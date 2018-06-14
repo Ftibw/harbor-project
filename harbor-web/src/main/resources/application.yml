@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: harbor-web
+  datasource:
+    url: jdbc:mysql://localhost:3306/harbor?useUnicode=true&characterEncoding=utf8   #47.94.202.250
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource #druid数据源
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  redis:
+      host: 47.94.202.250
+mybatis:
+    type-aliases-package: com.whxm.harbor.bean
+    mapper-locations: mapper/*.xml
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+swagger2:   #swagger2
+    package: com.whxm.harbor.controller
+fileDir:    #文件上传目录配置
+    activityLogoDir: activityLogo
+    activityMaterialImgDir: activityMaterialPicture
+    shopLogoDir: shopLogo
+    shopPictureDir: shopPicture
+    screensaverMaterialImgDir: screensaverMaterialPicture
+urlConfig:  #静态资源服务器项目路径
+    urlPrefix: http://192.168.1.103:8080/resources/
