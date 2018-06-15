@@ -244,25 +244,24 @@ public class ShopServiceImpl implements ShopService {
         return shopPicturesPath;
     }
 
-    //这个方法
+    //这个方法...
     @Override
     public Result getShopPicturesByBizType(String bizFormatType) {
 
         Result ret;
 
         try {
-            List<String> shopIdList = bizShopMapper.selectShopIdListByBizType(bizFormatType);
+            final List<String> picturesPath = new ArrayList<>();
 
-            List<String> picturesPath = new ArrayList<>();
-
-            for (String shopId : shopIdList) {
-                List<String> shopPicturesPath = getShopPicturesById(shopId);
-
-                shopPicturesPath.forEach(item -> item = urlConfig.getUrlPrefix() + item);
-
-                if (!shopPicturesPath.isEmpty())
-                    picturesPath.addAll(shopPicturesPath);
-            }
+            bizShopMapper.selectShopIdListByBizType(bizFormatType)
+                    .forEach(
+                            shopId -> getShopPicturesById(shopId)
+                                    .forEach(
+                                            item -> picturesPath.add(
+                                                    urlConfig.getUrlPrefix() + item
+                                            )
+                                    )
+                    );
 
             ret = new Result(picturesPath);
 
