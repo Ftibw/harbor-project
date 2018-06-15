@@ -101,19 +101,19 @@ public class UserController {
     }
 
     @ApiOperation("删除用户(需授权)")
-    @DeleteMapping("/user/{ID}")
+    @DeleteMapping("/user")
     public Result delUser(
             @ApiParam(name = "ID", value = "用户的ID", required = true)
-            @PathVariable("ID") String userId
+                    String id
     ) {
         Result ret = null;
         try {
-            ret = userService.deleteUser(userId);
+            ret = userService.deleteUser(id);
         } catch (Exception e) {
 
-            logger.error("ID为{}的用户数据 删除报错", userId, e);
+            logger.error("ID为{}的用户数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + userId + "的用户数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的用户数据 删除报错", null);
         }
 
         return ret;

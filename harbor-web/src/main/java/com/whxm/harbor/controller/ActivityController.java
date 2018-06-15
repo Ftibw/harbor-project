@@ -128,21 +128,21 @@ public class ActivityController {
     }
 
     @ApiOperation("删除活动(需授权)")
-    @DeleteMapping("/bizActivity/{ID}")
+    @DeleteMapping("/bizActivity")
     public Result delBizActivity(
             @ApiParam(name = "ID", value = "活动的ID", required = true)
-            @PathVariable("ID") Integer bizActivityId
+             Integer id
     ) {
         Result result = null;
 
         try {
-            result = activityService.deleteBizActivity(bizActivityId);
+            result = activityService.deleteBizActivity(id);
 
         } catch (Exception e) {
 
-            logger.error("ID为{}的活动数据 删除报错", bizActivityId, e);
+            logger.error("ID为{}的活动数据 删除报错", id, e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizActivityId + "的活动数据 删除报错", null);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动数据 删除报错", null);
         }
         return result;
     }

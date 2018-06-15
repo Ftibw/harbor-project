@@ -31,6 +31,9 @@ public class TokenUtils {
      */
     public static String chaos(String text, String salt) {
 
+        if (null == text || text.length() != 32)
+            return null;
+
         for (int i = 0; i < DEFAULT_TIMES; i++) {
             text = text.substring(SOURCE_FACTOR) + text.substring(0, SOURCE_FACTOR);
         }
@@ -54,6 +57,9 @@ public class TokenUtils {
      */
     public static String order(String text) {
 
+        if (null == text || text.length() != 64)
+            return null;
+
         for (int i = 0; i < DEFAULT_TIMES; i++) {
 
             text = text.substring(64 - TARGET_FACTOR_HIGH) + text.substring(0, 64 - TARGET_FACTOR_HIGH);
@@ -75,6 +81,9 @@ public class TokenUtils {
      * 分离盐获取原始盐
      */
     public static String salt(String text) {
+
+        if (null == text || text.length() != 64)
+            return null;
 
         for (int i = 0; i < DEFAULT_TIMES; i++) {
 

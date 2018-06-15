@@ -104,19 +104,19 @@ public class ScreensaverMaterialController {
     }
 
     @ApiOperation("删除屏保素材(需授权)")
-    @DeleteMapping("/bizScreensaverMaterial/{ID}")
+    @DeleteMapping("/bizScreensaverMaterial")
     public Result delBizScreensaverMaterial(
-            @ApiParam(name = "ID", value = "屏保素材的ID", required = true)
-            @PathVariable("ID") Integer bizScreensaverMaterialId
+            @ApiParam(name = "id", value = "屏保素材的ID", required = true)
+                    Integer id
     ) {
         Result ret = null;
         try {
-            ret = screensaverMaterialService.deleteBizScreensaverMaterial(bizScreensaverMaterialId);
+            ret = screensaverMaterialService.deleteBizScreensaverMaterial(id);
         } catch (Exception e) {
 
-            logger.error("ID为{}的屏保素材数据 删除报错", bizScreensaverMaterialId, e);
+            logger.error("ID为{}的屏保素材数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizScreensaverMaterialId + "的屏保素材数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保素材数据 删除报错", null);
         }
 
         return ret;

@@ -126,17 +126,17 @@ public class BusinessFormatController {
     }
 
     @ApiOperation("删除业态(需授权)")
-    @DeleteMapping("/bizFormat/{ID}")
+    @DeleteMapping("/bizFormat")
     public Result delBizFormat(@ApiParam(name = "ID", value = "业态ID", required = true)
-                               @PathVariable("ID") Integer bizFormatId) {
+                                       Integer id) {
         Result ret = null;
         try {
-            ret = businessFormatService.deleteBizFormat(bizFormatId);
+            ret = businessFormatService.deleteBizFormat(id);
         } catch (Exception e) {
 
             logger.error("ID为{}的业态数据 删除报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizFormatId + "的业态数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的业态数据 删除报错", null);
         }
         return ret;
     }

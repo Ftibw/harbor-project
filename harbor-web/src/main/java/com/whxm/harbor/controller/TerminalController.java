@@ -155,19 +155,19 @@ public class TerminalController {
     }
 
     @ApiOperation("删除终端(需授权)")
-    @DeleteMapping("/bizTerminal/{ID}")
+    @DeleteMapping("/bizTerminal")
     public Result delBizTerminal(
             @ApiParam(name = "ID", value = "终端的ID", required = true)
-            @PathVariable("ID") String terminalId
+                    String id
     ) {
         Result ret = null;
         try {
-            ret = terminalService.deleteBizTerminal(terminalId);
+            ret = terminalService.deleteBizTerminal(id);
         } catch (Exception e) {
 
-            logger.error("ID为{}的终端数据 删除报错", terminalId, e);
+            logger.error("ID为{}的终端数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + terminalId + "的终端数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的终端数据 删除报错", null);
         }
 
         return ret;

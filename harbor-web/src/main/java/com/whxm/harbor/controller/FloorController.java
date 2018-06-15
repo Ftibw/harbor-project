@@ -109,13 +109,13 @@ public class FloorController {
 
 
     @ApiOperation("删除楼层(需授权)")
-    @DeleteMapping("/bizFloor/{ID}")
+    @DeleteMapping("/bizFloor")
     public Result delBizFloor(@ApiParam(name = "ID", value = "楼层ID", required = true)
-                              @PathVariable("ID") Integer bizFloorId) {
+                                      Integer id) {
         Result ret = null;
 
         try {
-            ret = floorService.deleteBizFloor(bizFloorId);
+            ret = floorService.deleteBizFloor(id);
         } catch (Exception e) {
 
             logger.error("楼层数据 删除报错", e);

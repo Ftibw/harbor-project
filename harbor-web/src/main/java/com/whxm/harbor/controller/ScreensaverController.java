@@ -88,19 +88,19 @@ public class ScreensaverController {
     }
 
     @ApiOperation("删除屏保(需授权)")
-    @DeleteMapping("/bizScreensaver/{ID}")
+    @DeleteMapping("/bizScreensaver")
     public Result delBizScreensaver(
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
-            @PathVariable("ID") Integer bizScreensaverId
+           Integer id
     ) {
         Result ret = null;
 
         try {
-            ret = screensaverService.deleteBizScreensaver(bizScreensaverId);
+            ret = screensaverService.deleteBizScreensaver(id);
         } catch (Exception e) {
-            logger.error("ID{}的屏保数据 删除报错", bizScreensaverId, e);
+            logger.error("ID{}的屏保数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizScreensaverId + "的屏保 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保 删除报错", null);
         }
 
         return ret;

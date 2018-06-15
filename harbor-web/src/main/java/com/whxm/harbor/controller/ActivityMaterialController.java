@@ -132,19 +132,19 @@ public class ActivityMaterialController {
     }
 
     @ApiOperation("删除活动素材(需授权)")
-    @DeleteMapping("/bizActivityMaterial/{ID}")
+    @DeleteMapping("/bizActivityMaterial")
     public Result delBizActivityMaterial(
             @ApiParam(name = "ID", value = "活动素材的ID", required = true)
-            @PathVariable("ID") Integer bizActivityMaterialId
+                    Integer id
     ) {
         Result result = null;
         try {
-            result = activityMaterialService.deleteBizActivityMaterial(bizActivityMaterialId);
+            result = activityMaterialService.deleteBizActivityMaterial(id);
         } catch (Exception e) {
 
-            logger.error("ID为{}的活动素材 删除报错", bizActivityMaterialId, e);
+            logger.error("ID为{}的活动素材 删除报错", id, e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizActivityMaterialId + "的活动素材 删除报错", null);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动素材 删除报错", null);
         }
         return result;
     }
