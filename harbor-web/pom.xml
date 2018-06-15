@@ -1,57 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>harbor-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <artifactId>harbor-web</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+    <!--<packaging>war</packaging>-->
 
-	<name>harbor-web</name>
-	<description>harbor web</description>
+    <name>harbor-web</name>
+    <description>harbor web</description>
 
-	<parent>
-		<groupId>com.whxm.harbor</groupId>
-		<artifactId>harbor-project</artifactId>
-		<version>0.1.0</version>
-	</parent>
+    <parent>
+        <groupId>com.whxm.harbor</groupId>
+        <artifactId>harbor-project</artifactId>
+        <version>0.1.0</version>
+    </parent>
 
-	<dependencies>
-		<!--打成war包的配置-->
-		<!--<dependency>
+    <dependencies>
+        <!--打成war包的配置-->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>-->
-		<!--service层依赖-->
-		<dependency>
-			<groupId>com.whxm.harbor</groupId>
-			<artifactId>harbor-service</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<!--spring boot web-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<!-- swagger2 的依赖 -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-		</dependency>
-	</dependencies>
+        <!--service层依赖-->
+        <dependency>
+            <groupId>com.whxm.harbor</groupId>
+            <artifactId>harbor-service</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <!--spring boot web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- swagger2 的依赖 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

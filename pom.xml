@@ -69,12 +69,6 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-            <!--spring-boot-jdbc依赖-->
-            <!--<dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-jdbc</artifactId>
-                <version>${springboot.version}</version>
-            </dependency>-->
             <!--spring-boot-data-redis依赖-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
