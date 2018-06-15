@@ -6,8 +6,10 @@ import com.whxm.harbor.bean.BizFormat;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.BusinessFormatService;
 import com.whxm.harbor.mapper.BizFormatMapper;
+import org.omg.CORBA.OBJECT_NOT_EXIST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -29,7 +32,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     @Override
     public BizFormat getBizFormat(Integer bizFormatId) {
 
-        BizFormat bizFormat = null;
+        BizFormat bizFormat;
 
         try {
             bizFormat = bizFormatMapper.selectByPrimaryKey(bizFormatId);
@@ -47,7 +50,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     public PageVO<BizFormat> getBizFormatList(PageQO<BizFormat> pageQO) {
 
 
-        PageVO<BizFormat> pageVO = null;
+        PageVO<BizFormat> pageVO;
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
@@ -70,10 +73,10 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     @Override
     public List<BizFormat> getBizFormatList() {
 
-        List<BizFormat> list = null;
+        List<BizFormat> list;
 
         try {
-            list = bizFormatMapper.getBizFormatList(null);
+            list = bizFormatMapper.getBizFormatList((BizFormat) Constant.DEFAULT_QUERY_CONDITION);
 
         } catch (Exception e) {
 
@@ -88,15 +91,14 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     @Override
     public Result deleteBizFormat(Integer bizFormatId) {
 
-        //StringUtils.isNotBlank(bizFormatId)
+        Result ret;
 
-        Result ret = null;
         try {
             BizFormat bizFormat = new BizFormat();
 
             bizFormat.setBizFormatId(bizFormatId);
 
-            bizFormat.setIsDeleted(0);
+            bizFormat.setIsDeleted(Constant.RECORD_IS_DELETED);
 
             updateBizFormat(bizFormat);
 
@@ -115,19 +117,19 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     @Override
     public Result updateBizFormat(BizFormat bizFormat) {
 
-        Result ret = null;
+        Result ret;
 
         if (null == bizFormat) {
 
             logger.info("业态为空");
 
-            return ret = new Result("业态为空");
+            return new Result("业态为空");
 
         } else if (null == bizFormat.getBizFormatId()) {
 
             logger.info("业态ID为空");
 
-            return ret = new Result("业态ID为空");
+            return new Result("业态ID为空");
         }
 
         try {
@@ -154,7 +156,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             if (null != bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber())) {
 
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", null);
+                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
             }
 
             bizFormat.setIsDeleted(1);

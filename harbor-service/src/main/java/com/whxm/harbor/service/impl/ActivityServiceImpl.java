@@ -2,6 +2,7 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ActivityService;
 import com.whxm.harbor.bean.BizActivity;
 import com.whxm.harbor.bean.PageQO;
@@ -24,19 +25,22 @@ public class ActivityServiceImpl implements ActivityService {
 
     private static final Logger logger = LoggerFactory.getLogger(ActivityServiceImpl.class);
 
+    @Autowired
+    private UrlConfig urlConfig;
+
     @Resource
     private BizActivityMapper bizActivityMapper;
 
     @Override
     public BizActivity getBizActivity(Integer bizActivityId) {
 
-        BizActivity bizActivity = null;
+        BizActivity bizActivity;
 
         try {
             bizActivity = bizActivityMapper.selectByPrimaryKey(bizActivityId);
 
             if (null == bizActivity) {
-                logger.info("错误活动ID", bizActivity);
+                logger.info("ID为{}的活动不存在", bizActivityId);
             }
         } catch (Exception e) {
 
@@ -50,7 +54,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public PageVO<BizActivity> getBizActivityList(PageQO<BizActivity> pageQO) {
-        PageVO<BizActivity> pageVO = null;
+
+        PageVO<BizActivity> pageVO;
 
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
@@ -77,16 +82,13 @@ public class ActivityServiceImpl implements ActivityService {
         return pageVO;
     }
 
-    @Autowired
-    private UrlConfig urlConfig;
-
     @Override
     public List<BizActivity> getBizActivityList() {
 
-        List<BizActivity> list = null;
+        List<BizActivity> list;
 
         try {
-            list = bizActivityMapper.getBizActivityList(null);
+            list = bizActivityMapper.getBizActivityList((BizActivity) Constant.DEFAULT_QUERY_CONDITION);
 
             list.forEach(item -> item.setActivityLogo(
                     urlConfig.getUrlPrefix()
@@ -105,22 +107,32 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Result deleteBizActivity(Integer bizActivityId) {
-        Result ret = null;
 
-        Integer ACTIVITY_DELETED = 0;
+        Result ret;
 
         try {
             BizActivity activity = new BizActivity();
 
             activity.setActivityId(bizActivityId);
 
-            activity.setIsDeleted(ACTIVITY_DELETED);
+            activity.setIsDeleted(Constant.RECORD_IS_DELETED);
 
-            updateBizActivity(activity);
+            boolean isSuccess = updateBizActivity(activity)
+                    .getData()
+                    .toString()
+                    .contains("1");
 
-            logger.info("ID为{}的活动 删除成功", bizActivityId);
+            logger.info(
+                    isSuccess ?
+                            "ID为{}的活动 删除成功" :
+                            "ID为{}的活动 删除失败",
+                    bizActivityId
+            );
 
-            ret = new Result("删除成功");
+            ret = new Result(isSuccess ?
+                    "ID为" + bizActivityId + "的活动删除成功" :
+                    "ID为" + bizActivityId + "的活动删除失败"
+            );
 
         } catch (Exception e) {
 
@@ -134,12 +146,20 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Result updateBizActivity(BizActivity bizActivity) {
-        Result ret = null;
+
+        Result ret;
 
         try {
             int affectRow = bizActivityMapper.updateByPrimaryKeySelective(bizActivity);
 
+            logger.info(1 == affectRow ?
+                            "ID为{}的活动 修改成功" :
+                            "ID为{}的活动 修改失败",
+                    bizActivity.getActivityId()
+            );
+
             ret = new Result("活动数据修改了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("活动数据 修改报错", e);
@@ -153,16 +173,19 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Result addBizActivity(BizActivity bizActivity) {
 
-        Result ret = null;
+        Result ret;
 
         try {
-            bizActivity.setActivityId(null);
+            bizActivity.setActivityId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
-            bizActivity.setIsDeleted(1);
+            bizActivity.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
             int affectRow = bizActivityMapper.insert(bizActivity);
 
+            logger.info(1 == affectRow ? "活动添加成功" : "活动添加失败");
+
             ret = new Result("活动数据添加了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("活动数据 添加报错", e);

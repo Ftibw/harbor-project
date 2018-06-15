@@ -70,7 +70,7 @@ public class ActivityMaterialController {
 
     @ApiOperation("获取活动素材列表(需授权)")
     @GetMapping("/bizActivityMaterials")
-    public Result getBizActivities(PageQO<BizActivityMaterial> pageQO, BizActivityMaterial condition) {
+    public Result getBizActivityMaterials(PageQO<BizActivityMaterial> pageQO, BizActivityMaterial condition) {
 
         Result ret = null;
         PageVO<BizActivityMaterial> pageVO = null;

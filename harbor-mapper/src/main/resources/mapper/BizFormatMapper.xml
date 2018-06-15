@@ -8,8 +8,8 @@
         <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    biz_format_id, biz_format_number, biz_format_type, is_deleted
-  </sql>
+        biz_format_id, biz_format_number, biz_format_type, is_deleted
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -17,15 +17,15 @@
         where biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from biz_format
-    where biz_format_id = #{bizFormatId,jdbcType=INTEGER}
-  </delete>
+        DELETE FROM biz_format
+        WHERE biz_format_id = #{bizFormatId,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.BizFormat">
-    insert into biz_format (biz_format_id, biz_format_number, biz_format_type, 
-      is_deleted)
-    values (#{bizFormatId,jdbcType=INTEGER}, #{bizFormatNumber,jdbcType=VARCHAR}, #{bizFormatType,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=INTEGER})
-  </insert>
+        INSERT INTO biz_format (biz_format_id, biz_format_number, biz_format_type,
+                                is_deleted)
+        VALUES (#{bizFormatId,jdbcType=INTEGER}, #{bizFormatNumber,jdbcType=VARCHAR}, #{bizFormatType,jdbcType=VARCHAR},
+                #{isDeleted,jdbcType=INTEGER})
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizFormat">
         insert into biz_format
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -73,21 +73,25 @@
         where biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizFormat">
-    update biz_format
-    set biz_format_number = #{bizFormatNumber,jdbcType=VARCHAR},
-      biz_format_type = #{bizFormatType,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=INTEGER}
-    where biz_format_id = #{bizFormatId,jdbcType=INTEGER}
-  </update>
+        UPDATE biz_format
+        SET biz_format_number = #{bizFormatNumber,jdbcType=VARCHAR},
+            biz_format_type   = #{bizFormatType,jdbcType=VARCHAR},
+            is_deleted        = #{isDeleted,jdbcType=INTEGER}
+        WHERE biz_format_id = #{bizFormatId,jdbcType=INTEGER}
+    </update>
 
     <!--以下为自定义部分-->
     <select id="getBizFormatList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from biz_format where is_deleted = 1
+        from biz_format
+        where is_deleted = 1
     </select>
 
     <select id="selectIdByNumber" resultMap="BaseResultMap">
-        SELECT biz_format_id FROM  biz_format WHERE biz_format_number=#{bizFormatNumber}
+        SELECT biz_format_id
+        FROM biz_format
+        WHERE biz_format_number = #{bizFormatNumber}
+              AND is_deleted = 1
     </select>
 </mapper>

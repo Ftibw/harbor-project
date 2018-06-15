@@ -7,6 +7,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizActivityMaterialMapper;
 import com.whxm.harbor.service.ActivityMaterialService;
 import org.slf4j.Logger;
@@ -24,13 +25,16 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
     private static final Logger logger = LoggerFactory.getLogger(ActivityMaterialServiceImpl.class);
 
+    @Autowired
+    private UrlConfig urlConfig;
+
     @Resource
     private BizActivityMaterialMapper bizActivityMaterialMapper;
 
     @Override
     public BizActivityMaterial getBizActivityMaterial(Integer bizActivityMaterialId) {
 
-        BizActivityMaterial activityMaterial = null;
+        BizActivityMaterial activityMaterial;
 
         try {
             activityMaterial = bizActivityMaterialMapper.selectMaterialWithActivityType(bizActivityMaterialId);
@@ -51,7 +55,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO<BizActivityMaterial> pageQO) {
 
-        PageVO<BizActivityMaterial> pageVO = null;
+        PageVO<BizActivityMaterial> pageVO;
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
@@ -79,15 +83,19 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
     @Override
     public Result deleteBizActivityMaterial(Integer bizActivityMaterialId) {
-        Result ret = null;
+
+        Result ret;
 
         try {
+            int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
 
-            bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
+            logger.info(1 == affectRow ?
+                            "ID为{}的活动素材 删除成功" :
+                            "ID为{}的活动素材 删除失败",
+                    bizActivityMaterialId
+            );
 
-            logger.info("ID为{}的活动素材 删除成功", bizActivityMaterialId);
-
-            ret = new Result("删除成功");
+            ret = new Result("活动素材数据删除了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -101,13 +109,21 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
     @Override
     public Result updateBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
-        Result ret = null;
+
+        Result ret;
 
         try {
 
             int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 
+            logger.info(1 == affectRow ?
+                            "ID为{}的活动素材 修改成功" :
+                            "ID为{}的活动素材 修改失败",
+                    bizActivityMaterial.getActivityMaterialId()
+            );
+
             ret = new Result("活动素材数据修改了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("活动素材数据 修改报错", e);
@@ -121,14 +137,20 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public Result addBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
 
-        Result ret = null;
+        Result ret;
 
         try {
-            bizActivityMaterial.setActivityMaterialId(null);
+            bizActivityMaterial.setActivityMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
             int affectRow = bizActivityMaterialMapper.insert(bizActivityMaterial);
 
+            logger.info(1 == affectRow ?
+                    "活动素材 添加成功" :
+                    "活动素材 添加失败"
+            );
+
             ret = new Result("活动素材数据添加了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("活动素材数据 添加报错", e);
@@ -139,13 +161,10 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         return ret;
     }
 
-    @Autowired
-    private UrlConfig urlConfig;
-
     @Override
     public List<BizActivityMaterial> getMaterialListByActivityId(Integer activityId) {
 
-        List<BizActivityMaterial> list = null;
+        List<BizActivityMaterial> list;
 
         try {
             BizActivityMaterial activityMaterial = new BizActivityMaterial();

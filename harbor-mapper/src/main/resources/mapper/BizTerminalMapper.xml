@@ -18,10 +18,10 @@
         <result column="terminal_platform" property="terminalPlatform" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    terminal_id, terminal_name, terminal_number, terminal_ip, terminal_type, terminal_location, 
-    terminal_rotation_angle, is_terminal_online, is_deleted, add_terminal_time, register_terminal_time, 
-    floor_id, terminal_switch_time, terminal_platform
-  </sql>
+        terminal_id, terminal_name, terminal_number, terminal_ip, terminal_type, terminal_location,
+        terminal_rotation_angle, is_terminal_online, is_deleted, add_terminal_time, register_terminal_time,
+        floor_id, terminal_switch_time, terminal_platform
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
@@ -29,23 +29,27 @@
         where terminal_id = #{terminalId,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from biz_terminal
-    where terminal_id = #{terminalId,jdbcType=VARCHAR}
-  </delete>
+        DELETE FROM biz_terminal
+        WHERE terminal_id = #{terminalId,jdbcType=VARCHAR}
+    </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.BizTerminal">
-    insert into biz_terminal (terminal_id, terminal_name, terminal_number, 
-      terminal_ip, terminal_type, terminal_location, 
-      terminal_rotation_angle, is_terminal_online, 
-      is_deleted, add_terminal_time, register_terminal_time, 
-      floor_id, terminal_switch_time, terminal_platform
-      )
-    values (#{terminalId,jdbcType=VARCHAR}, #{terminalName,jdbcType=VARCHAR}, #{terminalNumber,jdbcType=VARCHAR},
-      #{terminalIp,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR}, #{terminalLocation,jdbcType=VARCHAR}, 
-      #{terminalRotationAngle,jdbcType=INTEGER}, #{isTerminalOnline,jdbcType=INTEGER}, 
-      #{isDeleted,jdbcType=INTEGER}, #{addTerminalTime,jdbcType=TIMESTAMP}, #{registerTerminalTime,jdbcType=TIMESTAMP}, 
-      #{floorId,jdbcType=INTEGER}, #{terminalSwitchTime,jdbcType=TIMESTAMP}, #{terminalPlatform,jdbcType=INTEGER}
-      )
-  </insert>
+        INSERT INTO biz_terminal (terminal_id, terminal_name, terminal_number,
+                                  terminal_ip, terminal_type, terminal_location,
+                                  terminal_rotation_angle, is_terminal_online,
+                                  is_deleted, add_terminal_time, register_terminal_time,
+                                  floor_id, terminal_switch_time, terminal_platform
+        )
+        VALUES (#{terminalId,jdbcType=VARCHAR}, #{terminalName,jdbcType=VARCHAR}, #{terminalNumber,jdbcType=VARCHAR},
+                                                #{terminalIp,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR},
+                                                #{terminalLocation,jdbcType=VARCHAR},
+                                                #{terminalRotationAngle,jdbcType=INTEGER},
+                                                #{isTerminalOnline,jdbcType=INTEGER},
+                                                #{isDeleted,jdbcType=INTEGER}, #{addTerminalTime,jdbcType=TIMESTAMP},
+                                                #{registerTerminalTime,jdbcType=TIMESTAMP},
+                #{floorId,jdbcType=INTEGER}, #{terminalSwitchTime,jdbcType=TIMESTAMP},
+                #{terminalPlatform,jdbcType=INTEGER}
+        )
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizTerminal">
         insert into biz_terminal
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -183,30 +187,30 @@
         where terminal_id = #{terminalId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizTerminal">
-    update biz_terminal
-    set terminal_name = #{terminalName,jdbcType=VARCHAR},
-      terminal_number = #{terminalNumber,jdbcType=VARCHAR},
-      terminal_ip = #{terminalIp,jdbcType=VARCHAR},
-      terminal_type = #{terminalType,jdbcType=VARCHAR},
-      terminal_location = #{terminalLocation,jdbcType=VARCHAR},
-      terminal_rotation_angle = #{terminalRotationAngle,jdbcType=INTEGER},
-      is_terminal_online = #{isTerminalOnline,jdbcType=INTEGER},
-      is_deleted = #{isDeleted,jdbcType=INTEGER},
-      add_terminal_time = #{addTerminalTime,jdbcType=TIMESTAMP},
-      register_terminal_time = #{registerTerminalTime,jdbcType=TIMESTAMP},
-      floor_id = #{floorId,jdbcType=INTEGER},
-      terminal_switch_time = #{terminalSwitchTime,jdbcType=TIMESTAMP},
-      terminal_platform = #{terminalPlatform,jdbcType=INTEGER}
-    where terminal_id = #{terminalId,jdbcType=VARCHAR}
-  </update>
+        UPDATE biz_terminal
+        SET terminal_name           = #{terminalName,jdbcType=VARCHAR},
+            terminal_number         = #{terminalNumber,jdbcType=VARCHAR},
+            terminal_ip             = #{terminalIp,jdbcType=VARCHAR},
+            terminal_type           = #{terminalType,jdbcType=VARCHAR},
+            terminal_location       = #{terminalLocation,jdbcType=VARCHAR},
+            terminal_rotation_angle = #{terminalRotationAngle,jdbcType=INTEGER},
+            is_terminal_online      = #{isTerminalOnline,jdbcType=INTEGER},
+            is_deleted              = #{isDeleted,jdbcType=INTEGER},
+            add_terminal_time       = #{addTerminalTime,jdbcType=TIMESTAMP},
+            register_terminal_time  = #{registerTerminalTime,jdbcType=TIMESTAMP},
+            floor_id                = #{floorId,jdbcType=INTEGER},
+            terminal_switch_time    = #{terminalSwitchTime,jdbcType=TIMESTAMP},
+            terminal_platform       = #{terminalPlatform,jdbcType=INTEGER}
+        WHERE terminal_id = #{terminalId,jdbcType=VARCHAR}
+    </update>
 
     <!--以下为自定义部分-->
-    <select id="selectIdByNumber" resultMap="ExtensionResultMap">
+    <select id="selectIdByNumber" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>,floor_name
+        <include refid="Base_Column_List"/>
         FROM biz_terminal
-        JOIN biz_floor USING (floor_id)
         WHERE terminal_number=#{terminalNumber}
+        AND is_deleted=1
     </select>
 
     <select id="getBizTerminalList" resultMap="ExtensionResultMap">
@@ -230,20 +234,21 @@
 
     <delete id="delScreensaverTerminalRelation">
         DELETE FROM screensaver_published_terminal_relation
-        WHERE terminal_id=#{terminalId}
+        WHERE terminal_id = #{terminalId}
     </delete>
 
     <update id="updateRegisteredTime">
-        UPDATE biz_terminal SET register_terminal_time=#{registerTerminalTime}
-        WHERE terminal_number=#{terminalNumber} AND terminal_platform=#{terminalPlatform}
+        UPDATE biz_terminal
+        SET register_terminal_time = #{registerTerminalTime}
+        WHERE terminal_number = #{terminalNumber} AND terminal_platform = #{terminalPlatform}
     </update>
 
     <select id="selectTerminalWithScreensaver" resultType="java.util.HashMap">
-        select
-        screensaver_id screensaverId,
-        terminal_switch_time terminalSwitchTime
-        from biz_terminal
-        LEFT JOIN screensaver_published_terminal_relation  USING (terminal_id)
-        WHERE terminal_number=#{terminalNumber}
+        SELECT
+            screensaver_id       screensaverId,
+            terminal_switch_time terminalSwitchTime
+        FROM biz_terminal
+            LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
+        WHERE terminal_number = #{terminalNumber}
     </select>
 </mapper>
