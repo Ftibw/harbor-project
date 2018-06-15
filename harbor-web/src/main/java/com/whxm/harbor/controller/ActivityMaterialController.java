@@ -34,15 +34,18 @@ public class ActivityMaterialController {
     @Autowired
     private FileDir fileDir;
 
-    @ApiOperation(value = "根据活动编号获取活动素材列表",
-            notes = "param: {'activity':'xx'}   activity表示活动编号")
-    @PostMapping("/activityMaterials")
-    public Map<String, Object> getBizActivities(Integer activity) {
+    @ApiOperation(value = "根据活动ID获取活动素材列表")
+    @PostMapping(value = "/activityMaterials", consumes = "application/x-www-form-urlencoded")
+    public Map<String, Object> getBizActivities(
+            @ApiParam(name = "activity", value = "活动ID", required = true)
+                    Integer activity) {
 
         ResultMap<String, Object> ret = new ResultMap<String, Object>(2);
 
         try {
-            Integer activityId = activity;
+            Integer activityId;
+
+            activityId = activity;
 
             List<BizActivityMaterial> list = activityMaterialService.getMaterialListByActivityId(activityId);
 

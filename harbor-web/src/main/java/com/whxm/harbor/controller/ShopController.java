@@ -38,7 +38,7 @@ public class ShopController {
     private FileDir fileDir;
 
     @ApiOperation(value = "根据业态和楼层获取店铺列表")
-    @PostMapping("/shops")
+    @PostMapping(value = "/shops", consumes = "application/x-www-form-urlencoded")
     public Map<String, Object> getBizShops(
             @ApiParam(name = "floor", value = "楼层ID", required = true)
                     Integer floor,
@@ -92,7 +92,7 @@ public class ShopController {
     }
 
     @ApiOperation(value = "根据商铺的业态类型获取商铺图片")
-    @GetMapping("/typePictures")
+    @GetMapping(value = "/typePictures", consumes = "application/x-www-form-urlencoded")
     public Result getPicturesByType(
             @ApiParam(name = "type", value = "商铺的业态种类", required = true)
                     String type) {

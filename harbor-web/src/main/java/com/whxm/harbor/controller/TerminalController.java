@@ -29,7 +29,7 @@ public class TerminalController {
     private TerminalService terminalService;
 
     @ApiOperation("终端注册")
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
     public Map<String, Boolean> register(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
@@ -66,7 +66,7 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端的屏保节目")
-    @PostMapping("/program")
+    @PostMapping(value = "/program", consumes = "application/x-www-form-urlencoded")
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
