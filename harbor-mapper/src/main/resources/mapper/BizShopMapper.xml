@@ -20,12 +20,12 @@
         <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    shop_id, shop_number, shop_name, shop_english_name, floor_id, biz_format_id, shop_house_number, 
-    is_shop_enabled, shop_logo_path, shop_tel, add_shop_time, shop_checkin_time, shop_weight
-  </sql>
+        shop_id, shop_number, shop_name, shop_english_name, floor_id, biz_format_id, shop_house_number,
+        is_shop_enabled, shop_logo_path, shop_tel, add_shop_time, shop_checkin_time, shop_weight
+    </sql>
     <sql id="Blob_Column_List">
-    shop_descript
-  </sql>
+        shop_descript
+    </sql>
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
@@ -35,21 +35,24 @@
         where shop_id = #{shopId,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from biz_shop
-    where shop_id = #{shopId,jdbcType=VARCHAR}
-  </delete>
+        DELETE FROM biz_shop
+        WHERE shop_id = #{shopId,jdbcType=VARCHAR}
+    </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.BizShop">
-    insert into biz_shop (shop_id, shop_number, shop_name, 
-      shop_english_name, floor_id, biz_format_id, 
-      shop_house_number, is_shop_enabled, shop_logo_path, 
-      shop_tel, add_shop_time, shop_checkin_time, 
-      shop_weight, shop_descript)
-    values (#{shopId,jdbcType=VARCHAR}, #{shopNumber,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR},
-      #{shopEnglishName,jdbcType=VARCHAR}, #{floorId,jdbcType=INTEGER}, #{bizFormatId,jdbcType=VARCHAR}, 
-      #{shopHouseNumber,jdbcType=VARCHAR}, #{isShopEnabled,jdbcType=INTEGER}, #{shopLogoPath,jdbcType=VARCHAR}, 
-      #{shopTel,jdbcType=VARCHAR}, #{addShopTime,jdbcType=TIMESTAMP}, #{shopCheckinTime,jdbcType=TIMESTAMP}, 
-      #{shopWeight,jdbcType=INTEGER}, #{shopDescript,jdbcType=LONGVARCHAR})
-  </insert>
+        INSERT INTO biz_shop (shop_id, shop_number, shop_name,
+                              shop_english_name, floor_id, biz_format_id,
+                              shop_house_number, is_shop_enabled, shop_logo_path,
+                              shop_tel, add_shop_time, shop_checkin_time,
+                              shop_weight, shop_descript)
+        VALUES (#{shopId,jdbcType=VARCHAR}, #{shopNumber,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR},
+                                            #{shopEnglishName,jdbcType=VARCHAR}, #{floorId,jdbcType=INTEGER},
+                                            #{bizFormatId,jdbcType=VARCHAR},
+                                            #{shopHouseNumber,jdbcType=VARCHAR}, #{isShopEnabled,jdbcType=INTEGER},
+                                            #{shopLogoPath,jdbcType=VARCHAR},
+                                            #{shopTel,jdbcType=VARCHAR}, #{addShopTime,jdbcType=TIMESTAMP},
+                #{shopCheckinTime,jdbcType=TIMESTAMP},
+                #{shopWeight,jdbcType=INTEGER}, #{shopDescript,jdbcType=LONGVARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizShop">
         insert into biz_shop
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -187,38 +190,38 @@
         where shop_id = #{shopId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whxm.harbor.bean.BizShop">
-    update biz_shop
-    set shop_number = #{shopNumber,jdbcType=VARCHAR},
-      shop_name = #{shopName,jdbcType=VARCHAR},
-      shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
-      floor_id = #{floorId,jdbcType=INTEGER},
-      biz_format_id = #{bizFormatId,jdbcType=VARCHAR},
-      shop_house_number = #{shopHouseNumber,jdbcType=VARCHAR},
-      is_shop_enabled = #{isShopEnabled,jdbcType=INTEGER},
-      shop_logo_path = #{shopLogoPath,jdbcType=VARCHAR},
-      shop_tel = #{shopTel,jdbcType=VARCHAR},
-      add_shop_time = #{addShopTime,jdbcType=TIMESTAMP},
-      shop_checkin_time = #{shopCheckinTime,jdbcType=TIMESTAMP},
-      shop_weight = #{shopWeight,jdbcType=INTEGER},
-      shop_descript = #{shopDescript,jdbcType=LONGVARCHAR}
-    where shop_id = #{shopId,jdbcType=VARCHAR}
-  </update>
+        UPDATE biz_shop
+        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+            shop_name         = #{shopName,jdbcType=VARCHAR},
+            shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
+            floor_id          = #{floorId,jdbcType=INTEGER},
+            biz_format_id     = #{bizFormatId,jdbcType=VARCHAR},
+            shop_house_number = #{shopHouseNumber,jdbcType=VARCHAR},
+            is_shop_enabled   = #{isShopEnabled,jdbcType=INTEGER},
+            shop_logo_path    = #{shopLogoPath,jdbcType=VARCHAR},
+            shop_tel          = #{shopTel,jdbcType=VARCHAR},
+            add_shop_time     = #{addShopTime,jdbcType=TIMESTAMP},
+            shop_checkin_time = #{shopCheckinTime,jdbcType=TIMESTAMP},
+            shop_weight       = #{shopWeight,jdbcType=INTEGER},
+            shop_descript     = #{shopDescript,jdbcType=LONGVARCHAR}
+        WHERE shop_id = #{shopId,jdbcType=VARCHAR}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizShop">
-    update biz_shop
-    set shop_number = #{shopNumber,jdbcType=VARCHAR},
-      shop_name = #{shopName,jdbcType=VARCHAR},
-      shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
-      floor_id = #{floorId,jdbcType=INTEGER},
-      biz_format_id = #{bizFormatId,jdbcType=VARCHAR},
-      shop_house_number = #{shopHouseNumber,jdbcType=VARCHAR},
-      is_shop_enabled = #{isShopEnabled,jdbcType=INTEGER},
-      shop_logo_path = #{shopLogoPath,jdbcType=VARCHAR},
-      shop_tel = #{shopTel,jdbcType=VARCHAR},
-      add_shop_time = #{addShopTime,jdbcType=TIMESTAMP},
-      shop_checkin_time = #{shopCheckinTime,jdbcType=TIMESTAMP},
-      shop_weight = #{shopWeight,jdbcType=INTEGER}
-    where shop_id = #{shopId,jdbcType=VARCHAR}
-  </update>
+        UPDATE biz_shop
+        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+            shop_name         = #{shopName,jdbcType=VARCHAR},
+            shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
+            floor_id          = #{floorId,jdbcType=INTEGER},
+            biz_format_id     = #{bizFormatId,jdbcType=VARCHAR},
+            shop_house_number = #{shopHouseNumber,jdbcType=VARCHAR},
+            is_shop_enabled   = #{isShopEnabled,jdbcType=INTEGER},
+            shop_logo_path    = #{shopLogoPath,jdbcType=VARCHAR},
+            shop_tel          = #{shopTel,jdbcType=VARCHAR},
+            add_shop_time     = #{addShopTime,jdbcType=TIMESTAMP},
+            shop_checkin_time = #{shopCheckinTime,jdbcType=TIMESTAMP},
+            shop_weight       = #{shopWeight,jdbcType=INTEGER}
+        WHERE shop_id = #{shopId,jdbcType=VARCHAR}
+    </update>
 
     <!--以下为自定义部分-->
     <select id="selectIdByNumber" resultMap="BaseResultMap">
@@ -260,9 +263,9 @@
 
     <!--插入商铺图片-->
     <insert id="insertShopPictures">
-        INSERT INTO shop_picture_relation(shop_id, shop_picture_path, shop_picture_size) VALUES
+        INSERT INTO shop_picture_relation(shop_id, shop_picture_path, shop_picture_size,shop_picture_name) VALUES
         <foreach collection="pictures" item="item" separator=",">
-            (#{shopId},#{item.shopPicturePath},#{item.shopPictureSize})
+            (#{shopId},#{item.shopPicturePath},#{item.shopPictureSize},#{item.shopPictureName})
         </foreach>
     </insert>
 
@@ -273,14 +276,17 @@
     </delete>-->
 
     <select id="selectShopPicturesById" resultType="java.lang.String">
-        SELECT shop_picture_path FROM shop_picture_relation WHERE shop_id=#{bizShopId}
+        SELECT shop_picture_path
+        FROM shop_picture_relation
+        WHERE shop_id = #{bizShopId}
     </select>
 
     <!--啰嗦,字段需求一开始没说,到后来又要加-->
     <select id="selectShopIdListByBizType" resultType="java.lang.String">
-        SELECT bs.shop_id FROM biz_shop bs
-        JOIN biz_format bf USING (biz_format_id)
-        WHERE bf.biz_format_type=#{bizFormatType}
+        SELECT bs.shop_id
+        FROM biz_shop bs
+            JOIN biz_format bf USING (biz_format_id)
+        WHERE bf.biz_format_type = #{bizFormatType}
     </select>
 
     <!--<select id="selectShopPicturesByType" >

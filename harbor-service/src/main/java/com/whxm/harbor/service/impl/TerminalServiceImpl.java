@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
@@ -24,12 +25,18 @@ public class TerminalServiceImpl implements TerminalService {
     private static final Logger logger = LoggerFactory.getLogger(TerminalServiceImpl.class);
 
     @Resource
+    private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
+
+    @Autowired
+    private UrlConfig urlConfig;
+
+    @Resource
     private BizTerminalMapper bizTerminalMapper;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
 
-        BizTerminal terminal = null;
+        BizTerminal terminal;
 
         try {
             terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
@@ -50,7 +57,7 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public PageVO<BizTerminal> getBizTerminalList(PageQO<BizTerminal> pageQO) {
 
-        PageVO<BizTerminal> pageVO = null;
+        PageVO<BizTerminal> pageVO;
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
@@ -72,7 +79,8 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result deleteBizTerminal(String bizTerminalId) {
-        Result ret = null;
+
+        Result ret;
 
         try {
 
@@ -80,13 +88,18 @@ public class TerminalServiceImpl implements TerminalService {
 
             BizTerminal bizTerminal = new BizTerminal();
 
-            bizTerminal.setIsDeleted(0);
+            bizTerminal.setTerminalId(bizTerminalId);
 
-            updateBizTerminal(bizTerminal);
+            bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
 
-            logger.info("ID为{}的终端 删除成功", bizTerminalId);
+            boolean isSuccess = updateBizTerminal(bizTerminal).getData().toString().contains("1");
 
-            ret = new Result("删除成功");
+            logger.info(isSuccess ? "ID为{}的终端 删除成功" : "ID为{}的终端 删除失败", bizTerminalId);
+
+            ret = new Result(isSuccess ?
+                    "ID为" + bizTerminalId + "的终端 删除成功" :
+                    "ID为" + bizTerminalId + "的终端 删除失败"
+            );
 
         } catch (Exception e) {
 
@@ -100,13 +113,20 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result updateBizTerminal(BizTerminal bizTerminal) {
-        Result ret = null;
+
+        Result ret;
 
         try {
 
             int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
+            logger.info(1 == affectRow ?
+                    "ID为" + bizTerminal.getTerminalId() + "的终端数据修改成功" :
+                    "ID为" + bizTerminal.getTerminalId() + "的终端数据修改失败"
+            );
+
             ret = new Result("终端数据修改了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("终端数据 修改报错", e);
@@ -119,15 +139,16 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result addBizTerminal(BizTerminal bizTerminal) {
-        Result ret = null;
+
+        Result ret;
 
         try {
             if (null != bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber())) {
 
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", null);
+                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
             }
 
-            bizTerminal.setIsDeleted(1);
+            bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
             bizTerminal.setAddTerminalTime(new Date());
 
@@ -135,7 +156,13 @@ public class TerminalServiceImpl implements TerminalService {
 
             int affectRow = bizTerminalMapper.insert(bizTerminal);
 
+            logger.info(1 == affectRow ?
+                    "终端数据添加成功" :
+                    "终端数据添加失败"
+            );
+
             ret = new Result("终端数据添加了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("终端数据 添加报错", e);
@@ -149,15 +176,16 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public Result register(Map<String, Object> params) {
 
-        Result ret = null;
+        Result ret;
 
         try {
             if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
 
                 ret = new Result("终端注册成功");
+
             } else {
 
-                ret = new Result(HttpStatus.NOT_FOUND.value(), "终端未注册", null);
+                ret = new Result(HttpStatus.NOT_FOUND.value(), "终端未注册", Constant.NO_DATA);
             }
 
         } catch (Exception e) {
@@ -170,12 +198,6 @@ public class TerminalServiceImpl implements TerminalService {
         return ret;
     }
 
-    @Resource
-    private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
-
-    @Autowired
-    private UrlConfig urlConfig;
-
     @Override
     public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
 
@@ -183,7 +205,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         final List<Map<String, Object>> list = new ArrayList<>();
 
-        Map<String, Object> terminalInfo = null;
+        Map<String, Object> terminalInfo;
 
         String terminalNumber = (String) params.get("terminalNumber");
 

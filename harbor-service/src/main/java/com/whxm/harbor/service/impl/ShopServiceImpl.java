@@ -7,6 +7,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public BizShop getBizShop(String bizShopId) {
 
-        BizShop bizShop = null;
+        BizShop bizShop;
         try {
             bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
 
@@ -52,7 +53,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public PageVO<BizShop> getBizShopList(PageQO<BizShop> pageQO) {
 
-        PageVO<BizShop> pageVO = null;
+        PageVO<BizShop> pageVO;
 
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
@@ -91,7 +92,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public List<BizShop> getBizShopList(Map<String, Object> params) {
 
-        List<BizShop> list = null;
+        List<BizShop> list;
 
         try {
             list = bizShopMapper.getBizShopListByFloorNumberAndBizType(params);
@@ -113,7 +114,8 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Result triggerBizShop(String bizShopId) {
-        Result ret = null;
+
+        Result ret;
 
         if (null != bizShopId) {
 
@@ -140,7 +142,7 @@ public class ShopServiceImpl implements ShopService {
         } else {
             logger.error("商铺ID为空");
 
-            ret = new Result(HttpStatus.NOT_FOUND.value(), "商铺ID为空", null);
+            ret = new Result(HttpStatus.NOT_FOUND.value(), "商铺ID为空", Constant.NO_DATA);
         }
 
         return ret;
@@ -148,22 +150,24 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Result updateBizShop(BizShop bizShop) {
-        Result ret = null;
+
+        Result ret;
 
         if (null == bizShop
                 || "".equals(bizShop.getShopId())
                 || null == bizShop.getShopId()) {
 
             logger.error("商铺数据不存在");
-            return new Result(HttpStatus.OK.value(), "商铺数据不存在", null);
+
+            return new Result(HttpStatus.OK.value(), "商铺数据不存在", Constant.NO_DATA);
         }
 
         try {
             int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
 
-            logger.info("ID为{}的商铺 修改成功", bizShop.getShopId());
+            logger.info(1 == affectRow ? "ID为{}的商铺 修改成功" : "ID为{}的商铺 修改失败", bizShop.getShopId());
 
-            ret = new Result("成功修改" + affectRow + "行");
+            ret = new Result("商铺数据修改了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -178,29 +182,31 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Result addBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
 
-        Result ret = null;
-        Integer SHOP_ENABLED = 1;
+        Result ret;
 
         if (null != bizShop) {
             try {
                 if (null != bizShopMapper.selectIdByNumber(bizShop.getShopNumber())) {
 
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", null);
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", Constant.NO_DATA);
                 }
-
                 //赋值
                 String shopId = UUID.randomUUID().toString().replace("-", "");
 
                 bizShop.setShopId(shopId);
-                bizShop.setIsShopEnabled(SHOP_ENABLED);
+                bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
                 bizShop.setAddShopTime(new Date());
 
                 int affectRow = bizShopMapper.insert(bizShop);
 
                 int affectRow2 = 0;
 
-                if (null != pictureList && !pictureList.isEmpty())
+                if (null != pictureList && !pictureList.isEmpty() && !pictureList.get(0).isEmpty()) {
+
                     affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
+                }
+
+                logger.info("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
 
                 ret = new Result("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
 
@@ -214,16 +220,17 @@ public class ShopServiceImpl implements ShopService {
         } else {
             logger.error("要添加的商铺数据为空");
 
-            ret = new Result(HttpStatus.NOT_ACCEPTABLE.value(), "要添加的商铺数据为空", null);
+            ret = new Result(HttpStatus.NOT_ACCEPTABLE.value(), "要添加的商铺数据为空", Constant.NO_DATA);
         }
 
         return ret;
     }
 
+    //蛋疼,以下为专门定制的服务...
     @Override
     public List<String> getShopPicturesById(String bizShopId) {
 
-        List<String> shopPicturesPath = null;
+        List<String> shopPicturesPath;
 
         try {
             shopPicturesPath = bizShopMapper.selectShopPicturesById(bizShopId);
@@ -238,9 +245,11 @@ public class ShopServiceImpl implements ShopService {
         return shopPicturesPath;
     }
 
+    //这个方法
     @Override
     public Result getShopPicturesByBizType(String bizFormatType) {
-        Result ret = null;
+
+        Result ret;
 
         try {
             List<String> shopIdList = bizShopMapper.selectShopIdListByBizType(bizFormatType);
