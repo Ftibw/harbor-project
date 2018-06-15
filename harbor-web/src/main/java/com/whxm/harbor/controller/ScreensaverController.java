@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Api(description = "屏保服务")
 @RestController
 @RequestMapping("/screensaver")
@@ -92,7 +94,7 @@ public class ScreensaverController {
     @DeleteMapping("/bizScreensaver")
     public Result delBizScreensaver(
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
-           Integer id
+                    Integer id
     ) {
         Result ret = null;
 
@@ -125,7 +127,15 @@ public class ScreensaverController {
     @ApiOperation("发布屏保(需授权)")
     @PostMapping("/publishedScreensaver")
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
+
+        if (Objects.isNull(param.screensaverId) || Objects.isNull(param.terminalIds)) {
+
+            return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
+                    "参数输入错误", Constant.NO_DATA);
+        }
+
         Result ret = null;
+
         try {
             ret = screensaverService.publishScreensaver(param.screensaverId, param.terminalIds);
 
