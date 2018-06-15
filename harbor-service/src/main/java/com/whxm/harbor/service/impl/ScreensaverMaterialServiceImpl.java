@@ -7,6 +7,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public BizScreensaverMaterial getBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
-        BizScreensaverMaterial screensaverMaterial = null;
+        BizScreensaverMaterial screensaverMaterial;
 
         try {
             screensaverMaterial = bizScreensaverMaterialMapper.selectByPrimaryKey(bizScreensaverMaterialId);
@@ -54,7 +55,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO<BizScreensaverMaterial> pageQO) {
 
-        PageVO<BizScreensaverMaterial> pageVO = null;
+        PageVO<BizScreensaverMaterial> pageVO;
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
@@ -83,15 +84,17 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
     @Override
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
-        Result ret = null;
+
+        Result ret;
 
         try {
 
-            bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+            int affectRow = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
 
-            logger.info("ID为{}的屏保素材 删除成功", bizScreensaverMaterialId);
+            logger.info(1 == affectRow ?
+                    "ID为{}的屏保素材删除成功" : "ID为{}的屏保素材删除失败", bizScreensaverMaterialId);
 
-            ret = new Result("删除成功");
+            ret = new Result("ID为" + bizScreensaverMaterialId + "的屏保素材 删除了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -105,13 +108,21 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
     @Override
     public Result updateBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
-        Result ret = null;
+
+        Result ret;
 
         try {
 
             int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 
-            ret = new Result("屏保素材数据修改了" + affectRow + "行");
+            logger.info(1 == affectRow ?
+                            "ID为{}的屏保素材修改成功" : "ID为{}的屏保素材修改失败",
+                    bizScreensaverMaterial.getScreensaverMaterialId()
+            );
+
+            ret = new Result("ID为" + bizScreensaverMaterial.getScreensaverMaterialId()
+                    + "的屏保素材 修改了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("屏保素材数据 修改报错", e);
@@ -125,12 +136,17 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public Result addBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
 
-        Result ret = null;
+        Result ret;
 
         try {
+            bizScreensaverMaterial.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+
             int affectRow = bizScreensaverMaterialMapper.insert(bizScreensaverMaterial);
 
+            logger.info(1 == affectRow ? "屏保素材添加成功" : "屏保素材添加失败");
+
             ret = new Result("屏保素材数据添加了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("屏保素材数据 添加报错", e);

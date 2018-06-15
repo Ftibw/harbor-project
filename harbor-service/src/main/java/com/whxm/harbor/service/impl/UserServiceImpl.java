@@ -43,7 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String userId) {
-        User user = null;
+
+        User user;
 
         try {
             user = userMapper.selectByPrimaryKey(userId);
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageVO<User> getUserList(PageQO<User> pageQO) {
 
-        PageVO<User> pageVO = null;
+        PageVO<User> pageVO;
 
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
@@ -85,12 +86,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result deleteUser(String userId) {
 
-        Result ret = null;
+        Result ret;
 
         try {
-            userMapper.deleteByPrimaryKey(userId);
+            int affectRow = userMapper.deleteByPrimaryKey(userId);
 
-            ret = new Result("ID为的" + userId + "用户成功删除");
+            logger.info(1 == affectRow ? "ID为的{}用户删除成功" : "ID为的{}用户删除失败", userId);
+
+            ret = new Result("ID为的" + userId + "用户 删除了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -106,14 +109,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result addUser(User user) {
 
-        Result ret = null;
+        Result ret;
 
         try {
             user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 
             int affectRow = userMapper.insert(user);
 
-            ret = new Result("用户数据 成功添加" + affectRow + "行");
+            logger.info(1 == affectRow ? "用户添加成功" : "用户添加失败");
+
+            ret = new Result("用户数据 添加" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -128,12 +133,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result updateUser(User user) {
 
-        Result ret = null;
+        Result ret;
 
         try {
             int affectRow = userMapper.updateByPrimaryKeySelective(user);
 
-            ret = new Result("用户数据 修改成功 影响了" + affectRow + "行");
+            logger.info(1 == affectRow ? "ID为的{}用户修改成功" : "ID为的{}用户修改失败", user.getUserId());
+
+            ret = new Result("用户数据 修改了" + affectRow + "行");
 
         } catch (Exception e) {
 

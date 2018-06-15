@@ -6,6 +6,7 @@ import com.whxm.harbor.bean.BizScreensaver;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizScreensaverMapper;
 import com.whxm.harbor.service.ScreensaverService;
 import org.slf4j.Logger;
@@ -28,14 +29,13 @@ public class ScreensaverServiceImpl implements ScreensaverService {
     @Override
     public BizScreensaver getBizScreensaver(Integer bizScreensaverId) {
 
-        BizScreensaver screensaver = null;
+        BizScreensaver screensaver;
 
         try {
             screensaver = bizScreensaverMapper.selectWithScreensaverMaterialAndPublishedTerminalAmount(bizScreensaverId);
 
-            if (null == screensaver) {
-                logger.error("错误屏保ID", screensaver);
-            }
+            if (null == screensaver) logger.info("ID为{}的屏保不存在", bizScreensaverId);
+
         } catch (Exception e) {
 
             logger.error("屏保ID为{}的数据 获取报错", bizScreensaverId);
@@ -49,7 +49,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
     @Override
     public PageVO<BizScreensaver> getBizScreensaverList(PageQO<BizScreensaver> pageQO) {
 
-        PageVO<BizScreensaver> pageVO = null;
+        PageVO<BizScreensaver> pageVO;
 
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
@@ -59,6 +59,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
             pageVO.setList(bizScreensaverMapper.getBizScreensaverList(pageQO.getCondition()));
 
             pageVO.setTotal(page.getTotal());
+
         } catch (Exception e) {
             logger.error("屏保列表 获取报错", e);
 
@@ -70,18 +71,18 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
     @Override
     public Result deleteBizScreensaver(Integer bizScreensaverId) {
-        Result ret = null;
+
+        Result ret;
 
         try {
             //删除屏保,先删屏保-屏保素材关系表,再删主表
-            int affectRow1 = bizScreensaverMapper.delScreensaverMaterialRelation(bizScreensaverId);
+            int affectRow = bizScreensaverMapper.delScreensaverMaterialRelation(bizScreensaverId);
 
             int affectRow2 = bizScreensaverMapper.deleteByPrimaryKey(bizScreensaverId);
 
-            logger.info("ID为{}的屏保 删除成功{}行,屏保-屏保素材关系表删除成功{}行",
-                    bizScreensaverId, affectRow2, affectRow1);
+            logger.info("ID为{}的屏保 删除{}行,屏保-屏保素材关系表删除{}行", bizScreensaverId, affectRow2, affectRow);
 
-            ret = new Result("ID为" + bizScreensaverId + "的屏保 删除成功" + affectRow2 + "行,屏保-屏保素材关系表删除成功" + affectRow1 + "行");
+            ret = new Result("ID为" + bizScreensaverId + "的屏保 删除了" + affectRow2 + "行,屏保-屏保素材关系表删除了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -95,13 +96,16 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
     @Override
     public Result updateBizScreensaver(BizScreensaver bizScreensaver) {
-        Result ret = null;
+
+        Result ret;
 
         try {
-
             int affectRow = bizScreensaverMapper.updateByPrimaryKeySelective(bizScreensaver);
 
+            logger.info(1 == affectRow ? "ID为{}的屏保修改成功" : "ID为{}的屏保修改失败", bizScreensaver.getScreensaverId());
+
             ret = new Result("屏保数据修改了" + affectRow + "行");
+
         } catch (Exception e) {
 
             logger.error("屏保数据 修改报错", e);
@@ -114,18 +118,27 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
     @Override
     public Result addBizScreensaver(BizScreensaver bizScreensaver, Integer[] screensaverMaterialIds) {
-        Result ret = null;
+
+        Result ret;
 
         try {
+            bizScreensaver.setScreensaverId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+
             bizScreensaver.setAddScreensaverTime(new Date());
 
-            int affectRow1 = bizScreensaverMapper.insert(bizScreensaver);
+            int affectRow = bizScreensaverMapper.insert(bizScreensaver);
 
-            System.out.println("影响了" + affectRow1 + "行,新增数据的主键为" + bizScreensaver.getScreensaverId());
+            logger.info(1 == affectRow ?
+                    "屏保数据添加成功,新增数据的主键为" + bizScreensaver.getScreensaverId() : "屏保数据添加失败");
 
-            int affectRow2 = bizScreensaverMapper.insertScreensaverMaterials(bizScreensaver.getScreensaverId(), screensaverMaterialIds);
+            int affectRow2 = bizScreensaverMapper.insertScreensaverMaterials(
+                    bizScreensaver.getScreensaverId(),
+                    screensaverMaterialIds
+            );
 
-            ret = new Result("屏保数据添加了" + affectRow1 + "行,该屏保添加了" + affectRow2 + "个素材");
+            logger.info(0 == affectRow2 ? "屏保-屏保素材中间表添加失败" : "屏保-屏保素材中间表添加了" + affectRow2 + "行");
+
+            ret = new Result("屏保数据添加了" + affectRow + "行,该屏保添加了" + affectRow2 + "个屏保素材");
 
         } catch (Exception e) {
 
@@ -139,13 +152,17 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
     @Override
     public Result publishScreensaver(Integer screensaverId, String[] terminalIds) {
-        Result ret = null;
+
+        Result ret;
 
         try {
             //发布屏保,就是向屏保-发布的终端关系表中插入数据
             int affectRow = bizScreensaverMapper.insertScreensaverPublishedTerminal(screensaverId, terminalIds, new Date());
 
-            ret = new Result("成功发布终端" + affectRow + "个");
+            logger.info(0 == affectRow ?
+                    "ID为{}的屏保发布失败" : "ID为{}的屏保成功发布终端" + screensaverId + "个", screensaverId);
+
+            ret = new Result("ID为" + screensaverId + "的屏保 发布终端" + affectRow + "个");
 
         } catch (Exception e) {
 

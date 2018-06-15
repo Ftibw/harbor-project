@@ -9,7 +9,6 @@ import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.BusinessFormatService;
 import com.whxm.harbor.mapper.BizFormatMapper;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -36,6 +34,8 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         try {
             bizFormat = bizFormatMapper.selectByPrimaryKey(bizFormatId);
+
+            if (null == bizFormat) logger.info("ID为{}的业态不存在", bizFormatId);
 
         } catch (Exception e) {
 
@@ -100,7 +100,13 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             bizFormat.setIsDeleted(Constant.RECORD_IS_DELETED);
 
-            updateBizFormat(bizFormat);
+            boolean isSuccess = updateBizFormat(bizFormat)
+                    .getData()
+                    .toString()
+                    .contains("1");
+
+            logger.info(isSuccess ?
+                    "ID为{}的业态数据 删除成功" : "ID为{}的业态数据 删除失败", bizFormatId);
 
             ret = new Result("ID为" + bizFormatId + "的业态数据删除成功");
 
@@ -135,7 +141,10 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         try {
             int affectRow = bizFormatMapper.updateByPrimaryKeySelective(bizFormat);
 
-            ret = new Result("ID为" + bizFormat.getBizFormatId() + "的业态 修改成功 影响了" + affectRow + "行");
+            logger.info(1 == affectRow ?
+                    "ID为{}的业态数据 修改成功" : "ID为{}的业态数据 修改失败", bizFormat.getBizFormatId());
+
+            ret = new Result("业态数据 修改了" + affectRow + "行");
 
         } catch (Exception e) {
 
@@ -150,7 +159,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
     @Override
     public Result addBizFormat(BizFormat bizFormat) {
 
-        Result ret = null;
+        Result ret;
 
         try {
 
@@ -159,11 +168,15 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
                 return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
             }
 
-            bizFormat.setIsDeleted(1);
+            bizFormat.setBizFormatId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+
+            bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
             int affectRow = bizFormatMapper.insert(bizFormat);
 
-            ret = new Result("成功添加" + affectRow + "行记录");
+            logger.info(1 == affectRow ? "业态数据添成功" : "业态数据添失败");
+
+            ret = new Result("业态数据添加了" + affectRow + "行");
 
         } catch (Exception e) {
 
