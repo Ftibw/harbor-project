@@ -149,7 +149,7 @@ public class ActivityController {
     }
 
     @ApiOperation("添加活动(需授权)")
-    @PostMapping("/bizActivity")
+    @PostMapping(value = "/bizActivity")
     public Result addBizActivity(@RequestBody BizActivity bizActivity) {
 
         Result result = null;

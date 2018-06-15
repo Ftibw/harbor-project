@@ -231,24 +231,25 @@
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizTerminal" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
     </resultMap>
-
+    <!--终端主动清除屏保发布终端关系表-->
     <delete id="delScreensaverTerminalRelation">
         DELETE FROM screensaver_published_terminal_relation
         WHERE terminal_id = #{terminalId}
     </delete>
-
+    <!--根据终端编号和终端平台,更新终端注册时间-->
     <update id="updateRegisteredTime">
         UPDATE biz_terminal
         SET register_terminal_time = #{registerTerminalTime}
         WHERE terminal_number = #{terminalNumber} AND terminal_platform = #{terminalPlatform}
     </update>
 
+    <!--根据终端编号查询:终端开关机时间, 屏保ID(通过终端关联屏保发布终端表)-->
     <select id="selectTerminalWithScreensaver" resultType="java.util.HashMap">
         SELECT
             screensaver_id       screensaverId,
             terminal_switch_time terminalSwitchTime
         FROM biz_terminal
-            LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
+        LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         WHERE terminal_number = #{terminalNumber}
     </select>
 </mapper>

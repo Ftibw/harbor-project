@@ -18,8 +18,11 @@ public class PageQO<T> {
     @Range(min = 1, max = Integer.MAX_VALUE)
     private int pageSize = 10;
 
-//    @ApiModelProperty(value = "排序", notes = "例：create_time desc,update_time desc")
-//    private String orderBy;
+    @ApiModelProperty(value = "排序", notes = "例：create_time desc,update_time desc")
+    private String orderBy;
+
+    @ApiModelProperty(value = "查询条件", hidden = true)
+    private T condition;
 
     public PageQO(int pageNum, int pageSize) {
         this.pageNum = pageNum;
@@ -50,8 +53,13 @@ public class PageQO<T> {
         this.pageSize = pageSize;
     }
 
-    @ApiModelProperty(value = "查询条件",hidden = true)
-    private T condition;
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 
     public T getCondition() {
         return condition;

@@ -121,8 +121,8 @@ public class TerminalServiceImpl implements TerminalService {
             int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
             logger.info(1 == affectRow ?
-                    "ID为" + bizTerminal.getTerminalId() + "的终端数据修改成功" :
-                    "ID为" + bizTerminal.getTerminalId() + "的终端数据修改失败"
+                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改成功" :
+                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改失败"
             );
 
             ret = new Result("终端数据修改了" + affectRow + "行");
@@ -217,7 +217,7 @@ public class TerminalServiceImpl implements TerminalService {
             terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
 
             if (null != terminalInfo) {
-                //屏保信息
+                //屏保ID
                 screensaverId = terminalInfo.get("screensaverId");
                 //终端开关机时间
                 terminalSwitchTime = terminalInfo.get("terminalSwitchTime");

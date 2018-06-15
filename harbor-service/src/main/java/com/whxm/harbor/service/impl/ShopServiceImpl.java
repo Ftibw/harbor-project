@@ -255,13 +255,14 @@ public class ShopServiceImpl implements ShopService {
 
             List<String> picturesPath = new ArrayList<>();
 
-            shopIdList.forEach(shopId -> {
-
+            for (String shopId : shopIdList) {
                 List<String> shopPicturesPath = getShopPicturesById(shopId);
 
-                if (null != shopPicturesPath)
+                shopPicturesPath.forEach(item -> item = urlConfig.getUrlPrefix() + item);
+
+                if (!shopPicturesPath.isEmpty())
                     picturesPath.addAll(shopPicturesPath);
-            });
+            }
 
             ret = new Result(picturesPath);
 
