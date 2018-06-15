@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.BizScreensaver;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ScreensaverService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +66,7 @@ public class ScreensaverController {
 
             logger.error("ID为{}的屏保数据 获取报错", screensaverId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + screensaverId + "的屏保数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + screensaverId + "的屏保数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -100,7 +101,7 @@ public class ScreensaverController {
         } catch (Exception e) {
             logger.error("ID{}的屏保数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保 删除报错", Constant.NO_DATA);
         }
 
         return ret;

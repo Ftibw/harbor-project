@@ -1,6 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ActivityMaterialService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -110,7 +111,7 @@ public class ActivityMaterialController {
 
             logger.error("ID为{}活动素材数据 获取报错", activityMaterialId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + activityMaterialId + "活动素材数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + activityMaterialId + "活动素材数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -144,7 +145,7 @@ public class ActivityMaterialController {
 
             logger.error("ID为{}的活动素材 删除报错", id, e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动素材 删除报错", null);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动素材 删除报错", Constant.NO_DATA);
         }
         return result;
     }

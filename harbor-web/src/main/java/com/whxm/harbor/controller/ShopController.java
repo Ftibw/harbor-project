@@ -3,6 +3,7 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -83,7 +84,8 @@ public class ShopController {
         } catch (Exception e) {
             logger.error("ID为{}的商铺图片 获取报错", bizShopId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizShopId + "的商铺图片 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + bizShopId + "的商铺图片 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -103,7 +105,8 @@ public class ShopController {
         } catch (Exception e) {
             logger.error("业态类型为{}的商铺图片 获取报错", type, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "业态类型为" + type + "的商铺图片 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "业态类型为" + type + "的商铺图片 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -187,7 +190,8 @@ public class ShopController {
 
             logger.error("ID为{}的商铺数据 获取报错", shopId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + shopId + "的商铺数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + shopId + "的商铺数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -224,7 +228,8 @@ public class ShopController {
 
             logger.error("ID为{}的商铺 状态(启用/停用)变更报错", bizShopId);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizShopId + "的商铺 状态切换报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + bizShopId + "的商铺 状态切换报错", Constant.NO_DATA);
         }
 
         return ret;

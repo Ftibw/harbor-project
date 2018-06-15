@@ -1,6 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ActivityService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -83,7 +84,7 @@ public class ActivityController {
 
             logger.error("活动列表 获取报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "", pageQO);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动列表 获取报错", pageQO);
         }
 
         return ret;
@@ -106,7 +107,7 @@ public class ActivityController {
 
             logger.error("ID为{}的活动数据 获取报错", activityId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + activityId + "的活动数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + activityId + "的活动数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -131,7 +132,7 @@ public class ActivityController {
     @DeleteMapping("/bizActivity")
     public Result delBizActivity(
             @ApiParam(name = "ID", value = "活动的ID", required = true)
-             Integer id
+                    Integer id
     ) {
         Result result = null;
 
@@ -142,7 +143,7 @@ public class ActivityController {
 
             logger.error("ID为{}的活动数据 删除报错", id, e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动数据 删除报错", null);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动数据 删除报错", Constant.NO_DATA);
         }
         return result;
     }

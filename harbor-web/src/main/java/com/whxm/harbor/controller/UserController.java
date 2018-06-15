@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.UserService;
 import com.whxm.harbor.utils.MD5Util;
 import com.whxm.harbor.utils.TokenUtils;
@@ -148,11 +149,11 @@ public class UserController {
         Result ret = null;
 
         if (null == user.getUserLoginname()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户名不能为空", null);
+            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户名不能为空", Constant.NO_DATA);
         }
 
         if (null == user.getUserPassword()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户密码不能为空", null);
+            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户密码不能为空", Constant.NO_DATA);
         }
 
         User info = userService.login(user);
@@ -180,10 +181,10 @@ public class UserController {
 
             } else
 
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "密码错误", null);
+                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "密码错误", Constant.NO_DATA);
         } else {
 
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "该用户不存在", null);
+            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "该用户不存在", Constant.NO_DATA);
         }
 
         return ret;
@@ -217,9 +218,9 @@ public class UserController {
                 ret = new Result(chaos(userId, newSalt));
 
             } else
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "token无效", null);
+                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "token无效", Constant.NO_DATA);
         } else
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "未登陆", null);
+            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "未登陆", Constant.NO_DATA);
 
         return ret;
     }
@@ -241,7 +242,7 @@ public class UserController {
 
             logger.error("登出报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登出报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登出报错", Constant.NO_DATA);
         }
 
         return ret;

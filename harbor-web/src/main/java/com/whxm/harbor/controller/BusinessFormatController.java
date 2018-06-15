@@ -2,6 +2,7 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.BusinessFormatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -86,7 +87,7 @@ public class BusinessFormatController {
 
             logger.error("ID为{}的业态数据 获取报错", bizFormatId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizFormatId + "的业态数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizFormatId + "的业态数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -136,7 +137,7 @@ public class BusinessFormatController {
 
             logger.error("ID为{}的业态数据 删除报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的业态数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的业态数据 删除报错", Constant.NO_DATA);
         }
         return ret;
     }

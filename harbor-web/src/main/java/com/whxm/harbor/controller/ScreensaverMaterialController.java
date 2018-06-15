@@ -6,6 +6,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -80,7 +81,8 @@ public class ScreensaverMaterialController {
 
             logger.error("ID为{}的屏保素材数据 获取报错", screensaverMaterialId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + screensaverMaterialId + "的屏保素材数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + screensaverMaterialId + "的屏保素材数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -97,7 +99,8 @@ public class ScreensaverMaterialController {
 
             logger.error("屏保素材数据 修改报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材数据 修改报错", bizScreensaverMaterial);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "屏保素材数据 修改报错", bizScreensaverMaterial);
         }
 
         return ret;
@@ -116,7 +119,8 @@ public class ScreensaverMaterialController {
 
             logger.error("ID为{}的屏保素材数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保素材数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + id + "的屏保素材数据 删除报错", Constant.NO_DATA);
         }
 
         return ret;

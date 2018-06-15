@@ -2,6 +2,7 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.utils.IPv4Util;
 import io.swagger.annotations.*;
@@ -87,7 +88,7 @@ public class TerminalController {
             convert.clean()
                     .build("code", 0)
                     .build("prog", prog)
-                    .build("on_off", null)
+                    .build("on_off", Constant.NO_DATA)
                     .build("data", new Object[]{});
         }
         return convert;
@@ -133,7 +134,8 @@ public class TerminalController {
 
             logger.error("ID为{}的终端数据 获取报错", terminalId, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + terminalId + "的终端数据 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + terminalId + "的终端数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -167,7 +169,8 @@ public class TerminalController {
 
             logger.error("ID为{}的终端数据 删除报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的终端数据 删除报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + id + "的终端数据 删除报错", Constant.NO_DATA);
         }
 
         return ret;
