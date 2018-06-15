@@ -140,6 +140,7 @@ public class ScreensaverController {
             ret = screensaverService.publishScreensaver(param.screensaverId, param.terminalIds);
 
         } catch (Exception e) {
+
             logger.error("ID为{}的屏保 发布报错", param.screensaverId);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保 发布报错", param);
