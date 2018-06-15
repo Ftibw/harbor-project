@@ -69,7 +69,7 @@ public class TerminalController {
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
-            @ApiParam(name = "prog", value = "前正在播放的屏保编", required = true)
+            @ApiParam(name = "prog", value = "前正在播放的屏保编号", required = true)
                     Integer prog
     ) {
 

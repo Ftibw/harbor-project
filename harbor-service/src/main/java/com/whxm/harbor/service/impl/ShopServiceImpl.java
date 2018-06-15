@@ -96,10 +96,11 @@ public class ShopServiceImpl implements ShopService {
         try {
             list = bizShopMapper.getBizShopListByFloorNumberAndBizType(params);
 
-            list.forEach(item -> item.setShopLogoPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getShopLogoPath()
-            ));
+            list.forEach(item ->
+                    item.setShopLogoPath(
+                            urlConfig.getUrlPrefix()
+                                    + item.getShopLogoPath()
+                    ));
         } catch (Exception e) {
 
             logger.error("商铺数据列表 获取报错", e);
@@ -198,7 +199,7 @@ public class ShopServiceImpl implements ShopService {
 
                 int affectRow2 = 0;
 
-                if (!pictureList.isEmpty())
+                if (null != pictureList && !pictureList.isEmpty())
                     affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
 
                 ret = new Result("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");

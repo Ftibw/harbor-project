@@ -36,10 +36,14 @@ public class ShopController {
     @Autowired
     private FileDir fileDir;
 
-    @ApiOperation(value = "根据业态和楼层获取店铺列表",
-            notes = "param: {'floor':'xx','type':''}   type表示业态ID，floor表示楼层ID")
+    @ApiOperation(value = "根据业态和楼层获取店铺列表")
     @PostMapping("/shops")
-    public Map<String, Object> getBizShops(Integer floor, Integer type) {
+    public Map<String, Object> getBizShops(
+            @ApiParam(name = "floor", value = "楼层ID", required = true)
+                    Integer floor,
+            @ApiParam(name = "type", value = "业态ID", required = true)
+                    Integer type
+    ) {
 
         ResultMap<String, Object> ret = new ResultMap<>(2);
 
