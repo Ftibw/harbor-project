@@ -112,6 +112,13 @@ public class ScreensaverController {
     @ApiOperation("添加屏保(需授权)")
     @PostMapping("/bizScreensaver")
     public Result addBizScreensaver(@RequestBody ScreensaverParam param) {
+
+        if (Objects.isNull(param.bizScreensaver) || Objects.isNull(param.screensaverMaterialIds)) {
+
+            return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
+                    "参数不能为null", Constant.NO_DATA);
+        }
+
         Result ret = null;
         try {
             ret = screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds);
@@ -131,7 +138,7 @@ public class ScreensaverController {
         if (Objects.isNull(param.screensaverId) || Objects.isNull(param.terminalIds)) {
 
             return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
-                    "参数输入错误", Constant.NO_DATA);
+                    "参数不能为null", Constant.NO_DATA);
         }
 
         Result ret = null;
