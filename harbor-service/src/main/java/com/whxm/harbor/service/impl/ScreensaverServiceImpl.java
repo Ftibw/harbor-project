@@ -160,7 +160,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
             int affectRow = bizScreensaverMapper.insertScreensaverPublishedTerminal(screensaverId, terminalIds, new Date());
 
             logger.info(0 == affectRow ?
-                    "ID为{}的屏保发布失败" : "ID为{}的屏保成功发布终端" + screensaverId + "个", screensaverId);
+                    "ID为{}的屏保发布失败" : "ID为{}的屏保成功发布终端" + affectRow + "个", screensaverId);
 
             ret = new Result("ID为" + screensaverId + "的屏保 发布终端" + affectRow + "个");
 
