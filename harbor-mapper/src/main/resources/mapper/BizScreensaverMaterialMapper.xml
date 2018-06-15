@@ -107,6 +107,7 @@
                 concat('%',#{screensaverMaterialType},'%')
             </if>
         </where>
+        ORDER BY screensaver_material_id DESC
     </select>
 
     <select id="selectMaterialsByScreensaverId" resultMap="BaseResultMap">

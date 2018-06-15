@@ -86,6 +86,7 @@
         <include refid="Base_Column_List"/>
         from biz_format
         where is_deleted = 1
+        ORDER BY biz_format_id DESC
     </select>
 
     <select id="selectIdByNumber" resultMap="BaseResultMap">

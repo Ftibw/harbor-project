@@ -95,5 +95,6 @@
         select
         <include refid="Base_Column_List"/>
         from biz_activity where is_deleted = 1
+        ORDER BY activity_id DESC
     </select>
 </mapper>

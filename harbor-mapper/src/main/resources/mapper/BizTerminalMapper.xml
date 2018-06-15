@@ -226,6 +226,7 @@
             <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
             <if test="floorId!=null">and floor_id=#{floorId}</if>
         </where>
+        order by add_terminal_time desc
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizTerminal" extends="BaseResultMap">

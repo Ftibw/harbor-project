@@ -254,6 +254,7 @@
             <if test="floorId!=null">and floor_id=#{floorId}</if>
             <if test="bizFormatId!=null">and biz_format_id=#{bizFormatId}</if>
         </where>
+        order by add_shop_time desc
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizShop" extends="BaseResultMap">

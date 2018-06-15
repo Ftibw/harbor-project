@@ -22,10 +22,10 @@
     <!--设置插入返回主键-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="screensaverId"
             parameterType="com.whxm.harbor.bean.BizScreensaver">
-    insert into biz_screensaver (screensaver_id, screensaver_program_name, 
+    insert into biz_screensaver (screensaver_id, screensaver_program_name,
        add_screensaver_time
       )
-    values (#{screensaverId,jdbcType=INTEGER}, #{screensaverProgramName,jdbcType=VARCHAR}, 
+    values (#{screensaverId,jdbcType=INTEGER}, #{screensaverProgramName,jdbcType=VARCHAR},
        #{addScreensaverTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -126,6 +126,7 @@
     <if test="screensaverProgramName!=null">
         WHERE bs.screensaver_program_name LIKE concat('%',#{screensaverProgramName},'%')
     </if>
+    ORDER BY bs.screensaver_id DESC
   </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizScreensaver" extends="BaseResultMap">

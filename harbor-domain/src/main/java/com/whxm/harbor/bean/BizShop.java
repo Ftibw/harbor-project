@@ -15,7 +15,7 @@ public class BizShop {
 
     private Integer floorId;
 
-    private String bizFormatId;
+    private Integer bizFormatId;
 
     private String shopHouseNumber;
 
@@ -95,12 +95,12 @@ public class BizShop {
         this.floorId = floorId;
     }
 
-    public String getBizFormatId() {
+    public Integer getBizFormatId() {
         return bizFormatId;
     }
 
-    public void setBizFormatId(String bizFormatId) {
-        this.bizFormatId = bizFormatId == null ? null : bizFormatId.trim();
+    public void setBizFormatId(Integer bizFormatId) {
+        this.bizFormatId = bizFormatId;
     }
 
     public String getShopHouseNumber() {

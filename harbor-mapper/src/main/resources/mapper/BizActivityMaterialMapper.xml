@@ -109,6 +109,7 @@
   <select id="getBizActivityMaterialList" resultMap="ExtensionResultMap">
     select bam.*,ba.activity_type from biz_activity_material bam
     JOIN biz_activity ba USING (activity_id)
+    ORDER BY bam.activity_material_id DESC
     <where>
       <if test="activityMaterialName!=null">and bam.activity_material_name like concat('%',#{activityMaterialName},'%')</if>
       <if test="activityId!=null">and bam.activity_id=#{activityId}</if>

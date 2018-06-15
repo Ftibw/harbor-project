@@ -81,5 +81,6 @@
         select
         <include refid="Base_Column_List"/>
         from biz_floor
+        ORDER BY floor_id DESC
     </select>
 </mapper>
