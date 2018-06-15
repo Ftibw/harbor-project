@@ -201,10 +201,10 @@ public class ShopServiceImpl implements ShopService {
 
                 int affectRow2 = 0;
 
-                if (null != pictureList && !pictureList.isEmpty() && !pictureList.get(0).isEmpty()) {
+                //必填传入参数,前端需要把控
+                if (null != pictureList && !pictureList.isEmpty() && !pictureList.get(0).isEmpty())
 
                     affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
-                }
 
                 logger.info("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
 
