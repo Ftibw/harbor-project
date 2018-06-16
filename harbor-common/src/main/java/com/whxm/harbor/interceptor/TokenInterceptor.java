@@ -24,9 +24,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         String token = request.getParameter("token");
 
-        String salt = null;
-
-        if (token != null) {
+        if (token != null && 64 == token.length()) {
             //设置String序列化器
             StringRedisSerializer serializer = new StringRedisSerializer();
 
@@ -35,18 +33,18 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             redisTemplate.setValueSerializer(serializer);
 
             //从redis获取user信息
-            salt = (String) redisTemplate.boundValueOps(order(token)).get();
+            if (redisTemplate.boundValueOps(order(token)).get().equals(TokenUtils.salt(token))){
+
+                return true;
+            }
         }
 
-        if (null == token || null == salt || !salt.equals(TokenUtils.salt(token))) {
-            response.setContentType("text/html;charset=utf-8");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().println("未授权");
-            // 401 状态码 没有权限访问
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return false;
-        }
+        response.setContentType("text/html;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().println("未授权");
+        // 401 状态码 没有权限访问
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
-        return true;
+        return false;
     }
 }

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @Api(description = "屏保素材服务")
 @RestController
 @MyApiResponses
+@RequestMapping("/screensaverMaterial")
 public class ScreensaverMaterialController {
 
     private static final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialController.class);

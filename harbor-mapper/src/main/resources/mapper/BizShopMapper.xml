@@ -231,16 +231,6 @@
         WHERE shop_number=#{shopNumber}
     </select>
 
-    <select id="getBizShopListByFloorNumberAndBizType" resultMap="ExtensionResultMap">
-        select
-        <include refid="Base_Column_List"/>,floor_name,biz_format_type
-        from biz_shop
-        JOIN biz_floor USING(floor_id)
-        JOIN biz_format USING (biz_format_id)
-        WHERE floor_id=#{floorId} AND biz_format_id=#{bizFormatId}
-    </select>
-
-
     <select id="getBizShopList" resultMap="ExtensionResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name,biz_format_type
@@ -255,6 +245,19 @@
             <if test="bizFormatId!=null">and biz_format_id=#{bizFormatId}</if>
         </where>
         order by add_shop_time desc
+    </select>
+
+    <select id="getBizShopListOptional" resultMap="ExtensionResultMap">
+        select
+        <include refid="Base_Column_List"/>,floor_name,biz_format_type
+        from biz_shop
+        JOIN biz_floor USING(floor_id)
+        JOIN biz_format USING (biz_format_id)
+        <where>
+            <if test="floorId!=null">AND floor_id=#{floorId}</if>
+            <if test="bizFormatId!=null">AND biz_format_id=#{bizFormatId}</if>
+            <if test="initial!=null">AND shop_name like concat(#{initial},'%')</if>
+        </where>
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizShop" extends="BaseResultMap">
@@ -276,25 +279,22 @@
         WHERE shop_id=#{shopId}
     </delete>-->
 
-    <select id="selectShopPicturesById" resultType="java.lang.String">
-        SELECT shop_picture_path
+    <select id="selectShopPicturesById" resultType="com.whxm.harbor.bean.ShopPicture">
+        SELECT
+            shop_id shopId,
+            shop_picture_path shopPicturePath,
+            shop_picture_name shopPictureName,
+            shop_picture_size shopPictureSize
         FROM shop_picture_relation
         WHERE shop_id = #{bizShopId}
     </select>
 
     <!--啰嗦,字段需求一开始没说,到后来又要加-->
-    <select id="selectShopIdListByBizType" resultType="java.lang.String">
+    <!--<select id="selectShopIdListByBizType" resultType="java.lang.String">
         SELECT bs.shop_id
         FROM biz_shop bs
             JOIN biz_format bf USING (biz_format_id)
         WHERE bf.biz_format_type = #{bizFormatType}
-    </select>
-
-    <!--<select id="selectShopPicturesByType" >
-        SELECT bs.shop_id FROM biz_shop bs
-        JOIN biz_format bf USING (biz_format_id)
-        WHERE bf.biz_format_type=#{bizFormatType}
     </select>-->
-
 
 </mapper>

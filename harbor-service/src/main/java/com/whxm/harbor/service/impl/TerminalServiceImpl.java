@@ -225,7 +225,7 @@ public class TerminalServiceImpl implements TerminalService {
             //先存了list引用再说
             ret.build("prog", screensaverId)
                     .build("on_off", String.valueOf(terminalSwitchTime))
-                    .build("data", list);
+                    .build("data", list).build("delay", 10);
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);

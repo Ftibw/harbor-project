@@ -2,16 +2,15 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.whxm.harbor.bean.BizShop;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
+import com.whxm.harbor.vo.BizShopVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -85,22 +84,32 @@ public class ShopServiceImpl implements ShopService {
     /**
      * 终端获取商铺数据
      *
-     * @param params 楼层编号和业态编号
+     * @param params 楼层ID/业态ID/商铺名称首字母
      * @return list
      */
     @Override
-    public List<BizShop> getBizShopList(Map<String, Object> params) {
+    public List<BizShopVo> getBizShopListOptional(Map<String, Object> params) {
 
-        List<BizShop> list;
+        final List<BizShopVo> ret = new ArrayList<>();
 
         try {
-            list = bizShopMapper.getBizShopListByFloorNumberAndBizType(params);
+            List<BizShop> list = bizShopMapper.getBizShopListOptional(params);
 
-            list.forEach(item ->
-                    item.setShopLogoPath(
-                            urlConfig.getUrlPrefix()
-                                    + item.getShopLogoPath()
-                    ));
+            list.forEach(po -> {
+
+                po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+
+                BizShopVo vo = new BizShopVo();
+
+                BeanUtils.copyProperties(po, vo);
+
+                vo.setPictures(this.getShopPicturesById(vo.getShopId()));
+
+                ret.add(vo);
+            });
+
+            logger.info(list.isEmpty() ? "{}条件下查询商铺列表无数据" : "{}条件下查询商铺列表成功", params);
+
         } catch (Exception e) {
 
             logger.error("商铺数据列表 获取报错", e);
@@ -108,7 +117,7 @@ public class ShopServiceImpl implements ShopService {
             throw new RuntimeException();
         }
 
-        return list;
+        return ret;
     }
 
     @Override
@@ -225,14 +234,21 @@ public class ShopServiceImpl implements ShopService {
         return ret;
     }
 
-    //蛋疼,以下为专门定制的服务...
     @Override
-    public List<String> getShopPicturesById(String bizShopId) {
+    public List<ShopPicture> getShopPicturesById(String bizShopId) {
 
-        List<String> shopPicturesPath;
+        List<ShopPicture> list;
 
         try {
-            shopPicturesPath = bizShopMapper.selectShopPicturesById(bizShopId);
+            list = bizShopMapper.selectShopPicturesById(bizShopId);
+
+            list.forEach(picture ->
+                    picture.setShopPicturePath(
+                            urlConfig.getUrlPrefix() + picture.getShopPicturePath()
+                    )
+            );
+
+            logger.info(list.isEmpty() ? "ID为{}的商铺图片不存在" : "ID为{}的商铺图片查询成功", bizShopId);
 
         } catch (Exception e) {
 
@@ -241,37 +257,6 @@ public class ShopServiceImpl implements ShopService {
             throw new RuntimeException();
         }
 
-        return shopPicturesPath;
-    }
-
-    //这个方法...
-    @Override
-    public Result getShopPicturesByBizType(String bizFormatType) {
-
-        Result ret;
-
-        try {
-            final List<String> picturesPath = new ArrayList<>();
-
-            bizShopMapper.selectShopIdListByBizType(bizFormatType)
-                    .forEach(
-                            shopId -> getShopPicturesById(shopId)
-                                    .forEach(
-                                            item -> picturesPath.add(
-                                                    urlConfig.getUrlPrefix() + item
-                                            )
-                                    )
-                    );
-
-            ret = new Result(picturesPath);
-
-        } catch (Exception e) {
-
-            logger.error("业态种类为{}的商铺图片列表 查询报错", bizFormatType, e);
-
-            throw new RuntimeException();
-        }
-
-        return ret;
+        return list;
     }
 }

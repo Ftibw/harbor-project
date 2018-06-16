@@ -16,7 +16,7 @@ public class PageQO<T> {
 
     @ApiModelProperty(value = "一页数量")
     @Range(min = 1, max = Integer.MAX_VALUE)
-    private int pageSize = 10;
+    private int pageSize = Integer.MAX_VALUE;
 
    /* @ApiModelProperty(value = "排序", notes = "例：create_time desc,update_time desc")
     private String orderBy;*/

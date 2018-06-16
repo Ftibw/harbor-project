@@ -1,6 +1,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizShop;
+import com.whxm.harbor.bean.ShopPicture;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,12 +27,11 @@ public interface BizShopMapper {
 
     List<BizShop> getBizShopList(BizShop condition);
 
-    List<String> selectShopPicturesById(String bizShopId);
+    List<ShopPicture> selectShopPicturesById(String bizShopId);
 
-    List<String> selectShopIdListByBizType(String bizFormatType);
+//    List<String> selectShopIdListByBizType(String bizFormatType);
 
-    List<BizShop> getBizShopListByFloorNumberAndBizType(Map<String, Object> params);
-
+    List<BizShop> getBizShopListOptional(Map<String, Object> params);
 
     BizShop selectIdByNumber(String shopNumber);
 

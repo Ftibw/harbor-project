@@ -1,9 +1,7 @@
 package com.whxm.harbor.service;
 
-import com.whxm.harbor.bean.BizShop;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.*;
+import com.whxm.harbor.vo.BizShopVo;
 
 import java.util.List;
 import java.util.Map;
@@ -30,9 +28,9 @@ public interface ShopService {
 
 
     /**
-     *根据业态和楼层获取店铺列表
+     *根据{业态ID/楼层ID/商铺名称首字母}获取店铺列表
      */
-    List<BizShop> getBizShopList(Map<String, Object> params);
+    List<BizShopVo> getBizShopListOptional(Map<String, Object> params);
 
     /**
      * 根据ID停用/启用商铺
@@ -62,7 +60,7 @@ public interface ShopService {
      * @param bizShopId 商铺ID
      * @return 商铺的图片路径集合
      */
-    List<String> getShopPicturesById(String bizShopId);
+    List<ShopPicture> getShopPicturesById(String bizShopId);
 
     /**
      * 根据业态种类获取图片集合
@@ -70,5 +68,5 @@ public interface ShopService {
      * @param bizFormatType 业态种类
      * @return 查询结果
      */
-    Result getShopPicturesByBizType(String bizFormatType);
+//    Result getShopPicturesByBizType(String bizFormatType);
 }

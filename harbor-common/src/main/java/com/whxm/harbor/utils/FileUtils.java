@@ -99,4 +99,12 @@ public class FileUtils {
             return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "上传的文件是空的", file);
         }
     }
+
+    /*
+    File file = new File("图片文件路径");
+    FileInputStream fis = new FileInputStream(file)；
+    BufferedImage bufferedImg = ImageIO.read(fis);
+    int imgWidth = bufferedImg.getWidth();
+    int imgHeight = bufferedImg.getHeight();
+    */
 }

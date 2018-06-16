@@ -52,23 +52,23 @@ public class ScreensaverController {
     }
 
     @ApiOperation("获取屏保(需授权)")
-    @GetMapping("/bizScreensaver/{ID}")
+    @GetMapping("/bizScreensaver")
     public Result getBizScreensaver(
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
-            @PathVariable("ID") Integer screensaverId
+            @RequestParam("id") Integer id
     ) {
-        Result ret = null;
-        BizScreensaver screensaver = null;
+        Result ret;
+
         try {
-            screensaver = screensaverService.getBizScreensaver(screensaverId);
+            BizScreensaver screensaver = screensaverService.getBizScreensaver(id);
 
             ret = new Result(screensaver);
 
         } catch (Exception e) {
 
-            logger.error("ID为{}的屏保数据 获取报错", screensaverId, e);
+            logger.error("ID为{}的屏保数据 获取报错", id, e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + screensaverId + "的屏保数据 获取报错", Constant.NO_DATA);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;

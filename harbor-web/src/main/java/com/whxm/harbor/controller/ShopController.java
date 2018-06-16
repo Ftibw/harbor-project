@@ -3,9 +3,11 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.FileUtils;
+import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,7 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,24 +43,40 @@ public class ShopController {
     private ShopService shopService;
 
     @Autowired
+    private UrlConfig urlConfig;
+
+    @Autowired
     private FileDir fileDir;
+
+    @ApiOperation(value = "根据店铺名称首字母获取商铺列表")
+    @PostMapping(value = "/shopsByName", consumes = "application/x-www-form-urlencoded")
+    public Map<String, Object> getBizShopsByName(
+            @ApiParam(name = "initial", value = "商铺名称首字母", required = true)
+                    String initial) {
+//        shopService
+        return null;
+    }
+
 
     @ApiOperation(value = "根据业态和楼层获取店铺列表")
     @PostMapping(value = "/shops", consumes = "application/x-www-form-urlencoded")
     public Map<String, Object> getBizShops(
-            @ApiParam(name = "floor", value = "楼层ID", required = true)
+            @ApiParam(name = "floor", value = "楼层ID")
                     Integer floor,
-            @ApiParam(name = "type", value = "业态ID", required = true)
-                    Integer type
+            @ApiParam(name = "type", value = "业态ID")
+                    Integer type,
+            @ApiParam(name = "initial", value = "商铺名称首字母")
+                    String initial
     ) {
 
         ResultMap<String, Object> ret = new ResultMap<>(2);
 
         try {
-            List<BizShop> list = shopService.getBizShopList(
-                    new ResultMap<String, Object>(2)
+            List<BizShopVo> list = shopService.getBizShopListOptional(
+                    new ResultMap<String, Object>(3)
                             .build("floorId", floor)
                             .build("bizFormatId", type)
+                            .build("initial", initial)
             );
 
             ret.build("data", list);
@@ -69,17 +93,16 @@ public class ShopController {
         return ret;
     }
 
-
     @ApiOperation(value = "根据商铺ID获取商铺图片")
     @GetMapping("/shopPictures/{ID}")
     public Result getPicturesById(@PathVariable("ID") String bizShopId) {
 
-        Result ret = null;
+        Result ret;
 
         try {
-            List<String> shopPicturePaths = shopService.getShopPicturesById(bizShopId);
+            List<ShopPicture> shopPictures = shopService.getShopPicturesById(bizShopId);
 
-            ret = new Result(shopPicturePaths);
+            ret = new Result(shopPictures);
 
         } catch (Exception e) {
             logger.error("ID为{}的商铺图片 获取报错", bizShopId, e);
@@ -91,26 +114,7 @@ public class ShopController {
         return ret;
     }
 
-    @ApiOperation(value = "根据商铺的业态类型获取商铺图片")
-    @GetMapping(value = "/typePictures", consumes = "application/x-www-form-urlencoded")
-    public Result getPicturesByType(
-            @ApiParam(name = "type", value = "商铺的业态种类", required = true)
-                    String type) {
-
-        Result ret = null;
-
-        try {
-            ret = shopService.getShopPicturesByBizType(type);
-
-        } catch (Exception e) {
-            logger.error("业态类型为{}的商铺图片 获取报错", type, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "业态类型为" + type + "的商铺图片 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
-    }
+    //=========================以上为对外提供的API=================================
 
     @ApiOperation("上传商铺logo")
     @PostMapping("/logo")
@@ -134,6 +138,30 @@ public class ShopController {
                 Map<String, Object> map = new HashMap<String, Object>(4);
 
                 FileUtils.upload(file, request, fileDir.getShopPictureDir(), map);
+
+                //InputStream is = file.getInputStream();
+                //判断图片横屏还是竖屏
+                /*URL url = new URL(urlConfig.getUrlPrefix() + map.get("filePath"));
+
+                URLConnection con = url.openConnection();
+                //不超时
+                con.setConnectTimeout(0);
+                //不允许缓存
+                con.setUseCaches(false);
+
+                con.setDefaultUseCaches(false);
+
+                InputStream pis = con.getInputStream();
+
+                BufferedImage bufferedImg = ImageIO.read(pis);
+
+                int imgWidth = bufferedImg.getWidth();
+
+                int imgHeight = bufferedImg.getHeight();
+
+                String type = imgWidth > imgHeight ? "横屏" : "竖屏";
+
+                System.out.println(type);*/
 
                 retList.add(map);
 
@@ -215,21 +243,21 @@ public class ShopController {
     }
 
     @ApiOperation("启用/停用商铺(需授权)")
-    @PatchMapping("/bizShop/{ID}")
+    @DeleteMapping(value = "/bizShop")
     public Result triggerBizShop(
             @ApiParam(name = "ID", value = "商铺的ID", required = true)
-            @PathVariable("ID") String bizShopId
+                    String id
     ) {
         Result ret = null;
         try {
-            ret = shopService.triggerBizShop(bizShopId);
+            ret = shopService.triggerBizShop(id);
 
         } catch (Exception e) {
 
-            logger.error("ID为{}的商铺 状态(启用/停用)变更报错", bizShopId);
+            logger.error("ID为{}的商铺 状态(启用/停用)变更报错", id);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + bizShopId + "的商铺 状态切换报错", Constant.NO_DATA);
+                    "ID为" + id + "的商铺 状态切换报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -242,6 +270,7 @@ public class ShopController {
     public Result addBizShop(@RequestBody ShopParam param) {
 
         Result ret = null;
+
         try {
             ret = shopService.addBizShop(param.bizShop, param.pictureList);
 
