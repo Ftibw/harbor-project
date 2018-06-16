@@ -132,7 +132,8 @@ public class ScreensaverController {
         return ret;
     }
 
-    @ApiOperation("发布屏保(需授权)")
+    @ApiOperation(value = "发布屏保(需授权)",
+            notes = "Integer screensaverId 屏保ID,String[] terminalIds 终端ID数组")
     @PostMapping("/publishedScreensaver")
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
 
