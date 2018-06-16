@@ -37,6 +37,18 @@ public class BizTerminal {
     //join biz_floor 查询终端所在楼层名
     private String floorName;
 
+    //join screensaver_published_terminal_relation 查询指定屏保已发布的终端列表
+    private Integer screensaverId;
+
+    @JsonIgnore
+    public Integer getScreensaverId() {
+        return screensaverId;
+    }
+
+    public void setScreensaverId(Integer screensaverId) {
+        this.screensaverId = screensaverId;
+    }
+
     public String getFloorName() {
         return floorName;
     }

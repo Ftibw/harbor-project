@@ -218,6 +218,9 @@
         <include refid="Base_Column_List"/>,floor_name
         FROM biz_terminal
         JOIN biz_floor USING (floor_id)
+        <if test="screensaverId!=null">
+            JOIN screensaver_published_terminal_relation USING (terminal_id)
+        </if>
         <where>
             is_deleted=1
             <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
@@ -225,6 +228,7 @@
             <if test="terminalType!=null">and terminal_type =#{terminalType}</if>
             <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
             <if test="floorId!=null">and floor_id=#{floorId}</if>
+            <if test="screensaverId!=null">and screensaver_id=#{screensaverId}</if>
         </where>
         order by add_terminal_time desc
     </select>
@@ -250,7 +254,7 @@
             screensaver_id       screensaverId,
             terminal_switch_time terminalSwitchTime
         FROM biz_terminal
-        LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
+            LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         WHERE terminal_number = #{terminalNumber}
     </select>
 </mapper>
