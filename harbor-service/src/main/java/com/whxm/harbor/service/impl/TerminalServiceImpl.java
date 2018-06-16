@@ -251,4 +251,24 @@ public class TerminalServiceImpl implements TerminalService {
 
         return ret;
     }
+
+    @Override
+    public List<BizTerminal> getNotPublishedTerminal() {
+
+        List<BizTerminal> list = null;
+
+        try {
+            list = bizTerminalMapper.selectNotPublishedTerminal();
+
+            logger.info(list.isEmpty() ? "无屏保的终端不存在" : "查询无屏保的终端列表OK");
+
+        } catch (Exception e) {
+
+            logger.error("无屏保的终端列表查询报错", e);
+
+            throw new RuntimeException();
+        }
+
+        return list;
+    }
 }

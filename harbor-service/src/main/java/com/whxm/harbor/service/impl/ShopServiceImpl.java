@@ -7,6 +7,7 @@ import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
+import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -201,6 +207,9 @@ public class ShopServiceImpl implements ShopService {
                 //赋值
                 String shopId = UUID.randomUUID().toString().replace("-", "");
 
+                bizShop.setShopEnglishName(
+                        PinyinUtils.toPinyin(bizShop.getShopName())
+                );
                 bizShop.setShopId(shopId);
                 bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
                 bizShop.setAddShopTime(new Date());

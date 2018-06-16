@@ -31,7 +31,7 @@ public class ScreensaverController {
 
     @ApiOperation("获取屏保列表(需授权)")
     @GetMapping("/bizScreensavers")
-    public Result getBizActivities(PageQO<BizScreensaver> pageQO, BizScreensaver condition) {
+    public Result bizScreensaverList(PageQO<BizScreensaver> pageQO, BizScreensaver condition) {
 
         Result ret = null;
 
@@ -136,6 +136,8 @@ public class ScreensaverController {
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
 
         if (Objects.isNull(param.screensaverId) || Objects.isNull(param.terminalIds)) {
+
+            logger.info("有参数为null",param);
 
             return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
                     "参数不能为null", Constant.NO_DATA);

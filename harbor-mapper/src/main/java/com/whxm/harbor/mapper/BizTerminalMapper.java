@@ -39,4 +39,10 @@ public interface BizTerminalMapper {
      * @return
      */
     Map<String, Object> selectTerminalWithScreensaver(String terminalId);
+
+    /**
+     * 查找没有屏保的终端
+     * @return 终端列表
+     */
+    List<BizTerminal> selectNotPublishedTerminal();
 }

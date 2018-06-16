@@ -6,6 +6,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import com.whxm.harbor.utils.FileUtils;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Map;
 
 @Api(description = "屏保素材服务")
 @RestController
@@ -35,18 +38,37 @@ public class ScreensaverMaterialController {
     @Autowired
     private FileDir fileDir;
 
+    @Autowired
+    private UrlConfig urlConfig;
+
     @ApiOperation("上传屏保素材图片")
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request, fileDir.getScreensaverMaterialImgDir());
+        Result ret = FileUtils.upload(file, request, fileDir.getScreensaverMaterialImgDir());
+
+        try {
+            Map<String, Object> map = (Map<String, Object>) ret.getData();
+            //判断图片横屏还是竖屏
+            String path = urlConfig.getUrlPrefix() + map.get("filePath");
+
+            String orientation = FileUtils.getImageOrientation(
+                    path.replace("\\", "/"));
+
+            map.put("imageOrientation", orientation);
+
+        } catch (IOException e) {
+
+            logger.error("屏保素材图片上传报错", e);
+        }
+        return ret;
     }
 
     //===============================以下均被拦截===============================
 
     @ApiOperation("获取屏保素材列表(需授权)")
-    @GetMapping("/bizScreensaverMaterials")
-    public Result getBizActivities(PageQO<BizScreensaverMaterial> pageQO, BizScreensaverMaterial condition) {
+    @PostMapping("/bizScreensaverMaterials")
+    public Result getBizScreensaverMaterials(PageQO<BizScreensaverMaterial> pageQO, BizScreensaverMaterial condition) {
 
         Result ret = null;
 

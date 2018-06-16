@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "终端服务")
@@ -96,8 +97,29 @@ public class TerminalController {
 
     //==========================以下均被拦截============================
 
+    @ApiOperation("获取无屏保的终端列表(需授权)")
+    @GetMapping("/bizTerminalsNotPublished")
+    public Result getNotPublishedTerminals() {
+
+        Result ret = null;
+
+        try {
+            List<BizTerminal> list = terminalService.getNotPublishedTerminal();
+
+            ret = new Result(list);
+
+        } catch (Exception e) {
+
+            logger.error("无屏保的终端列表查询报错", e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "无屏保的终端列表查询失败", Constant.NO_DATA);
+        }
+
+        return ret;
+    }
+
     @ApiOperation("获取终端列表(需授权)")
-    @GetMapping("/bizTerminals")
+    @PostMapping("/bizTerminals")
     public Result getBizTerminals(PageQO<BizTerminal> pageQO, BizTerminal condition) {
 
         Result ret = null;
@@ -179,17 +201,21 @@ public class TerminalController {
     @ApiOperation("添加终端(需授权)")
     @PostMapping("/bizTerminal")
     public Result addBizTerminal(@RequestBody BizTerminal bizTerminal, HttpServletRequest request) {
+
         Result ret = null;
+
         try {
             bizTerminal.setTerminalIp(IPv4Util.getIpAddress(request));
 
             ret = terminalService.addBizTerminal(bizTerminal);
 
         } catch (Exception e) {
+
             logger.error("终端 添加报错", e);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端 添加报错", bizTerminal);
         }
+
         return ret;
     }
 

@@ -18,14 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,24 +41,14 @@ public class ShopController {
     @Autowired
     private FileDir fileDir;
 
-    @ApiOperation(value = "根据店铺名称首字母获取商铺列表")
-    @PostMapping(value = "/shopsByName", consumes = "application/x-www-form-urlencoded")
-    public Map<String, Object> getBizShopsByName(
-            @ApiParam(name = "initial", value = "商铺名称首字母", required = true)
-                    String initial) {
-//        shopService
-        return null;
-    }
-
-
-    @ApiOperation(value = "根据业态和楼层获取店铺列表")
+    @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
     @PostMapping(value = "/shops", consumes = "application/x-www-form-urlencoded")
     public Map<String, Object> getBizShops(
             @ApiParam(name = "floor", value = "楼层ID")
                     Integer floor,
             @ApiParam(name = "type", value = "业态ID")
                     Integer type,
-            @ApiParam(name = "initial", value = "商铺名称首字母")
+            @ApiParam(name = "initial", value = "商铺名称大写首字母")
                     String initial
     ) {
 
@@ -76,7 +59,7 @@ public class ShopController {
                     new ResultMap<String, Object>(3)
                             .build("floorId", floor)
                             .build("bizFormatId", type)
-                            .build("initial", initial)
+                            .build("initial", initial.toLowerCase())
             );
 
             ret.build("data", list);
@@ -87,7 +70,7 @@ public class ShopController {
 
             logger.error("楼层列表 获取报错", e);
 
-            ret.build("data", new Object[]{}).build("success", false);
+            ret.build("data", new byte[]{}).build("success", false);
         }
 
         return ret;
@@ -139,29 +122,13 @@ public class ShopController {
 
                 FileUtils.upload(file, request, fileDir.getShopPictureDir(), map);
 
-                //InputStream is = file.getInputStream();
                 //判断图片横屏还是竖屏
-                /*URL url = new URL(urlConfig.getUrlPrefix() + map.get("filePath"));
+                String path = urlConfig.getUrlPrefix() + map.get("filePath");
 
-                URLConnection con = url.openConnection();
-                //不超时
-                con.setConnectTimeout(0);
-                //不允许缓存
-                con.setUseCaches(false);
+                String orientation = FileUtils.getImageOrientation(
+                        path.replace("\\", "/"));
 
-                con.setDefaultUseCaches(false);
-
-                InputStream pis = con.getInputStream();
-
-                BufferedImage bufferedImg = ImageIO.read(pis);
-
-                int imgWidth = bufferedImg.getWidth();
-
-                int imgHeight = bufferedImg.getHeight();
-
-                String type = imgWidth > imgHeight ? "横屏" : "竖屏";
-
-                System.out.println(type);*/
+                map.put("imageOrientation", orientation);
 
                 retList.add(map);
 

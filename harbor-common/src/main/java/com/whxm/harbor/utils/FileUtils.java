@@ -5,9 +5,13 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,11 +104,28 @@ public class FileUtils {
         }
     }
 
-    /*
-    File file = new File("图片文件路径");
-    FileInputStream fis = new FileInputStream(file)；
-    BufferedImage bufferedImg = ImageIO.read(fis);
-    int imgWidth = bufferedImg.getWidth();
-    int imgHeight = bufferedImg.getHeight();
-    */
+    /**
+     * 判断图片是横屏还是竖屏
+     */
+    public static String getImageOrientation(String path) throws IOException {
+
+        URL url = new URL(path);
+
+        /*URLConnection con = url.openConnection();
+        //不超时
+        con.setConnectTimeout(0);
+        //不允许缓存
+        con.setUseCaches(false);
+        con.setDefaultUseCaches(false);*/
+
+        InputStream is = url.openConnection().getInputStream();
+
+        BufferedImage bufferedImg = ImageIO.read(is);
+
+        int imgWidth = bufferedImg.getWidth();
+
+        int imgHeight = bufferedImg.getHeight();
+
+        return imgWidth > imgHeight ? "横屏" : "竖屏";
+    }
 }

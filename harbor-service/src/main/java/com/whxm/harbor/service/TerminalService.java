@@ -2,6 +2,7 @@ package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,8 +59,14 @@ public interface TerminalService {
 
     /**
      * 根据终端编号和屏保ID
+     *
      * @param params
      * @return
      */
-    ResultMap<String,Object> getTerminalScreensaverProgram(Map<String, Object> params);
+    ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params);
+
+    /**
+     *获取无屏保的终端
+     */
+    List<BizTerminal> getNotPublishedTerminal();
 }

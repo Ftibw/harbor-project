@@ -11,8 +11,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.whxm.harbor.utils.TokenUtils.order;
-
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 
@@ -33,7 +31,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             redisTemplate.setValueSerializer(serializer);
 
             //从redis获取user信息
-            if (redisTemplate.boundValueOps(order(token)).get().equals(TokenUtils.salt(token))){
+            String userId = TokenUtils.order(token);
+            String salt = TokenUtils.salt(token);
+            if (null != userId
+                    && null != salt
+                    && redisTemplate
+                    .boundValueOps(userId)
+                    .get()
+                    .equals(salt)) {
 
                 return true;
             }

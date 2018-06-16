@@ -61,12 +61,4 @@ public interface ShopService {
      * @return 商铺的图片路径集合
      */
     List<ShopPicture> getShopPicturesById(String bizShopId);
-
-    /**
-     * 根据业态种类获取图片集合
-     *
-     * @param bizFormatType 业态种类
-     * @return 查询结果
-     */
-//    Result getShopPicturesByBizType(String bizFormatType);
 }
