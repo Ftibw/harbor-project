@@ -289,13 +289,4 @@
         FROM shop_picture_relation
         WHERE shop_id = #{bizShopId}
     </select>
-
-    <!--啰嗦,字段需求一开始没说,到后来又要加-->
-    <!--<select id="selectShopIdListByBizType" resultType="java.lang.String">
-        SELECT bs.shop_id
-        FROM biz_shop bs
-            JOIN biz_format bf USING (biz_format_id)
-        WHERE bf.biz_format_type = #{bizFormatType}
-    </select>-->
-
 </mapper>

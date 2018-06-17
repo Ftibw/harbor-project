@@ -9,7 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @MapperScan("com.whxm.harbor.mapper")
-@PropertySource(value = {"classpath:config/application.yml"},ignoreResourceNotFound = true,encoding = "utf-8")
 public class HarborWebApplication {
 
     public static void main(String[] args) {
