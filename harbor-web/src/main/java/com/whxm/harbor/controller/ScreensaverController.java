@@ -132,17 +132,19 @@ public class ScreensaverController {
         return ret;
     }
 
-    @ApiOperation(value = "发布屏保(需授权)",
-            notes = "Integer screensaverId 屏保ID,String[] terminalIds 终端ID数组")
+    /*@ApiOperation(value = "发布屏保(需授权)",
+            notes = "Integer screensaverId 屏保ID,String[] terminalIds 终端ID数组")*/
     @PostMapping("/publishedScreensaver")
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
 
         if (Objects.isNull(param.screensaverId) || Objects.isNull(param.terminalIds)) {
 
-            logger.info("有参数为null",param);
+            logger.info("输入参数不能为null,param:{{}}",
+                    "screensaverId:" + param.screensaverId + "," +
+                            "terminalIds:" + Arrays.toString(param.terminalIds));
 
             return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
-                    "参数不能为null", Constant.NO_DATA);
+                    "参数不能为null", param);
         }
 
         Result ret = null;
@@ -161,6 +163,14 @@ public class ScreensaverController {
 
 }
 
+class PublishedScreensaverParam {
+
+    public Integer screensaverId;
+
+    public String[] terminalIds;
+}
+
+
 class ScreensaverParam {
 
     public BizScreensaver bizScreensaver;
@@ -168,9 +178,3 @@ class ScreensaverParam {
     public Integer[] screensaverMaterialIds;
 }
 
-class PublishedScreensaverParam {
-
-    public Integer screensaverId;
-
-    public String[] terminalIds;
-}
