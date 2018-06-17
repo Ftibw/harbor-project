@@ -1,8 +1,10 @@
 package com.whxm.harbor.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class User implements Serializable {
     private String userId;
 
     private String userLoginname;
@@ -16,7 +18,7 @@ public class User implements Serializable{
     private String userEmail;
 
     private String userWechat;
-
+    @JsonIgnore
     private Integer isDeleted;
 
     public String getUserId() {
