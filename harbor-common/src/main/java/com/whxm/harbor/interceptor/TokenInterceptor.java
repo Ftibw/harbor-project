@@ -35,10 +35,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             String salt = TokenUtils.salt(token);
             if (null != userId
                     && null != salt
-                    && redisTemplate
-                    .boundValueOps(userId)
-                    .get()
-                    .equals(salt)) {
+                    &&salt.equals(redisTemplate.boundValueOps(userId).get())){
 
                 return true;
             }
