@@ -1,5 +1,6 @@
 package com.whxm.harbor.interceptor;
 
+import com.whxm.harbor.utils.RequestJsonUtils;
 import com.whxm.harbor.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,7 +36,24 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             String salt = TokenUtils.salt(token);
             if (null != userId
                     && null != salt
-                    &&salt.equals(redisTemplate.boundValueOps(userId).get())){
+                    && salt.equals(redisTemplate.boundValueOps(userId).get())) {
+
+                //防止表单重复提交,主要是防止不幂等的新增请求
+                if ("POST".equals(request.getMethod().toUpperCase())
+                        ) {
+                    //  terminal/bizTerminal
+                    //  floor/bizFloor
+                    //  screensaver/bizScreensaver
+                    //  bizFormat/bizFormat
+                    //  activityMaterial/bizActivityMaterial
+                    //  activity/bizActivity
+                    String params = RequestJsonUtils.getRequestPostStr(request);
+
+                    String uri = request.getRequestURI();
+
+                    System.out.println(uri + "\n" + userId + "\n"+params);
+                }
+
 
                 return true;
             }
