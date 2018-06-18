@@ -9,10 +9,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -43,23 +45,28 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     && null != salt
                     && salt.equals(redisTemplate.boundValueOps(userId).get())) {
 
+                //不幂等的操作如下(均为POST)
+                /*terminal/bizTerminal
+                floor/bizFloor
+                screensaver/bizScreensaver
+                bizFormat/bizFormat
+                activityMaterial/bizActivityMaterial
+                activity/bizActivity*/
+
                 //防止表单重复提交,主要是防止不幂等的新增请求
-                if ("POST".equals(request.getMethod().toUpperCase())) {
-                    //  terminal/bizTerminal
-                    //  floor/bizFloor
-                    //  screensaver/bizScreensaver
-                    //  bizFormat/bizFormat
-                    //  activityMaterial/bizActivityMaterial
-                    //  activity/bizActivity
+                //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
+                if ("POST".equals(request.getMethod().toUpperCase())
+                        && request.getContentType()
+                        .equalsIgnoreCase("application/json")) {
                     String uri = request.getRequestURI();
 
                     String params = RequestJsonUtils.getRequestPostStr(request);
 
                     String lockKey = uri + userId + MD5Util.MD5(params);
 
-                    System.out.println(lockKey);
+                    //System.out.println(lockKey);
 
-                    if (lock.tryAcquire(lockKey, uri + userId, 10000)) return true;
+                    if (lock.tryAcquire(lockKey, token, 10000)) return true;
 
                     else {
                         response.setContentType("text/html;charset=utf-8");
@@ -71,7 +78,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     }
 
                 }
-
 
                 return true;
             }
@@ -85,4 +91,25 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         return false;
     }
+
+    /**
+     * 请求完成后,释放redis分布式锁
+     */
+    /*@Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
+        String token = request.getParameter("token");
+
+        String userId = TokenUtils.order(token);
+
+        String uri = request.getRequestURI();
+
+        String params = RequestJsonUtils.getRequestPostStr(request);
+
+        String lockKey = uri + userId + MD5Util.MD5(params);
+
+        //System.out.println(lockKey);
+
+        lock.tryRelease(lockKey, token);    //true清除成功/false清除失败
+    }*/
 }
