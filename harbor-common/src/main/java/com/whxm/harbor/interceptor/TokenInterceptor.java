@@ -1,5 +1,7 @@
 package com.whxm.harbor.interceptor;
 
+import com.whxm.harbor.lock.RedisDistributedLock;
+import com.whxm.harbor.utils.MD5Util;
 import com.whxm.harbor.utils.RequestJsonUtils;
 import com.whxm.harbor.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+
+    @Autowired
+    private RedisDistributedLock lock;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -39,19 +44,32 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     && salt.equals(redisTemplate.boundValueOps(userId).get())) {
 
                 //防止表单重复提交,主要是防止不幂等的新增请求
-                if ("POST".equals(request.getMethod().toUpperCase())
-                        ) {
+                if ("POST".equals(request.getMethod().toUpperCase())) {
                     //  terminal/bizTerminal
                     //  floor/bizFloor
                     //  screensaver/bizScreensaver
                     //  bizFormat/bizFormat
                     //  activityMaterial/bizActivityMaterial
                     //  activity/bizActivity
-                    String params = RequestJsonUtils.getRequestPostStr(request);
-
                     String uri = request.getRequestURI();
 
-                    System.out.println(uri + "\n" + userId + "\n"+params);
+                    String params = RequestJsonUtils.getRequestPostStr(request);
+
+                    String lockKey = uri + userId + MD5Util.MD5(params);
+
+                    System.out.println(lockKey);
+
+                    if (lock.tryAcquire(lockKey, uri + userId, 10000)) return true;
+
+                    else {
+                        response.setContentType("text/html;charset=utf-8");
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().println("表单重复提交了");
+                        // 400 状态码 用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。
+                        response.setStatus(HttpStatus.BAD_REQUEST.value());
+                        return false;
+                    }
+
                 }
 
 

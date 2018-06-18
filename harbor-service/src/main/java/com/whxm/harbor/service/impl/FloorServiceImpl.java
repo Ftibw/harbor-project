@@ -153,7 +153,7 @@ public class FloorServiceImpl implements FloorService {
             synchronized (this) {
                 if (null != bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber())) {
 
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "楼层编号重复", Constant.NO_DATA);
                 }
             }
 
