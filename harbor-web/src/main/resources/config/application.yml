@@ -43,6 +43,9 @@ urlConfig:
 server:
   port: 9000
 
+#防止表单重复提交
+#1.数据库乐观锁,以前秒杀用过
+#2.redis分布式锁,尝试性使用
 #redis分布式锁的jedis配置
 jedis:
   host: ${redishost:192.168.1.80}
