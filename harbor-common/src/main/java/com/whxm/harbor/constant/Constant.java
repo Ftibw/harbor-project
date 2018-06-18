@@ -12,7 +12,12 @@ public class Constant {
 
     public static final Integer ENABLED_STATUS = 1;
 
-    public static final Integer DISABLED_STATUS = 0;
+    public static final Object NO_DATA = "";
 
-    public static final Object NO_DATA = null;
+    public static final String DEFAULT_FILTER_METHOD = "POST";
+
+    public static final String DEFAULT_FILTER_CONTENT_TYPE = "application/json";
+
+    //单位秒
+    public static final Integer DEFAULT_SUBMIT_EXPIRE_TIME = 100000;
 }

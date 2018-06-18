@@ -1,5 +1,6 @@
 package com.whxm.harbor.interceptor;
 
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.utils.MD5Util;
 import com.whxm.harbor.utils.RequestJsonUtils;
@@ -53,9 +54,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
                 //防止表单重复提交,主要是防止不幂等的新增请求
                 //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
-                if ("POST".equals(request.getMethod().toUpperCase())
-                        && request.getContentType()
-                        .equalsIgnoreCase("application/json")) {
+                if (Constant.DEFAULT_FILTER_METHOD.equals(request.getMethod().toUpperCase())
+                        && request.getContentType().equalsIgnoreCase(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
+
                     String uri = request.getRequestURI();
 
                     String params = RequestJsonUtils.getRequestPostStr(request);
@@ -63,8 +64,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     String lockKey = uri + userId + MD5Util.MD5(params);
 
                     //System.out.println(lockKey);
-                    //10秒内防止重复提交
-                    if (lock.tryAcquire(lockKey, token, 10000)) return true;
+                    if (lock.tryAcquire(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
 
                     else {
                         response.setContentType("text/html;charset=utf-8");
