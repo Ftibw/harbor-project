@@ -24,7 +24,7 @@ public class FilterConfig {
     }  
   
     /**  
-     * 创建一个bean  
+     * 创建一个多种类的方法/类型请求过滤器
      */
     @Bean(name = "MultiplexRequestFilter")
     public Filter getMultiplexRequestFilter() {
