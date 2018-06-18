@@ -23,7 +23,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         String token = request.getParameter("token");
 
         if (token != null && 64 == token.length()) {
-            //设置String序列化器
+            //分布式的时候,设置String序列化器
             StringRedisSerializer serializer = new StringRedisSerializer();
 
             redisTemplate.setKeySerializer(serializer);
