@@ -150,9 +150,11 @@ public class FloorServiceImpl implements FloorService {
         Result ret;
 
         try {
-            if (null != bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber())) {
+            synchronized (this) {
+                if (null != bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber())) {
 
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
+                }
             }
 
             int affectRow = bizFloorMapper.insert(bizFloor);

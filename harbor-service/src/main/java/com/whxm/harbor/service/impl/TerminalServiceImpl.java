@@ -143,9 +143,11 @@ public class TerminalServiceImpl implements TerminalService {
         Result ret;
 
         try {
-            if (null != bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber())) {
+            synchronized (this) {
+                if (null != bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber())) {
 
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
+                }
             }
 
             bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
@@ -225,7 +227,8 @@ public class TerminalServiceImpl implements TerminalService {
             //先存了list引用再说
             ret.build("prog", screensaverId)
                     .build("on_off", String.valueOf(terminalSwitchTime))
-                    .build("data", list).build("delay", 10);
+                    .build("data", list)
+                    .build("delay", 10);
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);

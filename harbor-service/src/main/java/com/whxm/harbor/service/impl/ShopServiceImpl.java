@@ -200,9 +200,11 @@ public class ShopServiceImpl implements ShopService {
 
         if (null != bizShop) {
             try {
-                if (null != bizShopMapper.selectIdByNumber(bizShop.getShopNumber())) {
+                synchronized (this) {
+                    if (null != bizShopMapper.selectIdByNumber(bizShop.getShopNumber())) {
 
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", Constant.NO_DATA);
+                        return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", Constant.NO_DATA);
+                    }
                 }
                 //赋值
                 String shopId = UUID.randomUUID().toString().replace("-", "");

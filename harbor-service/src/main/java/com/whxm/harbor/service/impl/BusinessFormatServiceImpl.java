@@ -162,12 +162,12 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         Result ret;
 
         try {
+            synchronized (this) {
+                if (null != bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber())) {
 
-            if (null != bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber())) {
-
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
+                }
             }
-
             bizFormat.setBizFormatId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
             bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
