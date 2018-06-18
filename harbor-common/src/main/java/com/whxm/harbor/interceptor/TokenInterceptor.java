@@ -63,7 +63,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     String lockKey = uri + userId + MD5Util.MD5(params);
 
                     //System.out.println(lockKey);
-
+                    //10秒内防止重复提交
                     if (lock.tryAcquire(lockKey, token, 10000)) return true;
 
                     else {
