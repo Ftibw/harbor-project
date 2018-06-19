@@ -10,10 +10,10 @@ public class BizScreensaver {
     private Date addScreensaverTime;
 
     //join中间表screensaver_material_relation查询该屏保的素材数量
-    private Integer screensaverMaterialAmount;
+    private Integer screensaverMaterialAmount = 0;
 
     //join中间表screensaver_published_terminal_relation查询该屏保的发布终端数量
-    private Integer screensaverPublishedAmount;
+    private Integer screensaverPublishedAmount = 0;
 
     public Integer getScreensaverPublishedAmount() {
         return screensaverPublishedAmount;
