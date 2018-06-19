@@ -119,7 +119,7 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端列表(需授权)")
-    @PostMapping("/bizTerminals")
+    @GetMapping("/bizTerminals")
     public Result getBizTerminals(PageQO<BizTerminal> pageQO, BizTerminal condition) {
 
         Result ret = null;
