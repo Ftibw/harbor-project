@@ -67,7 +67,7 @@ public class ScreensaverMaterialController {
     //===============================以下均被拦截===============================
 
     @ApiOperation("获取屏保素材列表(需授权)")
-    @PostMapping("/bizScreensaverMaterials")
+    @GetMapping("/bizScreensaverMaterials")
     public Result getBizScreensaverMaterials(PageQO<BizScreensaverMaterial> pageQO, BizScreensaverMaterial condition) {
 
         Result ret = null;
