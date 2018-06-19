@@ -1,8 +1,8 @@
 spring:
   application:
     name: harbor-web
-  datasource:     #47.94.202.250
-    url: jdbc:mysql://${databasehost:localhost}:3306/harbor?useUnicode=true&characterEncoding=utf8
+  datasource:     #localhost
+    url: jdbc:mysql://${databasehost:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:192.168.1.80}    #47.94.202.250
+      host: ${redishost:47.94.202.250}    #192.168.1.80
 mybatis:
   type-aliases-package: com.whxm.harbor.bean
   mapper-locations: mapper/*.xml
@@ -48,5 +48,5 @@ server:
 #2.redis分布式锁,尝试性使用
 #redis分布式锁的jedis配置
 jedis:
-  host: ${redishost:192.168.1.80}
+  host: ${redishost:47.94.202.250}
   port: ${redisPort:6379}
