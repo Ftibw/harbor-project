@@ -146,7 +146,6 @@ public class ShopController {
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺访问数据列表 获取错误", pageQO);
         }
 
-
         return ret;
     }
     //=========================以上为对外提供的API=================================

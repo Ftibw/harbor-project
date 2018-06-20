@@ -118,6 +118,7 @@ public class ActivityController {
     public Result updateBizActivity(@RequestBody BizActivity bizActivity) {
         Result result = null;
         try {
+
             result = activityService.updateBizActivity(bizActivity);
         } catch (Exception e) {
 

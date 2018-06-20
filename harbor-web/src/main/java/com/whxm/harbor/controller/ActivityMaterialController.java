@@ -77,6 +77,7 @@ public class ActivityMaterialController {
     public Result getBizActivityMaterials(PageQO<BizActivityMaterial> pageQO, BizActivityMaterial condition) {
 
         Result ret = null;
+
         PageVO<BizActivityMaterial> pageVO = null;
         try {
             pageQO.setCondition(condition);

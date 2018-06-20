@@ -150,6 +150,9 @@ public class ActivityServiceImpl implements ActivityService {
         Result ret;
 
         try {
+
+            bizActivity.setActivityLogo(bizActivity.getActivityLogo().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+
             int affectRow = bizActivityMapper.updateByPrimaryKeySelective(bizActivity);
 
             logger.info(1 == affectRow ?

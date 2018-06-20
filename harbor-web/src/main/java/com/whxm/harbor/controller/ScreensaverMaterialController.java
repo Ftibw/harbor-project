@@ -117,9 +117,11 @@ public class ScreensaverMaterialController {
     @ApiOperation("修改屏保素材(需授权)")
     @PutMapping("/bizScreensaverMaterial")
     public Result updateBizScreensaverMaterial(@RequestBody BizScreensaverMaterial bizScreensaverMaterial) {
+
         Result ret = null;
 
-        Assert.notNull(bizScreensaverMaterial.getScreensaverMaterialId(),"屏保素材ID不能为null");
+        Assert.notNull(bizScreensaverMaterial.getScreensaverMaterialId(), "屏保素材ID不能为null");
+
         try {
             ret = screensaverMaterialService.updateBizScreensaverMaterial(bizScreensaverMaterial);
 

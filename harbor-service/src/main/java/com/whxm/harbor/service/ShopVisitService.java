@@ -10,12 +10,12 @@ import java.util.List;
 public interface ShopVisitService {
     
     /**
-     * 根据商铺ID获取商铺访问数据
+     * 根据商铺编号获取商铺访问数据
      *
-     * @param shopId 商铺ID
+     * @param ShopNumber 商铺编号
      * @return 商铺访问数据
      */
-    ShopVisit getShopVisit(String  shopId);
+    ShopVisit getShopVisit(String  ShopNumber);
 
     /**
      * 获取商铺访问列表

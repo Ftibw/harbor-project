@@ -3,13 +3,16 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.mapper.TerminalVisitMapper;
 import com.whxm.harbor.service.TerminalService;
+import com.whxm.harbor.service.TerminalVisitService;
 import com.whxm.harbor.utils.IPv4Util;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +31,9 @@ public class TerminalController {
 
     @Autowired
     private TerminalService terminalService;
+    
+    @Autowired
+    private TerminalVisitService terminalVisitService;
 
     @ApiOperation("终端注册")
     @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
@@ -93,6 +99,53 @@ public class TerminalController {
                     .build("data", new Object[]{});
         }
         return convert;
+    }
+
+
+    @ApiOperation(value = "访问终端")
+    @PostMapping("/visit")
+    public Result updateTerminalVisit(
+            @ApiParam(name = "terminalNumber", value = "终端编号")
+            @RequestParam("terminalNumber") String terminalNumber) {
+
+        Assert.notNull(terminalNumber, "终端编号为空");
+
+        Result ret = null;
+
+        try {
+
+            ret = terminalVisitService.updateTerminalVisit(terminalNumber);
+
+        } catch (Exception e) {
+
+            logger.error("编号为{}的终端访问数据更新报错", terminalNumber);
+        }
+
+        return ret;
+    }
+
+
+    @ApiOperation(value = "获取终端访问数据列表")
+    @GetMapping("/visits")
+    public Result getTerminalVisitList(PageQO<BizTerminal> pageQO, BizTerminal condition) {
+
+        Result ret = null;
+
+        try {
+            pageQO.setCondition(condition);
+
+            PageVO<TerminalVisit> pageVO = terminalVisitService.getTerminalVisitList(pageQO);
+
+            ret = new Result(pageVO);
+
+        } catch (Exception e) {
+
+            logger.error("终端访问数据列表 获取错误", e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端访问数据列表 获取错误", pageQO);
+        }
+
+        return ret;
     }
 
     //==========================以下均被拦截============================

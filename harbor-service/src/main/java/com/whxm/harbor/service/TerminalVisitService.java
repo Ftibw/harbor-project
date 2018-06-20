@@ -10,12 +10,12 @@ import java.util.List;
 public interface TerminalVisitService {
     
     /**
-     * 根据终端ID获取终端访问数据
+     * 根据终端编号获取终端访问数据
      *
-     * @param terminalId 终端ID
+     * @param terminalNumber 终端编号
      * @return 终端访问数据
      */
-    TerminalVisit getTerminalVisit(String terminalId);
+    TerminalVisit getTerminalVisit(String terminalNumber);
 
     /**
      * 获取终端访问列表
@@ -34,10 +34,10 @@ public interface TerminalVisitService {
     /**
      * 更新终端访问数据
      *
-     * @param terminalId 终端访问数据新值
+     * @param terminalNumber 终端编号
      * @return ret
      */
-    Result updateTerminalVisit(String terminalId);
+    Result updateTerminalVisit(String terminalNumber);
 
 
 }

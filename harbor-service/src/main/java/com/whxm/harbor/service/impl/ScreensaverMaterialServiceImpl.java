@@ -112,6 +112,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         Result ret;
 
         try {
+            bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
             int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 
