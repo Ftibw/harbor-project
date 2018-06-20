@@ -2,6 +2,7 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.TerminalVisitMapper;

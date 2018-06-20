@@ -5,9 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface VisitCountLogMapper {
 
-    @Insert("insert into count_shop_log value(#{shopNumber},#{ip},#{signature},CURRENT_TIMESTAMP)")
-    int logShopVisit(@Param("shopNumber") String shopNumber,@Param("ip")  String ip,@Param("signature")  String signature);
-
-    @Insert("insert into count_terminal_log value(#{terminalNumber},#{ip},#{signature},CURRENT_TIMESTAMP)")
-    int logTerminalVisit(@Param("terminalNumber")String terminalNumber,@Param("ip") String ip,@Param("signature") String signature);
+    @Insert("insert into visit_count_log(terminal_ip,visit_message,log_time) " +
+            "value(#{ip},#{message},CURRENT_TIMESTAMP)")
+    int writeLog( @Param("ip")  String ip,@Param("message")  String message);
 }
