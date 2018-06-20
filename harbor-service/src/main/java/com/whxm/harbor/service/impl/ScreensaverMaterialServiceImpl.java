@@ -146,7 +146,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
 
-            logger.info(0 == affectRow ? "屏保素材添加失败" : "屏保素材成功添加" + affectRow + "行");
+            logger.info("屏保素材添加{}",0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
 
             ret = new Result("屏保素材数据添加了" + affectRow + "行");
 

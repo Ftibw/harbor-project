@@ -6,6 +6,7 @@ import com.whxm.harbor.conf.FileDir;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ShopService;
+import com.whxm.harbor.service.ShopVisitService;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
@@ -15,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +34,9 @@ import java.util.Map;
 public class ShopController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
+
+    @Autowired
+    private ShopVisitService shopVisitService;
 
     @Autowired
     private ShopService shopService;
@@ -97,6 +103,52 @@ public class ShopController {
         return ret;
     }
 
+    @ApiOperation(value = "访问商铺")
+    @PostMapping("/visit")
+    public Result updateShopVisit(
+            @ApiParam(name = "shopNumber", value = "商铺编号")
+            @RequestParam("shopNumber") String shopNumber) {
+
+        Assert.notNull(shopNumber, "商铺编号为空");
+
+        Result ret = null;
+
+        try {
+
+            ret = shopVisitService.updateShopVisit(shopNumber);
+
+        } catch (Exception e) {
+
+            logger.error("编号为{}的商铺访问数据更新报错", shopNumber);
+        }
+
+        return ret;
+    }
+
+
+    @ApiOperation(value = "获取商铺访问数据列表")
+    @GetMapping("/visits")
+    public Result getShopVisitList(PageQO<BizShop> pageQO, BizShop condition) {
+
+        Result ret = null;
+
+        try {
+            pageQO.setCondition(condition);
+
+            PageVO<ShopVisit> pageVO = shopVisitService.getShopVisitList(pageQO);
+
+            ret = new Result(pageVO);
+
+        } catch (Exception e) {
+
+            logger.error("商铺访问数据列表 获取错误", e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺访问数据列表 获取错误", pageQO);
+        }
+
+
+        return ret;
+    }
     //=========================以上为对外提供的API=================================
 
     @ApiOperation("上传商铺logo")

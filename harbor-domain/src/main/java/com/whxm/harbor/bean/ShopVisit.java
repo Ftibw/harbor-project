@@ -1,37 +1,29 @@
 package com.whxm.harbor.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ShopVisit {
-    private Integer id;
 
-    private String shopId;
+    private String shopNumber;
 
-    private Long shopVisitAmount;
+    private BigDecimal shopVisitAmount;
 
     private Date shopVisitTime;
 
-    public Integer getId() {
-        return id;
+    public String getShopNumber() {
+        return shopNumber;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setShopNumber(String shopNumber) {
+        this.shopNumber = shopNumber == null ? null : shopNumber.trim();
     }
 
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId == null ? null : shopId.trim();
-    }
-
-    public Long getShopVisitAmount() {
+    public BigDecimal getShopVisitAmount() {
         return shopVisitAmount;
     }
 
-    public void setShopVisitAmount(Long shopVisitAmount) {
+    public void setShopVisitAmount(BigDecimal shopVisitAmount) {
         this.shopVisitAmount = shopVisitAmount;
     }
 

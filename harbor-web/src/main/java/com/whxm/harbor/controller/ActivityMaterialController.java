@@ -141,7 +141,7 @@ public class ActivityMaterialController {
             @ApiParam(name = "ID", value = "活动素材的ID", required = true)
                     Integer id
     ) {
-        Result result = null;
+        Result result;
         try {
             result = activityMaterialService.deleteBizActivityMaterial(id);
         } catch (Exception e) {
@@ -155,18 +155,18 @@ public class ActivityMaterialController {
 
     @ApiOperation("添加活动素材(需授权)")
     @PostMapping("/bizActivityMaterial")
-    public Result addBizActivityMaterial(@RequestBody BizActivityMaterial bizActivityMaterial) {
+    public Result addBizActivityMaterial(@RequestBody List<BizActivityMaterial> list) {
 
-        Result result = null;
+        Result result;
 
-        try {                                         //List<BizActivityMaterial> list
-            result = activityMaterialService.addBizActivityMaterial(bizActivityMaterial);
+        try {
+            result = activityMaterialService.addBizActivityMaterials(list);
 
         } catch (Exception e) {
 
             logger.error("活动素材数据 添加报错", e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动素材数据 添加报错", bizActivityMaterial);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动素材数据 添加报错", list);
         }
         return result;
     }

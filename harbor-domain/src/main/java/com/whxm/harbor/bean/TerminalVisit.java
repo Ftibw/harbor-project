@@ -1,37 +1,28 @@
 package com.whxm.harbor.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TerminalVisit {
-    private Integer id;
+    private String terminalNumber;
 
-    private String terminalId;
-
-    private Long terminalVisitAmount;
+    private BigDecimal terminalVisitAmount;
 
     private Date terminalVisitTime;
 
-    public Integer getId() {
-        return id;
+    public String getTerminalNumber() {
+        return terminalNumber;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setTerminalNumber(String terminalNumber) {
+        this.terminalNumber = terminalNumber == null ? null : terminalNumber.trim();
     }
 
-    public String getTerminalId() {
-        return terminalId;
-    }
-
-    public void setTerminalId(String terminalId) {
-        this.terminalId = terminalId == null ? null : terminalId.trim();
-    }
-
-    public Long getTerminalVisitAmount() {
+    public BigDecimal getTerminalVisitAmount() {
         return terminalVisitAmount;
     }
 
-    public void setTerminalVisitAmount(Long terminalVisitAmount) {
+    public void setTerminalVisitAmount(BigDecimal terminalVisitAmount) {
         this.terminalVisitAmount = terminalVisitAmount;
     }
 

@@ -3,6 +3,7 @@ package com.whxm.harbor.bean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Range;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @desc 分页查询对象
@@ -21,7 +22,7 @@ public class PageQO<T> {
    /* @ApiModelProperty(value = "排序", notes = "例：create_time desc,update_time desc")
     private String orderBy;*/
 
-    @ApiModelProperty(value = "查询条件", hidden = true)
+    @ApiModelProperty(hidden = true)
     private T condition;
 
     public PageQO(int pageNum, int pageSize) {
