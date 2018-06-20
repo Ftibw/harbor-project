@@ -159,7 +159,7 @@ public class ActivityMaterialController {
 
         Result result = null;
 
-        try {
+        try {                                         //List<BizActivityMaterial> list
             result = activityMaterialService.addBizActivityMaterial(bizActivityMaterial);
 
         } catch (Exception e) {

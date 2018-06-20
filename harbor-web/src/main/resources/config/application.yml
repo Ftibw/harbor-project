@@ -1,8 +1,8 @@
 spring:
   application:
     name: harbor-web
-  datasource:     #localhost
-    url: jdbc:mysql://${databasehost:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
+  datasource:     #47.94.202.250
+    url: jdbc:mysql://${databasehost:localhost}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -38,6 +38,7 @@ fileDir:
   shopLogoDir: shopLogo
   shopPictureDir: shopPicture
   screensaverMaterialImgDir: screensaverMaterialPicture
+  mapPictureDir: mapPicture
 urlConfig:
   urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
 server:

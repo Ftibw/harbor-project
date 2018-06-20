@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -135,16 +134,19 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     }
 
     @Override
-    public Result addBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
+    public Result addBizScreensaverMaterial(List<BizScreensaverMaterial> list) {
 
         Result ret;
 
         try {
-            bizScreensaverMaterial.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+            list.forEach(item -> item.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
+//            bizScreensaverMaterial.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
-            int affectRow = bizScreensaverMaterialMapper.insert(bizScreensaverMaterial);
+//            int affectRow = bizScreensaverMaterialMapper.insert(bizScreensaverMaterial);
 
-            logger.info(1 == affectRow ? "屏保素材添加成功" : "屏保素材添加失败");
+            int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
+
+            logger.info(0 == affectRow ? "屏保素材添加失败" : "屏保素材成功添加" + affectRow + "行");
 
             ret = new Result("屏保素材数据添加了" + affectRow + "行");
 

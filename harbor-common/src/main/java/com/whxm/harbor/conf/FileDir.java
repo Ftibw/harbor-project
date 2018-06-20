@@ -32,6 +32,8 @@ public class FileDir {
     private String shopPictureDir;
     @Value("${fileDir.screensaverMaterialImgDir}")
     private String screensaverMaterialImgDir;
+    @Value("${fileDir.mapPictureDir}")
+    private String mapPictureDir;
 
     public String getActivityLogoDir() {
         return activityLogoDir;
@@ -51,5 +53,9 @@ public class FileDir {
 
     public String getScreensaverMaterialImgDir() {
         return screensaverMaterialImgDir;
+    }
+
+    public String getMapPictureDir() {
+        return mapPictureDir;
     }
 }

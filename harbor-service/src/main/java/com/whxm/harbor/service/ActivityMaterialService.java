@@ -51,6 +51,14 @@ public interface ActivityMaterialService {
     Result addBizActivityMaterial(BizActivityMaterial bizActivityMaterial);
 
     /**
+     * 新增活动材料数据
+     *
+     * @param list 新活动材料数据列表
+     * @return 添加操作结果
+     */
+    Result addBizActivityMaterials(List<BizActivityMaterial> list);
+
+    /**
      * 根据活动ID获取活动素材列表
      *
      * @param activityId 活动ID

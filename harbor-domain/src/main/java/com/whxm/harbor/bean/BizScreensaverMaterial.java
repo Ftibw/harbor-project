@@ -11,6 +11,8 @@ public class BizScreensaverMaterial {
 
     private String screensaverMaterialName;
 
+    private String screensaverMaterialImgName;
+
     private String screensaverMaterialType;
 
     public Integer getScreensaverMaterialId() {
@@ -18,6 +20,14 @@ public class BizScreensaverMaterial {
     }
 
     public Integer screensaverId;
+
+    public String getScreensaverMaterialImgName() {
+        return screensaverMaterialImgName;
+    }
+
+    public void setScreensaverMaterialImgName(String screensaverMaterialImgName) {
+        this.screensaverMaterialImgName = screensaverMaterialImgName;
+    }
 
     @JsonIgnore
     public Integer getScreensaverId() {

@@ -6,6 +6,8 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 
+import java.util.List;
+
 public interface ScreensaverMaterialService {
     /**
      * 根据屏保素材ID获取屏保素材数据
@@ -44,5 +46,5 @@ public interface ScreensaverMaterialService {
      * @param screensaverMaterial  新屏保素材数据
      * @return  添加操作结果
      */
-    Result addBizScreensaverMaterial(BizScreensaverMaterial screensaverMaterial);
+    Result addBizScreensaverMaterial(List<BizScreensaverMaterial> screensaverMaterial);
 }

@@ -13,6 +13,7 @@ import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.hibernate.validator.constraints.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Api(description = "屏保素材服务")
@@ -151,15 +153,16 @@ public class ScreensaverMaterialController {
 
     @ApiOperation("添加屏保素材(需授权)")
     @PostMapping("/bizScreensaverMaterial")
-    public Result addBizScreensaverMaterial(@RequestBody BizScreensaverMaterial bizScreensaverMaterial) {
+    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
+        //BizScreensaverMaterial bizScreensaverMaterial
         Result ret = null;
         try {
-            ret = screensaverMaterialService.addBizScreensaverMaterial(bizScreensaverMaterial);
+            ret = screensaverMaterialService.addBizScreensaverMaterial(list);
 
         } catch (Exception e) {
             logger.error("屏保素材 添加报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材 添加报错", bizScreensaverMaterial);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材 添加报错", list);
         }
         return ret;
     }

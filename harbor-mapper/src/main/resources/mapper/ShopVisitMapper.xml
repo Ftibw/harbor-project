@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whxm.harbor.mapper.ShopVisitMapper" >
+  <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.ShopVisit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="shop_visit_amount" property="shopVisitAmount" jdbcType="BIGINT" />
+    <result column="shop_visit_time" property="shopVisitTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_id, shop_visit_amount, shop_visit_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from biz_shop_visit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from biz_shop_visit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.whxm.harbor.bean.ShopVisit" >
+    insert into biz_shop_visit (id, shop_id, shop_visit_amount, 
+      shop_visit_time)
+    values (#{id,jdbcType=INTEGER}, #{shopId,jdbcType=VARCHAR}, #{shopVisitAmount,jdbcType=BIGINT}, 
+      #{shopVisitTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.whxm.harbor.bean.ShopVisit" >
+    insert into biz_shop_visit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="shopVisitAmount != null" >
+        shop_visit_amount,
+      </if>
+      <if test="shopVisitTime != null" >
+        shop_visit_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopVisitAmount != null" >
+        #{shopVisitAmount,jdbcType=BIGINT},
+      </if>
+      <if test="shopVisitTime != null" >
+        #{shopVisitTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.ShopVisit" >
+    update biz_shop_visit
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopVisitAmount != null" >
+        shop_visit_amount = #{shopVisitAmount,jdbcType=BIGINT},
+      </if>
+      <if test="shopVisitTime != null" >
+        shop_visit_time = #{shopVisitTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.ShopVisit" >
+    update biz_shop_visit
+    set shop_id = #{shopId,jdbcType=VARCHAR},
+      shop_visit_amount = #{shopVisitAmount,jdbcType=BIGINT},
+      shop_visit_time = #{shopVisitTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

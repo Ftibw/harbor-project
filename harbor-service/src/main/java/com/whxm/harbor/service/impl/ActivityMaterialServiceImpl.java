@@ -162,6 +162,33 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     }
 
     @Override
+    public Result addBizActivityMaterials(List<BizActivityMaterial> list) {
+
+        Result ret;
+
+        try {
+            list.forEach(item->item.setActivityMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
+
+            int affectRow = bizActivityMaterialMapper.batchInsert(list);
+
+            logger.info(0 == affectRow ?
+                    "活动素材 添加失败" :
+                    "活动素材 成功添加"+affectRow+"行"
+            );
+
+            ret = new Result("活动素材数据添加了" + affectRow + "行");
+
+        } catch (Exception e) {
+
+            logger.error("活动素材数据 添加报错", e);
+
+            throw new RuntimeException();
+        }
+
+        return ret;
+    }
+
+    @Override
     public List<BizActivityMaterial> getMaterialListByActivityId(Integer activityId) {
 
         List<BizActivityMaterial> list;

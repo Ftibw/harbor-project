@@ -7,11 +7,12 @@
         <result column="screensaver_material_size" property="screensaverMaterialSize" jdbcType="BIGINT"/>
         <result column="screensaver_material_name" property="screensaverMaterialName" jdbcType="VARCHAR"/>
         <result column="screensaver_material_type" property="screensaverMaterialType" jdbcType="VARCHAR"/>
+        <result column="screensaver_material_img_name" property="screensaverMaterialImgName" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    screensaver_material_id, screensaver_material_img_path, screensaver_material_size,
-    screensaver_material_name, screensaver_material_type
-  </sql>
+        screensaver_material_id, screensaver_material_img_path, screensaver_material_size,
+        screensaver_material_name, screensaver_material_img_name, screensaver_material_type
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -19,17 +20,18 @@
         where screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from biz_screensaver_material
-    where screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
-  </delete>
+        DELETE FROM biz_screensaver_material
+        WHERE screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
-    insert into biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
-      screensaver_material_size, screensaver_material_name,
-      screensaver_material_type)
-    values (#{screensaverMaterialId,jdbcType=INTEGER}, #{screensaverMaterialImgPath,jdbcType=VARCHAR},
-      #{screensaverMaterialSize,jdbcType=BIGINT}, #{screensaverMaterialName,jdbcType=VARCHAR},
-      #{screensaverMaterialType,jdbcType=VARCHAR})
-  </insert>
+        INSERT INTO biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
+                                              screensaver_material_size, screensaver_material_name, screensaver_material_img_name,
+                                              screensaver_material_type)
+        VALUES (#{screensaverMaterialId,jdbcType=INTEGER}, #{screensaverMaterialImgPath,jdbcType=VARCHAR},
+                #{screensaverMaterialSize,jdbcType=BIGINT}, #{screensaverMaterialName,jdbcType=VARCHAR},
+                #{screensaverMaterialImgName,jdbcType=VARCHAR},
+                #{screensaverMaterialType,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
         insert into biz_screensaver_material
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,6 +46,9 @@
             </if>
             <if test="screensaverMaterialName != null">
                 screensaver_material_name,
+            </if>
+            <if test="screensaverMaterialImgName != null">
+                screensaver_material_img_name,
             </if>
             <if test="screensaverMaterialType != null">
                 screensaver_material_type,
@@ -62,6 +67,9 @@
             <if test="screensaverMaterialName != null">
                 #{screensaverMaterialName,jdbcType=VARCHAR},
             </if>
+            <if test="screensaverMaterialImgName != null">
+                #{screensaverMaterialImgName,jdbcType=VARCHAR},
+            </if>
             <if test="screensaverMaterialType != null">
                 #{screensaverMaterialType,jdbcType=VARCHAR},
             </if>
@@ -79,6 +87,9 @@
             <if test="screensaverMaterialName != null">
                 screensaver_material_name = #{screensaverMaterialName,jdbcType=VARCHAR},
             </if>
+            <if test="screensaverMaterialImgName != null">
+                screensaver_material_img_name= #{screensaverMaterialImgName,jdbcType=VARCHAR},
+            </if>
             <if test="screensaverMaterialType != null">
                 screensaver_material_type = #{screensaverMaterialType,jdbcType=VARCHAR},
             </if>
@@ -86,13 +97,14 @@
         where screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
-    update biz_screensaver_material
-    set screensaver_material_img_path = #{screensaverMaterialImgPath,jdbcType=VARCHAR},
-      screensaver_material_size = #{screensaverMaterialSize,jdbcType=BIGINT},
-      screensaver_material_name = #{screensaverMaterialName,jdbcType=VARCHAR},
-      screensaver_material_type = #{screensaverMaterialType,jdbcType=VARCHAR}
-    where screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
-  </update>
+        UPDATE biz_screensaver_material
+        SET screensaver_material_img_path = #{screensaverMaterialImgPath,jdbcType=VARCHAR},
+            screensaver_material_size     = #{screensaverMaterialSize,jdbcType=BIGINT},
+            screensaver_material_name     = #{screensaverMaterialName,jdbcType=VARCHAR},
+            screensaver_material_img_name = #{screensaverMaterialImgName,jdbcType=VARCHAR},
+            screensaver_material_type     = #{screensaverMaterialType,jdbcType=VARCHAR}
+        WHERE screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
+    </update>
 
     <!--以下是自定义部分-->
     <select id="getBizScreensaverMaterialList" resultMap="BaseResultMap">
@@ -106,11 +118,14 @@
             <if test="screensaverMaterialName!=null">and screensaver_material_name like
                 concat('%',#{screensaverMaterialName},'%')
             </if>
+            <if test="screensaverMaterialImgName!=null">and screensaver_material_img_name like
+                concat('%',#{screensaverMaterialImgName},'%')
+            </if>
             <if test="screensaverMaterialType!=null">and screensaver_material_type like
                 concat('%',#{screensaverMaterialType},'%')
             </if>
             <if test="screensaverId!=null">
-                and  screensaver_id=#{screensaverId}
+                and screensaver_id=#{screensaverId}
             </if>
         </where>
         ORDER BY screensaver_material_id DESC
@@ -123,4 +138,17 @@
         JOIN screensaver_material_relation USING (screensaver_material_id)
         WHERE screensaver_id=#{screensaverId}
     </select>
+
+    <insert id="batchInsert">
+        INSERT INTO biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
+        screensaver_material_size, screensaver_material_name, screensaver_material_img_name,
+        screensaver_material_type)
+        VALUES
+        <foreach collection="list" separator="," item="item">
+            (#{item.screensaverMaterialId,jdbcType=INTEGER}, #{item.screensaverMaterialImgPath,jdbcType=VARCHAR},
+            #{item.screensaverMaterialSize,jdbcType=BIGINT}, #{item.screensaverMaterialName,jdbcType=VARCHAR},
+            #{item.screensaverMaterialImgName,jdbcType=VARCHAR},
+            #{item.screensaverMaterialType,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
 </mapper>
