@@ -9,8 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 public class WebConf extends WebMvcConfigurerAdapter {
+
+    private final HandlerInterceptor tokenInterceptor;
+
     @Autowired
-    private HandlerInterceptor tokenInterceptor;
+    public WebConf(HandlerInterceptor tokenInterceptor) {
+        this.tokenInterceptor = tokenInterceptor;
+    }
 
 
     //在低版本的spring boot中WebConf extends WebMvcConfigurerAdapter时,如下写法
@@ -29,7 +34,8 @@ public class WebConf extends WebMvcConfigurerAdapter {
                         "/terminal/publish*",
                         "/user/user*",
                         "/user/token",
-                        "/user/logout"
+                        "/user/logout",
+                        "/map/bizMap*"
                 );
         super.addInterceptors(registry);
     }

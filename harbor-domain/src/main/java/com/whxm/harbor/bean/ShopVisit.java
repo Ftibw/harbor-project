@@ -11,6 +11,17 @@ public class ShopVisit {
 
     private Date shopVisitTime;
 
+    //shopNumber连接biz_shop
+    private String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
     public String getShopNumber() {
         return shopNumber;
     }

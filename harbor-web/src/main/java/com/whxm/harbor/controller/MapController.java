@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -134,6 +135,9 @@ public class MapController {
             @ApiParam(name = "ID", value = "地图的ID", required = true)
                     Integer id
     ) {
+
+        Assert.notNull(id, "地图ID不能为空");
+
         Result result = null;
 
         try {

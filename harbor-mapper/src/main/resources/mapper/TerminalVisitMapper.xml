@@ -72,13 +72,12 @@
     <!--以下是自定义部分-->
 
     <select id="getTerminalVisitList" parameterType="com.whxm.harbor.bean.BizTerminal"
-            resultMap="com.whxm.harbor.mapper.BizTerminalMapper.ExtensionResultMap">
+            resultMap="ModelResultMap">
         SELECT
         terminal_number,
         terminal_name,
         terminal_type,
         terminal_ip,
-        floor_id,
         floor_name,
         is_terminal_online,
         terminal_visit_amount
@@ -94,6 +93,16 @@
             <if test="floorId!=null">and floor_id=#{floorId}</if>
         </where>
     </select>
+
+    <resultMap id="ModelResultMap" type="com.whxm.harbor.model.TerminalVisitModel">
+        <id column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+        <id column="terminal_name" property="terminalName" jdbcType="VARCHAR"/>
+        <id column="terminal_type" property="terminalType" jdbcType="VARCHAR"/>
+        <id column="terminal_ip" property="terminalIp" jdbcType="VARCHAR"/>
+        <id column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <id column="is_terminal_online" property="isTerminalOnline" jdbcType="INTEGER"/>
+        <result column="terminal_visit_amount" property="terminalVisitAmount" jdbcType="DECIMAL"/>
+    </resultMap>
 
     <update id="updateAmountByID">
         UPDATE biz_terminal_visit
