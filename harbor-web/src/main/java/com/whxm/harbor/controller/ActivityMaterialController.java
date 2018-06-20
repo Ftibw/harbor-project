@@ -26,7 +26,7 @@ import java.util.Map;
 @MyApiResponses
 public class ActivityMaterialController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivityMaterialController.class);
+    private final Logger logger = LoggerFactory.getLogger(ActivityMaterialController.class);
 
     @Autowired
     private ActivityMaterialService activityMaterialService;

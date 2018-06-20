@@ -22,7 +22,7 @@ import java.util.*;
 @Transactional
 public class TerminalServiceImpl implements TerminalService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TerminalServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(TerminalServiceImpl.class);
 
     @Resource
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;

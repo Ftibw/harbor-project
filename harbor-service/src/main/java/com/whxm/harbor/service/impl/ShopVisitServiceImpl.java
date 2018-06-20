@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional
 public class ShopVisitServiceImpl implements ShopVisitService {
 
-    private final static Logger logger = LoggerFactory.getLogger(ShopVisitServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ShopVisitServiceImpl.class);
 
     @Resource
     private ShopVisitMapper shopVisitMapper;
@@ -52,10 +52,13 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
         try {
 
-            int affectRow= shopVisitMapper.updateAmountByID(shopNumber);
+            int affectRow = shopVisitMapper.updateAmountByID(shopNumber);
 
-            logger.info(1 == affectRow ?
-                    "编号为{}的商铺访问数据更新成功" : "编号为{}的商铺访问数据更新失败", shopNumber);
+            if (this.logger.isDebugEnabled()) {
+
+                this.logger.debug(1 == affectRow ?
+                        "编号为{}的商铺访问数据更新成功" : "编号为{}的商铺访问数据更新失败", shopNumber);
+            }
 
             ret = new Result("编号为" + shopNumber + "商铺访问数据 更新了" + affectRow);
 

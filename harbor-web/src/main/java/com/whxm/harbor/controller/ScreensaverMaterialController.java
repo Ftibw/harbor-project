@@ -33,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/screensaverMaterial")
 public class ScreensaverMaterialController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialController.class);
+    private final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialController.class);
 
     @Autowired
     private ScreensaverMaterialService screensaverMaterialService;

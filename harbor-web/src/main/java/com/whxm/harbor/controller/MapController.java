@@ -26,7 +26,7 @@ import java.util.List;
 @MyApiResponses
 public class MapController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MapController.class);
+    private final Logger logger = LoggerFactory.getLogger(MapController.class);
 
     @Autowired
     private MapService mapService;

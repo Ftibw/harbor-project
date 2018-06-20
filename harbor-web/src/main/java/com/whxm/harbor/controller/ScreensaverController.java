@@ -25,7 +25,7 @@ import java.util.Objects;
 @MyApiResponses
 public class ScreensaverController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScreensaverController.class);
+    private final Logger logger = LoggerFactory.getLogger(ScreensaverController.class);
 
     @Autowired
     private ScreensaverService screensaverService;

@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 public class MapServiceImpl implements MapService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MapServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(MapServiceImpl.class);
 
     @Resource
     private BizMapMapper bizMapMapper;

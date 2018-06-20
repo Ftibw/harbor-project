@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class VisitAspect {
 
-    private final static Logger logger = LoggerFactory.getLogger(VisitAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(VisitAspect.class);
 
     @Autowired
     private VisitLogService visitLogService;

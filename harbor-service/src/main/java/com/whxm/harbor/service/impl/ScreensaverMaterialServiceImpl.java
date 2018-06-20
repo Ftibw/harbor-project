@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialServiceImpl.class);
 
     @Resource
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;

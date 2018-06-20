@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/bizFormat")
 @MyApiResponses
 public class BusinessFormatController {
-    private static final Logger logger = LoggerFactory.getLogger(BusinessFormatController.class);
+    private final Logger logger = LoggerFactory.getLogger(BusinessFormatController.class);
 
     @Autowired
     private BusinessFormatService businessFormatService;

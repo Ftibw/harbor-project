@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 public class FloorServiceImpl implements FloorService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FloorServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(FloorServiceImpl.class);
 
     @Resource
     private BizFloorMapper bizFloorMapper;

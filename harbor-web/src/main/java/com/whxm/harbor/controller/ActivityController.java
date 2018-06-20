@@ -25,7 +25,7 @@ import java.util.List;
 @MyApiResponses
 public class ActivityController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivityController.class);
+    private final Logger logger = LoggerFactory.getLogger(ActivityController.class);
 
     @Autowired
     private ActivityService activityService;

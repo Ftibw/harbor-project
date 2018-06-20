@@ -27,7 +27,7 @@ import java.util.Map;
 @MyApiResponses
 public class TerminalController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TerminalController.class);
+    private final Logger logger = LoggerFactory.getLogger(TerminalController.class);
 
     @Autowired
     private TerminalService terminalService;

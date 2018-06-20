@@ -34,7 +34,7 @@ import java.util.Map;
 @MyApiResponses
 public class ShopController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
+    private final Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     @Autowired
     private ShopVisitService shopVisitService;

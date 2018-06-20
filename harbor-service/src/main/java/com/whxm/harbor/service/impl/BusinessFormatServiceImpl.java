@@ -22,7 +22,7 @@ import java.util.List;
 @Transactional
 public class BusinessFormatServiceImpl implements BusinessFormatService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BusinessFormatServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(BusinessFormatServiceImpl.class);
 
     @Resource
     private BizFormatMapper bizFormatMapper;

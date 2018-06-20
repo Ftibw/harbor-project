@@ -30,7 +30,7 @@ import static com.whxm.harbor.utils.TokenUtils.order;
 @MyApiResponses
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;

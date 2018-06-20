@@ -21,7 +21,7 @@ import java.util.Date;
 @Transactional
 public class ScreensaverServiceImpl implements ScreensaverService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScreensaverServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ScreensaverServiceImpl.class);
 
     @Resource
     private BizScreensaverMapper bizScreensaverMapper;

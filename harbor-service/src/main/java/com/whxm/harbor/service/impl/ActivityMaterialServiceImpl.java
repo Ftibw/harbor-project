@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivityMaterialServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ActivityMaterialServiceImpl.class);
 
     @Autowired
     private UrlConfig urlConfig;
@@ -168,13 +168,13 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         Result ret;
 
         try {
-            list.forEach(item->item.setActivityMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
+            list.forEach(item -> item.setActivityMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
 
             int affectRow = bizActivityMaterialMapper.batchInsert(list);
 
             logger.info(0 == affectRow ?
                     "活动素材 添加失败" :
-                    "活动素材 成功添加"+affectRow+"行"
+                    "活动素材 成功添加" + affectRow + "行"
             );
 
             ret = new Result("活动素材数据添加了" + affectRow + "行");

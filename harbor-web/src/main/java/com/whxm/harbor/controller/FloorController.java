@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/floor")
 @MyApiResponses
 public class FloorController {
-    private static final Logger logger = LoggerFactory.getLogger(FloorController.class);
+    private final Logger logger = LoggerFactory.getLogger(FloorController.class);
 
     @Autowired
     private FloorService floorService;

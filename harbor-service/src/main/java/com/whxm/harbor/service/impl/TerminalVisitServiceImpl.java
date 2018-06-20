@@ -19,7 +19,7 @@ import java.util.List;
 @Transactional
 public class TerminalVisitServiceImpl implements TerminalVisitService {
 
-    private final static Logger logger = LoggerFactory.getLogger(TerminalVisitServiceImpl.class);
+    private final  Logger logger = LoggerFactory.getLogger(TerminalVisitServiceImpl.class);
 
     @Resource
     private TerminalVisitMapper terminalVisitMapper;
@@ -57,8 +57,11 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
             int affectRow= terminalVisitMapper.updateAmountByID(terminalNumber);
 
-            logger.info(1 == affectRow ?
-                    "编号为{}的终端访问数据更新成功" : "编号为{}的终端访问数据更新失败", terminalNumber);
+            if (this.logger.isDebugEnabled()) {
+
+                this.logger.debug(1 == affectRow ?
+                        "编号为{}的终端访问数据更新成功" : "编号为{}的终端访问数据更新失败", terminalNumber);
+            }
 
             ret = new Result("编号为" + terminalNumber + "终端访问数据 更新了" + affectRow);
 

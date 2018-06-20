@@ -29,7 +29,7 @@ import java.util.*;
 @Transactional
 public class ShopServiceImpl implements ShopService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShopServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ShopServiceImpl.class);
 
     @Autowired
     private UrlConfig urlConfig;

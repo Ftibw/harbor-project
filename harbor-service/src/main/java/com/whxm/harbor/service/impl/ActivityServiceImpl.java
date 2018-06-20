@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 public class ActivityServiceImpl implements ActivityService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivityServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ActivityServiceImpl.class);
 
     @Autowired
     private UrlConfig urlConfig;
