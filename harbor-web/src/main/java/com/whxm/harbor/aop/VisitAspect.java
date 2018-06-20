@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class VisitAspect {
 
     @Around("@within(com.whxm.harbor.annotation.VisitLogger)||@annotation(com.whxm.harbor.annotation.VisitLogger)")
-    public Object visitLogPoint(ProceedingJoinPoint pjp){
+    public Object visitLogPoint(ProceedingJoinPoint joinPoint){
 
         return null;
     }
