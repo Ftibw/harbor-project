@@ -4,6 +4,7 @@ package com.whxm.harbor.lock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.Collections;
 
@@ -19,7 +20,7 @@ public class RedisDistributedLock {
     private static final Long RELEASE_SUCCESS = 1L;
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     /**
      * 尝试获取分布式锁
@@ -40,7 +41,7 @@ public class RedisDistributedLock {
         //最后在sendCommand中调用了Protocol.sendCommand(outputStream, cmd, args);
 
         //说明了参数对应的条件的设置都是在redis中完成的,保证了原子性
-        String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
+        String result = jedisPool.getResource().set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
 
         return LOCK_SUCCESS.equals(result);
     }
@@ -60,7 +61,7 @@ public class RedisDistributedLock {
                 + "then return redis.call('del', KEYS[1]) "
                 + "else return 0 end";
 
-        Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
+        Object result = jedisPool.getResource().eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
 
         return RELEASE_SUCCESS.equals(result);
     }
