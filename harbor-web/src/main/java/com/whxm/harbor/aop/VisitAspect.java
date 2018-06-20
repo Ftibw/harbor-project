@@ -7,6 +7,8 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,22 +20,31 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class VisitAspect {
 
+    private final static Logger logger = LoggerFactory.getLogger(VisitAspect.class);
+
     @Autowired
     private VisitLogService visitLogService;
 
     @Around("@within(com.whxm.harbor.annotation.VisitLogger)||@annotation(com.whxm.harbor.annotation.VisitLogger)")
-    public Object visitLogPoint(ProceedingJoinPoint joinPoint) {
+    public Object visitLogPoint(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String signature = joinPoint.getSignature().getName();
 
-        String param = joinPoint.getArgs()[0].toString();
+        Object param = joinPoint.getArgs()[0];
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        if (param instanceof String) {
 
-        String ip = IPv4Util.getIpAddress(request);
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        visitLogService.recordVisit(ip,param,signature);
+            String ip = IPv4Util.getIpAddress(request);
 
-        return null;
+            int affectRow = visitLogService.recordVisit(param.toString(), ip, signature + "(" + param + ")");
+
+            if (1 == affectRow) {
+                logger.info("调用方法[{}({})],日志记录成功", signature, param);
+            }
+        }
+
+        return joinPoint.proceed();
     }
 }

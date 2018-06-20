@@ -15,12 +15,19 @@ public class VisitLogServiceImpl implements VisitLogService {
     private VisitCountLogMapper logger;
 
     @Override
-    public int recordVisit(String ip, String terminalId, String Signature) {
+    public int recordVisit(String param, String ip, String signature) {
 
-        logger.logShopVisit();
+        int affectRow = 0;
 
-        logger.logTerminalVisit();
+        if (signature.toLowerCase().contains("shop")) {
 
-        return 0;
+            affectRow = logger.logShopVisit(param, ip, signature);
+
+        } else if (signature.toLowerCase().contains("terminal")) {
+
+            affectRow = logger.logTerminalVisit(param, ip, signature);
+        }
+
+        return affectRow;
     }
 }
