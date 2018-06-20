@@ -15,16 +15,12 @@ public class VisitLogServiceImpl implements VisitLogService {
     private VisitCountLogMapper logger;
 
     @Override
-    public int recordShopVisit(String ip, String terminalId) {
+    public int recordVisit(String ip, String terminalId, String Signature) {
+
         logger.logShopVisit();
 
-        return 0;
-    }
-
-    @Override
-    public int recordTerminalVisit(String ip, String shopId) {
-
         logger.logTerminalVisit();
+
         return 0;
     }
 }

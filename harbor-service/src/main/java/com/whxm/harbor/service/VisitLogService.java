@@ -9,8 +9,6 @@ public interface VisitLogService {
      *
      * @return 日志记录条数
      */
-    int recordShopVisit(String ip, String terminalId);
-
-    int recordTerminalVisit(String ip, String shopId);
+    int recordVisit(String ip, String terminalId,String Signature);
 
 }
