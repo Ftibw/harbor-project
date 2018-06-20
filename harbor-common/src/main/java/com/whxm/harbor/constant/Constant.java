@@ -18,6 +18,6 @@ public class Constant {
 
     public static final String DEFAULT_FILTER_CONTENT_TYPE = "application/json";
 
-    //单位秒
+    //表单提交防重时长(单位秒)
     public static final Integer DEFAULT_SUBMIT_EXPIRE_TIME = 100000;
 }
