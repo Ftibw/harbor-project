@@ -113,6 +113,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         Result ret;
 
         try {
+            bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
             int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 

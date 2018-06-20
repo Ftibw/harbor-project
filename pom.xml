@@ -88,6 +88,11 @@
                 <artifactId>spring-boot-starter-cache</artifactId>
                 <version>${springboot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
             <!--commons-fileupload自动依赖了io-->
             <dependency>
                 <groupId>commons-fileupload</groupId>
