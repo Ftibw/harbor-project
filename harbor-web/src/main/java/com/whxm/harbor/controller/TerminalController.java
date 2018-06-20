@@ -1,9 +1,9 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
+import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.mapper.TerminalVisitMapper;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
 import com.whxm.harbor.utils.IPv4Util;
@@ -101,7 +101,7 @@ public class TerminalController {
         return convert;
     }
 
-
+    @VisitLogger
     @ApiOperation(value = "访问终端")
     @PostMapping("/visit")
     public Result updateTerminalVisit(
@@ -124,7 +124,7 @@ public class TerminalController {
         return ret;
     }
 
-
+    @VisitLogger
     @ApiOperation(value = "获取终端访问数据列表")
     @GetMapping("/visits")
     public Result getTerminalVisitList(PageQO<BizTerminal> pageQO, BizTerminal condition) {

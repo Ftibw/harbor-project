@@ -1,6 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
+import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
 import com.whxm.harbor.conf.UrlConfig;
@@ -103,6 +104,7 @@ public class ShopController {
         return ret;
     }
 
+    @VisitLogger
     @ApiOperation(value = "访问商铺")
     @PostMapping("/visit")
     public Result updateShopVisit(
@@ -125,7 +127,7 @@ public class ShopController {
         return ret;
     }
 
-
+    @VisitLogger
     @ApiOperation(value = "获取商铺访问数据列表")
     @GetMapping("/visits")
     public Result getShopVisitList(PageQO<BizShop> pageQO, BizShop condition) {
