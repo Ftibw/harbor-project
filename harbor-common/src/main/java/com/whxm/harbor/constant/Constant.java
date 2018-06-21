@@ -12,6 +12,8 @@ public class Constant {
 
     public static final Integer ENABLED_STATUS = 1;
 
+    public static final Integer DISENABLED_STATUS = 1;
+
     public static final Object NO_DATA = "";
 
     public static final String DEFAULT_FILTER_METHOD = "POST";

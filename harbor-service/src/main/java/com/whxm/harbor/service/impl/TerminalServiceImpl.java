@@ -150,6 +150,8 @@ public class TerminalServiceImpl implements TerminalService {
                 }
             }
 
+            bizTerminal.setIsTerminalOnline(Constant.DISENABLED_STATUS);
+
             bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
             bizTerminal.setAddTerminalTime(new Date());
