@@ -57,7 +57,7 @@ public class VisitAspect {
             map.put("method", signature.toShortString()
                     .replaceAll("^(.*)\\(..\\)$", "$1"));
 
-            map.put("param", param.toString());
+            //map.put("param", param.toString());
 
             Object result = joinPoint.proceed();
 
