@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:47.94.202.250}    #192.168.1.80
+      host: ${redishost:192.168.1.80}    #47.94.202.250
 mybatis:
   type-aliases-package: com.whxm.harbor.bean
   mapper-locations: mapper/*.xml
@@ -49,5 +49,5 @@ server:
 #2.redis分布式锁,尝试性使用
 #redis分布式锁的jedis配置
 jedis:
-  host: ${redishost:47.94.202.250}
+  host: ${redishost:192.168.1.80}  #47.94.202.250
   port: ${redisPort:6379}

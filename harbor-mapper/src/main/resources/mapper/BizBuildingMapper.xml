@@ -26,7 +26,8 @@
     delete from biz_building
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.whxm.harbor.bean.BizBuilding" >
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+          parameterType="com.whxm.harbor.bean.BizBuilding" >
     insert into biz_building (id, number, name, 
       color, layer, type, 
       width, height, page_x, 

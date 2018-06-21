@@ -81,6 +81,8 @@ public class TerminalController {
                     Integer prog
     ) {
 
+        Assert.notNull(sn, "终端编号不能为空");
+
         ResultMap<String, Object> convert = new ResultMap<>(4);
 
         try {
