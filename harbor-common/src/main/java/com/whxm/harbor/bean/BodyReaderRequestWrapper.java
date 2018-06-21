@@ -81,6 +81,8 @@ public class BodyReaderRequestWrapper extends HttpServletRequestWrapper {
             baos.write(buff, 0, size);
         }
 
+        baos.close();
+
         return baos.toByteArray();
     }
 
