@@ -6,6 +6,7 @@ import com.whxm.harbor.constant.Constant;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MultiplexRequestFilter implements Filter {
 
@@ -28,6 +29,7 @@ public class MultiplexRequestFilter implements Filter {
             HttpServletRequest req = (HttpServletRequest) request;
 
             if (Constant.DEFAULT_FILTER_METHOD.equals(req.getMethod().toUpperCase())
+                    && Objects.nonNull(req.getContentType())
                     && req.getContentType().equalsIgnoreCase(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
 
                 requestWrapper = new BodyReaderRequestWrapper((HttpServletRequest) request);

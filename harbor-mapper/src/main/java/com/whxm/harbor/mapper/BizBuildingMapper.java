@@ -1,6 +1,13 @@
+
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizBuilding;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface BizBuildingMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +21,15 @@ public interface BizBuildingMapper {
     int updateByPrimaryKeySelective(BizBuilding record);
 
     int updateByPrimaryKey(BizBuilding record);
+
+    @Results(value = {
+            @Result(property = "pageX"
+                    , column = "page_x",
+                    javaType = String.class, jdbcType = JdbcType.VARCHAR),
+            @Result(property = "pageY"
+                    , column = "page_Y",
+                    javaType = String.class, jdbcType = JdbcType.VARCHAR)
+    })
+    @Select("select * from biz_building")
+    List<BizBuilding> getBuildingList();
 }

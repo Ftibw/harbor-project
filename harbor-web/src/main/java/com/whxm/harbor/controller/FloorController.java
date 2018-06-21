@@ -67,7 +67,7 @@ public class FloorController {
         } catch (Exception e) {
             logger.error("楼层列表 获取报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "楼层列表 获取报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "楼层列表 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -84,7 +84,7 @@ public class FloorController {
 
             logger.error("楼层数据 添加报错", e);
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "楼层数据 添加报错", null);
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "楼层数据 添加报错", Constant.NO_DATA);
         }
 
         return ret;

@@ -3,9 +3,9 @@ package com.whxm.harbor.bean;
 public class BizMap {
     private Integer mapId;
 
-    private String mapName;
+    private String  mapName;
 
-    private String mapImgPath;
+    private String  mapImgPath;
 
     private Integer floorId;
 
