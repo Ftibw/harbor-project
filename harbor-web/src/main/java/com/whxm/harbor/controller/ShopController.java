@@ -108,8 +108,8 @@ public class ShopController {
     @ApiOperation(value = "访问商铺")
     @PostMapping("/visit")
     public Result updateShopVisit(
-            @ApiParam(name = "shopNumber", value = "商铺编号")
-            @RequestParam("shopNumber") String shopNumber) {
+            @ApiParam(name = "no", value = "商铺编号")
+            @RequestParam("no") String shopNumber) {
 
         Assert.notNull(shopNumber, "商铺编号为空");
 
@@ -127,7 +127,6 @@ public class ShopController {
         return ret;
     }
 
-    @VisitLogger
     @ApiOperation(value = "获取商铺访问数据列表")
     @GetMapping("/visits")
     public Result getShopVisitList(PageQO<BizShop> pageQO, BizShop condition) {

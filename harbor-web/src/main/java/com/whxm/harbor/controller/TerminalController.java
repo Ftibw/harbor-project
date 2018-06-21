@@ -124,7 +124,6 @@ public class TerminalController {
         return ret;
     }
 
-    @VisitLogger
     @ApiOperation(value = "获取终端访问数据列表")
     @GetMapping("/visits")
     public Result getTerminalVisitList(PageQO<BizTerminal> pageQO, BizTerminal condition) {
