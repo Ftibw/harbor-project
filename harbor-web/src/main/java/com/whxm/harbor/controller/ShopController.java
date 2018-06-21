@@ -113,20 +113,7 @@ public class ShopController {
 
         Assert.notNull(shopNumber, "商铺编号为空");
 
-        ResultMap<String, Object> ret = null;
-
-        try {
-
-            ret = shopVisitService.updateShopVisit(shopNumber);
-
-        } catch (Exception e) {
-
-            logger.error("编号为{}的商铺访问数据更新报错", shopNumber);
-
-            ret = new ResultMap<String, Object>(1).build("success", false);
-        }
-
-        return ret;
+        return shopVisitService.updateShopVisit(shopNumber);
     }
 
     @ApiOperation(value = "获取商铺访问数据列表")

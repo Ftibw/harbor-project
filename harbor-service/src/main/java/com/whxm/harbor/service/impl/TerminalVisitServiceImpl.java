@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -68,7 +69,9 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
             logger.error("编号为{}的终端访问更新 报错", terminalNumber, e);
 
-            throw new RuntimeException();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+            ret = new ResultMap<String, Object>(1).build("success", false);
         }
 
         return ret;

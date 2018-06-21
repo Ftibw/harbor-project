@@ -9,11 +9,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -53,27 +51,26 @@ public class VisitAspect {
 
             String ip = IPv4Util.getIpAddress(request);
 
+            //应该写到自定义缓存或中间件缓存中,定量/定时批处理,异步批处理提高读写和响应速度
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("method", signature.toShortString()
+                    .replaceAll("^(.*)\\(..\\)$", "$1"));
+
+            map.put("param", param.toString());
+
             Object result = joinPoint.proceed();
 
             if (Objects.nonNull(result)
                     && result instanceof ResultMap
                     && (boolean) ((ResultMap) result).get("success")) {
 
-                if (this.logger.isDebugEnabled()) {
-                    logger.info("调用方法[{}({})]成功", signature, param);
-                }
-
-                //应该写到自定义缓存或中间件缓存中,定量/定时批处理,异步批处理提高读写和响应速度
-                Map<String, String> map = new HashMap<>();
-
-                map.put("method", signature.toShortString()
-                        .replaceAll("^(.*)\\(..\\)$", "$1"));
-
-                map.put("param", param.toString());
-
-                visitLogService.recordVisit(ip, JSONUtils.toJSONString(map));
-
+                map.put("success", true);
             }
+
+            map.put("success", false);
+
+            visitLogService.recordVisit(ip, JSONUtils.toJSONString(map));
 
             return result;
         }

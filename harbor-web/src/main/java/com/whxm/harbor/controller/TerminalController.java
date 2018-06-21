@@ -31,7 +31,7 @@ public class TerminalController {
 
     @Autowired
     private TerminalService terminalService;
-    
+
     @Autowired
     private TerminalVisitService terminalVisitService;
 
@@ -110,20 +110,7 @@ public class TerminalController {
 
         Assert.notNull(terminalNumber, "终端编号为空");
 
-        ResultMap<String, Object> ret = null;
-
-        try {
-
-            ret = terminalVisitService.updateTerminalVisit(terminalNumber);
-
-        } catch (Exception e) {
-
-            logger.error("编号为{}的终端访问数据更新报错", terminalNumber);
-
-            ret = new ResultMap<String, Object>(1).build("success", false);
-        }
-
-        return ret;
+        return terminalVisitService.updateTerminalVisit(terminalNumber);
     }
 
     @ApiOperation(value = "获取终端访问数据列表")

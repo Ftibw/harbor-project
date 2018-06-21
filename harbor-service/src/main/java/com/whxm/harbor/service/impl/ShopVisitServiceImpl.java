@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -49,7 +50,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
     @Override
     public ResultMap<String, Object> updateShopVisit(String shopNumber) {
 
-        ResultMap<String, Object> ret;
+        ResultMap<String, Object> ret=null;
 
         try {
 
@@ -67,7 +68,10 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
             logger.error("编号为{}的商铺访问更新 报错", shopNumber, e);
 
-            throw new RuntimeException();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+            ret = new ResultMap<String, Object>(1).build("success", false);
+
         }
 
         return ret;
