@@ -35,7 +35,7 @@ public class ActivityMaterialController {
     private FileDir fileDir;
 
     @ApiOperation(value = "根据活动ID获取活动素材列表")
-    @PostMapping(value = "/activityMaterials", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/activityMaterials")
     public Map<String, Object> getBizActivities(
             @ApiParam(name = "activity", value = "活动ID", required = true)
                     Integer activity) {

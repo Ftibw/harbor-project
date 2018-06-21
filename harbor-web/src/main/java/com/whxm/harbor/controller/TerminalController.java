@@ -36,7 +36,7 @@ public class TerminalController {
     private TerminalVisitService terminalVisitService;
 
     @ApiOperation("终端注册")
-    @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/register")
     public Map<String, Boolean> register(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
@@ -73,7 +73,7 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端的屏保节目")
-    @PostMapping(value = "/program", consumes = "application/x-www-form-urlencoded")
+    @RequestMapping(value = "/program", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
