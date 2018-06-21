@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User {
     private String userId;
 
     private String userLoginname;
