@@ -89,12 +89,14 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
         try {
 
-            int affectRow = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+            bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
 
-            logger.info(1 == affectRow ?
+            int affectRow1 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+
+            logger.info(1 == affectRow1 ?
                     "ID为{}的屏保素材删除成功" : "ID为{}的屏保素材删除失败", bizScreensaverMaterialId);
 
-            ret = new Result("ID为" + bizScreensaverMaterialId + "的屏保素材 删除了" + affectRow + "行");
+            ret = new Result("ID为" + bizScreensaverMaterialId + "的屏保素材 删除了" + affectRow1 + "行");
 
         } catch (Exception e) {
 
@@ -147,7 +149,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
 
-            logger.info("屏保素材添加{}",0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
+            logger.info("屏保素材添加{}", 0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
 
             ret = new Result("屏保素材数据添加了" + affectRow + "行");
 

@@ -217,7 +217,7 @@
         SELECT
         <include refid="Base_Column_List"/>,floor_name
         FROM biz_terminal
-        JOIN biz_floor USING (floor_id)
+        LEFT JOIN biz_floor USING (floor_id)
         <if test="screensaverId!=null">
             JOIN screensaver_published_terminal_relation USING (terminal_id)
         </if>
@@ -237,8 +237,8 @@
         select
         <include refid="Base_Column_List"/>,floor_name
         from biz_terminal
-        JOIN biz_floor USING (floor_id)
-        WHERE terminal_id
+        LEFT JOIN biz_floor USING (floor_id)
+        WHERE is_deleted=1 AND terminal_id
         NOT IN (
           SELECT terminal_id
           FROM screensaver_published_terminal_relation
