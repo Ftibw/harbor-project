@@ -59,6 +59,12 @@ public class ShopController {
                     String initial
     ) {
 
+        Assert.notNull(floor,"楼层ID为空");
+
+        Assert.notNull(type,"业态ID为空");
+
+        Assert.notNull(initial,"商铺名称大写首字母为空");
+
         ResultMap<String, Object> ret = new ResultMap<>(2);
 
         try {
@@ -75,7 +81,7 @@ public class ShopController {
 
         } catch (Exception e) {
 
-            logger.error("楼层列表 获取报错", e);
+            logger.error("floorId:{},bizFormatId:{},initial:{}---店铺列表 获取报错", floor, type, initial, e);
 
             ret.build("data", new byte[]{}).build("success", false);
         }

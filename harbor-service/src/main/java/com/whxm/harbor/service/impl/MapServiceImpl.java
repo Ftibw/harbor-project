@@ -35,7 +35,9 @@ public class MapServiceImpl implements MapService {
         try {
             bizMap = bizMapMapper.selectByPrimaryKey(bizMapId);
 
-            if (null == bizMap) logger.info("ID为{}的地图不存在", bizMapId);
+            if (this.logger.isDebugEnabled()) {
+                if (null == bizMap) logger.info("ID为{}的地图不存在", bizMapId);
+            }
 
         } catch (Exception e) {
 
@@ -98,7 +100,9 @@ public class MapServiceImpl implements MapService {
 
             int affectRow = bizMapMapper.deleteByPrimaryKey(bizMapId);
 
-            logger.info(1 == affectRow ? "ID为{}的地图删除失败" : "ID为{}的地图删除成功", bizMapId);
+            if (this.logger.isDebugEnabled()) {
+                logger.info(0 == affectRow ? "ID为{}的地图删除失败" : "ID为{}的地图删除成功", bizMapId);
+            }
 
             ret = new Result("ID为" + bizMapId + "的地图 删除了" + affectRow + "行");
 

@@ -114,7 +114,9 @@ public class ShopServiceImpl implements ShopService {
                 ret.add(vo);
             });
 
-            logger.info(list.isEmpty() ? "{}条件下查询商铺列表无数据" : "{}条件下查询商铺列表成功", params);
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(list.isEmpty() ? "{}条件下查询商铺列表无数据" : "{}条件下查询商铺列表成功", params);
+            }
 
         } catch (Exception e) {
 
@@ -179,8 +181,9 @@ public class ShopServiceImpl implements ShopService {
         try {
             int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
 
-            logger.info(1 == affectRow ? "ID为{}的商铺 修改成功" : "ID为{}的商铺 修改失败", bizShop.getShopId());
-
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ? "ID为{}的商铺 修改成功" : "ID为{}的商铺 修改失败", bizShop.getShopId());
+            }
             ret = new Result("商铺数据修改了" + affectRow + "行");
 
         } catch (Exception e) {

@@ -66,9 +66,9 @@ public class VisitAspect {
                     && (boolean) ((ResultMap) result).get("success")) {
 
                 map.put("success", true);
+            }else {
+                map.put("success", false);
             }
-
-            map.put("success", false);
 
             visitLogService.recordVisit(param.toString(), ip, JSONUtils.toJSONString(map));
 
