@@ -2,6 +2,7 @@ package com.whxm.harbor.aop;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.ResultMap;
 import com.whxm.harbor.service.VisitLogService;
 import com.whxm.harbor.utils.IPv4Util;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -55,8 +56,8 @@ public class VisitAspect {
             Object result = joinPoint.proceed();
 
             if (Objects.nonNull(result)
-                    && result instanceof Result
-                    && ((Result) result).getStatus() == HttpStatus.OK.value()) {
+                    && result instanceof ResultMap
+                    && (boolean) ((ResultMap) result).get("success")) {
 
                 if (this.logger.isDebugEnabled()) {
                     logger.info("调用方法[{}({})]成功", signature, param);
