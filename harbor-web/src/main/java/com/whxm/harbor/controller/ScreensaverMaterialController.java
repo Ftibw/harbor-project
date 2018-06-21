@@ -44,6 +44,7 @@ public class ScreensaverMaterialController {
     @Autowired
     private UrlConfig urlConfig;
 
+    @SuppressWarnings("unchecked")
     @ApiOperation("上传屏保素材图片")
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
@@ -55,8 +56,7 @@ public class ScreensaverMaterialController {
             //判断图片横屏还是竖屏
             String path = urlConfig.getUrlPrefix() + map.get("filePath");
 
-            String orientation = FileUtils.getImageOrientation(
-                    path.replace("\\", "/"));
+            String orientation = FileUtils.getImageOrientation(path);
 
             map.put("imageOrientation", orientation);
 

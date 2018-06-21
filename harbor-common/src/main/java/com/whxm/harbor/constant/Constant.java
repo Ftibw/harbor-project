@@ -22,4 +22,7 @@ public class Constant {
 
     //表单提交防重时长(单位秒)
     public static final Integer DEFAULT_SUBMIT_EXPIRE_TIME = 100000;
+
+    public static final String resourcePath = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
+
 }

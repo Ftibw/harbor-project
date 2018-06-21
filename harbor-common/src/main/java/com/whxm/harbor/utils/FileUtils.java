@@ -1,6 +1,7 @@
 package com.whxm.harbor.utils;
 
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +44,6 @@ public class FileUtils {
         try {
             //资源服务器项目路径
             //request.getServletContext().getRealPath(File.separator + uploadRootDir);
-            String resourcePath = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
             //文件名称
             originName = file.getOriginalFilename();
             //文件大小
@@ -51,7 +51,7 @@ public class FileUtils {
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的目录
-            String filePath = resourcePath + File.separator + uploadRootDir;
+            String filePath = Constant.resourcePath + File.separator + uploadRootDir;
             //分文件夹管理时的文件夹名
             String dirName = StringUtils.createDirName();
             //文件夹
@@ -77,7 +77,7 @@ public class FileUtils {
             result.put("fileOriginName", originName);
             result.put("fileSize", size);
             result.put("fileNewName", newName);
-            result.put("filePath", href);
+            result.put("filePath", href.replace("\\", "/"));
         }
     }
 
