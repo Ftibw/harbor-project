@@ -23,15 +23,22 @@ public class BodyReaderRequestWrapper extends HttpServletRequestWrapper {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
+    /**
+     * step1:请求经过过滤器的POST+json验证后将调用这个构造方法创建BodyReaderRequestWrapper实例
+     */
     public BodyReaderRequestWrapper(HttpServletRequest request) throws IOException {
+        /**step2:两次向父类构造,将request对象注入ServletRequestWrapper中,用ServletRequest接受*/
         super(request);
-        //读取输入流
+        //读取输入流并缓存到body中
         this.body = readBytes(request.getInputStream());
     }
 
+    /**
+     * step4:自定义的过滤器放行后,此对象在其他地方被调用,并获取流时将实际调用此方法(子类重新了改方法),因为request内容被body缓存了,每次去读都是拷贝body的数据,因此可以反复的读
+     */
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        //再封装数据
+        /**将body中缓存的字节数组放入字节数组读入流,供调用者读取*/
         final ByteArrayInputStream bais = new ByteArrayInputStream(body);
 
         return new ServletInputStream() {
@@ -58,6 +65,9 @@ public class BodyReaderRequestWrapper extends HttpServletRequestWrapper {
         };
     }
 
+    /**
+     * step3:将request中的输入流inputStream,用字节数组输出流写入内存,再读取字节数组保存到body属性中
+     */
     private static byte[] readBytes(InputStream in) throws IOException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
