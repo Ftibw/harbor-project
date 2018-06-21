@@ -16,11 +16,11 @@ public class VisitLogServiceImpl implements VisitLogService {
     private VisitCountLogMapper logger;
 
     @Override
-    public int recordVisit(String ip, String message) {
+    public int recordVisit(String number, String ip, String message) {
 
         int affectRow = 0;
         try {
-            affectRow = logger.writeLog(ip, message);
+            affectRow = logger.writeLog(number, ip, message);
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

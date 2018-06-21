@@ -12,6 +12,6 @@ public interface VisitLogService {
      * @param message 日志信息
      * @return 日志记录条数
      */
-    int recordVisit(String ip, String message);
+    int recordVisit(String number,String ip, String message);
 
 }

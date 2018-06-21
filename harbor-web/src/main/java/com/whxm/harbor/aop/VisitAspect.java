@@ -70,7 +70,7 @@ public class VisitAspect {
 
             map.put("success", false);
 
-            visitLogService.recordVisit(ip, JSONUtils.toJSONString(map));
+            visitLogService.recordVisit(param.toString(), ip, JSONUtils.toJSONString(map));
 
             return result;
         }
