@@ -37,7 +37,7 @@ public interface TerminalVisitService {
      * @param terminalNumber 终端编号
      * @return ret
      */
-    Result updateTerminalVisit(String terminalNumber);
+    ResultMap<String, Object> updateTerminalVisit(String terminalNumber);
 
 
 }

@@ -107,13 +107,13 @@ public class ShopController {
     @VisitLogger
     @ApiOperation(value = "访问商铺")
     @PostMapping("/visit")
-    public Result updateShopVisit(
+    public Map<String, Object> updateShopVisit(
             @ApiParam(name = "no", value = "商铺编号")
             @RequestParam("no") String shopNumber) {
 
         Assert.notNull(shopNumber, "商铺编号为空");
 
-        Result ret = null;
+        ResultMap<String, Object> ret = null;
 
         try {
 
@@ -122,6 +122,8 @@ public class ShopController {
         } catch (Exception e) {
 
             logger.error("编号为{}的商铺访问数据更新报错", shopNumber);
+
+            ret = new ResultMap<String, Object>(1).build("success", false);
         }
 
         return ret;

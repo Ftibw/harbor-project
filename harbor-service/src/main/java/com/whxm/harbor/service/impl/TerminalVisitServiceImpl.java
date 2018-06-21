@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 public class TerminalVisitServiceImpl implements TerminalVisitService {
 
-    private final  Logger logger = LoggerFactory.getLogger(TerminalVisitServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(TerminalVisitServiceImpl.class);
 
     @Resource
     private TerminalVisitMapper terminalVisitMapper;
@@ -48,15 +48,13 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
     //如果是POST+JSON就会被防重复提交了...
     @Override
-    public Result updateTerminalVisit(String terminalNumber) {
+    public ResultMap<String, Object> updateTerminalVisit(String terminalNumber) {
 
-        Result ret;
-
-        Assert.notNull(terminalNumber, "终端编号不能为空");
+        ResultMap<String, Object> ret;
 
         try {
 
-            int affectRow= terminalVisitMapper.updateAmountByID(terminalNumber);
+            int affectRow = terminalVisitMapper.updateAmountByID(terminalNumber);
 
             if (this.logger.isDebugEnabled()) {
 
@@ -64,7 +62,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
                         "编号为{}的终端访问数据更新成功" : "编号为{}的终端访问数据更新失败", terminalNumber);
             }
 
-            ret = new Result("编号为" + terminalNumber + "终端访问数据 更新了" + affectRow);
+            ret = new ResultMap<String, Object>(1).build("success", 1 == affectRow);
 
         } catch (Exception e) {
 

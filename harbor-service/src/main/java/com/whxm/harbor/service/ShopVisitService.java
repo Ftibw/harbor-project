@@ -37,7 +37,7 @@ public interface ShopVisitService {
      * @param shopNumber 商铺访问数据新值
      * @return ret
      */
-    Result updateShopVisit(String shopNumber);
+    ResultMap<String,Object> updateShopVisit(String shopNumber);
 
 
 }

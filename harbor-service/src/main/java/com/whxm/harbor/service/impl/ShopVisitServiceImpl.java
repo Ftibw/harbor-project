@@ -47,9 +47,9 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
     //如果是POST+JSON就会被防重复提交了...
     @Override
-    public Result updateShopVisit(String shopNumber) {
+    public ResultMap<String, Object> updateShopVisit(String shopNumber) {
 
-        Result ret;
+        ResultMap<String, Object> ret;
 
         try {
 
@@ -61,7 +61,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
                         "编号为{}的商铺访问数据更新成功" : "编号为{}的商铺访问数据更新失败", shopNumber);
             }
 
-            ret = new Result("编号为" + shopNumber + "商铺访问数据 更新了" + affectRow);
+            ret = new ResultMap<String, Object>(1).build("success", 1 == affectRow);
 
         } catch (Exception e) {
 

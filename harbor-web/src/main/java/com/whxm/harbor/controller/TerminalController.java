@@ -104,13 +104,13 @@ public class TerminalController {
     @VisitLogger
     @ApiOperation(value = "访问终端")
     @PostMapping("/visit")
-    public Result updateTerminalVisit(
-            @ApiParam(name = "terminalNumber", value = "终端编号")
-            @RequestParam("terminalNumber") String terminalNumber) {
+    public ResultMap<String, Object> updateTerminalVisit(
+            @ApiParam(name = "sn", value = "终端编号")
+            @RequestParam("sn") String terminalNumber) {
 
         Assert.notNull(terminalNumber, "终端编号为空");
 
-        Result ret = null;
+        ResultMap<String, Object> ret = null;
 
         try {
 
@@ -119,6 +119,8 @@ public class TerminalController {
         } catch (Exception e) {
 
             logger.error("编号为{}的终端访问数据更新报错", terminalNumber);
+
+            ret = new ResultMap<String, Object>(1).build("success", false);
         }
 
         return ret;
