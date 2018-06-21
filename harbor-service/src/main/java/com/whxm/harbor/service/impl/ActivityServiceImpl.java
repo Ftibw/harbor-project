@@ -117,10 +117,9 @@ public class ActivityServiceImpl implements ActivityService {
 
             activity.setIsDeleted(Constant.RECORD_IS_DELETED);
 
-            boolean isSuccess = updateBizActivity(activity)
-                    .getData()
-                    .toString()
-                    .contains("1");
+            int affectRow = bizActivityMapper.updateByPrimaryKeySelective(activity);
+
+            boolean isSuccess = 1 == affectRow;
 
             logger.info(
                     isSuccess ?
