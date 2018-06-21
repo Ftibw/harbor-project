@@ -56,7 +56,7 @@ public class BuildingController {
     public Result delBizBuilding(@ApiParam(name = "ID", value = "建筑ID", required = true)
                                          Integer id) {
 
-        Assert.notNull(id,"建筑ID");
+        Assert.notNull(id,"建筑ID不能为空");
 
         return buildingService.deleteBizBuilding(id);
     }
