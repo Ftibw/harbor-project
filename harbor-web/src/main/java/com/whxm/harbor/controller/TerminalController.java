@@ -6,7 +6,7 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
-import com.whxm.harbor.utils.IPv4Util;
+import com.whxm.harbor.utils.IPv4Utils;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -248,7 +248,7 @@ public class TerminalController {
         Result ret = null;
 
         try {
-            bizTerminal.setTerminalIp(IPv4Util.getIpAddress(request));
+            bizTerminal.setTerminalIp(IPv4Utils.getIpAddress(request));
 
             ret = terminalService.addBizTerminal(bizTerminal);
 

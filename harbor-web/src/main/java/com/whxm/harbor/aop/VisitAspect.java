@@ -1,10 +1,9 @@
 package com.whxm.harbor.aop;
 
 import com.alibaba.druid.support.json.JSONUtils;
-import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.ResultMap;
 import com.whxm.harbor.service.VisitLogService;
-import com.whxm.harbor.utils.IPv4Util;
+import com.whxm.harbor.utils.IPv4Utils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -49,7 +48,7 @@ public class VisitAspect {
 
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-            String ip = IPv4Util.getIpAddress(request);
+            String ip = IPv4Utils.getIpAddress(request);
 
             //应该写到自定义缓存或中间件缓存中,定量/定时批处理,异步批处理提高读写和响应速度
             Map<String, Object> map = new HashMap<>();
