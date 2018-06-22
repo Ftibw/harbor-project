@@ -49,9 +49,4 @@ public interface ScreensaverMaterialService {
      */
     Result addBizScreensaverMaterial(List<BizScreensaverMaterial> screensaverMaterial);
 
-    /**
-     * 查询没有关联指定屏保的屏保素材
-     * @return 素材列表
-     */
-    List<BizScreensaverMaterial> getMaterialsUnboundScreensaver();
 }

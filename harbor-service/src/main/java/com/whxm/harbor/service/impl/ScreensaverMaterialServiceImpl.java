@@ -93,24 +93,6 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         return pageVO;
     }
 
-
-    public List<BizScreensaverMaterial> getMaterialsUnboundScreensaver() {
-
-        List<BizScreensaverMaterial> list = null;
-
-        try {
-            list = bizScreensaverMaterialMapper
-                    .getMaterialsUnboundTheScreensaver();
-
-        } catch (Exception e) {
-            logger.error("屏保素材列表 获取报错", e);
-
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        }
-
-        return list;
-    }
-
     @Override
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 

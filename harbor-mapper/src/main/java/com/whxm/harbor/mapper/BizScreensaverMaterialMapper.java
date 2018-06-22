@@ -21,12 +21,9 @@ public interface BizScreensaverMaterialMapper {
 
     List<BizScreensaverMaterial> getBizScreensaverMaterialList(BizScreensaverMaterial condition);
 
-    List<BizScreensaverMaterial> getMaterialsUnboundTheScreensaver();
-
     List<BizScreensaverMaterial> selectMaterialsByScreensaverId(Object screensaverId);
 
     int batchInsert(List<BizScreensaverMaterial> list);
-
 
     @Insert("DELETE FROM screensaver_material_relation WHERE where screensaver_material_id=#{bizScreensaverMaterialId}")
     int delScreensaverMaterialRelation(@Param("bizScreensaverMaterialId") Integer bizScreensaverMaterialId);
