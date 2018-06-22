@@ -21,7 +21,7 @@ public interface BizScreensaverMaterialMapper {
 
     List<BizScreensaverMaterial> getBizScreensaverMaterialList(BizScreensaverMaterial condition);
 
-    List<BizScreensaverMaterial> getMaterialsUnboundTheScreensaver(Integer screensaverId);
+    List<BizScreensaverMaterial> getMaterialsUnboundTheScreensaver();
 
     List<BizScreensaverMaterial> selectMaterialsByScreensaverId(Object screensaverId);
 

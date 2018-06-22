@@ -133,7 +133,7 @@
         ORDER BY screensaver_material_id DESC
     </select>
 
-    <!--根据屏保ID查询此屏保未绑定的屏保素材-->
+    <!--查询未绑定屏保的屏保素材-->
     <select id="getMaterialsUnboundTheScreensaver" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -142,8 +142,7 @@
         NOT exists (
         SELECT screensaver_material_id
         FROM screensaver_material_relation smr
-        WHERE smr.screensaver_id = #{screensaverId}
-        AND smr.screensaver_material_id = bsm.screensaver_material_id
+        WHERE smr.screensaver_material_id = bsm.screensaver_material_id
         )
         ORDER BY screensaver_material_id DESC
     </select>

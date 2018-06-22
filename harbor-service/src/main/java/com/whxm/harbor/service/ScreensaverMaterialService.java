@@ -51,8 +51,7 @@ public interface ScreensaverMaterialService {
 
     /**
      * 查询没有关联指定屏保的屏保素材
-     * @param screensaverId 屏保ID
      * @return 素材列表
      */
-    List<BizScreensaverMaterial> getMaterialsUnboundScreensaver(Integer screensaverId);
+    List<BizScreensaverMaterial> getMaterialsUnboundScreensaver();
 }

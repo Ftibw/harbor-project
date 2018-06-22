@@ -94,13 +94,13 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     }
 
 
-    public List<BizScreensaverMaterial> getMaterialsUnboundScreensaver(Integer screensaverId) {
+    public List<BizScreensaverMaterial> getMaterialsUnboundScreensaver() {
 
         List<BizScreensaverMaterial> list = null;
 
         try {
             list = bizScreensaverMaterialMapper
-                    .getMaterialsUnboundTheScreensaver(screensaverId);
+                    .getMaterialsUnboundTheScreensaver();
 
         } catch (Exception e) {
             logger.error("屏保素材列表 获取报错", e);

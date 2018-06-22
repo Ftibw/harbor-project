@@ -169,11 +169,11 @@ public class ScreensaverMaterialController {
     }
 
 
-    @ApiOperation("添加屏保素材(需授权)")
+    @ApiOperation("查询未绑定屏保的屏保素材(需授权)")
     @GetMapping("/unbound-ScreensaverMaterials/")
-    public Result getMaterialsUnboundScreensaver(Integer screensaverId) {
+    public Result getMaterialsUnboundScreensaver() {
 
-        List<BizScreensaverMaterial> list = screensaverMaterialService.getMaterialsUnboundScreensaver(screensaverId);
+        List<BizScreensaverMaterial> list = screensaverMaterialService.getMaterialsUnboundScreensaver();
 
         if (null == list || list.isEmpty()) {
             return Result.build(HttpStatus.NOT_FOUND.value(), "暂无数据");
