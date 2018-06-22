@@ -16,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 @Api(description = "屏保服务")
 @RestController
@@ -160,7 +159,6 @@ public class ScreensaverController {
         }
         return ret;
     }
-
 }
 
 class PublishedScreensaverParam {

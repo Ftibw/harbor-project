@@ -143,5 +143,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         from sys_user
+        where user_loginname != 'admin'
     </select>
 </mapper>
