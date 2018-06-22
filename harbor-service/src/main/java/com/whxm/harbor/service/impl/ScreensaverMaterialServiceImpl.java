@@ -118,13 +118,14 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 
-            logger.info(1 == affectRow ?
-                            "ID为{}的屏保素材修改成功" : "ID为{}的屏保素材修改失败",
-                    bizScreensaverMaterial.getScreensaverMaterialId()
-            );
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ?
+                                "ID为{}的屏保素材修改成功" : "ID为{}的屏保素材修改失败",
+                        bizScreensaverMaterial.getScreensaverMaterialId()
+                );
+            }
 
-            ret = new Result("ID为" + bizScreensaverMaterial.getScreensaverMaterialId()
-                    + "的屏保素材 修改了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizScreensaverMaterial : "屏保素材 修改了0行");
 
         } catch (Exception e) {
 
@@ -143,15 +144,15 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
         try {
             list.forEach(item -> item.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
-//            bizScreensaverMaterial.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
-
-//            int affectRow = bizScreensaverMaterialMapper.insert(bizScreensaverMaterial);
 
             int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
 
-            logger.info("屏保素材添加{}", 0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
+            if (this.logger.isDebugEnabled()) {
 
-            ret = new Result("屏保素材数据添加了" + affectRow + "行");
+                logger.debug("屏保素材添加{}", 0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
+            }
+
+            ret = new Result(0 != affectRow ? list : "屏保素材数据添加了0行");
 
         } catch (Exception e) {
 

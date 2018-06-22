@@ -104,7 +104,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.info(1 == affectRow ? "ID为{}的屏保修改成功" : "ID为{}的屏保修改失败", bizScreensaver.getScreensaverId());
 
-            ret = new Result("屏保数据修改了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizScreensaver : "屏保数据修改了0行");
 
         } catch (Exception e) {
 

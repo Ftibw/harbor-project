@@ -117,13 +117,14 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 
-            logger.info(1 == affectRow ?
-                            "ID为{}的活动素材 修改成功" :
-                            "ID为{}的活动素材 修改失败",
-                    bizActivityMaterial.getActivityMaterialId()
-            );
-
-            ret = new Result("活动素材数据修改了" + affectRow + "行");
+            if (this.logger.isDebugEnabled()) {
+                logger.info(1 == affectRow ?
+                                "ID为{}的活动素材 修改成功" :
+                                "ID为{}的活动素材 修改失败",
+                        bizActivityMaterial.getActivityMaterialId()
+                );
+            }
+            ret = new Result(1 == affectRow ? bizActivityMaterial : "活动素材 修改失败");
 
         } catch (Exception e) {
 
@@ -145,12 +146,14 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             int affectRow = bizActivityMaterialMapper.insert(bizActivityMaterial);
 
-            logger.info(1 == affectRow ?
-                    "活动素材 添加成功" :
-                    "活动素材 添加失败"
-            );
+            if (this.logger.isDebugEnabled()) {
+                logger.info(1 == affectRow ?
+                        "活动素材 添加成功" :
+                        "活动素材 添加失败"
+                );
+            }
 
-            ret = new Result("活动素材数据添加了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizActivityMaterial : "活动素材 添加失败");
 
         } catch (Exception e) {
 

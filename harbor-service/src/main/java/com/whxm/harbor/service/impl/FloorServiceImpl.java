@@ -130,10 +130,12 @@ public class FloorServiceImpl implements FloorService {
         try {
             int affectRow = bizFloorMapper.updateByPrimaryKeySelective(bizFloor);
 
-            logger.info(1 == affectRow ?
-                    "ID为{}的楼层数据修改成功" : "ID为{}的楼层数据修改失败", bizFloor.getFloorId());
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ?
+                        "ID为{}的楼层数据修改成功" : "ID为{}的楼层数据修改失败", bizFloor.getFloorId());
+            }
 
-            ret = new Result("楼层数据 修改了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizFloor : "楼层数据修改0行");
 
         } catch (Exception e) {
 
@@ -168,9 +170,12 @@ public class FloorServiceImpl implements FloorService {
             if (Objects.nonNull(exist))
                 return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "楼层编号重复", bizFloor.getFloorName());
 
-            logger.info(1 == affectRow ? "楼层数据添加成功" : "楼层数据添加失败");
+            if (this.logger.isDebugEnabled()) {
 
-            ret = new Result("楼层数据 添加了" + affectRow + "条数据");
+                logger.debug(1 == affectRow ? "楼层数据添加成功" : "楼层数据添加失败");
+            }
+
+            ret = new Result(1 == affectRow ? bizFloor : "楼层数据添加0行");
 
         } catch (Exception e) {
 

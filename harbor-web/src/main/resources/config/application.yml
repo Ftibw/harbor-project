@@ -42,7 +42,7 @@ fileDir:
 urlConfig:
   urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
 server:
-  port: 80
+  port: 9000
 
 #防止表单重复提交
 #1.数据库乐观锁,以前秒杀用过

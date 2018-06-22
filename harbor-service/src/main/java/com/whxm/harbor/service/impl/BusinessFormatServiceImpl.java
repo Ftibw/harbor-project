@@ -144,10 +144,12 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         try {
             int affectRow = bizFormatMapper.updateByPrimaryKeySelective(bizFormat);
 
-            logger.info(1 == affectRow ?
-                    "ID为{}的业态数据 修改成功" : "ID为{}的业态数据 修改失败", bizFormat.getBizFormatId());
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ?
+                        "ID为{}的业态数据 修改成功" : "ID为{}的业态数据 修改失败", bizFormat.getBizFormatId());
+            }
 
-            ret = new Result("业态数据 修改了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizFormat : "业态数据修改0行");
 
         } catch (Exception e) {
 
@@ -169,7 +171,6 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         int affectRow = 0;
 
         try {
-
             bizFormat.setBizFormatId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
             bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
@@ -186,9 +187,11 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
             if (Objects.nonNull(exist))
                 return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", bizFormat.getBizFormatNumber());
 
-            logger.info(1 == affectRow ? "业态数据添成功" : "业态数据添失败");
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ? "业态数据添成功" : "业态数据添失败");
+            }
 
-            ret = new Result("业态数据添加了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizFormat : "业态数据添0行");
 
         } catch (Exception e) {
 

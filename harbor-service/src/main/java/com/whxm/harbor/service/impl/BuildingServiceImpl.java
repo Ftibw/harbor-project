@@ -95,7 +95,7 @@ public class BuildingServiceImpl implements BuildingService {
 
             int affectRow = bizBuildingMapper.updateByPrimaryKeySelective(bizBuilding);
 
-            ret = Result.ok(1 == affectRow ? bizBuilding : "更新失败");
+            ret = Result.ok(1 == affectRow ? bizBuilding : "建筑数据修改0行");
 
         } catch (Exception e) {
 
@@ -130,10 +130,10 @@ public class BuildingServiceImpl implements BuildingService {
             }
 
             if (Objects.nonNull(exist)) {
-                return Result.build(HttpStatus.NOT_ACCEPTABLE.value(), "建筑编号不能重复", bizBuilding.getNumber());
+                return Result.build(HttpStatus.NOT_ACCEPTABLE.value(), "建筑编号不能重复", bizBuilding);
             }
 
-            ret = Result.ok(1 == affectRow ? bizBuilding : "添加失败");
+            ret = Result.ok(1 == affectRow ? bizBuilding : "建筑数据添加0行");
 
         } catch (Exception e) {
 

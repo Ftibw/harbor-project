@@ -133,10 +133,12 @@ public class MapServiceImpl implements MapService {
         try {
             int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 
-            logger.info(1 == affectRow ?
-                    "ID为{}的地图数据修改成功" : "ID为{}的地图数据修改失败", bizMap.getMapId());
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ?
+                        "ID为{}的地图数据修改成功" : "ID为{}的地图数据修改失败", bizMap.getMapId());
+            }
 
-            ret = new Result("地图数据 修改了" + affectRow + "行");
+            ret = new Result(1 == affectRow ? bizMap : "地图数据 修改了0行");
 
         } catch (Exception e) {
 
@@ -156,9 +158,11 @@ public class MapServiceImpl implements MapService {
         try {
             int affectRow = bizMapMapper.insert(bizMap);
 
-            logger.info(1 == affectRow ? "地图数据添加成功" : "地图数据添加失败");
+            if (this.logger.isDebugEnabled()) {
+                logger.debug(1 == affectRow ? "地图数据添加成功" : "地图数据添加失败");
+            }
 
-            ret = new Result("地图数据 添加了" + affectRow + "条数据");
+            ret = new Result(1 == affectRow ? bizMap : "地图数据 添加0行");
 
         } catch (Exception e) {
 

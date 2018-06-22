@@ -160,7 +160,7 @@ public class ActivityServiceImpl implements ActivityService {
                     bizActivity.getActivityId()
             );
 
-            ret = new Result("活动数据修改了" + affectRow + "行");
+            ret = new Result(bizActivity);
 
         } catch (Exception e) {
 
@@ -186,7 +186,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.info(1 == affectRow ? "活动添加成功" : "活动添加失败");
 
-            ret = new Result("活动数据添加了" + affectRow + "行");
+            ret = new Result(bizActivity);
 
         } catch (Exception e) {
 
