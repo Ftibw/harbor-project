@@ -262,12 +262,12 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public List<BizTerminal> getNotPublishedTerminal() {
+    public List<BizTerminal> getNotPublishedTerminal(Integer screensaverId) {
 
         List<BizTerminal> list = null;
 
         try {
-            list = bizTerminalMapper.selectNotPublishedTerminal();
+            list = bizTerminalMapper.selectNotPublishedTerminal(screensaverId);
 
             logger.info(list.isEmpty() ? "无屏保的终端不存在" : "查询无屏保的终端列表OK");
 

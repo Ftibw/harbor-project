@@ -55,11 +55,11 @@ public class TerminalController {
                             .build("terminalPlatform", os)
                             .build("registerTerminalTime", new Date())
             );
-            if (null!=terminal) {
+            if (null != terminal) {
 
                 ret.build("success", true)
-                .build("floor",terminal.getFloorNumber())
-                .build("rotate",terminal.getTerminalRotationAngle());
+                        .build("floor", terminal.getFloorNumber())
+                        .build("rotate", terminal.getTerminalRotationAngle());
 
             } else {
 
@@ -143,14 +143,14 @@ public class TerminalController {
 
     //==========================以下均被拦截============================
 
-    @ApiOperation("获取无屏保的终端列表(需授权)")
+    @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
     @GetMapping("/bizTerminalsNotPublished")
-    public Result getNotPublishedTerminals() {
+    public Result getNotPublishedTerminals(@RequestParam("id") Integer id) {
 
         Result ret = null;
 
         try {
-            List<BizTerminal> list = terminalService.getNotPublishedTerminal();
+            List<BizTerminal> list = terminalService.getNotPublishedTerminal(id);
 
             ret = new Result(list);
 

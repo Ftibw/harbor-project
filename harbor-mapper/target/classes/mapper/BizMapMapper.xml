@@ -85,6 +85,7 @@
         select<include refid="Base_Column_List"/>,floor_name
         from biz_map
         LEFT JOIN biz_floor USING (floor_id)
+        order by map_id DESC
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizMap" extends="BaseResultMap">

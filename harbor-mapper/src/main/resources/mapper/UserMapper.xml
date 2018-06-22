@@ -10,11 +10,12 @@
         <result column="user_email" property="userEmail" jdbcType="VARCHAR"/>
         <result column="user_wechat" property="userWechat" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
+        <result column="add_user_time" property="addUserTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    user_id, user_loginname, user_password, user_name, user_alias, user_email, user_wechat, 
-    is_deleted
-  </sql>
+        user_id, user_loginname, user_password, user_name, user_alias, user_email, user_wechat,
+        is_deleted, add_user_time
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
@@ -22,17 +23,17 @@
         where user_id = #{userId,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from sys_user
-    where user_id = #{userId,jdbcType=VARCHAR}
-  </delete>
+        DELETE FROM sys_user
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.User">
-    insert into sys_user (user_id, user_loginname, user_password, 
-      user_name, user_alias, user_email, 
-      user_wechat, is_deleted)
-    values (#{userId,jdbcType=VARCHAR}, #{userLoginname,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
-      #{userName,jdbcType=VARCHAR}, #{userAlias,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, 
-      #{userWechat,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER})
-  </insert>
+        INSERT INTO sys_user (user_id, user_loginname, user_password,
+                              user_name, user_alias, user_email,
+                              user_wechat, is_deleted, add_user_time)
+        VALUES (#{userId,jdbcType=VARCHAR}, #{userLoginname,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+                #{userName,jdbcType=VARCHAR}, #{userAlias,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},
+                #{userWechat,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER}, CURRENT_TIMESTAMP)
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.User">
         insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -60,6 +61,9 @@
             <if test="isDeleted != null">
                 is_deleted,
             </if>
+            <if test="addUserTime!=null">
+                add_user_time
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">
@@ -85,6 +89,9 @@
             </if>
             <if test="isDeleted != null">
                 #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="addUserTime!=null">
+                #{addUserTime,jdbcType="TIMESTAMP"}
             </if>
         </trim>
     </insert>
@@ -112,20 +119,24 @@
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted,jdbcType=INTEGER},
             </if>
+            <if test="addUserTime!=null">
+                add_user_time = #{addUserTime,jdbcType=TIMESTAMP}
+            </if>
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.User">
-    update sys_user
-    set user_loginname = #{userLoginname,jdbcType=VARCHAR},
-      user_password = #{userPassword,jdbcType=VARCHAR},
-      user_name = #{userName,jdbcType=VARCHAR},
-      user_alias = #{userAlias,jdbcType=VARCHAR},
-      user_email = #{userEmail,jdbcType=VARCHAR},
-      user_wechat = #{userWechat,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=INTEGER}
-    where user_id = #{userId,jdbcType=VARCHAR}
-  </update>
+        UPDATE sys_user
+        SET user_loginname = #{userLoginname,jdbcType=VARCHAR},
+            user_password  = #{userPassword,jdbcType=VARCHAR},
+            user_name      = #{userName,jdbcType=VARCHAR},
+            user_alias     = #{userAlias,jdbcType=VARCHAR},
+            user_email     = #{userEmail,jdbcType=VARCHAR},
+            user_wechat    = #{userWechat,jdbcType=VARCHAR},
+            is_deleted     = #{isDeleted,jdbcType=INTEGER},
+            add_user_time  = #{addUserTime,jdbcType=TIMESTAMP}
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+    </update>
 
     <!--以下为自定义部分-->
     <select id="selectUserLoginInfo" parameterType="com.whxm.harbor.bean.User" resultMap="BaseResultMap">
@@ -144,5 +155,6 @@
         <include refid="Base_Column_List"/>
         from sys_user
         where user_loginname != 'admin'
+        order by add_user_time DESC
     </select>
 </mapper>

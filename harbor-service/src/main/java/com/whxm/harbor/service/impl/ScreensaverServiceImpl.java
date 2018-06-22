@@ -156,6 +156,9 @@ public class ScreensaverServiceImpl implements ScreensaverService {
         Result ret;
 
         try {
+            //delete relation where screensaver_id !=#{screensaverId} terminal_id in(<foreach collection="terminalIds" item="item" separator=",">item</foreach>)
+            //清除终端的屏保
+
             //发布屏保,就是向屏保-发布的终端关系表中插入数据
             int affectRow = bizScreensaverMapper.insertScreensaverPublishedTerminal(screensaverId, terminalIds, new Date());
 

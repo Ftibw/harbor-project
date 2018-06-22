@@ -66,6 +66,7 @@ public interface TerminalService {
 
     /**
      *获取无屏保的终端
+     * @param screensaverId
      */
-    List<BizTerminal> getNotPublishedTerminal();
+    List<BizTerminal> getNotPublishedTerminal(Integer screensaverId);
 }

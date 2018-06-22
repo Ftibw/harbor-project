@@ -144,5 +144,6 @@
         <include refid="Base_Column_List"/>
         from sys_user
         where user_loginname != 'admin'
+        order by add_user_time DESC
     </select>
 </mapper>
