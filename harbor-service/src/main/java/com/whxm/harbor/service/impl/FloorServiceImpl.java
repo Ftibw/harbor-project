@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -149,15 +150,23 @@ public class FloorServiceImpl implements FloorService {
 
         Result ret;
 
-        try {
-            synchronized (this) {
-                if (null != bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber())) {
+        Object exist = null;
 
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "楼层编号重复", Constant.NO_DATA);
+        int affectRow = 0;
+
+        try {
+            //已经做了编号的唯一索引,这里真浪费,暂时这样,优先保证状态正确性
+            synchronized (this) {
+
+                exist = bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber());
+
+                if (Objects.isNull(exist)) {
+                    affectRow = bizFloorMapper.insert(bizFloor);
                 }
             }
 
-            int affectRow = bizFloorMapper.insert(bizFloor);
+            if (Objects.nonNull(exist))
+                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "楼层编号重复", bizFloor.getFloorName());
 
             logger.info(1 == affectRow ? "楼层数据添加成功" : "楼层数据添加失败");
 

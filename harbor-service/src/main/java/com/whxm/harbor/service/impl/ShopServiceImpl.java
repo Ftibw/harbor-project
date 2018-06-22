@@ -201,14 +201,14 @@ public class ShopServiceImpl implements ShopService {
 
         Result ret;
 
+        Object exist = null;
+
+        int affectRow = 0;
+
+        int affectRow2 = 0;
+
         if (null != bizShop) {
             try {
-                synchronized (this) {
-                    if (null != bizShopMapper.selectIdByNumber(bizShop.getShopNumber())) {
-
-                        return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", Constant.NO_DATA);
-                    }
-                }
                 //赋值
                 String shopId = UUID.randomUUID().toString().replace("-", "");
 
@@ -219,16 +219,26 @@ public class ShopServiceImpl implements ShopService {
                 bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
                 bizShop.setAddShopTime(new Date());
 
-                int affectRow = bizShopMapper.insert(bizShop);
+                //已经做了编号的唯一索引,这里真浪费,暂时这样,优先保证状态正确性
+                synchronized (this) {
 
-                int affectRow2 = 0;
+                    exist = bizShopMapper.selectIdByNumber(bizShop.getShopNumber());
 
-                //必填传入参数,前端需要把控
-                if (null != pictureList && !pictureList.isEmpty() && !pictureList.get(0).isEmpty())
+                    if (Objects.isNull(exist)) {
 
-                    affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
+                        affectRow = bizShopMapper.insert(bizShop);
+                    }
+                }
 
-                logger.info("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
+                if (Objects.nonNull(exist))
+                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", bizShop.getShopNumber());
+
+                affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
+
+                if (this.logger.isDebugEnabled()) {
+
+                    logger.debug("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
+                }
 
                 ret = new Result("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
 
@@ -262,7 +272,10 @@ public class ShopServiceImpl implements ShopService {
                     )
             );
 
-            logger.info(list.isEmpty() ? "ID为{}的商铺图片不存在" : "ID为{}的商铺图片查询成功", bizShopId);
+            if (this.logger.isDebugEnabled()) {
+
+                logger.debug(list.isEmpty() ? "ID为{}的商铺图片不存在" : "ID为{}的商铺图片查询成功", bizShopId);
+            }
 
         } catch (Exception e) {
 

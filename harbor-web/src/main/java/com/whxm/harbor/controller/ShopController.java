@@ -23,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Api(description = "商铺服务")
 @RestController
@@ -49,7 +46,7 @@ public class ShopController {
     private FileDir fileDir;
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
-    @PostMapping(value = "/shops", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/shops")
     public Map<String, Object> getBizShops(
             @ApiParam(name = "floor", value = "楼层ID")
                     Integer floor,
@@ -58,13 +55,6 @@ public class ShopController {
             @ApiParam(name = "initial", value = "商铺名称大写首字母")
                     String initial
     ) {
-
-        Assert.notNull(floor,"楼层ID为空");
-
-        Assert.notNull(type,"业态ID为空");
-
-        Assert.notNull(initial,"商铺名称大写首字母为空");
-
         ResultMap<String, Object> ret = new ResultMap<>(2);
 
         try {
@@ -72,7 +62,7 @@ public class ShopController {
                     new ResultMap<String, Object>(3)
                             .build("floorId", floor)
                             .build("bizFormatId", type)
-                            .build("initial", initial.toLowerCase())
+                            .build("initial", Objects.nonNull(initial) ? initial.toLowerCase() : initial)
             );
 
             ret.build("data", list);
@@ -282,6 +272,8 @@ public class ShopController {
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
     public Result addBizShop(@RequestBody ShopParam param) {
+
+        //if (null != param.pictureList && !param.pictureList.isEmpty() && !param.pictureList.get(0).isEmpty())
 
         Result ret = null;
 

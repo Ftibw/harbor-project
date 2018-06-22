@@ -10,10 +10,12 @@ import com.whxm.harbor.mapper.UserMapper;
 import com.whxm.harbor.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -109,14 +111,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result addUser(User user) {
 
-        Result ret;
+        Result ret = null;
+
+        Object exist = null;
+
+        int affectRow = 0;
 
         try {
             user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 
-            int affectRow = userMapper.insert(user);
+            synchronized (this) {
+
+                exist = userMapper.selectUserLoginInfo(user);
+
+                if (null == exist) affectRow = userMapper.insert(user);
+            }
+
+            if (exist != null)
+                return Result.build(HttpStatus.NOT_ACCEPTABLE.value(), "账户名重复", user.getUserLoginname());
 
             logger.info(1 == affectRow ? "用户添加成功" : "用户添加失败");
+
 
             ret = new Result("用户数据 添加" + affectRow + "行");
 

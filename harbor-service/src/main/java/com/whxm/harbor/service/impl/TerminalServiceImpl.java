@@ -142,14 +142,11 @@ public class TerminalServiceImpl implements TerminalService {
 
         Result ret;
 
+        Object exist = null;
+
+        int affectRow = 0;
+
         try {
-            synchronized (this) {
-                if (null != bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber())) {
-
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
-                }
-            }
-
             bizTerminal.setIsTerminalOnline(Constant.DISENABLED_STATUS);
 
             bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
@@ -158,7 +155,19 @@ public class TerminalServiceImpl implements TerminalService {
 
             bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
 
-            int affectRow = bizTerminalMapper.insert(bizTerminal);
+            //仅仅是逻辑删除,仍需查询编号
+            synchronized (this) {
+
+                exist = bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber());
+
+                if (Objects.isNull(exist)) {
+
+                    affectRow = bizTerminalMapper.insert(bizTerminal);
+                }
+            }
+
+            if (Objects.nonNull(exist))
+                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
 
             logger.info(1 == affectRow ?
                     "终端数据添加成功" :
