@@ -2,7 +2,7 @@ package com.whxm.harbor.interceptor;
 
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.lock.RedisDistributedLock;
-import com.whxm.harbor.utils.MD5Util;
+import com.whxm.harbor.utils.MD5Utils;
 import com.whxm.harbor.utils.RequestJsonUtils;
 import com.whxm.harbor.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
                     String params = RequestJsonUtils.getRequestPostStr(request);
 
-                    String lockKey = uri + userId + MD5Util.MD5(params);
+                    String lockKey = uri + userId + MD5Utils.MD5(params);
 
                     //System.out.println(lockKey);
                     if (lock.tryAcquire(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
@@ -104,7 +104,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         String params = RequestJsonUtils.getRequestPostStr(request);
 
-        String lockKey = uri + userId + MD5Util.MD5(params);
+        String lockKey = uri + userId + MD5Utils.MD5(params);
 
         //System.out.println(lockKey);
 

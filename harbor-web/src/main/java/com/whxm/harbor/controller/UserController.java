@@ -7,7 +7,7 @@ import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.UserService;
-import com.whxm.harbor.utils.MD5Util;
+import com.whxm.harbor.utils.MD5Utils;
 import com.whxm.harbor.utils.TokenUtils;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -125,15 +125,15 @@ public class UserController {
     @PostMapping("/user")
     public Result addUser(@RequestBody User user) {
 
-        Assert.notNull(user,"用户数据为空");
-        Assert.notNull(user.getUserLoginname(),"用户登录名不能为空");
-        Assert.notNull(user.getUserPassword(),"用户密码不能为空");
+        Assert.notNull(user, "用户数据为空");
+        Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
+        Assert.notNull(user.getUserPassword(), "用户密码不能为空");
 
         Result ret = null;
 
         try {
             //32位加密
-            user.setUserPassword(MD5Util.MD5(user.getUserPassword()));
+            user.setUserPassword(MD5Utils.MD5(user.getUserPassword()));
 
             ret = userService.addUser(user);
 
@@ -167,7 +167,7 @@ public class UserController {
 
         if (null != info) {
 
-            if (info.getUserPassword().equals(MD5Util.MD5(user.getUserPassword()))) {
+            if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
 
                 String userId = info.getUserId();
 
@@ -182,6 +182,10 @@ public class UserController {
 
                 //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
                 redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
+
+                //redisTemplate.boundHashOps(userId).put("salt",salt);
+                //redisTemplate.boundHashOps(userId).put("user",JacksonUtils.toJSon(info));
+                //redisTemplate.boundHashOps(userId).expire(2, TimeUnit.HOURS);
 
                 //将userId和盐搅拌生成token
                 ret = new Result(chaos(userId, salt));
@@ -254,5 +258,4 @@ public class UserController {
 
         return ret;
     }
-
 }

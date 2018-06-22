@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 /**
  * Updated by Ftibw on 2018/6/14 22:46.
  */
-public class MD5Util {
+public class MD5Utils {
 
     private static String getMD5Str(String str) {
 
