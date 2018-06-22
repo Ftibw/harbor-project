@@ -92,6 +92,8 @@ public class TerminalServiceImpl implements TerminalService {
 
             bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
 
+            bizTerminal.setTerminalNumber(null);
+
             boolean isSuccess = updateBizTerminal(bizTerminal).getData().toString().contains("1");
 
             logger.info(isSuccess ? "ID为{}的终端 删除成功" : "ID为{}的终端 删除失败", bizTerminalId);
@@ -155,7 +157,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
 
-            //仅仅是逻辑删除,仍需查询编号
+            //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
             synchronized (this) {
 
                 exist = bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber());

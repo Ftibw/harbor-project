@@ -76,6 +76,8 @@ public class FloorController {
     @ApiOperation("添加楼层(需授权)")
     @PostMapping("/bizFloor")
     public Result addBizFloor(@RequestBody BizFloor bizFloor) {
+
+        //楼层编号不能重复
         Result ret = null;
 
         try {

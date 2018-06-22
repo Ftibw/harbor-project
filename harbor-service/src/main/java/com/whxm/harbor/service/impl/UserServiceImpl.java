@@ -120,6 +120,7 @@ public class UserServiceImpl implements UserService {
         try {
             user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 
+            //仅为了避免重复索引抛异常,就多查一次,贼浪费
             synchronized (this) {
 
                 exist = userMapper.selectUserLoginInfo(user);

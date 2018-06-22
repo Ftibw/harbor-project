@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -100,6 +101,8 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             bizFormat.setIsDeleted(Constant.RECORD_IS_DELETED);
 
+            bizFormat.setBizFormatNumber(null);
+
             boolean isSuccess = updateBizFormat(bizFormat)
                     .getData()
                     .toString()
@@ -161,18 +164,27 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         Result ret;
 
-        try {
-            synchronized (this) {
-                if (null != bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber())) {
+        Object exist = null;
 
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", Constant.NO_DATA);
-                }
-            }
+        int affectRow = 0;
+
+        try {
+
             bizFormat.setBizFormatId(Constant.INCREMENT_ID_DEFAULT_VALUE);
 
             bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
-            int affectRow = bizFormatMapper.insert(bizFormat);
+            bizFormat.setBizFormatNumber(null);
+            //仅为了避免重复索引抛异常,就多查一次,贼浪费
+            synchronized (this) {
+                exist = bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber());
+                if (Objects.isNull(exist)) {
+                    affectRow = bizFormatMapper.insert(bizFormat);
+                }
+            }
+
+            if (Objects.nonNull(exist))
+                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "业态编号重复", bizFormat.getBizFormatNumber());
 
             logger.info(1 == affectRow ? "业态数据添成功" : "业态数据添失败");
 

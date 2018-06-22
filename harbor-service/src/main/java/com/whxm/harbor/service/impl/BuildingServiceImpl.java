@@ -13,6 +13,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -114,9 +115,23 @@ public class BuildingServiceImpl implements BuildingService {
 
         Result ret = null;
 
-        try {
+        Object exist = null;
 
-            int affectRow = bizBuildingMapper.insert(bizBuilding);
+        int affectRow = 0;
+
+        try {
+            synchronized (this) {
+                exist = bizBuildingMapper.selectByNumber(bizBuilding.getNumber());
+
+                if (Objects.isNull(exist)) {
+                    //仅为了避免重复索引抛异常,就多查一次,贼浪费
+                    affectRow = bizBuildingMapper.insert(bizBuilding);
+                }
+            }
+
+            if (Objects.nonNull(exist)) {
+                return Result.build(HttpStatus.NOT_ACCEPTABLE.value(), "建筑编号不能重复", bizBuilding.getNumber());
+            }
 
             ret = Result.ok(1 == affectRow ? bizBuilding : "添加失败");
 

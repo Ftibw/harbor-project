@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -123,7 +124,13 @@ public class UserController {
     @ApiOperation("添加用户(需授权)")
     @PostMapping("/user")
     public Result addUser(@RequestBody User user) {
+
+        Assert.notNull(user,"用户数据为空");
+        Assert.notNull(user.getUserLoginname(),"用户登录名不能为空");
+        Assert.notNull(user.getUserPassword(),"用户密码不能为空");
+
         Result ret = null;
+
         try {
             //32位加密
             user.setUserPassword(MD5Util.MD5(user.getUserPassword()));

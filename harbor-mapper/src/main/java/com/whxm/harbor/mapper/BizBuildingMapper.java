@@ -2,9 +2,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizBuilding;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.List;
@@ -32,4 +30,8 @@ public interface BizBuildingMapper {
     })
     @Select("select * from biz_building")
     List<BizBuilding> getBuildingList();
+
+    @ResultMap("BaseResultMap")
+    @Select("select * from biz_building where number=#{number}")
+    BizBuilding selectByNumber(@Param("number") String number);
 }
