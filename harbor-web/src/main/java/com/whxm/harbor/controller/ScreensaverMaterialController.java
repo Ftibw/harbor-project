@@ -1,10 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.bean.BizScreensaverMaterial;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
@@ -169,5 +166,19 @@ public class ScreensaverMaterialController {
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材 添加报错", list);
         }
         return ret;
+    }
+
+
+    @ApiOperation("添加屏保素材(需授权)")
+    @GetMapping("/unbound-ScreensaverMaterials/")
+    public Result getMaterialsUnboundScreensaver(Integer screensaverId) {
+
+        List<BizScreensaverMaterial> list = screensaverMaterialService.getMaterialsUnboundScreensaver(screensaverId);
+
+        if (null == list || list.isEmpty()) {
+            return Result.build(HttpStatus.NOT_FOUND.value(), "暂无数据");
+        }
+
+        return Result.ok(list);
     }
 }

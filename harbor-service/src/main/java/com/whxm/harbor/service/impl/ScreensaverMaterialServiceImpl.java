@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -56,12 +58,21 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     public PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO<BizScreensaverMaterial> pageQO) {
 
         PageVO<BizScreensaverMaterial> pageVO;
+
+        List<BizScreensaverMaterial> list = null;
+
         try {
             Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
             pageVO = new PageVO<>(pageQO);
 
-            List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(pageQO.getCondition());
+            BizScreensaverMaterial condition = pageQO.getCondition();
+
+            if (Objects.nonNull(condition.getScreensaverId()))
+                list = bizScreensaverMaterialMapper
+                        .selectMaterialsByScreensaverId(condition.getScreensaverId());
+            else
+                list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition);
 
             list.forEach(item -> item.setScreensaverMaterialImgPath(
                     urlConfig.getUrlPrefix()
@@ -80,6 +91,24 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         }
 
         return pageVO;
+    }
+
+
+    public List<BizScreensaverMaterial> getMaterialsUnboundScreensaver(Integer screensaverId) {
+
+        List<BizScreensaverMaterial> list = null;
+
+        try {
+            list = bizScreensaverMaterialMapper
+                    .getMaterialsUnboundTheScreensaver(screensaverId);
+
+        } catch (Exception e) {
+            logger.error("屏保素材列表 获取报错", e);
+
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+
+        return list;
     }
 
     @Override

@@ -107,13 +107,18 @@
     </update>
 
     <!--以下是自定义部分-->
+    <!--
+        <if test="screensaverId!=null">
+            join screensaver_material_relation using(screensaver_material_id)
+        </if>
+        <if test="screensaverId!=null">
+            and screensaver_id=#{screensaverId}
+        </if>
+    -->
     <select id="getBizScreensaverMaterialList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from biz_screensaver_material
-        <if test="screensaverId!=null">
-            join screensaver_material_relation using(screensaver_material_id)
-        </if>
         <where>
             <if test="screensaverMaterialName!=null">and screensaver_material_name like
                 concat('%',#{screensaverMaterialName},'%')
@@ -124,13 +129,25 @@
             <if test="screensaverMaterialType!=null">and screensaver_material_type like
                 concat('%',#{screensaverMaterialType},'%')
             </if>
-            <if test="screensaverId!=null">
-                and screensaver_id=#{screensaverId}
-            </if>
         </where>
         ORDER BY screensaver_material_id DESC
     </select>
 
+    <!--根据屏保ID查询此屏保未绑定的屏保素材-->
+    <select id="getMaterialsUnboundTheScreensaver" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM biz_screensaver_material bsm
+        WHERE
+        NOT exists (
+        SELECT screensaver_material_id
+        FROM screensaver_material_relation smr
+        WHERE smr.screensaver_id = #{screensaverId}
+        AND smr.screensaver_material_id = bsm.screensaver_material_id
+        )
+        ORDER BY screensaver_material_id DESC
+    </select>
+    <!--根据屏保ID查询此屏保绑定的屏保素材-->
     <select id="selectMaterialsByScreensaverId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

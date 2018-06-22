@@ -20,8 +20,8 @@ public interface ScreensaverMaterialService {
     /**
      * 获取屏保素材列表
      *
-     * @return list
      * @param pageQO
+     * @return list
      */
     PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO<BizScreensaverMaterial> pageQO);
 
@@ -43,8 +43,16 @@ public interface ScreensaverMaterialService {
 
     /**
      * 新增屏保素材数据
-     * @param screensaverMaterial  新屏保素材数据
-     * @return  添加操作结果
+     *
+     * @param screensaverMaterial 新屏保素材数据
+     * @return 添加操作结果
      */
     Result addBizScreensaverMaterial(List<BizScreensaverMaterial> screensaverMaterial);
+
+    /**
+     * 查询没有关联指定屏保的屏保素材
+     * @param screensaverId 屏保ID
+     * @return 素材列表
+     */
+    List<BizScreensaverMaterial> getMaterialsUnboundScreensaver(Integer screensaverId);
 }
