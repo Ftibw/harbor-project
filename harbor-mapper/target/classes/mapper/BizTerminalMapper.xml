@@ -205,17 +205,18 @@
     </update>
 
     <!--以下为自定义部分-->
-    <select id="selectIdByNumber" resultMap="BaseResultMap">
+    <select id="selectIdByNumber" resultMap="ExtensionResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,floor_number
         FROM biz_terminal
+        JOIN biz_floor USING (floor_id)
         WHERE terminal_number=#{terminalNumber}
         AND is_deleted=1
     </select>
 
     <select id="getBizTerminalList" resultMap="ExtensionResultMap">
         SELECT
-        <include refid="Base_Column_List"/>,floor_name
+        <include refid="Base_Column_List"/>,floor_name,floor_number
         FROM biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
         <if test="screensaverId!=null">
@@ -235,7 +236,7 @@
 
     <select id="selectNotPublishedTerminal" resultMap="ExtensionResultMap">
         select
-        <include refid="Base_Column_List"/>,floor_name
+        <include refid="Base_Column_List"/>,floor_name,floor_number
         from biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
         WHERE is_deleted=1 AND terminal_id
@@ -248,6 +249,7 @@
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizTerminal" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <result column="floor_number" property="floorNumber" jdbcType="VARCHAR"/>
     </resultMap>
     <!--终端主动清除屏保发布终端关系表-->
     <delete id="delScreensaverTerminalRelation">

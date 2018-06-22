@@ -1,6 +1,7 @@
 package com.whxm.harbor.aop;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @desc 请求参数、响应体统一日志打印
  * @since 10/10/2017 9:54 AM
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class RestControllerAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -117,6 +118,9 @@ public class RestControllerAspect {
      */
     @SuppressWarnings("unchecked")
     private String deleteSensitiveContent(Object obj) {
+
+        if (obj instanceof String)
+            return (String) obj;
 
         if (obj == null || obj instanceof Exception) {
             return JacksonUtils.toJson(obj);

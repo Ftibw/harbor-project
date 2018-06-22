@@ -37,26 +37,29 @@ public class TerminalController {
 
     @ApiOperation("终端注册")
     @PostMapping(value = "/register")
-    public Map<String, Boolean> register(
+    public Map<String, Object> register(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
             @ApiParam(name = "os", value = "终端类型(1=android,2=windows)", required = true)
                     Integer os
     ) {
 
-        Map<String, Boolean> ret = new HashMap<>(1);
+        ResultMap<String, Object> ret = new ResultMap<>(3);
 
         try {
+            //"floor":"楼层编号","rotate":45
             //终端注册然后获取注册状态
-            if (HttpStatus.OK.value() ==
-                    terminalService
-                            .register(
-                                    new ResultMap<String, Object>(3)
-                                            .build("terminalNumber", sn)
-                                            .build("terminalPlatform", os)
-                                            .build("registerTerminalTime", new Date())
-                            ).getStatus()) {
-                ret.put("success", true);
+            BizTerminal terminal = terminalService.register(
+                    new ResultMap<String, Object>(3)
+                            .build("terminalNumber", sn)
+                            .build("terminalPlatform", os)
+                            .build("registerTerminalTime", new Date())
+            );
+            if (null!=terminal) {
+
+                ret.build("success", true)
+                .build("floor",terminal.getFloorNumber())
+                .build("rotate",terminal.getTerminalRotationAngle());
 
             } else {
 

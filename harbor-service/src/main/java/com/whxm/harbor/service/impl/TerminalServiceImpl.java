@@ -189,18 +189,12 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public Result register(Map<String, Object> params) {
-
-        Result ret;
+    public BizTerminal register(Map<String, Object> params) {
 
         try {
             if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
 
-                ret = new Result("终端注册成功");
-
-            } else {
-
-                ret = new Result(HttpStatus.NOT_FOUND.value(), "终端未注册", Constant.NO_DATA);
+                return bizTerminalMapper.selectIdByNumber(params.get("terminalNumber"));
             }
 
         } catch (Exception e) {
@@ -209,8 +203,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             throw new RuntimeException();
         }
-
-        return ret;
+        return null;
     }
 
     @Override

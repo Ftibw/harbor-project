@@ -36,6 +36,8 @@ public class BizTerminal {
 
     //join biz_floor 查询终端所在楼层名
     private String floorName;
+    //join biz_floor 查询终端所在楼层编号
+    private String floorNumber;
 
     //join screensaver_published_terminal_relation 查询指定屏保已发布的终端列表
     private Integer screensaverId;
@@ -55,6 +57,14 @@ public class BizTerminal {
 
     public void setFloorName(String floorName) {
         this.floorName = floorName;
+    }
+
+    public String getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(String floorNumber) {
+        this.floorNumber = floorNumber;
     }
 
     public String getTerminalId() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="074d9578-6aed-4811-958f-c95c8a87790e" name="Default" comment="harbor update">
+    <list default="true" id="074d9578-6aed-4811-958f-c95c8a87790e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java" afterPath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java" />
       <change beforePath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/MD5Util.java" afterPath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/MD5Utils.java" />
       <change beforePath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/UserController.java" afterPath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/UserController.java" />
@@ -38,70 +38,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="ScreensaverService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ScreensaverService.java">
+      <file leaf-file-name="RestControllerAspect.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/aop/RestControllerAspect.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="605">
-              <caret line="56" column="73" lean-forward="false" selection-start-line="56" selection-start-column="62" selection-end-line="56" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScreensaverController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ScreensaverController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1900">
-              <caret line="160" column="5" lean-forward="false" selection-start-line="160" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShopPicture.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/ShopPicture.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserMapper.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/UserMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="145" column="39" lean-forward="false" selection-start-line="145" selection-start-column="39" selection-end-line="145" selection-end-column="39" />
+            <state relative-caret-position="-1970">
+              <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
               <folding>
-                <marker date="1529650077167" expanded="true" signature="1170:1293" ph="select from sys_user" />
-                <marker date="1529650077167" expanded="true" signature="1382:1449" ph="delete from sys_user... " />
-                <marker date="1529650077167" expanded="true" signature="1533:1946" ph="insert into sys_user... " />
-                <marker date="1529650077167" expanded="true" signature="3903:4859" ph="update sys_user... " />
-                <marker date="1529650077167" expanded="true" signature="4957:5384" ph="update sys_user... " />
-                <marker date="1529650077167" expanded="true" signature="5906:5992" ph="SELECT from sys_user" />
-                <marker date="1529650077167" expanded="true" signature="5906:6018" ph="SELECT from sys_user" />
+                <element signature="e#4400#4430#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="188" column="0" lean-forward="false" selection-start-line="188" selection-start-column="0" selection-end-line="188" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TypeReference.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.8.11/jackson-core-2.8.11.jar!/com/fasterxml/jackson/core/type/TypeReference.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="10" column="22" lean-forward="false" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -109,8 +53,8 @@
       <file leaf-file-name="JacksonUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/JacksonUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="67" column="25" lean-forward="false" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="25" />
+            <state relative-caret-position="177">
+              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,34 +62,101 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RestControllerAspect.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/aop/RestControllerAspect.java">
+      <file leaf-file-name="TokenInterceptor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2025">
-              <caret line="136" column="39" lean-forward="false" selection-start-line="136" selection-start-column="39" selection-end-line="136" selection-end-column="39" />
+            <state relative-caret-position="-837">
+              <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TerminalController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="419">
+              <caret line="65" column="42" lean-forward="true" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TerminalService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/TerminalService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="203">
+              <caret line="56" column="21" lean-forward="true" selection-start-line="56" selection-start-column="21" selection-end-line="56" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TerminalServiceImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="196" column="57" lean-forward="false" selection-start-line="196" selection-start-column="41" selection-end-line="196" selection-end-column="57" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BizTerminalMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizTerminalMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="191">
+              <caret line="24" column="23" lean-forward="true" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BizTerminalMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="215">
+              <caret line="209" column="56" lean-forward="false" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="56" />
               <folding>
-                <element signature="e#4370#4400#0" expanded="true" />
+                <marker date="1529655452819" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
+                <marker date="1529655452819" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
+                <marker date="1529655452819" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
+                <marker date="1529655452819" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
+                <marker date="1529655452819" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
+                <marker date="1529655452819" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
+                <marker date="1529655452819" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
+                <marker date="1529655452819" expanded="true" signature="11497:11836" ph="select ,floo... " />
+                <marker date="1529655452819" expanded="true" signature="12217:12310" ph="DELETE FROM screensaver_published_terminal_relation... " />
+                <marker date="1529655452819" expanded="true" signature="12404:12578" ph="UPDATE biz_terminal... " />
+                <marker date="1529655452819" expanded="true" signature="12730:12994" ph="SELECT scree... biz_terminal" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HarborWebApplication.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/HarborWebApplication.java">
+      <file leaf-file-name="BizTerminal.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizTerminal.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="972">
+              <caret line="61" column="36" lean-forward="false" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+              <folding>
+                <element signature="e#1313#1314#0" expanded="true" />
+                <element signature="e#1367#1368#0" expanded="true" />
+                <element signature="e#1413#1414#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScreensaverServiceImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java">
+      <file leaf-file-name="ResultMap.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/bean/ResultMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="159" column="75" lean-forward="false" selection-start-line="159" selection-start-column="75" selection-end-line="159" selection-end-column="75" />
-              <folding />
+            <state relative-caret-position="162">
+              <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+              <folding>
+                <element signature="e#154#155#0" expanded="true" />
+                <element signature="e#192#193#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -244,9 +255,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizBuilding.java" />
-        <option value="$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizMap.java" />
-        <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/filter/MultiplexRequestFilter.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/VisitLogService.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/VisitLogServiceImpl.java" />
@@ -255,7 +263,6 @@
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ActivityController.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/FileUtils.java" />
-        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizActivityMapper.xml" />
@@ -263,7 +270,6 @@
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/bean/BodyReaderRequestWrapper.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/RequestHeaderInterceptor.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ActivityMaterialController.java" />
-        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/bean/ResultMap.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/aop/VisitAspect.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/handler/GlobalExceptionHandler.java" />
@@ -273,7 +279,6 @@
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ShopController.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/FloorController.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java" />
-        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/UserServiceImpl.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizBuildingMapper.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" />
@@ -294,7 +299,13 @@
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/UserMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/UserController.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/JacksonUtil.java" />
+        <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizTerminalMapper.java" />
+        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/TerminalService.java" />
+        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java" />
+        <option value="$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizTerminal.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/aop/RestControllerAspect.java" />
+        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml" />
+        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java" />
       </list>
     </option>
   </component>
@@ -432,6 +443,16 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="harbor" type="462c0819:PsiDirectoryNode" />
               <item name="bean" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+              <item name="interceptor" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
@@ -879,14 +900,7 @@
       <workItem from="1529494948711" duration="14769000" />
       <workItem from="1529542214502" duration="28071000" />
       <workItem from="1529588732471" duration="703000" />
-      <workItem from="1529629489472" duration="21619000" />
-    </task>
-    <task id="LOCAL-00046" summary="restful update">
-      <created>1529403154791</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1529403154791</updated>
+      <workItem from="1529629489472" duration="24360000" />
     </task>
     <task id="LOCAL-00047" summary="restful update">
       <created>1529403700273</created>
@@ -1224,11 +1238,18 @@
       <option name="project" value="LOCAL" />
       <updated>1529650081236</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="harbor update">
+      <created>1529652744070</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1529652744071</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="283639000" />
+    <option name="totallyTimeSpent" value="286380000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1241,6 +1262,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1251,7 +1273,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18347639" sideWeight="0.49344262" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2599772" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33751425" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1262,7 +1284,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1995439" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31330472" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23015021" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18347639" sideWeight="0.5065574" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1332,121 +1354,11 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="141" />
+      <option name="time" value="145" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/com/alibaba/druid/1.1.9/druid-1.1.9.jar!/com/alibaba/druid/support/json/JSONWriter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding>
-            <marker date="1528215522605" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1528215522605" expanded="false" signature="154:496" ph="..." />
-            <marker date="1528215522605" expanded="true" signature="602:609" ph="{}" />
-            <marker date="1528215522605" expanded="false" signature="644:655" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="671:677" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="707:718" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="734:740" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="773:784" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="800:806" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="835:846" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="865:871" ph=" }" />
-            <marker date="1528215522605" expanded="true" signature="911:2782" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="2821:3055" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="3101:3513" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="3558:3907" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="3961:4420" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="4463:5608" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="5668:6211" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="6277:6923" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="6975:7567" ph="{...}" />
-            <marker date="1528215522605" expanded="false" signature="7606:7617" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="7639:7645" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="7679:7690" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="7709:7715" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="7748:7759" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="7778:7784" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="7818:7829" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="7848:7854" ph=" }" />
-            <marker date="1528215522605" expanded="false" signature="7884:7895" ph=" { " />
-            <marker date="1528215522605" expanded="false" signature="7922:7928" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/alibaba/druid/1.1.9/druid-1.1.9.jar!/com/alibaba/druid/support/json/JSONUtils.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="5" column="38" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="38" />
-          <folding>
-            <marker date="1528215522605" expanded="false" signature="0:104" ph="/.../" />
-            <marker date="1528215522605" expanded="true" signature="195:202" ph="{}" />
-            <marker date="1528215522605" expanded="true" signature="252:370" ph="{...}" />
-            <marker date="1528215522605" expanded="true" signature="416:504" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="115" column="5" lean-forward="true" selection-start-line="115" selection-start-column="5" selection-end-line="115" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizShopMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="33" column="40" lean-forward="false" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/ShopVisitMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1867">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1529497104209" expanded="true" signature="758:895" ph="select from biz_shop_visit" />
-            <marker date="1529497104209" expanded="true" signature="988:1073" ph="DELETE FROM biz_shop_visit... " />
-            <marker date="1529497104209" expanded="true" signature="1168:1384" ph="INSERT INTO biz_shop_visit... " />
-            <marker date="1529497104209" expanded="true" signature="2416:2799" ph="update biz_shop_visit... " />
-            <marker date="1529497104209" expanded="true" signature="2906:3123" ph="UPDATE biz_shop_visit... " />
-            <marker date="1529497104209" expanded="true" signature="4177:4331" ph="UPDATE biz_shop_visit... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizShopMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="250" column="0" lean-forward="false" selection-start-line="250" selection-start-column="0" selection-end-line="260" selection-end-column="33" />
-          <folding>
-            <marker date="1529562996788" expanded="true" signature="1985:2162" ph="select , fro... " />
-            <marker date="1529562996788" expanded="true" signature="2255:2326" ph="DELETE FROM biz_shop... " />
-            <marker date="1529562996788" expanded="true" signature="2419:3497" ph="INSERT INTO biz_shop... " />
-            <marker date="1529562996788" expanded="true" signature="6735:8492" ph="update biz_shop... " />
-            <marker date="1529562996788" expanded="true" signature="8606:9527" ph="UPDATE biz_shop... " />
-            <marker date="1529562996788" expanded="true" signature="9632:10483" ph="UPDATE biz_shop... " />
-            <marker date="1529562996788" expanded="true" signature="10588:10700" ph="select from biz_shop" />
-            <marker date="1529562996788" expanded="true" signature="10788:11478" ph="select ,floo... " />
-            <marker date="1529562996788" expanded="true" signature="11574:12072" ph="select ,floo... " />
-            <marker date="1529562996788" expanded="true" signature="12995:13241" ph="SELECT shop_... shop_picture_relation" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ShopService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ShopController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3409">
@@ -1674,14 +1586,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1620">
-          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ScreensaverMaterialController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="695">
@@ -1804,16 +1708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/JacksonUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="67" column="25" lean-forward="false" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/HarborWebApplication.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
@@ -1822,13 +1716,106 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-837">
+          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/bean/ResultMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+          <folding>
+            <element signature="e#154#155#0" expanded="true" />
+            <element signature="e#192#193#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizTerminal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="61" column="36" lean-forward="false" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+          <folding>
+            <element signature="e#1313#1314#0" expanded="true" />
+            <element signature="e#1367#1368#0" expanded="true" />
+            <element signature="e#1413#1414#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/JacksonUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/aop/RestControllerAspect.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2025">
-          <caret line="136" column="39" lean-forward="false" selection-start-line="136" selection-start-column="39" selection-end-line="136" selection-end-column="39" />
+        <state relative-caret-position="-1970">
+          <caret line="33" column="9" lean-forward="true" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
           <folding>
-            <element signature="e#4370#4400#0" expanded="true" />
+            <element signature="e#4400#4430#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizTerminalMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="24" column="23" lean-forward="true" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="196" column="57" lean-forward="false" selection-start-line="196" selection-start-column="41" selection-end-line="196" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/TerminalService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="56" column="21" lean-forward="true" selection-start-line="56" selection-start-column="21" selection-end-line="56" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="209" column="56" lean-forward="false" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="56" />
+          <folding>
+            <marker date="1529655452819" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
+            <marker date="1529655452819" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
+            <marker date="1529655452819" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
+            <marker date="1529655452819" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
+            <marker date="1529655452819" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
+            <marker date="1529655452819" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
+            <marker date="1529655452819" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
+            <marker date="1529655452819" expanded="true" signature="11497:11836" ph="select ,floo... " />
+            <marker date="1529655452819" expanded="true" signature="12217:12310" ph="DELETE FROM screensaver_published_terminal_relation... " />
+            <marker date="1529655452819" expanded="true" signature="12404:12578" ph="UPDATE biz_terminal... " />
+            <marker date="1529655452819" expanded="true" signature="12730:12994" ph="SELECT scree... biz_terminal" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="65" column="42" lean-forward="true" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>

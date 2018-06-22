@@ -22,7 +22,7 @@ public interface BizTerminalMapper {
 
     void delScreensaverTerminalRelation(String bizTerminalId);
 
-    BizTerminal selectIdByNumber(String terminalNumber);
+    BizTerminal selectIdByNumber(Object terminalNumber);
 
     /**
      * 检测终端是否注册

@@ -50,12 +50,11 @@ public interface TerminalService {
     Result addBizTerminal(BizTerminal bizTerminal);
 
     /**
-     * 根据终端编号和终端平台获取终端ID
+     * 根据终端编号和终端平台确认终端是否注册
      *
      * @param params 终端编号和终端平台
-     * @return 终端ID
      */
-    Result register(Map<String, Object> params);
+    BizTerminal register(Map<String, Object> params);
 
     /**
      * 根据终端编号和屏保ID
