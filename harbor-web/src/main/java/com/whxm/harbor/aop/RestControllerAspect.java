@@ -62,7 +62,6 @@ public class RestControllerAspect {
         String methodName = this.getMethodName(joinPoint);
         String params = this.getParamsJson(joinPoint);
         String requester = "unknown";
-
         String userAgent = request.getHeader("user-agent");
 
         logger.info("Started request requester [{}] method [{}] params [{}] IP [{}] userAgent [{}]", requester, methodName, params, ip, userAgent);
