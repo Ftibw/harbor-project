@@ -180,6 +180,30 @@ public class ShopController {
         return ret;
     }
 
+    @ApiOperation("获取商铺(需授权)")
+    @GetMapping("/shop")
+    public Result getBizShop(
+            @ApiParam(name = "id", value = "商铺的ID", required = true)
+            @RequestParam("id") String shopId
+    ) {
+        Result ret = null;
+
+        BizShop shop = null;
+        try {
+            shop = shopService.getBizShop(shopId);
+
+            ret = new Result(shop);
+
+        } catch (Exception e) {
+
+            logger.error("ID为{}的商铺数据 获取报错", shopId, e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "ID为" + shopId + "的商铺数据 获取报错", Constant.NO_DATA);
+        }
+
+        return ret;
+    }
     //==========================以下均被拦截============================
 
     @ApiOperation("获取商铺列表(需授权)")
@@ -199,31 +223,6 @@ public class ShopController {
             logger.error("商铺列表 获取错误", e);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺列表 获取错误", pageQO);
-        }
-
-        return ret;
-    }
-
-    @ApiOperation("获取商铺(需授权)")
-    @GetMapping("/bizShop/{ID}")
-    public Result getBizShop(
-            @ApiParam(name = "ID", value = "商铺的ID", required = true)
-            @PathVariable("ID") String shopId
-    ) {
-        Result ret = null;
-
-        BizShop shop = null;
-        try {
-            shop = shopService.getBizShop(shopId);
-
-            ret = new Result(shop);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺数据 获取报错", shopId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + shopId + "的商铺数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
