@@ -32,6 +32,7 @@ public class WebConf extends WebMvcConfigurerAdapter {
                         "/screensaverMaterial/unbound*",
                         "/screensaver/biz*",
                         "/screensaver/publish*",
+                        "/terminal/biz*",
                         "/terminal/publish*",
                         "/user/user*",
                         "/user/token",

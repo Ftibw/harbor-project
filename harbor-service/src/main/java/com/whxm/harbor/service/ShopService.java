@@ -16,7 +16,7 @@ public interface ShopService {
      * @param bizShopId 商铺ID
      * @return 商铺数据
      */
-    BizShop getBizShop(String bizShopId);
+    BizShopVo getBizShop(String bizShopId);
 
     /**
      * 获取商铺列表

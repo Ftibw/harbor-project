@@ -82,7 +82,8 @@
 
     <!--以下是自定义部分-->
     <select id="getBizMapList" resultMap="ExtensionResultMap">
-        select<include refid="Base_Column_List"/>,floor_name
+        select
+        <include refid="Base_Column_List"/>,floor_name
         from biz_map
         LEFT JOIN biz_floor USING (floor_id)
         order by map_id DESC

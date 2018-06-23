@@ -180,7 +180,7 @@ public class ShopController {
         return ret;
     }
 
-    @ApiOperation("获取商铺(需授权)")
+    @ApiOperation("根据商铺ID获取商铺信息")
     @GetMapping("/shop")
     public Result getBizShop(
             @ApiParam(name = "id", value = "商铺的ID", required = true)
@@ -188,7 +188,7 @@ public class ShopController {
     ) {
         Result ret = null;
 
-        BizShop shop = null;
+        BizShopVo shop = null;
         try {
             shop = shopService.getBizShop(shopId);
 

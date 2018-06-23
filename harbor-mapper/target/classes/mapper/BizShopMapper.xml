@@ -16,9 +16,7 @@
         <result column="shop_checkin_time" property="shopCheckinTime" jdbcType="TIMESTAMP"/>
         <result column="shop_weight" property="shopWeight" jdbcType="INTEGER"/>
     </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="BaseResultMap">
-        <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
-    </resultMap>
+
     <sql id="Base_Column_List">
         shop_id, shop_number, shop_name, shop_english_name, floor_id, biz_format_id, shop_house_number,
         is_shop_enabled, shop_logo_path, shop_tel, add_shop_time, shop_checkin_time, shop_weight
@@ -26,14 +24,7 @@
     <sql id="Blob_Column_List">
         shop_descript
     </sql>
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from biz_shop
-        where shop_id = #{shopId,jdbcType=VARCHAR}
-    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM biz_shop
         WHERE shop_id = #{shopId,jdbcType=VARCHAR}
@@ -224,6 +215,22 @@
     </update>
 
     <!--以下为自定义部分-->
+
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        ,floor_name,biz_format_type
+        from biz_shop
+        LEFT JOIN biz_floor USING(floor_id)
+        LEFT JOIN biz_format USING (biz_format_id)
+        where shop_id = #{shopId,jdbcType=VARCHAR}
+    </select>
+    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="ExtensionResultMap">
+        <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
     <select id="selectIdByNumber" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -282,7 +289,7 @@
 
     <select id="selectShopPicturesById" resultType="com.whxm.harbor.bean.ShopPicture">
         SELECT
-            shop_id shopId,
+            shop_id           shopId,
             shop_picture_path shopPicturePath,
             shop_picture_name shopPictureName,
             shop_picture_size shopPictureSize

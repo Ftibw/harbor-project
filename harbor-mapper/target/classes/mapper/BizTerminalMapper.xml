@@ -233,17 +233,19 @@
         </where>
         order by add_terminal_time desc
     </select>
-
+    <!--查询指定ID的屏保未发布的终端-->
     <select id="selectNotPublishedTerminal" resultMap="ExtensionResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name,floor_number
         from biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
-        WHERE is_deleted=1 AND terminal_id
-        NOT IN (
-          SELECT terminal_id
+        WHERE terminal_id
+        not in(
+          select terminal_id
           FROM screensaver_published_terminal_relation
+          WHERE screensaver_id=#{screensaverId}
         )
+        AND is_deleted=1
         order by add_terminal_time desc
     </select>
 

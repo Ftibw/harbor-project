@@ -38,11 +38,21 @@ public class ShopServiceImpl implements ShopService {
     private BizShopMapper bizShopMapper;
 
     @Override
-    public BizShop getBizShop(String bizShopId) {
+    public BizShopVo getBizShop(String bizShopId) {
 
-        BizShop bizShop;
+        BizShopVo vo = null;
+
         try {
-            bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
+            BizShop po = bizShopMapper.selectByPrimaryKey(bizShopId);
+
+            if (null != po) {
+
+                vo = new BizShopVo();
+
+                BeanUtils.copyProperties(po, vo);
+
+                vo.setPictures(this.getShopPicturesById(bizShopId));
+            }
 
         } catch (Exception e) {
 
@@ -51,7 +61,7 @@ public class ShopServiceImpl implements ShopService {
             throw new RuntimeException();
         }
 
-        return bizShop;
+        return vo;
     }
 
     @Override
@@ -136,7 +146,7 @@ public class ShopServiceImpl implements ShopService {
         if (null != bizShopId) {
 
             try {
-                BizShop bizShop = getBizShop(bizShopId);
+                BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
                 /*
                  * if(0==bizShop.getIsShopEnabled() ^ 1)
                  * bizShopMapper.delShopPicturesRelation(bizShopId);
