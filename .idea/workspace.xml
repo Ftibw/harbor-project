@@ -4,8 +4,12 @@
     <bookmark url="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java" line="56" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="074d9578-6aed-4811-958f-c95c8a87790e" name="Default" comment="harbor update">
+    <list default="true" id="074d9578-6aed-4811-958f-c95c8a87790e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java" afterPath="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java" />
+      <change beforePath="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml" afterPath="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml" />
+      <change beforePath="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml" afterPath="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml" />
+      <change beforePath="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java" afterPath="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -39,11 +43,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="ScreensaverServiceImpl.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ScreensaverServiceImpl.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="160" column="0" lean-forward="false" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+            <state relative-caret-position="297">
+              <caret line="158" column="21" lean-forward="true" selection-start-line="158" selection-start-column="21" selection-end-line="158" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BizScreensaverMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="542">
+              <caret line="159" column="9" lean-forward="true" selection-start-line="159" selection-start-column="9" selection-end-line="159" selection-end-column="9" />
+              <folding>
+                <marker date="1529724506379" expanded="true" signature="814:958" ph="select from biz_screensaver" />
+                <marker date="1529724506379" expanded="true" signature="1052:1144" ph="delete from biz_screensaver... " />
+                <marker date="1529724506379" expanded="true" signature="1328:1628" ph="insert into biz_screensaver... " />
+                <marker date="1529724506379" expanded="true" signature="2731:3157" ph="update biz_screensaver... " />
+                <marker date="1529724506379" expanded="true" signature="3269:3519" ph="update biz_screensaver... " />
+                <marker date="1529724506379" expanded="true" signature="3668:4641" ph="SELECT bs.sc... biz_screensaver" />
+                <marker date="1529724506379" expanded="true" signature="3967:4197" ph="SELECT count... screensaver_material_relation" />
+                <marker date="1529724506379" expanded="true" signature="4300:4541" ph="SELECT count... screensaver_published_terminal_relation" />
+                <marker date="1529724506379" expanded="true" signature="4736:5603" ph="SELECT bs.sc... biz_screensaver" />
+                <marker date="1529724506379" expanded="true" signature="4987:5137" ph="SELECT count... screensaver_material_relation" />
+                <marker date="1529724506379" expanded="true" signature="5206:5367" ph="SELECT count... screensaver_published_terminal_relation" />
+                <marker date="1529724506379" expanded="true" signature="6440:6529" ph="DELETE FROM screensaver_material_relation... " />
+                <marker date="1529724506379" expanded="true" signature="6640:6852" ph="DELETE FROM screensaver_published_terminal_relation... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BizScreensaverMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="542">
+              <caret line="38" column="66" lean-forward="false" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -59,27 +97,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BizTerminalMapper.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BizTerminalMapper.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
-              <caret line="252" column="13" lean-forward="true" selection-start-line="252" selection-start-column="13" selection-end-line="252" selection-end-column="13" />
+            <state relative-caret-position="335">
+              <caret line="256" column="46" lean-forward="false" selection-start-line="256" selection-start-column="16" selection-end-line="256" selection-end-column="46" />
               <folding>
-                <marker date="1529663515271" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
-                <marker date="1529663515271" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
-                <marker date="1529663515271" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
-                <marker date="1529663515271" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
-                <marker date="1529663515271" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
-                <marker date="1529663515271" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
-                <marker date="1529663515271" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
-                <marker date="1529663515271" expanded="true" signature="11523:12033" ph="select ,floo... " />
-                <marker date="1529663515271" expanded="true" signature="11714:11787" ph="SELECT termi... screensaver_published_terminal_relation" />
-                <marker date="1529663515271" expanded="true" signature="11714:11803" ph="SELECT termi... screensaver_published_terminal_relation" />
-                <marker date="1529663515271" expanded="true" signature="11714:11895" ph="SELECT termi... screensaver_published_terminal_relation" />
-                <marker date="1529663515271" expanded="true" signature="12414:12507" ph="DELETE FROM screensaver_published_terminal_relation... " />
-                <marker date="1529663515271" expanded="true" signature="12601:12775" ph="UPDATE biz_terminal... " />
-                <marker date="1529663515271" expanded="true" signature="12927:13191" ph="SELECT scree... biz_terminal" />
+                <marker date="1529671286854" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
+                <marker date="1529671286854" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
+                <marker date="1529671286854" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
+                <marker date="1529671286854" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
+                <marker date="1529671286854" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
+                <marker date="1529671286854" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
+                <marker date="1529671286854" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
+                <marker date="1529671286854" expanded="true" signature="11523:11917" ph="select ,floo... " />
+                <marker date="1529671286854" expanded="true" signature="12298:12391" ph="DELETE FROM screensaver_published_terminal_relation... " />
+                <marker date="1529671286854" expanded="true" signature="12485:12659" ph="UPDATE biz_terminal... " />
+                <marker date="1529671286854" expanded="true" signature="12811:13075" ph="SELECT scree... biz_terminal" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TerminalServiceImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6831">
+              <caret line="269" column="77" lean-forward="false" selection-start-line="269" selection-start-column="64" selection-end-line="269" selection-end-column="77" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -235,14 +280,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/VisitLogService.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/VisitLogServiceImpl.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/VisitCountLogMapper.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/conf/JedisConfig.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ActivityController.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/FileUtils.java" />
-        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizActivityMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizActivity.java" />
@@ -285,6 +328,8 @@
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/UserMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizMapMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml" />
+        <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java" />
+        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java" />
       </list>
     </option>
@@ -374,8 +419,8 @@
     <panes>
       <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -892,14 +937,8 @@
       <workItem from="1529542214502" duration="28071000" />
       <workItem from="1529588732471" duration="703000" />
       <workItem from="1529629489472" duration="31767000" />
-      <workItem from="1529668168289" duration="927000" />
-    </task>
-    <task id="LOCAL-00048" summary="restful update">
-      <created>1529404490156</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1529404490156</updated>
+      <workItem from="1529668168289" duration="2322000" />
+      <workItem from="1529723237413" duration="1062000" />
     </task>
     <task id="LOCAL-00049" summary="restful update">
       <created>1529404687908</created>
@@ -1237,11 +1276,18 @@
       <option name="project" value="LOCAL" />
       <updated>1529668301431</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="harbor update">
+      <created>1529670591193</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1529670591193</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="294714000" />
+    <option name="totallyTimeSpent" value="297171000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1266,10 +1312,10 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1995439" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2599772" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.102622576" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2333691" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24302575" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18347639" sideWeight="0.5065574" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32135195" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1350,14 +1396,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="26" column="13" lean-forward="false" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/FloorController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -1530,13 +1568,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="30" column="8" lean-forward="false" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/ShopPicture.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -1592,9 +1623,9 @@
         <state relative-caret-position="972">
           <caret line="61" column="36" lean-forward="false" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
           <folding>
-            <element signature="e#1313#1314#0" expanded="true" />
-            <element signature="e#1367#1368#0" expanded="true" />
-            <element signature="e#1413#1414#0" expanded="true" />
+            <element signature="e#1313#1314#0" expanded="false" />
+            <element signature="e#1367#1368#0" expanded="false" />
+            <element signature="e#1413#1414#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1695,14 +1726,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="659">
           <caret line="47" column="71" lean-forward="true" selection-start-line="47" selection-start-column="71" selection-end-line="47" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="269" column="59" lean-forward="false" selection-start-line="269" selection-start-column="59" selection-end-line="269" selection-end-column="59" />
         </state>
       </provider>
     </entry>
@@ -1763,34 +1786,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="160" column="0" lean-forward="false" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+        <state relative-caret-position="6831">
+          <caret line="269" column="77" lean-forward="false" selection-start-line="269" selection-start-column="64" selection-end-line="269" selection-end-column="77" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizTerminalMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
-          <caret line="252" column="13" lean-forward="true" selection-start-line="252" selection-start-column="13" selection-end-line="252" selection-end-column="13" />
+        <state relative-caret-position="335">
+          <caret line="256" column="46" lean-forward="false" selection-start-line="256" selection-start-column="16" selection-end-line="256" selection-end-column="46" />
           <folding>
-            <marker date="1529663515271" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
-            <marker date="1529663515271" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
-            <marker date="1529663515271" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
-            <marker date="1529663515271" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
-            <marker date="1529663515271" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
-            <marker date="1529663515271" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
-            <marker date="1529663515271" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
-            <marker date="1529663515271" expanded="true" signature="11523:12033" ph="select ,floo... " />
-            <marker date="1529663515271" expanded="true" signature="11714:11787" ph="SELECT termi... screensaver_published_terminal_relation" />
-            <marker date="1529663515271" expanded="true" signature="11714:11803" ph="SELECT termi... screensaver_published_terminal_relation" />
-            <marker date="1529663515271" expanded="true" signature="11714:11895" ph="SELECT termi... screensaver_published_terminal_relation" />
-            <marker date="1529663515271" expanded="true" signature="12414:12507" ph="DELETE FROM screensaver_published_terminal_relation... " />
-            <marker date="1529663515271" expanded="true" signature="12601:12775" ph="UPDATE biz_terminal... " />
-            <marker date="1529663515271" expanded="true" signature="12927:13191" ph="SELECT scree... biz_terminal" />
+            <marker date="1529671286854" expanded="true" signature="1955:2090" ph="select from biz_terminal" />
+            <marker date="1529671286854" expanded="true" signature="2183:2266" ph="DELETE FROM biz_terminal... " />
+            <marker date="1529671286854" expanded="true" signature="2363:3631" ph="INSERT INTO biz_terminal... " />
+            <marker date="1529671286854" expanded="true" signature="7053:8938" ph="update biz_terminal... " />
+            <marker date="1529671286854" expanded="true" signature="9047:10096" ph="UPDATE biz_terminal... " />
+            <marker date="1529671286854" expanded="true" signature="10206:10408" ph="SELECT ,floo... " />
+            <marker date="1529671286854" expanded="true" signature="10500:11397" ph="SELECT ,floo... " />
+            <marker date="1529671286854" expanded="true" signature="11523:11917" ph="select ,floo... " />
+            <marker date="1529671286854" expanded="true" signature="12298:12391" ph="DELETE FROM screensaver_published_terminal_relation... " />
+            <marker date="1529671286854" expanded="true" signature="12485:12659" ph="UPDATE biz_terminal... " />
+            <marker date="1529671286854" expanded="true" signature="12811:13075" ph="SELECT scree... biz_terminal" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="38" column="66" lean-forward="false" selection-start-line="38" selection-start-column="55" selection-end-line="38" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizScreensaverMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="159" column="9" lean-forward="true" selection-start-line="159" selection-start-column="9" selection-end-line="159" selection-end-column="9" />
+          <folding>
+            <marker date="1529724506379" expanded="true" signature="814:958" ph="select from biz_screensaver" />
+            <marker date="1529724506379" expanded="true" signature="1052:1144" ph="delete from biz_screensaver... " />
+            <marker date="1529724506379" expanded="true" signature="1328:1628" ph="insert into biz_screensaver... " />
+            <marker date="1529724506379" expanded="true" signature="2731:3157" ph="update biz_screensaver... " />
+            <marker date="1529724506379" expanded="true" signature="3269:3519" ph="update biz_screensaver... " />
+            <marker date="1529724506379" expanded="true" signature="3668:4641" ph="SELECT bs.sc... biz_screensaver" />
+            <marker date="1529724506379" expanded="true" signature="3967:4197" ph="SELECT count... screensaver_material_relation" />
+            <marker date="1529724506379" expanded="true" signature="4300:4541" ph="SELECT count... screensaver_published_terminal_relation" />
+            <marker date="1529724506379" expanded="true" signature="4736:5603" ph="SELECT bs.sc... biz_screensaver" />
+            <marker date="1529724506379" expanded="true" signature="4987:5137" ph="SELECT count... screensaver_material_relation" />
+            <marker date="1529724506379" expanded="true" signature="5206:5367" ph="SELECT count... screensaver_published_terminal_relation" />
+            <marker date="1529724506379" expanded="true" signature="6440:6529" ph="DELETE FROM screensaver_material_relation... " />
+            <marker date="1529724506379" expanded="true" signature="6640:6852" ph="DELETE FROM screensaver_published_terminal_relation... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ScreensaverServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="158" column="21" lean-forward="true" selection-start-line="158" selection-start-column="21" selection-end-line="158" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>

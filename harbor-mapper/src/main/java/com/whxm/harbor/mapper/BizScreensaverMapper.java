@@ -35,4 +35,6 @@ public interface BizScreensaverMapper {
     );
 
     int delScreensaverMaterialRelation(@Param("screensaverId") Integer bizScreensaverId);
+
+    int batchDeleteScreensaverTerminalRelation(@Param("terminalIds") String[] terminalIds);
 }

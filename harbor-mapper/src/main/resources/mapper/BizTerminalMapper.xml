@@ -239,14 +239,11 @@
         <include refid="Base_Column_List"/>,floor_name,floor_number
         from biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
-        WHERE
-        not exists (
-          SELECT terminal_id
+        WHERE terminal_id
+        not in(
+          select terminal_id
           FROM screensaver_published_terminal_relation
-          WHERE
-               biz_terminal.terminal_id=screensaver_published_terminal_relation.terminal_id
-          AND
-               screensaver_id = #{screensaverId}
+          WHERE screensaver_id=#{screensaverId}
         )
         AND is_deleted=1
         order by add_terminal_time desc
