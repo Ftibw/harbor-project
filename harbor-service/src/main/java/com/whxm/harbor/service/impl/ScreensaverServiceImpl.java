@@ -75,14 +75,18 @@ public class ScreensaverServiceImpl implements ScreensaverService {
         Result ret;
 
         try {
-            //删除屏保,先删屏保-屏保素材关系表,再删主表
+            //删除屏保,先删屏保-屏保素材关系表,再删屏保表
             int affectRow = bizScreensaverMapper.delScreensaverMaterialRelation(bizScreensaverId);
+
 
             int affectRow2 = bizScreensaverMapper.deleteByPrimaryKey(bizScreensaverId);
 
+            //删除屏保-屏保发布终端关系表中可能存在的关联
+            int affectRow3 = bizScreensaverMapper.delScreensaverPublishedTerminalRelation(bizScreensaverId);
+
             logger.info("ID为{}的屏保 删除{}行,屏保-屏保素材关系表删除{}行", bizScreensaverId, affectRow2, affectRow);
 
-            ret = new Result("ID为" + bizScreensaverId + "的屏保 删除了" + affectRow2 + "行,屏保-屏保素材关系表删除了" + affectRow + "行");
+            ret = new Result(String.format("ID为%d的屏保 删除了%d行,屏保-屏保素材关系表删除了%d行,屏保-屏保发布终端关系表删除了%d行", bizScreensaverId, affectRow2, affectRow, affectRow3));
 
         } catch (Exception e) {
 

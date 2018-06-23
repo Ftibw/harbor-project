@@ -30,8 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @desc 请求参数、响应体统一日志打印
  * @since 10/10/2017 9:54 AM
  */
-//@Aspect
-//@Component
+@Aspect
+@Component
 public class RestControllerAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -119,23 +119,34 @@ public class RestControllerAspect {
     @SuppressWarnings("unchecked")
     private String deleteSensitiveContent(Object obj) {
 
-        if (obj instanceof String)
-            return (String) obj;
-
-        if (obj == null || obj instanceof Exception) {
-            return JacksonUtils.toJson(obj);
+        if (obj == null) {
+            return null;
         }
+
+        if (obj instanceof Exception) {
+            return obj.getClass().getName();
+        }
+
         Map map = null;
         try {
             String params = JacksonUtils.toJson(obj);
+            //排除基本类型,包装类型,String等之后再进行json反序列化
+            if (null != params
+                    && params.matches("^\\{.*:.*}$")) {
 
-            map = JacksonUtils.readValue(params, Map.class);
+                map = JacksonUtils.readValue(params, Map.class);
 
-            List<String> sensitiveFieldList = this.getSensitiveFieldList();
-            for (String sensitiveField : sensitiveFieldList) {
-                if (map.containsKey(sensitiveField)) {
-                    map.put(sensitiveField, "******");
-                }
+                List<String> sensitiveFieldList = this.getSensitiveFieldList();
+
+                if (null != map)
+                    for (String sensitiveField : sensitiveFieldList) {
+                        if (map.containsKey(sensitiveField)) {
+                            map.put(sensitiveField, "******");
+                        }
+                    }
+            } else {
+                //基本类型,包装类型,String等简单参数直接返回
+                return params;
             }
         } catch (ClassCastException e) {
             return String.valueOf(obj);

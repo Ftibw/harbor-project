@@ -99,7 +99,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         Result ret;
 
         try {
-
+            //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
             bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
 
             int affectRow1 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);

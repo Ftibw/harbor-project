@@ -1,9 +1,14 @@
-com\whxm\harbor\mapper\BizScreensaverMaterialMapper.class
 com\whxm\harbor\mapper\BizFloorMapper.class
 com\whxm\harbor\mapper\BizFormatMapper.class
+com\whxm\harbor\mapper\VisitCountLogMapper.class
 com\whxm\harbor\mapper\BizScreensaverMapper.class
 com\whxm\harbor\mapper\UserMapper.class
 com\whxm\harbor\mapper\BizTerminalMapper.class
 com\whxm\harbor\mapper\BizActivityMaterialMapper.class
 com\whxm\harbor\mapper\BizActivityMapper.class
+com\whxm\harbor\mapper\ShopVisitMapper.class
+com\whxm\harbor\mapper\BizScreensaverMaterialMapper.class
+com\whxm\harbor\mapper\BizMapMapper.class
+com\whxm\harbor\mapper\BizBuildingMapper.class
+com\whxm\harbor\mapper\TerminalVisitMapper.class
 com\whxm\harbor\mapper\BizShopMapper.class

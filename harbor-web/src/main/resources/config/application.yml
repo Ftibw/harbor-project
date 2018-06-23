@@ -22,6 +22,10 @@ spring:
     maxOpenPreparedStatements: 20
   redis:
       host: ${redishost:47.94.202.250}    #192.168.1.80
+  #配置全局时间返回格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 mybatis:
   type-aliases-package: com.whxm.harbor.bean
   mapper-locations: mapper/*.xml
@@ -51,3 +55,4 @@ server:
 jedis:
   host: ${redisHost:47.94.202.250}  #192.168.1.80
   port: ${redisPort:6379}
+

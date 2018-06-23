@@ -21,54 +21,35 @@ public class IPv4Utils {
      */
     public final static String getIpAddress(HttpServletRequest request) {
         // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
-
         String ip = request.getHeader("X-Forwarded-For");
-        if (logger.isInfoEnabled()) {
-            logger.info("getIpAddress(HttpServletRequest) - X-Forwarded-For - String ip=" + ip);
-        }
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
                 ip = request.getHeader("Proxy-Client-IP");
-                /*if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
-                }*/
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
                 ip = request.getHeader("WL-Proxy-Client-IP");
-                /*if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
-                }*/
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
                 ip = request.getHeader("HTTP_CLIENT_IP");
-                /*if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - HTTP_CLIENT_IP - String ip=" + ip);
-                }*/
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                /*ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-                if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - HTTP_X_FORWARDED_FOR - String ip=" + ip);
-                }*/
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
                 ip = request.getRemoteAddr();
-               /* if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - getRemoteAddr - String ip=" + ip);
-                }*/
             }
         } else if (ip.length() > 15) {
             String[] ips = ip.split(",");
-            for (int index = 0; index < ips.length; index++) {
-                String strIp = (String) ips[index];
-                if (!("unknown".equalsIgnoreCase(strIp))) {
-                    ip = strIp;
+            for (String ip1 : ips) {
+                if (!("unknown".equalsIgnoreCase(ip1))) {
+                    ip = ip1;
                     break;
                 }
             }
         }
-        return ip.equals("0:0:0:0:0:0:0:1")?"127.0.0.1":ip;
+        return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
 
@@ -116,9 +97,9 @@ public class IPv4Utils {
      * @return int
      */
     public static String bytesToIp(byte[] bytes) {
-        return new StringBuffer().append(bytes[0] & 0xFF).append('.').append(
-                bytes[1] & 0xFF).append('.').append(bytes[2] & 0xFF)
-                .append('.').append(bytes[3] & 0xFF).toString();
+        return String.valueOf(bytes[0] & 0xFF) + '.' +
+                (bytes[1] & 0xFF) + '.' + (bytes[2] & 0xFF) +
+                '.' + (bytes[3] & 0xFF);
     }
 
     /**
@@ -171,10 +152,9 @@ public class IPv4Utils {
      * @return String
      */
     public static String intToIp(int ipInt) {
-        return new StringBuilder().append(((ipInt >> 24) & 0xff)).append('.')
-                .append((ipInt >> 16) & 0xff).append('.').append(
-                        (ipInt >> 8) & 0xff).append('.').append((ipInt & 0xff))
-                .toString();
+        return String.valueOf(((ipInt >> 24) & 0xff)) + '.' +
+                ((ipInt >> 16) & 0xff) + '.' +
+                ((ipInt >> 8) & 0xff) + '.' + (ipInt & 0xff);
     }
 
     /**
@@ -270,7 +250,7 @@ public class IPv4Utils {
             if (byteStr.length() == 0) {
                 byteStr.append(b);
             } else {
-                byteStr.append("," + b);
+                byteStr.append(",").append(b);
             }
         }
         System.out.println("IP: " + ipAddr + " ByInet --> byte[]: [ " + byteStr
@@ -283,7 +263,7 @@ public class IPv4Utils {
             if (byteStr.length() == 0) {
                 byteStr.append(b);
             } else {
-                byteStr.append("," + b);
+                byteStr.append(",").append(b);
             }
         }
         System.out.println("IP: " + ipAddr + " ByReg  --> byte[]: [ " + byteStr

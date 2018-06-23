@@ -76,11 +76,11 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端的屏保节目")
-    @RequestMapping(value = "/program", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value = "/program")
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
-            @ApiParam(name = "prog", value = "前正在播放的屏保编号", required = true)
+            @ApiParam(name = "prog", value = "前正在播放的屏保编号")
                     Integer prog
     ) {
 

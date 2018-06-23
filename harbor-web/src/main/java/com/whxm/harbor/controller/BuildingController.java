@@ -14,49 +14,53 @@ import java.util.List;
 
 @Api(description = "建筑服务")
 @RestController
-@RequestMapping("/building")
+@RequestMapping("/buildings")
 @MyApiResponses
 public class BuildingController {
 
     @Autowired
     private BuildingService buildingService;
 
-    @ApiOperation("获取建筑列表(需授权)")
-    @GetMapping("/bizBuildings")
-    public Result getBizBuildings() {
+    @ApiOperation("获取建筑列表")
+    @GetMapping
+    public Result getBizBuildings(
+            @ApiParam(name = "floor", value = "楼层ID")
+            @RequestParam(value = "floor", required = false)
+                    Integer floor) {
 
         List<BizBuilding> list = buildingService.getBizBuildingList();
 
         return Result.ok(list);
     }
 
-    @ApiOperation("添加建筑(需授权)")
-    @PostMapping("/bizBuilding")
-    public Result addBizBuilding(@RequestBody BizBuilding bizBuilding) {
+    @ApiOperation("添加建筑")
+    @PostMapping
+    public Result addBizBuilding(BizBuilding bizBuilding) {
 
-        Assert.notNull(bizBuilding,"建筑数据不能为空");
+        Assert.notNull(bizBuilding, "建筑数据不能为空");
 
         return buildingService.addBizBuilding(bizBuilding);
     }
 
-    @ApiOperation("修改建筑(需授权)")
-    @PutMapping("/bizBuilding")
-    public Result updateBizBuilding(@RequestBody BizBuilding bizBuilding) {
+    @ApiOperation("修改建筑")
+    @PutMapping
+    public Result updateBizBuilding(BizBuilding bizBuilding) {
 
-        Assert.notNull(bizBuilding,"建筑数据不能为空");
+        Assert.notNull(bizBuilding, "建筑数据不能为空");
 
-        Assert.notNull(bizBuilding.getId(),"建筑ID不能为空");
+        Assert.notNull(bizBuilding.getId(), "建筑ID不能为空");
 
         return buildingService.updateBizBuilding(bizBuilding);
     }
 
 
-    @ApiOperation("删除建筑(需授权)")
-    @DeleteMapping("/bizBuilding")
-    public Result delBizBuilding(@ApiParam(name = "ID", value = "建筑ID", required = true)
-                                         Integer id) {
+    @ApiOperation("删除建筑")
+    @DeleteMapping
+    public Result delBizBuilding(
+            @ApiParam(name = "ID", value = "建筑ID", required = true)
+            @RequestParam("id") Integer id) {
 
-        Assert.notNull(id,"建筑ID不能为空");
+        Assert.notNull(id, "建筑ID不能为空");
 
         return buildingService.deleteBizBuilding(id);
     }

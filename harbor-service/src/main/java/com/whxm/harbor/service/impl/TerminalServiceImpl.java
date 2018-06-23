@@ -232,7 +232,7 @@ public class TerminalServiceImpl implements TerminalService {
             }
             //先存了list引用再说
             ret.build("prog", screensaverId)
-                    .build("on_off", String.valueOf(terminalSwitchTime))
+                    .build("on_off", terminalSwitchTime)
                     .build("data", list)
                     .build("delay", 10);
 
