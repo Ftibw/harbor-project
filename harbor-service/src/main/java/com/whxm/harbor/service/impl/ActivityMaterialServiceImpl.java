@@ -46,7 +46,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材ID为{}的数据 获取报错", bizActivityMaterialId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return activityMaterial;
@@ -75,7 +75,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         } catch (Exception e) {
             logger.error("活动素材列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -101,7 +101,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材ID为{}的数据 删除错误", bizActivityMaterialId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -130,7 +130,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -159,7 +159,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -186,7 +186,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -213,7 +213,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
             logger.error("活动素材数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;

@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
             logger.error("ID为{}的用户数据 获取报错", userId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return user;
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
             logger.error("用户列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
             logger.error("用户数据 删除报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
 
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 
             logger.error("用户数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
             logger.error("用户数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

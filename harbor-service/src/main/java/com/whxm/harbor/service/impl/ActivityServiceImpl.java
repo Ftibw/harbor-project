@@ -46,7 +46,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.error("活动数据 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return bizActivity;
@@ -76,7 +76,7 @@ public class ActivityServiceImpl implements ActivityService {
         } catch (Exception e) {
             logger.error("活动列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -99,7 +99,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.error("活动数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;
@@ -137,7 +137,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.error("活动数据 删除错误", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -166,7 +166,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.error("活动数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -192,7 +192,7 @@ public class ActivityServiceImpl implements ActivityService {
 
             logger.error("活动数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

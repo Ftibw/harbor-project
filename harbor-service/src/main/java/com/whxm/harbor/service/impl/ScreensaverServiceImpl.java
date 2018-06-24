@@ -40,7 +40,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.error("屏保ID为{}的数据 获取报错", bizScreensaverId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return screensaver;
@@ -63,7 +63,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
         } catch (Exception e) {
             logger.error("屏保列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -92,7 +92,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.error("屏保ID为{}的数据 删除错误", bizScreensaverId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -114,7 +114,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.error("屏保数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -148,7 +148,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.error("屏保数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -174,7 +174,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
             logger.error("ID为{}的屏保 发布报错", screensaverId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

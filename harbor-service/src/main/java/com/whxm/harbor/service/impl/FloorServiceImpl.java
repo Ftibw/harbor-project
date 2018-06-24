@@ -42,7 +42,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("ID为{}的楼层 获取报错", bizFloorId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return bizFloor;
@@ -66,7 +66,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("楼层列表获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -84,7 +84,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("楼层数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;
@@ -107,7 +107,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("ID为{}的楼层 删除报错", bizFloorId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -141,7 +141,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("ID为{}的楼层修改 报错", bizFloor.getFloorId(), e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -181,7 +181,7 @@ public class FloorServiceImpl implements FloorService {
 
             logger.error("楼层数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

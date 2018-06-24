@@ -45,7 +45,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             logger.error("屏保素材ID为{}的数据 获取报错", bizScreensaverMaterialId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return screensaverMaterial;
@@ -87,7 +87,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             logger.error("屏保素材列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -113,7 +113,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             logger.error("屏保素材ID为{}的数据 删除错误", bizScreensaverMaterialId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -142,7 +142,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             logger.error("屏保素材数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -169,7 +169,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
             logger.error("屏保素材数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

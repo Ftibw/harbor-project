@@ -40,7 +40,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
             logger.error("商铺访问数据 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return shopVisit;
@@ -50,7 +50,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
     @Override
     public ResultMap<String, Object> updateShopVisit(String shopNumber) {
 
-        ResultMap<String, Object> ret=null;
+        ResultMap<String, Object> ret = null;
 
         try {
 
@@ -95,7 +95,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
             logger.error("商铺访问列表获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -113,7 +113,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
             logger.error("商铺访问数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;

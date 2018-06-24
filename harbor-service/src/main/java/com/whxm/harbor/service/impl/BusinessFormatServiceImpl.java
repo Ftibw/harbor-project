@@ -42,7 +42,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("ID为{}的业态数据 获取报错", bizFormatId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return bizFormat;
@@ -65,7 +65,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("业态数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -83,7 +83,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("业态数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;
@@ -117,7 +117,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("ID为{}的业态 删除报错", bizFormatId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -155,7 +155,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("ID为{}的业态 修改报错", bizFormat.getBizFormatId());
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -197,7 +197,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
             logger.error("业态数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

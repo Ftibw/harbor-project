@@ -48,7 +48,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端ID为{}的数据 获取报错", bizTerminalId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return terminal;
@@ -71,7 +71,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -107,7 +107,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端ID为{}的数据 删除错误", bizTerminalId);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -133,7 +133,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端数据 修改报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -182,7 +182,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -201,7 +201,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("终端是否注册 查询报错 ", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -255,7 +255,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("编号为{}的终端屏保信息 查询报错", terminalNumber, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -275,7 +275,7 @@ public class TerminalServiceImpl implements TerminalService {
 
             logger.error("无屏保的终端列表查询报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;

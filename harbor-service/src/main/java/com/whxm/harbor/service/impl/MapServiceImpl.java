@@ -43,7 +43,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("ID为{}的地图 获取报错", bizMapId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return bizMap;
@@ -67,7 +67,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("地图列表获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -85,7 +85,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("地图数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;
@@ -110,7 +110,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("ID为{}的地图 删除报错", bizMapId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -144,7 +144,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("ID为{}的地图修改 报错", bizMap.getMapId(), e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -168,7 +168,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("地图数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -195,7 +195,7 @@ public class MapServiceImpl implements MapService {
 
             logger.error("地图数据数据 添加报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;

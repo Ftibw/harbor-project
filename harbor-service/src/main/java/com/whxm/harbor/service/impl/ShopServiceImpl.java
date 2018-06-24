@@ -200,7 +200,7 @@ public class ShopServiceImpl implements ShopService {
 
             logger.error("ID为{}的商铺 修改错误", bizShop.getBizFormatId());
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return ret;
@@ -256,7 +256,7 @@ public class ShopServiceImpl implements ShopService {
 
                 logger.error("商铺数据 添加错误");
 
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
 
         } else {
@@ -291,7 +291,7 @@ public class ShopServiceImpl implements ShopService {
 
             logger.error("ID为{}的商铺图片 获取报错", bizShopId, e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;

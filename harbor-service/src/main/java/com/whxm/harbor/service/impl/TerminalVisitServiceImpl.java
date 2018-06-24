@@ -41,7 +41,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
             logger.error("终端访问数据 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return terminalVisit;
@@ -95,7 +95,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
             logger.error("终端访问列表获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return pageVO;
@@ -113,7 +113,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
             logger.error("终端访问数据列表 获取报错", e);
 
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return list;
