@@ -3,6 +3,7 @@ package com.whxm.harbor.utils;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.constant.Constant;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 

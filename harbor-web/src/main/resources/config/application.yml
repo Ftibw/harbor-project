@@ -43,8 +43,8 @@ fileDir:
   shopPictureDir: shopPicture
   screensaverMaterialImgDir: screensaverMaterialPicture
   mapPictureDir: mapPicture
-urlConfig:
-  urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
+urlConfig:                          #192.168.1.103
+  urlPrefix: ${resourceServer:http://47.94.202.250:8080/resources/}
 server:
   port: 9000
 
@@ -55,4 +55,10 @@ server:
 jedis:
   host: ${redisHost:47.94.202.250}  #192.168.1.80
   port: ${redisPort:6379}
+ftp:
+  controlPort: 21
+  host: 47.94.202.250
+  user: ftpuser
+  password: 123456
+
 
