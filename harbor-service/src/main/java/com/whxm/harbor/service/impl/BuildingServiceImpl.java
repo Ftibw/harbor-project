@@ -2,6 +2,7 @@ package com.whxm.harbor.service.impl;
 
 import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.service.BuildingService;
 import org.slf4j.Logger;
@@ -143,6 +144,32 @@ public class BuildingServiceImpl implements BuildingService {
 
             ret = Result.build(HttpStatus.INTERNAL_SERVER_ERROR.value(), "建筑数添加报错");
 
+        }
+
+        return ret;
+    }
+
+    @Override
+    public Result addBizBuildings(List<BizBuilding> list) {
+
+        Result ret;
+
+        try {
+            
+            int affectRow = bizBuildingMapper.batchInsert(list);
+
+            logger.info(0 == affectRow ?
+                    "建筑数据 添加失败" :
+                    "建筑数据 成功添加" + affectRow + "行"
+            );
+
+            ret = new Result("建筑数据数据添加了" + affectRow + "行");
+
+        } catch (Exception e) {
+
+            logger.error("建筑数据数据 添加报错", e);
+
+            throw new RuntimeException(e);
         }
 
         return ret;

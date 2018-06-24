@@ -97,7 +97,7 @@
         insert into biz_map (<include refid="Base_Column_List"/>)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{mapId,jdbcType=INTEGER}, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},
+            (null, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},
             #{floorId,jdbcType=INTEGER})
         </foreach>
     </insert>

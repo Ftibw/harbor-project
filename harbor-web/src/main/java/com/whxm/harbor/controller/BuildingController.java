@@ -33,13 +33,13 @@ public class BuildingController {
         return Result.ok(list);
     }
 
-    @ApiOperation("添加建筑")
+    @ApiOperation("批量添加建筑")
     @PostMapping
-    public Result addBizBuilding(BizBuilding bizBuilding) {
+    public Result addBizBuilding(@RequestParam("list") List<BizBuilding> list) {
 
-        Assert.notNull(bizBuilding, "建筑数据不能为空");
+        Assert.notNull(list, "建筑数据不能为空");
 
-        return buildingService.addBizBuilding(bizBuilding);
+        return buildingService.addBizBuildings(list);
     }
 
     @ApiOperation("修改建筑")

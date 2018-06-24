@@ -34,4 +34,6 @@ public interface BizBuildingMapper {
     @ResultMap("BaseResultMap")
     @Select("select * from biz_building where number=#{number}")
     BizBuilding selectByNumber(@Param("number") String number);
+
+    int batchInsert(List<BizBuilding> list);
 }
