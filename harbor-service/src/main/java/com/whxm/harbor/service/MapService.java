@@ -29,6 +29,7 @@ public interface MapService {
 
     /**
      * 获取全部地图数据
+     *
      * @return 全部地图数据
      */
     List<BizMap> getBizMapList();
@@ -56,4 +57,12 @@ public interface MapService {
      * @return 添加操作结果
      */
     Result addBizMap(BizMap bizMap);
+
+    /**
+     * 新增地图数据
+     *
+     * @param list 新地图数据列表
+     * @return 添加操作结果
+     */
+    Result addBizMaps(List<BizMap> list);
 }

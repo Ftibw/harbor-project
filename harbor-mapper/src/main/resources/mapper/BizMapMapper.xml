@@ -92,4 +92,13 @@
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizMap" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <insert id="batchInsert">
+        insert into biz_map (<include refid="Base_Column_List"/>)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{mapId,jdbcType=INTEGER}, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},
+            #{floorId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
 </mapper>

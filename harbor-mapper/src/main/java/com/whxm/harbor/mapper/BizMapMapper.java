@@ -18,4 +18,6 @@ public interface BizMapMapper {
     int updateByPrimaryKey(BizMap record);
 
     List<BizMap> getBizMapList(BizMap condition);
+
+    int batchInsert(List<BizMap> list);
 }

@@ -173,4 +173,31 @@ public class MapServiceImpl implements MapService {
 
         return ret;
     }
+
+    @Override
+    public Result addBizMaps(List<BizMap> list) {
+
+        Result ret;
+
+        try {
+            list.forEach(item -> item.setMapId(Constant.INCREMENT_ID_DEFAULT_VALUE));
+
+            int affectRow = bizMapMapper.batchInsert(list);
+
+            logger.info(0 == affectRow ?
+                    "地图数据 添加失败" :
+                    "地图数据 成功添加" + affectRow + "行"
+            );
+
+            ret = new Result("地图数据数据添加了" + affectRow + "行");
+
+        } catch (Exception e) {
+
+            logger.error("地图数据数据 添加报错", e);
+
+            throw new RuntimeException();
+        }
+
+        return ret;
+    }
 }
