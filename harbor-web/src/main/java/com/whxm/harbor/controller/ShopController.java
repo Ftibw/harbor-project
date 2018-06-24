@@ -45,9 +45,6 @@ public class ShopController {
     private ShopService shopService;
 
     @Autowired
-    private UrlConfig urlConfig;
-
-    @Autowired
     private FileDir fileDir;
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
@@ -273,34 +270,32 @@ public class ShopController {
     public Result addBizShop(@RequestBody ShopParam param, HttpServletRequest request) {
 
         Assert.notNull(param, "参数不能为空");
-        Assert.notNull(param.bizShop, "商铺数据不能为空");
+
+        BizShop bizShop = param.bizShop;
+
+        Assert.notNull(bizShop, "商铺数据不能为空");
 
         List<Map<String, Object>> pictureList = param.pictureList;
 
         //---------------------------------------------------------------------------
+        FtpSession ftpSession = ftpConfig.openSession(true);
+
+        bizShop.setShopLogoPath(ftpSession.clearLocalFileAfterUpload(bizShop.getShopLogoPath(), fileDir.getShopLogoDir(), request));
 
         if (null != pictureList
                 && !pictureList.isEmpty()
                 && !pictureList.get(0).isEmpty()) {
 
-            FtpSession ftpSession = ftpConfig.openSession(true);
-
-            for (Map<String, Object> item : pictureList) {
-                String shopPicturePath = String.valueOf(item.get("shopPicturePath"));
-
-                String ftpFileRelativePath = ftpSession.clearLocalFileAfterUpload(shopPicturePath, fileDir.getShopPictureDir(), request);
-
-                item.put("shopPicturePath", ftpFileRelativePath);
-            }
-
-            ftpConfig.closeSession(ftpSession);
+            pictureList.forEach(item ->
+                    item.put("shopPicturePath", ftpSession.clearLocalFileAfterUpload(String.valueOf(item.get("shopPicturePath")), fileDir.getShopPictureDir(), request)));
         }
+        ftpConfig.closeSession(ftpSession);
         //---------------------------------------------------------------------------
 
         Result ret = null;
 
         try {
-            ret = shopService.addBizShop(param.bizShop, pictureList);
+            ret = shopService.addBizShop(bizShop, pictureList);
 
         } catch (Exception e) {
 

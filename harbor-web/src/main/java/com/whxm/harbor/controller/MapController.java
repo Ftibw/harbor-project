@@ -3,7 +3,9 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -152,9 +154,21 @@ public class MapController {
         return result;
     }
 
+    @Autowired
+    private FtpConfig ftpConfig;
+
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
-    public Result addBizMap(@RequestBody BizMap bizMap) {
+    public Result addBizMap(@RequestBody BizMap bizMap, List<BizMap> list, HttpServletRequest request) {
+
+        //---------------------------------------------------------------------------
+        FtpSession ftpSession = ftpConfig.openSession(true);
+
+        list.forEach(item -> item
+                .setMapImgPath(ftpSession.clearLocalFileAfterUpload(item.getMapImgPath(), fileDir.getMapPictureDir(), request)));
+
+        ftpConfig.closeSession(ftpSession);
+        //---------------------------------------------------------------------------
 
         Result result = null;
         try {

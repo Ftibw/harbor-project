@@ -3,8 +3,10 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -137,10 +139,22 @@ public class ScreensaverMaterialController {
         return ret;
     }
 
+    @Autowired
+    private FtpConfig ftpConfig;
+
     @ApiOperation("添加屏保素材(需授权)")
     @PostMapping("/bizScreensaverMaterial")
-    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
-        //BizScreensaverMaterial bizScreensaverMaterial
+    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list, HttpServletRequest request) {
+
+        //---------------------------------------------------------------------------
+        FtpSession ftpSession = ftpConfig.openSession(true);
+
+        list.forEach(item -> item
+                .setScreensaverMaterialImgPath(ftpSession.clearLocalFileAfterUpload(item.getScreensaverMaterialImgPath(), fileDir.getScreensaverMaterialImgDir(), request)));
+
+        ftpConfig.closeSession(ftpSession);
+        //---------------------------------------------------------------------------
+
         Result ret = null;
         try {
             ret = screensaverMaterialService.addBizScreensaverMaterial(list);

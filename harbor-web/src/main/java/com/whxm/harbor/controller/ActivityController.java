@@ -1,7 +1,9 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
+import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ActivityService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -136,7 +138,7 @@ public class ActivityController {
             @ApiParam(name = "ID", value = "活动的ID", required = true)
                     Integer id
     ) {
-        Assert.notNull(id,"活动ID不能为空");
+        Assert.notNull(id, "活动ID不能为空");
 
         Result result = null;
 
@@ -152,9 +154,20 @@ public class ActivityController {
         return result;
     }
 
+    @Autowired
+    private FtpConfig ftpConfig;
+
     @ApiOperation("添加活动(需授权)")
     @PostMapping(value = "/bizActivity")
-    public Result addBizActivity(@RequestBody BizActivity bizActivity) {
+    public Result addBizActivity(@RequestBody BizActivity bizActivity, HttpServletRequest request) {
+
+        //---------------------------------------------------------------------------
+        FtpSession ftpSession = ftpConfig.openSession(true);
+
+        bizActivity.setActivityLogo(ftpSession.clearLocalFileAfterUpload(bizActivity.getActivityLogo(), fileDir.getActivityLogoDir(), request));
+
+        ftpConfig.closeSession(ftpSession);
+        //---------------------------------------------------------------------------
 
         Result result = null;
         try {
