@@ -16,7 +16,6 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.6</version>
         </dependency>
         <!--commons-lang3 apache工具组件-->
         <dependency>
