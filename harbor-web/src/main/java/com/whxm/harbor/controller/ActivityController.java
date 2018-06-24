@@ -62,7 +62,7 @@ public class ActivityController {
     @PostMapping("/logo")
     public Result uploadLogo(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request, fileDir.getActivityLogoDir());
+        return FileUtils.upload(file, request);
     }
 
     //==========================以下均被拦截============================

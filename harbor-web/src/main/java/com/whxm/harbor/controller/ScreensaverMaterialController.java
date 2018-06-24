@@ -45,22 +45,7 @@ public class ScreensaverMaterialController {
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        Result ret = FileUtils.upload(file, request, fileDir.getScreensaverMaterialImgDir());
-
-        try {
-            Map<String, Object> map = (Map<String, Object>) ret.getData();
-            //判断图片横屏还是竖屏
-            String path = urlConfig.getUrlPrefix() + map.get("filePath");
-
-            String orientation = FileUtils.getImageOrientation(path);
-
-            map.put("imageOrientation", orientation);
-
-        } catch (IOException e) {
-
-            logger.error("屏保素材图片上传报错", e);
-        }
-        return ret;
+        return FileUtils.upload(file, request);
     }
 
     //===============================以下均被拦截===============================

@@ -145,7 +145,9 @@ public class TerminalController {
 
     @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
     @GetMapping("/bizTerminalsNotPublished")
-    public Result getNotPublishedTerminals(@RequestParam("id") Integer id) {
+    public Result getNotPublishedTerminals(
+            @ApiParam(name = "id", value = "屏保的ID", required = true)
+            @RequestParam("id") Integer id) {
 
         Result ret = null;
 

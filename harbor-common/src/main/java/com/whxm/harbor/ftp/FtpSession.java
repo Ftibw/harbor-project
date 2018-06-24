@@ -1,9 +1,9 @@
-package com.whxm.harbor.utils;
+package com.whxm.harbor.ftp;
 
-import com.whxm.harbor.bean.FfpFileInfo;
 import org.apache.commons.net.ftp.*;
-import org.springframework.util.StringUtils;
+import org.springframework.web.context.ContextLoader;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,20 +15,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class FtpUtils {
+public class FtpSession {
 
     private FTPClient ftp;
     private boolean is_connected;
 
-    public FtpUtils() {
+    public FtpSession() {
         ftp = new FTPClient();
         is_connected = false;
     }
 
-    public FtpUtils(int defaultTimeoutSecond, int connectTimeoutSecond, int dataTimeoutSecond) {
+    public FtpSession(int defaultTimeoutSecond, int connectTimeoutSecond, int dataTimeoutSecond) {
         ftp = new FTPClient();
         is_connected = false;
 
@@ -82,14 +83,13 @@ public class FtpUtils {
     /**
      * 相对pwd的文件夹名(支持多级创建)
      *
+     * @param pwd     当前目录
      * @param dirName 文件夹名
      * @return 创建后的文件夹绝对路径
      */
-    public String mkdir(String dirName) throws IOException {
+    public String mkdir(String pwd, String dirName) throws IOException {
 
-        boolean isSuccess = true;
-
-        StringBuilder pathName = new StringBuilder(this.getWorkingDirectory());
+        StringBuilder pathName = new StringBuilder(pwd);
 
         StringTokenizer s = new StringTokenizer(dirName, "/");
 
@@ -100,44 +100,10 @@ public class FtpUtils {
             pathName.append("/").append(s.nextElement());
 
             //没有-p参数,无法跨级创建文件夹...不过优点是仅不存在的目录才创建
-            isSuccess = ftp.doCommand(FTPCmd.MKD.name(), pathName.toString());
+            ftp.doCommand(FTPCmd.MKD.name(), pathName.toString());
+
         }
-        return isSuccess ? pathName.toString() : null;
-    }
-
-    /**
-     * Uploads the file to the FTP server.
-     *
-     * @param ftpFileName server file name (with absolute path)
-     * @param localFile   local file to upload
-     * @throws IOException on I/O errors
-     */
-    public void upload(String ftpFileName, File localFile) throws IOException {
-        // File check.
-        if (!localFile.exists()) {
-            throw new IOException("Can't upload '" + localFile.getAbsolutePath() + "'. This file doesn't exist.");
-        }
-
-        // Upload.
-        InputStream in = null;
-        try {
-
-            // Use passive mode to pass firewalls.
-            ftp.enterLocalPassiveMode();
-
-            in = new BufferedInputStream(new FileInputStream(localFile));
-            if (!ftp.storeFile(ftpFileName, in)) {
-                throw new IOException("Can't upload file '" + ftpFileName + "' to FTP server. Check FTP permissions and path.");
-            }
-
-        } finally {
-            try {
-                if (null != in) {
-                    in.close();
-                }
-            } catch (IOException ignored) {
-            }
-        }
+        return pathName.toString();
     }
 
     /**
@@ -172,7 +138,7 @@ public class FtpUtils {
             if (!ftp.retrieveFile(ftpFileName, out)) {
                 throw new IOException("Error loading file " + ftpFileName + " from FTP server. Check FTP permissions and path.");
             }
-
+            ftp.getReply();
             out.flush();
         } finally {
             if (out != null) {
@@ -222,21 +188,6 @@ public class FtpUtils {
     }
 
     /**
-     * Sends an FTP Server site specific command
-     *
-     * @param args site command arguments
-     * @throws IOException on I/O errors
-     */
-    public void sendSiteCommand(String args) throws IOException {
-        if (ftp.isConnected()) {
-            try {
-                ftp.sendSiteCommand(args);
-            } catch (IOException ex) {
-            }
-        }
-    }
-
-    /**
      * Disconnects from the FTP server
      *
      * @throws IOException on I/O errors
@@ -244,33 +195,9 @@ public class FtpUtils {
     public void disconnect() throws IOException {
 
         if (ftp.isConnected()) {
-            try {
-                ftp.logout();
-                ftp.disconnect();
-                is_connected = false;
-            } catch (IOException ignored) {
-            }
-        }
-    }
-
-    /**
-     * Makes the full name of the file on the FTP server by joining its path and
-     * the local file name.
-     *
-     * @param ftpPath   file path on the server
-     * @param localFile local file
-     * @return full name of the file on the FTP server
-     */
-    public String makeFTPFileName(String ftpPath, File localFile) {
-        if (!StringUtils.hasText(ftpPath)) {
-            return localFile.getName();
-        } else {
-            String path = ftpPath.trim();
-            if (path.charAt(path.length() - 1) != '/') {
-                path = path + "/";
-            }
-
-            return path + localFile.getName();
+            ftp.logout();
+            ftp.disconnect();
+            is_connected = false;
         }
     }
 
@@ -296,91 +223,8 @@ public class FtpUtils {
         try {
             return ftp.printWorkingDirectory();
         } catch (IOException ignored) {
-        }
-
-        return "";
-    }
-
-    /**
-     * Set working directory on ftp server
-     *
-     * @param dir new working directory
-     * @return true, if working directory changed
-     */
-    public boolean setWorkingDirectory(String dir) {
-        if (!is_connected) {
-            return false;
-        }
-
-        try {
-            return ftp.changeWorkingDirectory(dir);
-        } catch (IOException e) {
-        }
-
-        return false;
-    }
-
-    /**
-     * Change working directory on ftp server to parent directory
-     *
-     * @return true, if working directory changed
-     */
-    public boolean setParentDirectory() {
-        if (!is_connected) {
-            return false;
-        }
-
-        try {
-            return ftp.changeToParentDirectory();
-        } catch (IOException e) {
-        }
-
-        return false;
-    }
-
-    /**
-     * Get parent directory name on ftp server
-     *
-     * @return parent directory
-     */
-    public String getParentDirectory() {
-        if (!is_connected) {
             return "";
         }
-
-        String w = getWorkingDirectory();
-        setParentDirectory();
-        String p = getWorkingDirectory();
-        setWorkingDirectory(w);
-
-        return p;
-    }
-
-    /**
-     * Get directory contents on ftp server
-     *
-     * @param filePath directory
-     * @return list of FTPFileInfo structures
-     * @throws IOException
-     */
-    public List<FfpFileInfo> listFiles(String filePath) throws IOException {
-        List<FfpFileInfo> fileList = new ArrayList<FfpFileInfo>();
-
-        // Use passive mode to pass firewalls.
-        ftp.enterLocalPassiveMode();
-        FTPFile[] ftpFiles = ftp.listFiles(filePath);
-        int size = (ftpFiles == null) ? 0 : ftpFiles.length;
-        for (int i = 0; i < size; i++) {
-            FTPFile ftpFile = ftpFiles[i];
-            FfpFileInfo fi = new FfpFileInfo();
-            fi.setName(ftpFile.getName());
-            fi.setSize(ftpFile.getSize());
-            fi.setTimestamp(ftpFile.getTimestamp());
-            fi.setType(ftpFile.isDirectory());
-            fileList.add(fi);
-        }
-
-        return fileList;
     }
 
     /**
@@ -446,5 +290,93 @@ public class FtpUtils {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    /**
+     * Uploads the file to the FTP server.
+     *
+     * @param ftpFileDir server upload directory (with absolute path)
+     * @param localFile  local file to upload
+     * @throws IOException on I/O errors
+     */
+    public String upload(String ftpFileDir, File localFile) throws IOException {
+        // Upload.
+        InputStream in = null;
+        // File check.
+        if (!localFile.exists()) {
+            return "Can't upload '" + localFile.getAbsolutePath() + "'. This file doesn't exist.";
+        }
+        // Use passive mode to pass firewalls.
+        ftp.enterLocalPassiveMode();
+
+        try {
+            in = new BufferedInputStream(new FileInputStream(localFile));
+
+            String fileName = localFile.getName();
+
+            if (!ftp.storeFile(ftpFileDir + "/" + fileName, in)) {
+                return "Can't upload file to directory '" + ftpFileDir + "' on FTP server. Check FTP permissions and path.";
+            }
+            //ftp.getReply();
+            return ftpFileDir + "/" + fileName;
+
+        } finally {
+            try {
+                if (null != in) {
+                    in.close();
+                }
+            } catch (IOException ignored) {
+            }
+        }
+
+    }
+
+    /**
+     * 上传文件到ftp服务器同时清除本地缓存文件
+     *
+     * @param relativeLocalFilePath    本地缓存文件的相对路径(相对于web应用的realPath,结构:web应用的绝对路径--->缓存文件相对web应用的路径)
+     * @param relativeFtpFileDirectory ftp文件的分类存储目录(相对于ftp用户的主目录,结构:主目录--->分类存储目录--->分时存储目录)
+     * @return ftp服务器中上传文件的相对路径(相对于ftp用户的主目录路径, 结构 : 主目录路径 - - - > 文件相对主目录的路径)
+     */
+    public String clearLocalFileAfterUpload(String relativeLocalFilePath, String relativeFtpFileDirectory, HttpServletRequest request) {
+
+        String rootPath = request.getServletContext().getRealPath("/");
+
+        String filePath = rootPath + relativeLocalFilePath;
+
+        File localFile = new File(filePath);
+
+        try {
+            String pwd = this.getWorkingDirectory();
+
+            String ftpDirPath = this.mkdir(pwd, String.format("%s/%tF", relativeFtpFileDirectory, new Date()));
+
+            String ftpFilePath = this.upload(ftpDirPath, localFile);
+
+            String ftpFileRelativePath = ftpFilePath.replaceAll(String.format("^%s/(.*)$", pwd), "$1");
+
+            return ftpFileRelativePath;
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+            return null;
+        } finally {
+            //noinspection ResultOfMethodCallIgnored
+            localFile.delete();
+        }
+    }
+
+    public static void main(String[] args) {
+        Date now = new Date();
+        String format = String.format("%tF %tT", now, now);
+        String format1 = String.format("%tF", now);
+        String format2 = String.format("%s/%tF", "relativeFtpFileDirectory", new Date());
+        String format3 = String.format("^%s/(.*)$", "pwd");
+        System.out.println(format);
+        System.out.println(format1);
+        System.out.println(format2);
+        System.out.println(format3);
     }
 }

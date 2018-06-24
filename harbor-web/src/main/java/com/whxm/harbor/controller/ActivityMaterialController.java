@@ -67,7 +67,7 @@ public class ActivityMaterialController {
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request, fileDir.getActivityMaterialImgDir());
+        return FileUtils.upload(file, request);
     }
 
     //==========================以下均被拦截============================

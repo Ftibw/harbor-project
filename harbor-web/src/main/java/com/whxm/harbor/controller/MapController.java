@@ -62,7 +62,7 @@ public class MapController {
     @PostMapping("/picture")
     public Result uploadMap(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request, fileDir.getMapPictureDir());
+        return FileUtils.upload(file, request);
     }
 
     //==========================以下均被拦截============================

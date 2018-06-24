@@ -1,8 +1,7 @@
 package com.whxm.harbor.conf;
 
-import com.whxm.harbor.utils.FtpUtils;
+import com.whxm.harbor.ftp.FtpSession;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
@@ -15,20 +14,28 @@ public class FtpConfig {
     private int controlPort;
     @Value("${ftp.host}")
     private String host;
-    @Value("ftp.user")
+    @Value("${ftp.user}")
     private String user;
     @Value("${ftp.password}")
     private String password;
 
-    @Bean
-    public FtpUtils getFtpUtils() throws IOException {
+    public FtpSession openSession(boolean isBinaryMode) {
 
-        FtpUtils utils = new FtpUtils(10, 10, 10);
+        FtpSession utils = new FtpSession(10, 10, 10);
 
-        utils.connect(host, controlPort, user, password, false);
-
+        try {
+            utils.connect(host, controlPort, user, password, !isBinaryMode);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return utils;
     }
 
-
+    public void closeSession(FtpSession session) {
+        try {
+            session.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

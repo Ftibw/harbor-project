@@ -1,6 +1,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizScreensaverMaterial;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,6 +26,6 @@ public interface BizScreensaverMaterialMapper {
 
     int batchInsert(List<BizScreensaverMaterial> list);
 
-    @Insert("DELETE FROM screensaver_material_relation WHERE where screensaver_material_id=#{bizScreensaverMaterialId}")
+    @Delete("DELETE FROM screensaver_material_relation WHERE screensaver_material_id=#{bizScreensaverMaterialId}")
     int delScreensaverMaterialRelation(@Param("bizScreensaverMaterialId") Integer bizScreensaverMaterialId);
 }
