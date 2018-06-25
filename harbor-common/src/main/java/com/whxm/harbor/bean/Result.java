@@ -1,57 +1,63 @@
 package com.whxm.harbor.bean;
 
-public class Result {
-    // 响应业务状态
-    private Integer status;
+import com.whxm.harbor.enums.ResultEnum;
 
-    // 响应消息
+
+public class Result {
+
+    private Integer code;
+
     private String msg;
 
-    // 响应中的数据
     private Object data;
 
-    public static Result build(Integer status, String msg, Object data) {
-        return new Result(status, msg, data);
-    }
-
-    public static Result ok(Object data) {
-        return new Result(data);
-    }
-
-    public static Result ok() {
-        return new Result(null);
-    }
-
     public Result() {
-
     }
 
-    public static Result build(Integer status, String msg) {
-        return new Result(status, msg, null);
-    }
-
-    public Result(Integer status, String msg, Object data) {
-        this.status = status;
+    public Result(Integer code, String msg) {
+        this.code = code;
         this.msg = msg;
-        this.data = data;
     }
 
-    public Result(Object data) {
-        this.status = 200;
-        this.msg = "OK";
-        this.data = data;
+    public static Result success() {
+        Result result = new Result();
+        result.setResultEnum(ResultEnum.SUCCESS);
+        return result;
     }
 
-    public Boolean isOK() {
-        return this.status == 200;
+    public static Result success(Object data) {
+        Result result = new Result();
+        result.setResultEnum(ResultEnum.SUCCESS);
+        result.setData(data);
+        return result;
     }
 
-    public Integer getStatus() {
-        return status;
+    public static Result failure(ResultEnum resultEnum) {
+        Result result = new Result();
+        result.setResultEnum(resultEnum);
+        return result;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public static Result failure(ResultEnum resultEnum, Object data) {
+        Result result = new Result();
+        result.setResultEnum(resultEnum);
+        result.setData(data);
+        return result;
+    }
+
+    //=====================================================================
+
+    public void setResultEnum(ResultEnum code) {
+        this.code = code.code();
+        this.msg = code.message();
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public String getMsg() {
@@ -69,5 +75,4 @@ public class Result {
     public void setData(Object data) {
         this.data = data;
     }
-
 }
