@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="074d9578-6aed-4811-958f-c95c8a87790e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java" afterPath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java" />
+      <change beforePath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java" afterPath="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -50,16 +50,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/FileUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26">
-              <caret line="94" column="25" lean-forward="false" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="BizBuildingMapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizBuildingMapper.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -73,28 +63,38 @@
       <file leaf-file-name="TokenInterceptor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1404">
-              <caret line="65" column="48" lean-forward="false" selection-start-line="65" selection-start-column="41" selection-end-line="65" selection-end-column="48" />
+            <state relative-caret-position="189">
+              <caret line="66" column="76" lean-forward="false" selection-start-line="66" selection-start-column="76" selection-end-line="66" selection-end-column="76" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RedisDistributedLock.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Constant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="415">
+              <caret line="23" column="67" lean-forward="true" selection-start-line="23" selection-start-column="67" selection-end-line="23" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedisDistributedLock.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+            <state relative-caret-position="189">
+              <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ActivityController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ActivityController.java">
+      <file leaf-file-name="RedisCommands.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/RedisCommands.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="66" column="29" lean-forward="false" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+            <state relative-caret-position="361">
+              <caret line="37" column="11" lean-forward="false" selection-start-line="37" selection-start-column="11" selection-end-line="37" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -117,10 +117,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="application.yml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="application.yml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1117">
+            <state relative-caret-position="81">
               <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
               <folding />
             </state>
@@ -241,7 +241,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ShopService.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizScreensaverMapper.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/JacksonUtils.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/IPv4Utils.java" />
@@ -292,6 +291,7 @@
         <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java" />
+        <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java" />
       </list>
     </option>
   </component>
@@ -762,13 +762,6 @@
       <workItem from="1529723237413" duration="68198000" />
       <workItem from="1529887671974" duration="451000" />
     </task>
-    <task id="LOCAL-00068" summary="harbor update">
-      <created>1529509820106</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1529509820106</updated>
-    </task>
     <task id="LOCAL-00069" summary="harbor update">
       <created>1529542655627</created>
       <option name="number" value="00069" />
@@ -1105,7 +1098,14 @@
       <option name="project" value="LOCAL" />
       <updated>1529907787464</updated>
     </task>
-    <option name="localTasksCounter" value="117" />
+    <task id="LOCAL-00117" summary="harbor update">
+      <created>1529908136335</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1529908136335</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1141,7 +1141,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="373131000" />
+    <option name="totallyTimeSpent" value="373316000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1275,20 +1275,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizMapMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="21" column="39" lean-forward="false" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizActivityMaterialMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="23" column="52" lean-forward="false" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizActivityMaterialMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="346">
@@ -1618,14 +1604,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1117">
-          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -1649,18 +1627,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/RedisCommands.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1404">
-          <caret line="65" column="48" lean-forward="false" selection-start-line="65" selection-start-column="41" selection-end-line="65" selection-end-column="48" />
+        <state relative-caret-position="361">
+          <caret line="37" column="11" lean-forward="false" selection-start-line="37" selection-start-column="11" selection-end-line="37" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+        <state relative-caret-position="189">
+          <caret line="31" column="21" lean-forward="true" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/interceptor/TokenInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="66" column="76" lean-forward="false" selection-start-line="66" selection-start-column="76" selection-end-line="66" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/constant/Constant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="23" column="67" lean-forward="true" selection-start-line="23" selection-start-column="67" selection-end-line="23" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
           <folding />
         </state>
       </provider>
