@@ -63,6 +63,9 @@
             <if test="bizFormatType != null">
                 biz_format_type = #{bizFormatType,jdbcType=VARCHAR},
             </if>
+            <if test="bizFormatNumber != -1">
+                biz_format_number = #{bizFormatNumber,jdbcType=VARCHAR},
+            </if>
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted,jdbcType=INTEGER},
             </if>
