@@ -304,7 +304,7 @@ public class FtpSession {
         InputStream in = null;
         // File check.
         if (!localFile.exists()) {
-            return "Can't upload '" + localFile.getAbsolutePath() + "'. This file doesn't exist.";
+            throw new IOException("Can't upload '" + localFile.getAbsolutePath() + "'. This file doesn't exist.");
         }
         // Use passive mode to pass firewalls.
         ftp.enterLocalPassiveMode();
@@ -315,7 +315,7 @@ public class FtpSession {
             String fileName = localFile.getName();
 
             if (!ftp.storeFile(ftpFileDir + "/" + fileName, in)) {
-                return "Can't upload file to directory '" + ftpFileDir + "' on FTP server. Check FTP permissions and path.";
+                throw new IOException("Can't upload file to directory '" + ftpFileDir + "' on FTP server. Check FTP permissions and path.");
             }
             //ftp.getReply();
             return ftpFileDir + "/" + fileName;
