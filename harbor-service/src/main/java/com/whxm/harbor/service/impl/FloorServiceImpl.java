@@ -99,9 +99,9 @@ public class FloorServiceImpl implements FloorService {
 
             int affectRow = bizFloorMapper.deleteByPrimaryKey(bizFloorId);
 
-            logger.info(1 == affectRow ? "ID为{}的楼层删除失败" : "ID为{}的楼层删除成功", bizFloorId);
+            logger.info(1 == affectRow ? "ID为{}的楼层删除成功" : "ID为{}的楼层删除失败", bizFloorId);
 
-            ret = new Result("ID为" + bizFloorId + "的楼层 删除了" + affectRow + "行");
+            ret = new Result(String.format("ID为%d的楼层 删除了%d行", bizFloorId, affectRow));
 
         } catch (Exception e) {
 
