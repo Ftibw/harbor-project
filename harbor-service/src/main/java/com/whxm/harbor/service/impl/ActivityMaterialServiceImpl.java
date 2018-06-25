@@ -37,18 +37,10 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
         BizActivityMaterial activityMaterial;
 
-        try {
-            activityMaterial = bizActivityMaterialMapper.selectMaterialWithActivityType(bizActivityMaterialId);
+        activityMaterial = bizActivityMaterialMapper.selectMaterialWithActivityType(bizActivityMaterialId);
 
-            if (null == activityMaterial)
-                logger.info("ID为{}的活动素材不存在", bizActivityMaterialId);
-
-        } catch (Exception e) {
-
-            logger.error("活动素材ID为{}的数据 获取报错", bizActivityMaterialId);
-
-            throw new RuntimeException(e);
-        }
+        if (null == activityMaterial)
+            logger.info("ID为{}的活动素材不存在", bizActivityMaterialId);
 
         return activityMaterial;
     }
