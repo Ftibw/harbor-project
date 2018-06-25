@@ -159,26 +159,25 @@ public class MapController {
 
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
-    public Result addBizMap(@RequestBody List<BizMap> list, HttpServletRequest request) {
+    public Result addBizMap(@RequestBody BizMap bizMap, HttpServletRequest request) {
 
         //---------------------------------------------------------------------------
         FtpSession ftpSession = ftpConfig.openSession(true);
 
-        list.forEach(item -> item
-                .setMapImgPath(ftpSession.clearLocalFileAfterUpload(item.getMapImgPath(), fileDir.getMapPictureDir(), request)));
+        bizMap.setMapImgPath(ftpSession.clearLocalFileAfterUpload(bizMap.getMapImgPath(), fileDir.getMapPictureDir(), request));
 
         ftpConfig.closeSession(ftpSession);
         //---------------------------------------------------------------------------
 
         Result result = null;
         try {
-            result = mapService.addBizMaps(list);
+            result = mapService.addBizMap(bizMap);
 
         } catch (Exception e) {
 
             logger.error("地图数据 添加报错", e);
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图数据 添加报错", list);
+            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图数据 添加报错", bizMap);
         }
         return result;
     }
