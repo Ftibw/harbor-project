@@ -64,7 +64,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     String lockKey = uri + userId + MD5Utils.MD5(params);
 
                     //System.out.println(lockKey);
-                    if (lock.tryAcquire(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
+                    if (lock.lock(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
 
                     else {
                         response.setContentType("text/html;charset=utf-8");
@@ -108,6 +108,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         //System.out.println(lockKey);
 
-        lock.tryRelease(lockKey, token);    //true清除成功/false清除失败
+        lock.unlock(lockKey, token);    //true清除成功/false清除失败
     }*/
 }

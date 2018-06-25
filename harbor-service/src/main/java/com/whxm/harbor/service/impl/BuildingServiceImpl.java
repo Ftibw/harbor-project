@@ -2,7 +2,6 @@ package com.whxm.harbor.service.impl;
 
 import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.service.BuildingService;
 import org.slf4j.Logger;
@@ -46,13 +45,13 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public List<BizBuilding> getBizBuildingList() {
+    public List<BizBuilding> getBizBuildingList(Integer floor) {
 
         List<BizBuilding> list = null;
 
         try {
 
-            list = bizBuildingMapper.getBuildingList();
+            list = bizBuildingMapper.getBuildingList(floor);
 
         } catch (Exception e) {
 

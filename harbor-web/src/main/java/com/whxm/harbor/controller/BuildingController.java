@@ -28,14 +28,14 @@ public class BuildingController {
             @RequestParam(value = "floor", required = false)
                     Integer floor) {
 
-        List<BizBuilding> list = buildingService.getBizBuildingList();
+        List<BizBuilding> list = buildingService.getBizBuildingList(floor);
 
         return Result.ok(list);
     }
 
     @ApiOperation("批量添加建筑")
     @PostMapping
-    public Result addBizBuilding(@RequestParam("list") List<BizBuilding> list) {
+    public Result addBizBuilding(@RequestBody List<BizBuilding> list) {
 
         Assert.notNull(list, "建筑数据不能为空");
 

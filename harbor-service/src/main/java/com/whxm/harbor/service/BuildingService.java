@@ -1,12 +1,9 @@
 package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.BizBuilding;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 建筑服务
@@ -23,9 +20,10 @@ public interface BuildingService {
     /**
      * 获取全部建筑数据
      *
+     * @param floor 楼层ID
      * @return 全部建筑数据
      */
-    List<BizBuilding> getBizBuildingList();
+    List<BizBuilding> getBizBuildingList(Integer floor);
 
     /**
      * 根据ID删除建筑

@@ -20,16 +20,19 @@ public interface BizBuildingMapper {
 
     int updateByPrimaryKey(BizBuilding record);
 
+
+    /*
     @Results(value = {
-            @Result(property = "pageX"
-                    , column = "page_x",
-                    javaType = String.class, jdbcType = JdbcType.VARCHAR),
-            @Result(property = "pageY"
-                    , column = "page_Y",
-                    javaType = String.class, jdbcType = JdbcType.VARCHAR)
+    @Result(property = "pageX"
+    , column = "page_x",
+    javaType = String.class, jdbcType = JdbcType.VARCHAR),
+    @Result(property = "pageY"
+    , column = "page_Y",
+    javaType = String.class, jdbcType = JdbcType.VARCHAR)
     })
     @Select("select * from biz_building")
-    List<BizBuilding> getBuildingList();
+    * */
+    List<BizBuilding> getBuildingList(@Param("floor") Integer floor);
 
     @ResultMap("BaseResultMap")
     @Select("select * from biz_building where number=#{number}")
