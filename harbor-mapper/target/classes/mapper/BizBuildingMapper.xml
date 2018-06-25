@@ -169,7 +169,7 @@
         FROM biz_building
         <where>
             <if test="floor!=null">
-                and floor=#{floor}
+                and layer=#{floor}
             </if>
         </where>
     </select>
