@@ -1,7 +1,7 @@
 spring:
   application:
     name: harbor-web
-  datasource:     #47.94.202.250
+  datasource:
     url: jdbc:mysql://${databasehost:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:47.94.202.250}    #192.168.1.80
+      host: ${redishost:47.94.202.250}
   #配置全局时间返回格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -43,18 +43,10 @@ fileDir:
   shopPictureDir: shopPicture
   screensaverMaterialImgDir: screensaverMaterialPicture
   mapPictureDir: mapPicture
-urlConfig:                          #192.168.1.103
+urlConfig:
   urlPrefix: ${resourceServer:http://47.94.202.250/}
 server:
   port: 9000
-
-#防止表单重复提交
-#1.数据库乐观锁,以前秒杀用过
-#2.redis分布式锁,尝试性使用
-#redis分布式锁的jedis配置
-jedis:
-  host: ${redisHost:47.94.202.250}  #192.168.1.80
-  port: ${redisPort:6379}
 ftp:
   controlPort: 21
   host: 47.94.202.250
