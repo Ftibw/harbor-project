@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
 import redis.clients.util.SafeEncoder;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class RedisDistributedLock {
                     SafeEncoder.encode(String.valueOf(expireTime))
             );
 
-            if (null != ret) logger.info("redis分布式锁加锁{}", new String((byte[]) ret));
+            if (null != ret) logger.info("key为[{}]的redis分布式锁加锁{}", lockKey, new String((byte[]) ret));
 
             return ret != null;
         });
