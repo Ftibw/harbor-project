@@ -155,10 +155,22 @@
         insert into biz_building (<include refid="Base_Column_List"/>)
         values
         <foreach collection="list" item="item" separator=",">
-            (NULL , #{number,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
-            #{color,jdbcType=VARCHAR}, #{layer,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
-            #{width,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{pageX,jdbcType=VARCHAR},
-            #{pageY,jdbcType=VARCHAR})
+            (NULL , #{item.number,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
+            #{item.color,jdbcType=VARCHAR}, #{item.layer,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER},
+            #{item.width,jdbcType=VARCHAR}, #{item.height,jdbcType=VARCHAR}, #{item.pageX,jdbcType=VARCHAR},
+            #{item.pageY,jdbcType=VARCHAR})
         </foreach>
     </insert>
+
+
+    <select id="getBuildingList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM biz_building
+        <where>
+            <if test="floor!=null">
+                and floor=#{floor}
+            </if>
+        </where>
+    </select>
 </mapper>
