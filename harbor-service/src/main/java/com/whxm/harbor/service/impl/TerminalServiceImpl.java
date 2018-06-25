@@ -246,7 +246,7 @@ public class TerminalServiceImpl implements TerminalService {
                         .selectMaterialsByScreensaverId(screensaverId)
                         .forEach(item -> list.add(
                                 new ResultMap<String, Object>(2)
-                                        .build("name", item.getScreensaverMaterialName())
+                                        .build("name", item.getScreensaverMaterialImgName())
                                         .build("url", urlConfig.getUrlPrefix() + item.getScreensaverMaterialImgPath())
                         ));
 
