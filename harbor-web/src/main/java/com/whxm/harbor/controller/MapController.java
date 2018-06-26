@@ -2,9 +2,10 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.MapService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,12 +13,9 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Api(description = "地图服务")
@@ -31,9 +29,6 @@ public class MapController {
     @Autowired
     private MapService mapService;
 
-    @Autowired
-    private FileDir fileDir;
-
     @ApiOperation("终端获取全部地图数据")
     @GetMapping("/maps")
     public ResultMap<String, Object> getBizFormats() {
@@ -43,9 +38,10 @@ public class MapController {
         try {
             List<BizMap> list = mapService.getBizMapList();
 
-            ret.build("data", list);
+            if (null == list || list.isEmpty())
+                throw new DataNotFoundException();
 
-            ret = list.isEmpty() ? ret.build("success", false) : ret.build("success", true);
+            ret.build("data", list).build("success", true);
 
         } catch (Exception e) {
 
@@ -60,9 +56,13 @@ public class MapController {
 
     @ApiOperation("上传地图")
     @PostMapping("/picture")
-    public Result uploadMap(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public Result uploadMap(@RequestParam("file") MultipartFile file) {
 
-        return FileUtils.upload(file, request, fileDir.getMapPictureDir());
+        if (null == file || file.isEmpty()) {
+            throw new ParameterInvalidException("上传的文件是空的");
+        }
+
+        return FileUtils.upload(file, Result::success);
     }
 
     @ApiOperation("根据楼层ID获取地图数据")
@@ -71,62 +71,36 @@ public class MapController {
             @ApiParam(name = "floor", value = "楼层ID", required = true)
             @RequestParam("floor") Integer floor
     ) {
-        Result ret = null;
-        BizMap map = null;
-        try {
-            map = mapService.getBizMap(floor);
 
-            ret = new Result(map);
+        Assert.notNull(floor, "楼层ID不能为空");
 
-        } catch (Exception e) {
+        BizMap bizMap = mapService.getBizMap(floor);
 
-            logger.error("楼层ID为{}的地图数据 获取报错", floor, e);
+        if (null == bizMap)
+            throw new DataNotFoundException();
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + floor + "的地图数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(bizMap);
     }
 
     //==========================以下均被拦截============================
 
     @ApiOperation("获取地图列表(需授权)")
     @GetMapping("/bizMaps")
-    public Result getBizMaps(PageQO<BizMap> pageQO, BizMap condition) {
-        Result ret = null;
+    public Result getBizMaps(PageQO pageQO, BizMap condition) {
 
-        PageVO<BizMap> pageVO = null;
+        PageVO<BizMap> pageVO = mapService.getBizMapList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            pageVO = mapService.getBizMapList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-
-            logger.error("地图列表 获取报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图列表 获取报错", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("修改地图(需授权)")
     @PutMapping("/bizMap")
     public Result updateBizMap(@RequestBody BizMap bizMap) {
-        Result result = null;
-        try {
-            result = mapService.updateBizMap(bizMap);
-        } catch (Exception e) {
 
-            logger.error("地图数据 修改报错", e);
+        Assert.notNull(bizMap, "地图数据不能为空");
+        Assert.isNull(bizMap.getMapId(), "地图ID必须为空");
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图数据 修改报错", bizMap);
-        }
-        return result;
+        return mapService.updateBizMap(bizMap);
     }
 
     @ApiOperation("删除地图(需授权)")
@@ -135,41 +109,19 @@ public class MapController {
             @ApiParam(name = "ID", value = "地图的ID", required = true)
                     Integer id
     ) {
-
         Assert.notNull(id, "地图ID不能为空");
 
-        Result result = null;
-
-        try {
-            result = mapService.deleteBizMap(id);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的地图数据 删除报错", id, e);
-
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的地图数据 删除报错", Constant.NO_DATA);
-        }
-        return result;
+        return mapService.deleteBizMap(id);
     }
 
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
     public Result addBizMap(@RequestBody BizMap bizMap) {
 
-        Assert.notNull(bizMap,"地图数据不能为空");
+        Assert.notNull(bizMap, "地图数据不能为空");
 
-        Assert.isNull(bizMap.getMapId(),"ID必须为空");
+        Assert.isNull(bizMap.getMapId(), "ID必须为空");
 
-        Result result = null;
-        try {
-            result = mapService.addBizMap(bizMap);
-
-        } catch (Exception e) {
-
-            logger.error("地图数据 添加报错", e);
-
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图数据 添加报错", bizMap);
-        }
-        return result;
+        return mapService.addBizMap(bizMap);
     }
 }

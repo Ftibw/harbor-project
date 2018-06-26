@@ -5,18 +5,16 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.UserService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.MD5Utils;
 import com.whxm.harbor.utils.TokenUtils;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -30,8 +28,6 @@ import static com.whxm.harbor.utils.TokenUtils.order;
 @RequestMapping("/user")
 @MyApiResponses
 public class UserController {
-
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -47,23 +43,11 @@ public class UserController {
                     @ApiImplicitParam(name = "userWechat", value = "用户微信", dataType = "String")
             }
     )*/
-    public Result getUsers(PageQO<User> pageQO, User condition) {
+    public Result getUsers(PageQO pageQO, User condition) {
 
-        Result ret = null;
+        PageVO<User> pageVO = userService.getUserList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<User> pageVO = userService.getUserList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("用户列表 获取报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户列表 获取报错", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("获取用户(需授权)")
@@ -72,34 +56,26 @@ public class UserController {
             @ApiParam(name = "ID", value = "用户的ID", required = true)
             @PathVariable("ID") String userId
     ) {
-        Result ret = null;
-        User user = null;
-        try {
-            user = userService.getUser(userId);
 
-            ret = new Result(user);
+        Assert.notNull(userId, "用户ID不能为空");
 
-        } catch (Exception e) {
-            logger.error("ID为{}的用户数据 获取报错", userId, e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + userId + "的用户数据 获取报错", null);
-        }
+        User user = userService.getUser(userId);
 
-        return ret;
+        if (null == user)
+            throw new DataNotFoundException();
+
+        return Result.success(user);
     }
 
     @ApiOperation("修改用户(需授权)")
     @PutMapping("/user")
     public Result updateUser(@RequestBody User user) {
-        Result ret = null;
-        try {
-            ret = userService.updateUser(user);
-        } catch (Exception e) {
 
-            logger.error("用户数据 修改报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户数据 修改报错", user);
-        }
 
-        return ret;
+        Assert.notNull(user, "用户数据不能为空");
+        Assert.notNull(user.getUserId(), "用户ID不能为空");
+
+        return userService.updateUser(user);
     }
 
     @ApiOperation("删除用户(需授权)")
@@ -108,17 +84,9 @@ public class UserController {
             @ApiParam(name = "ID", value = "用户的ID", required = true)
                     String id
     ) {
-        Result ret = null;
-        try {
-            ret = userService.deleteUser(id);
-        } catch (Exception e) {
+        Assert.notNull(id, "用户ID不能为空");
 
-            logger.error("ID为{}的用户数据 删除报错", id, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的用户数据 删除报错", null);
-        }
-
-        return ret;
+        return userService.deleteUser(id);
     }
 
     @ApiOperation("添加用户(需授权)")
@@ -126,23 +94,14 @@ public class UserController {
     public Result addUser(@RequestBody User user) {
 
         Assert.notNull(user, "用户数据为空");
+        Assert.isNull(user.getUserId(), "用户ID必须为空");
         Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
         Assert.notNull(user.getUserPassword(), "用户密码不能为空");
 
-        Result ret = null;
+        //32位加密
+        user.setUserPassword(MD5Utils.MD5(user.getUserPassword()));
 
-        try {
-            //32位加密
-            user.setUserPassword(MD5Utils.MD5(user.getUserPassword()));
-
-            ret = userService.addUser(user);
-
-        } catch (Exception e) {
-            logger.error("用户数据 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户数据 添加报错", user);
-        }
-        return ret;
+        return userService.addUser(user);
     }
 
 
@@ -153,75 +112,64 @@ public class UserController {
     @PostMapping("/login")
     public Result userLogin(@RequestBody User user) {
 
-        Result ret = null;
-
-        if (null == user.getUserLoginname()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户名不能为空", Constant.NO_DATA);
-        }
-
-        if (null == user.getUserPassword()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户密码不能为空", Constant.NO_DATA);
-        }
+        Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
+        Assert.notNull(user.getUserPassword(), "用户密码不能为空");
 
         User info = userService.login(user);
 
-        if (null != info) {
+        if (null == info)
+            throw new DataNotFoundException("该用户不存在");
 
-            String userId = info.getUserId();
+        String userId = info.getUserId();
 
-            //设置String序列化器
-            StringRedisSerializer serializer = new StringRedisSerializer();
+        //设置String序列化器
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
 
-            redisTemplate.setKeySerializer(serializer);
+        redisTemplate.setKeySerializer(serializer);
 
-            redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setValueSerializer(serializer);
 
-            synchronized (UserController.class) {
-                String oldSalt = (String) redisTemplate.boundValueOps(userId).get();
+        //----------------已登录过的放行-------------------
+        synchronized (UserController.class) {
 
-                if (null != oldSalt) {
+            String oldSalt = (String) redisTemplate.boundValueOps(userId).get();
 
-                    //发送推送消息给已登录用户是否确认允许登录
+            if (null != oldSalt) {
 
-                    return new Result(chaos(userId, oldSalt));
-                }
+                //发送推送消息给已登录用户是否确认允许登录
+
+                return Result.success(chaos(userId, oldSalt));
             }
+        }
+        //----------------验证成功的放行-------------------
+        if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
 
-            if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
 
+            String salt = UUID.randomUUID().toString().replace("-", "");
 
-                String salt = UUID.randomUUID().toString().replace("-", "");
+            //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
+            redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
 
-                //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
-                redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
+            //redisTemplate.boundHashOps(userId).put("salt",salt);
+            //redisTemplate.boundHashOps(userId).put("user",JacksonUtils.toJSon(info));
+            //redisTemplate.boundHashOps(userId).expire(2, TimeUnit.HOURS);
 
-                //redisTemplate.boundHashOps(userId).put("salt",salt);
-                //redisTemplate.boundHashOps(userId).put("user",JacksonUtils.toJSon(info));
-                //redisTemplate.boundHashOps(userId).expire(2, TimeUnit.HOURS);
-
-                //将userId和盐搅拌生成token
-                ret = new Result(chaos(userId, salt));
-
-            } else
-
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "密码错误", Constant.NO_DATA);
-        } else {
-
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "该用户不存在", Constant.NO_DATA);
+            //将userId和盐搅拌生成token
+            return Result.success(chaos(userId, salt));
         }
 
-        return ret;
+        return Result.failure(ResultEnum.USER_LOGIN_ERROR);
+
     }
 
     @ApiOperation("刷新token(需授权)")
     @GetMapping("/token")
     public Result token(
             @ApiParam(name = "token", value = "token值", required = true) String token) {
-        Result ret = null;
 
         if (token != null && 64 == token.length()) {
             //设置String序列化器
-            StringRedisSerializer serializer = new StringRedisSerializer();
+            RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
 
             redisTemplate.setKeySerializer(serializer);
 
@@ -238,36 +186,25 @@ public class UserController {
 
                 redisTemplate.boundValueOps(userId).set(newSalt, 2, TimeUnit.HOURS);
 
-                ret = new Result(chaos(userId, newSalt));
+                return Result.success(chaos(userId, newSalt));
 
-            } else
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "token无效", Constant.NO_DATA);
-        } else
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "未登陆", Constant.NO_DATA);
+            }
+        }
 
-        return ret;
+        return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
 
     @ApiOperation("用户登出(需授权)")
     @GetMapping("/logout")
     public Result logout(@ApiParam(name = "token", value = "token值", required = true) String token) {
-        Result ret = null;
 
-        try {
-            if (token != null && 64 == token.length()) {
+        if (token != null && 64 == token.length()) {
 
-                redisTemplate.delete(order(token));
+            redisTemplate.delete(order(token));
 
-                ret = new Result("登出成功");
-            }
-
-        } catch (Exception e) {
-
-            logger.error("登出报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登出报错", Constant.NO_DATA);
+            return Result.success("登出成功");
         }
 
-        return ret;
+        return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
 }

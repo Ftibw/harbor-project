@@ -16,11 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -67,7 +62,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public PageVO<BizShop> getBizShopList(PageQO<BizShop> pageQO) {
+    public PageVO<BizShop> getBizShopList(PageQO pageQO, BizShop condition) {
 
         PageVO<BizShop> pageVO;
 

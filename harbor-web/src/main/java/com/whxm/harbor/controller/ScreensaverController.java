@@ -5,19 +5,15 @@ import com.whxm.harbor.bean.BizScreensaver;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.ScreensaverService;
+import com.whxm.harbor.utils.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
 
 @Api(description = "屏保服务")
 @RestController
@@ -25,31 +21,16 @@ import java.util.*;
 @MyApiResponses
 public class ScreensaverController {
 
-    private final Logger logger = LoggerFactory.getLogger(ScreensaverController.class);
-
     @Autowired
     private ScreensaverService screensaverService;
 
     @ApiOperation("获取屏保列表(需授权)")
     @GetMapping("/bizScreensavers")
-    public Result bizScreensaverList(PageQO<BizScreensaver> pageQO, BizScreensaver condition) {
+    public Result bizScreensaverList(PageQO pageQO, BizScreensaver condition) {
 
-        Result ret = null;
+        PageVO<BizScreensaver> pageVO = screensaverService.getBizScreensaverList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<BizScreensaver> pageVO = screensaverService.getBizScreensaverList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("屏保列表 获取报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保列表 获取报错", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("获取屏保(需授权)")
@@ -58,37 +39,25 @@ public class ScreensaverController {
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
             @RequestParam("id") Integer id
     ) {
-        Result ret;
 
-        try {
-            BizScreensaver screensaver = screensaverService.getBizScreensaver(id);
+        Assert.notNull(id, "屏保的ID不能为空");
 
-            ret = new Result(screensaver);
+        BizScreensaver screensaver = screensaverService.getBizScreensaver(id);
 
-        } catch (Exception e) {
+        if (null == screensaver)
+            throw new DataNotFoundException();
 
-            logger.error("ID为{}的屏保数据 获取报错", id, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(screensaver);
     }
 
     @ApiOperation("修改屏保(需授权)")
     @PutMapping("/bizScreensaver")
     public Result updateBizScreensaver(@RequestBody BizScreensaver bizScreensaver) {
 
-        Result ret = null;
-        try {
-            ret = screensaverService.updateBizScreensaver(bizScreensaver);
-        } catch (Exception e) {
-            logger.error("屏保数据 修改报错", e);
+        Assert.notNull(bizScreensaver, "屏保数据不能为空");
+        Assert.isNull(bizScreensaver.getScreensaverId(), "屏保ID必须为空");
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保数据 修改报错", bizScreensaver);
-        }
-
-        return ret;
+        return screensaverService.updateBizScreensaver(bizScreensaver);
     }
 
     @ApiOperation("删除屏保(需授权)")
@@ -97,39 +66,21 @@ public class ScreensaverController {
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
                     Integer id
     ) {
-        Result ret = null;
+        Assert.notNull(id, "屏保的ID不能为空");
 
-        try {
-            ret = screensaverService.deleteBizScreensaver(id);
-        } catch (Exception e) {
-            logger.error("ID{}的屏保数据 删除报错", id, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的屏保 删除报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return screensaverService.deleteBizScreensaver(id);
     }
 
     @ApiOperation("添加屏保(需授权)")
     @PostMapping("/bizScreensaver")
     public Result addBizScreensaver(@RequestBody ScreensaverParam param) {
 
-        if (Objects.isNull(param.bizScreensaver) || Objects.isNull(param.screensaverMaterialIds)) {
+        Assert.notNull(param, "参数不能为空");
+        Assert.notNull(param.bizScreensaver, "屏保数据不能为空");
+        Assert.isNull(param.bizScreensaver.getScreensaverId(), "屏保ID必须为空");
+        Assert.notNull(param.screensaverMaterialIds, "屏保材料ID集合不能为空");
 
-            return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
-                    "参数不能为null", Constant.NO_DATA);
-        }
-
-        Result ret = null;
-        try {
-            ret = screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds);
-
-        } catch (Exception e) {
-            logger.error("屏保 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保 添加报错", param);
-        }
-        return ret;
+        return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds);
     }
 
     @ApiOperation(value = "发布屏保(需授权)",
@@ -137,28 +88,11 @@ public class ScreensaverController {
     @PostMapping("/publishedScreensaver")
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
 
-        if (Objects.isNull(param.screensaverId) || Objects.isNull(param.terminalIds)) {
+        Assert.notNull(param, "参数不能为空");
+        Assert.notNull(param.screensaverId, "屏保ID不能为空");
+        Assert.notNull(param.terminalIds, "终端ID集合不能为空");
 
-            logger.info("输入参数不能为null,param:{{}}",
-                    "screensaverId:" + param.screensaverId + "," +
-                            "terminalIds:" + Arrays.toString(param.terminalIds));
-
-            return new Result(HttpStatus.NOT_ACCEPTABLE.value(),
-                    "参数不能为null", param);
-        }
-
-        Result ret = null;
-
-        try {
-            ret = screensaverService.publishScreensaver(param.screensaverId, param.terminalIds);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的屏保 发布报错", param.screensaverId);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保 发布报错", param);
-        }
-        return ret;
+        return screensaverService.publishScreensaver(param.screensaverId, param.terminalIds);
     }
 }
 

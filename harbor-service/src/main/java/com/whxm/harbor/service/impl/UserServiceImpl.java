@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageVO<User> getUserList(PageQO<User> pageQO) {
+    public PageVO<User> getUserList(PageQO pageQO, User condition) {
 
         PageVO<User> pageVO;
 

@@ -55,7 +55,7 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public PageVO<BizTerminal> getBizTerminalList(PageQO<BizTerminal> pageQO) {
+    public PageVO<BizTerminal> getBizTerminalList(PageQO pageQO, BizTerminal condition) {
 
         PageVO<BizTerminal> pageVO;
         try {
@@ -149,7 +149,7 @@ public class TerminalServiceImpl implements TerminalService {
         int affectRow = 0;
 
         try {
-            bizTerminal.setIsTerminalOnline(Constant.DISENABLED_STATUS);
+            bizTerminal.setIsTerminalOnline(Constant.DISABLED_STATUS);
 
             bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
             //使用终端的类型(二维码/横屏/竖屏)来判断平台0/1/2

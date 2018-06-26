@@ -4,20 +4,19 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.IPv4Utils;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +42,9 @@ public class TerminalController {
             @ApiParam(name = "os", value = "终端类型(1=android,2=windows)", required = true)
                     Integer os
     ) {
+
+        Assert.notNull(sn, "终端编号不能为空");
+        Assert.notNull(os, "终端类型不能为空");
 
         ResultMap<String, Object> ret = new ResultMap<>(3);
 
@@ -113,32 +115,18 @@ public class TerminalController {
             @ApiParam(name = "sn", value = "终端编号")
             @RequestParam("sn") String terminalNumber) {
 
-        Assert.notNull(terminalNumber, "终端编号为空");
+        Assert.notNull(terminalNumber, "终端编号不能为空");
 
         return terminalVisitService.updateTerminalVisit(terminalNumber);
     }
 
     @ApiOperation(value = "获取终端访问数据列表")
     @GetMapping("/visits")
-    public Result getTerminalVisitList(PageQO<BizTerminal> pageQO, BizTerminal condition) {
+    public Result getTerminalVisitList(PageQO pageQO, BizTerminal condition) {
 
-        Result ret = null;
+        PageVO<TerminalVisit> pageVO = terminalVisitService.getTerminalVisitList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<TerminalVisit> pageVO = terminalVisitService.getTerminalVisitList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-
-            logger.error("终端访问数据列表 获取错误", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端访问数据列表 获取错误", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     //==========================以下均被拦截============================
@@ -149,43 +137,25 @@ public class TerminalController {
             @ApiParam(name = "id", value = "屏保的ID", required = true)
             @RequestParam("id") Integer id) {
         //BizTerminal condition
-        Result ret = null;
 
-        try {
-            //List<BizTerminal> list = terminalService.getNotPublishedTerminal(condition);
-            List<BizTerminal> list = terminalService.getNotPublishedTerminal(id);
+        Assert.notNull(id, "屏保的ID不能为空");
 
-            ret = new Result(list);
+        //List<BizTerminal> list = terminalService.getNotPublishedTerminal(condition);
+        List<BizTerminal> list = terminalService.getNotPublishedTerminal(id);
 
-        } catch (Exception e) {
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            logger.error("无屏保的终端列表查询报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "无屏保的终端列表查询失败", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(list);
     }
 
     @ApiOperation("获取终端列表(需授权)")
     @GetMapping("/bizTerminals")
-    public Result getBizTerminals(PageQO<BizTerminal> pageQO, BizTerminal condition) {
+    public Result getBizTerminals(PageQO pageQO, BizTerminal condition) {
 
-        Result ret = null;
+        PageVO<BizTerminal> pageVO = terminalService.getBizTerminalList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<BizTerminal> pageVO = terminalService.getBizTerminalList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("终端列表 获取报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端列表 获取报错", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("获取终端(需授权)")
@@ -194,37 +164,24 @@ public class TerminalController {
             @ApiParam(name = "ID", value = "终端的ID", required = true)
             @PathVariable("ID") String terminalId
     ) {
-        Result ret = null;
-        BizTerminal terminal = null;
-        try {
-            terminal = terminalService.getBizTerminal(terminalId);
+        Assert.notNull(terminalId, "终端的ID不能为空");
 
-            ret = new Result(terminal);
+        BizTerminal terminal = terminalService.getBizTerminal(terminalId);
 
-        } catch (Exception e) {
+        if (null == terminal)
+            throw new DataNotFoundException();
 
-            logger.error("ID为{}的终端数据 获取报错", terminalId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + terminalId + "的终端数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(terminal);
     }
 
     @ApiOperation("修改终端(需授权)")
     @PutMapping("/bizTerminal")
     public Result updateBizTerminal(@RequestBody BizTerminal bizTerminal) {
-        Result ret = null;
-        try {
-            ret = terminalService.updateBizTerminal(bizTerminal);
-        } catch (Exception e) {
 
-            logger.error("终端数据 修改报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端数据 修改报错", bizTerminal);
-        }
+        Assert.notNull(bizTerminal, "终端的数据不能为空");
+        Assert.notNull(bizTerminal.getTerminalId(), "终端的ID不能为空");
 
-        return ret;
+        return terminalService.updateBizTerminal(bizTerminal);
     }
 
     @ApiOperation("删除终端(需授权)")
@@ -233,39 +190,22 @@ public class TerminalController {
             @ApiParam(name = "ID", value = "终端的ID", required = true)
                     String id
     ) {
-        Result ret = null;
-        try {
-            ret = terminalService.deleteBizTerminal(id);
-        } catch (Exception e) {
 
-            logger.error("ID为{}的终端数据 删除报错", id, e);
+        Assert.notNull(id, "终端的ID不能为空");
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + id + "的终端数据 删除报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return terminalService.deleteBizTerminal(id);
     }
 
     @ApiOperation("添加终端(需授权)")
     @PostMapping("/bizTerminal")
     public Result addBizTerminal(@RequestBody BizTerminal bizTerminal, HttpServletRequest request) {
 
-        Result ret = null;
+        Assert.notNull(bizTerminal, "终端的数据不能为空");
+        Assert.isNull(bizTerminal.getTerminalId(), "终端的ID必须为空");
 
-        try {
-            bizTerminal.setTerminalIp(IPv4Utils.getIpAddress(request));
+        bizTerminal.setTerminalIp(IPv4Utils.getIpAddress(request));
 
-            ret = terminalService.addBizTerminal(bizTerminal);
-
-        } catch (Exception e) {
-
-            logger.error("终端 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "终端 添加报错", bizTerminal);
-        }
-
-        return ret;
+        return terminalService.addBizTerminal(bizTerminal);
     }
 
 }

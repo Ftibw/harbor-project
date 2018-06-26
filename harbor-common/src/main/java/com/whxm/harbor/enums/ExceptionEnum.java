@@ -13,7 +13,7 @@ public enum ExceptionEnum {
     /**
      * 数据未找到
      */
-    NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultEnum.RESULE_DATA_NONE),
+    NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultEnum.RESULT_DATA_NONE),
 
     /**
      * 数据已存在
@@ -33,7 +33,7 @@ public enum ExceptionEnum {
     /**
      * 远程访问时错误
      */
-    REMOTE_ACCESS_ERROR(RemoteAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR, ResultEnum.INTERFACE_OUTTER_INVOKE_ERROR),
+    REMOTE_ACCESS_ERROR(RemoteAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR, ResultEnum.INTERFACE_OUTER_INVOKE_ERROR),
 
     /**
      * 系统内部错误

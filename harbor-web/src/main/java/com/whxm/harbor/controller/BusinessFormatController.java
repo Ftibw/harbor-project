@@ -3,7 +3,9 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.BusinessFormatService;
+import com.whxm.harbor.utils.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,9 +37,10 @@ public class BusinessFormatController {
         try {
             List<BizFormat> list = businessFormatService.getBizFormatList();
 
-            ret.build("data", list);
+            if (null == list || list.isEmpty())
+                throw new DataNotFoundException();
 
-            ret = list.isEmpty() ? ret.build("success", false) : ret.build("success", true);
+            ret.build("data", list).build("success", true);
 
         } catch (Exception e) {
 
@@ -53,92 +56,40 @@ public class BusinessFormatController {
 
     @ApiOperation("获取后台业态列表(需授权)")
     @GetMapping("/bizFormats")
-    public Result getBizFormats(PageQO<BizFormat> pageQO, BizFormat condition) {
-        Result ret = null;
+    public Result getBizFormats(PageQO pageQO, BizFormat condition) {
 
-        try {
-            pageQO.setCondition(condition);
+        PageVO<BizFormat> pageVO = businessFormatService.getBizFormatList(pageQO, condition);
 
-            PageVO<BizFormat> pageVO = businessFormatService.getBizFormatList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-
-            logger.error("业态列表 获取报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "业态列表 获取报错", pageQO);
-        }
-
-        return ret;
-    }
-
-    @ApiOperation("获取业态(需授权)")
-    @GetMapping("/bizFormat/{ID}")
-    public Result getBizFormat(@PathVariable("ID") Integer bizFormatId) {
-        Result ret = null;
-
-        try {
-            BizFormat bizFormat = businessFormatService.getBizFormat(bizFormatId);
-
-            ret = new Result(bizFormat);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的业态数据 获取报错", bizFormatId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + bizFormatId + "的业态数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("新增业态(需授权)")
     @PostMapping("/bizFormat")
     public Result addBizFormat(@RequestBody BizFormat bizFormat) {
-        Result ret = null;
-        try {
-            ret = businessFormatService.addBizFormat(bizFormat);
 
-        } catch (Exception e) {
+        Assert.notNull(bizFormat, "业态数据不能为空");
+        Assert.isNull(bizFormat.getBizFormatId(), "业态ID必须为空");
 
-            logger.error("业态数据 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "业态数据 添加报错", bizFormat);
-
-        }
-        return ret;
+        return businessFormatService.addBizFormat(bizFormat);
     }
 
     @ApiOperation("修改业态(需授权)")
     @PutMapping("/bizFormat")
     public Result updateBizFormat(@RequestBody BizFormat bizFormat) {
-        Result ret = null;
-        try {
-            ret = businessFormatService.updateBizFormat(bizFormat);
 
-        } catch (Exception e) {
+        Assert.notNull(bizFormat, "业态数据不能为空");
+        Assert.notNull(bizFormat.getBizFormatId(), "业态ID不能为空");
 
-            logger.error("", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "业态数据 修改报错", bizFormat);
-        }
-        return ret;
+        return businessFormatService.updateBizFormat(bizFormat);
     }
 
     @ApiOperation("删除业态(需授权)")
     @DeleteMapping("/bizFormat")
     public Result delBizFormat(@ApiParam(name = "ID", value = "业态ID", required = true)
                                        Integer id) {
-        Result ret = null;
-        try {
-            ret = businessFormatService.deleteBizFormat(id);
-        } catch (Exception e) {
 
-            logger.error("ID为{}的业态数据 删除报错", e);
+        Assert.notNull(id, "业态ID不能为空");
 
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的业态数据 删除报错", Constant.NO_DATA);
-        }
-        return ret;
+        return businessFormatService.deleteBizFormat(id);
     }
 }

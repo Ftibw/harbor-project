@@ -22,9 +22,10 @@ public interface ShopService {
      * 获取商铺列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<BizShop> getBizShopList(PageQO<BizShop> pageQO);
+    PageVO<BizShop> getBizShopList(PageQO pageQO, BizShop condition);
 
 
     /**

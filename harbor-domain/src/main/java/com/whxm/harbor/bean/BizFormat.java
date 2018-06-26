@@ -3,7 +3,6 @@ package com.whxm.harbor.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BizFormat {
-
     private Integer bizFormatId;
 
     private String bizFormatNumber;

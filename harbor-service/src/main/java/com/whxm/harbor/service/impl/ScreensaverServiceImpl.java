@@ -47,7 +47,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
     }
 
     @Override
-    public PageVO<BizScreensaver> getBizScreensaverList(PageQO<BizScreensaver> pageQO) {
+    public PageVO<BizScreensaver> getBizScreensaverList(PageQO pageQO, BizScreensaver condition) {
 
         PageVO<BizScreensaver> pageVO;
 

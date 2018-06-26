@@ -6,22 +6,23 @@ import java.util.List;
 public enum ResultEnum {
 
     /**
-    当GET, PUT和PATCH请求成功时，要返回对应的数据，及状态码200，即SUCCESS
-    当POST创建数据成功时，要返回创建的数据，及状态码201，即CREATED
-    当DELETE删除数据成功时，不返回数据，状态码要返回204，即NO CONTENT
-    当GET 不到数据时，状态码要返回404，即NOT FOUND
-    任何时候，如果请求有问题，如校验请求数据时发现错误，要返回状态码 400，即BAD REQUEST
-    当API 请求需要用户认证时，如果request中的认证信息不正确，要返回状态码 401，即NOT AUTHORIZED
-    当API 请求需要验证用户权限时，如果当前用户无相应权限，要返回状态码 403，即FORBIDDEN
-    */
+     * 当GET, PUT和PATCH请求成功时，要返回对应的数据，及状态码200，即SUCCESS
+     * 当POST创建数据成功时，要返回创建的数据，及状态码201，即CREATED
+     * 当DELETE删除数据成功时，不返回数据，状态码要返回204，即NO CONTENT
+     * 当GET 不到数据时，状态码要返回404，即NOT FOUND
+     * 任何时候，如果请求有问题，如校验请求数据时发现错误，要返回状态码 400，即BAD REQUEST
+     * 当API 请求需要用户认证时，如果request中的认证信息不正确，要返回状态码 401，即NOT AUTHORIZED
+     * 当API 请求需要验证用户权限时，如果当前用户无相应权限，要返回状态码 403，即FORBIDDEN
+     */
     /* 成功状态码 */
-    SUCCESS(1, "成功"),
     //GET, PUT和PATCH
-    OK(200, "OK"),
+    OK(200, "成功"),
     //POST
-    CREATED(201, "Created"),
+    CREATED(201, "创建完成"),
     //DELETE
-    NO_CONTENT(204, "No Content"),
+    NO_CONTENT(204, "无数据"),
+
+    SUCCESS(1, "成功"),
 
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
@@ -38,6 +39,7 @@ public enum ResultEnum {
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
+    OPERATION_LOGIC_ERROR(30002, "被操作数据的逻辑出现问题"),
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

@@ -23,9 +23,10 @@ public interface MapService {
      * 获取地图列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<BizMap> getBizMapList(PageQO<BizMap> pageQO);
+    PageVO<BizMap> getBizMapList(PageQO pageQO, BizMap condition);
 
     /**
      * 获取全部地图数据

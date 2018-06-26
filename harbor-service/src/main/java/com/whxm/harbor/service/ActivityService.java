@@ -25,7 +25,7 @@ public interface ActivityService {
      * @param pageQO
      * @return list
      */
-    PageVO<BizActivity> getBizActivityList(PageQO<BizActivity> pageQO);
+    PageVO<BizActivity> getBizActivityList(PageQO pageQO, BizActivity condition);
 
     /**
      * 获取所有活动数据

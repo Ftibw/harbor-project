@@ -2,7 +2,6 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.TerminalVisitMapper;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -78,7 +76,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
     }
 
     @Override
-    public PageVO<TerminalVisit> getTerminalVisitList(PageQO<BizTerminal> pageQO) {
+    public PageVO<TerminalVisit> getTerminalVisitList(PageQO pageQO) {
 
         PageVO<TerminalVisit> pageVO;
 

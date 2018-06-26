@@ -21,9 +21,10 @@ public interface TerminalVisitService {
      * 获取终端访问列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<TerminalVisit> getTerminalVisitList(PageQO<BizTerminal> pageQO);
+    PageVO<TerminalVisit> getTerminalVisitList(PageQO pageQO, BizTerminal condition);
 
     /**
      * 获取全部终端访问数据

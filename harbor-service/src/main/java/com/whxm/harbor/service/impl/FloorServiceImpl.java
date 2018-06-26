@@ -7,11 +7,12 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.FloorService;
 import com.whxm.harbor.mapper.BizFloorMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,25 +50,22 @@ public class FloorServiceImpl implements FloorService {
     }
 
     @Override
-    public PageVO<BizFloor> getBizFloorList(PageQO<BizFloor> pageQO) {
+    public PageVO<BizFloor> getBizFloorList(PageQO pageQO, BizFloor condition) {
 
         PageVO<BizFloor> pageVO;
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        pageVO = new PageVO<>(pageQO);
 
-            pageVO.setList(bizFloorMapper.getBizFloorList(pageQO.getCondition()));
+        List<BizFloor> list = bizFloorMapper.getBizFloorList(condition);
 
-            pageVO.setTotal(page.getTotal());
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-        } catch (Exception e) {
+        pageVO.setList(list);
 
-            logger.error("楼层列表获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -75,117 +73,51 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public List<BizFloor> getBizFloorList() {
 
-        List<BizFloor> list;
-
-        try {
-            list = bizFloorMapper.getBizFloorList((BizFloor) Constant.DEFAULT_QUERY_CONDITION);
-
-        } catch (Exception e) {
-
-            logger.error("楼层数据列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return list;
+        return bizFloorMapper.getBizFloorList((BizFloor) Constant.DEFAULT_QUERY_CONDITION);
     }
 
     @Override
     public Result deleteBizFloor(Integer bizFloorId) {
 
-        Result ret;
+        int affectRow = bizFloorMapper.deleteByPrimaryKey(bizFloorId);
 
-        try {
-
-            int affectRow = bizFloorMapper.deleteByPrimaryKey(bizFloorId);
-
-            logger.info(1 == affectRow ? "ID为{}的楼层删除成功" : "ID为{}的楼层删除失败", bizFloorId);
-
-            ret = new Result(String.format("ID为%d的楼层 删除了%d行", bizFloorId, affectRow));
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的楼层 删除报错", bizFloorId, e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的楼层,无法删除", bizFloorId))
+                : Result.success(ResultEnum.NO_CONTENT);
     }
 
     @Override
     public Result updateBizFloor(BizFloor bizFloor) {
 
-        Result ret;
+        int affectRow = bizFloorMapper.updateByPrimaryKeySelective(bizFloor);
 
-        if (null == bizFloor) {
-
-            return new Result("楼层数据为空");
-
-        } else if (null == bizFloor.getFloorId()) {
-
-            return new Result("该楼层不存在");
-        }
-
-        try {
-            int affectRow = bizFloorMapper.updateByPrimaryKeySelective(bizFloor);
-
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(1 == affectRow ?
-                        "ID为{}的楼层数据修改成功" : "ID为{}的楼层数据修改失败", bizFloor.getFloorId());
-            }
-
-            ret = new Result(1 == affectRow ? bizFloor : "楼层数据修改0行");
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的楼层修改 报错", bizFloor.getFloorId(), e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的楼层,无法修改", bizFloor.getFloorId()))
+                : Result.success(bizFloor);
     }
 
     @Override
     public Result addBizFloor(BizFloor bizFloor) {
 
-        Result ret;
-
         Object exist = null;
 
         int affectRow = 0;
 
-        try {
-            bizFloor.setFloorId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+        //已经做了编号的唯一索引,这里真浪费,暂时这样,优先保证状态正确性
+        synchronized (this) {
 
-            //已经做了编号的唯一索引,这里真浪费,暂时这样,优先保证状态正确性
-            synchronized (this) {
+            exist = bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber());
 
-                exist = bizFloorMapper.selectIdByNumber(bizFloor.getFloorNumber());
-
-                if (Objects.isNull(exist)) {
-                    affectRow = bizFloorMapper.insert(bizFloor);
-                }
+            if (Objects.isNull(exist)) {
+                affectRow = bizFloorMapper.insert(bizFloor);
             }
-
-            if (Objects.nonNull(exist))
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "楼层编号重复", bizFloor.getFloorName());
-
-            if (this.logger.isDebugEnabled()) {
-
-                logger.debug(1 == affectRow ? "楼层数据添加成功" : "楼层数据添加失败");
-            }
-
-            ret = new Result(1 == affectRow ? bizFloor : "楼层数据添加0行");
-
-        } catch (Exception e) {
-
-            logger.error("楼层数据 添加报错", e);
-
-            throw new RuntimeException(e);
         }
 
-        return ret;
+        if (Objects.nonNull(exist))
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的楼层编号%s重复", bizFloor.getFloorId(), bizFloor.getFloorNumber()));
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法添加", bizFloor.getFloorId()))
+                : Result.success(bizFloor);
     }
 }

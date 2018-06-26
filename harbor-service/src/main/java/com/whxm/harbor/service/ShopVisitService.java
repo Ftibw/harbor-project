@@ -21,9 +21,10 @@ public interface ShopVisitService {
      * 获取商铺访问列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<ShopVisit> getShopVisitList(PageQO<BizShop> pageQO);
+    PageVO<ShopVisit> getShopVisitList(PageQO pageQO, BizShop condition);
 
     /**
      * 获取全部商铺访问数据

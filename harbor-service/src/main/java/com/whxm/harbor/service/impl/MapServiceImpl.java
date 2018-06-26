@@ -6,7 +6,6 @@ import com.whxm.harbor.bean.BizMap;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.FileDir;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizMapMapper;
@@ -14,7 +13,6 @@ import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +57,7 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public PageVO<BizMap> getBizMapList(PageQO<BizMap> pageQO) {
+    public PageVO<BizMap> getBizMapList(PageQO pageQO) {
 
         PageVO<BizMap> pageVO;
 

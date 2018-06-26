@@ -24,7 +24,7 @@ public interface ActivityMaterialService {
      *
      * @return list
      */
-    PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO<BizActivityMaterial> pageQO);
+    PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO pageQO, BizActivityMaterial condition);
 
     /**
      * 根据ID删除活动材料

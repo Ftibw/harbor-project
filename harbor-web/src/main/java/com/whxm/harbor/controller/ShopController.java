@@ -3,11 +3,11 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.service.ShopVisitService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
@@ -16,8 +16,6 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -39,11 +37,6 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
-    @Autowired
-    private FileDir fileDir;
-
-    @Autowired
-    private UrlConfig urlConfig;
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
     @PostMapping(value = "/shops")
@@ -62,12 +55,13 @@ public class ShopController {
                     new ResultMap<String, Object>(3)
                             .build("floorId", floor)
                             .build("bizFormatId", type)
-                            .build("initial", Objects.nonNull(initial) ? initial.toLowerCase() : initial)
+                            .build("initial", Objects.nonNull(initial) ? initial.toLowerCase() : null)
             );
 
-            ret.build("data", list);
+            if (null == list || list.isEmpty())
+                throw new DataNotFoundException();
 
-            ret = list.isEmpty() ? ret.build("success", false) : ret.build("success", true);
+            ret.build("data", list).build("success", true);
 
         } catch (Exception e) {
 
@@ -83,21 +77,14 @@ public class ShopController {
     @GetMapping("/shopPictures/{ID}")
     public Result getPicturesById(@PathVariable("ID") String bizShopId) {
 
-        Result ret;
+        Assert.notNull(bizShopId, "商铺ID不能为空");
 
-        try {
-            List<ShopPicture> shopPictures = shopService.getShopPicturesById(bizShopId);
+        List<ShopPicture> shopPictures = shopService.getShopPicturesById(bizShopId);
 
-            ret = new Result(shopPictures);
+        if (null == shopPictures || shopPictures.isEmpty())
+            throw new DataNotFoundException();
 
-        } catch (Exception e) {
-            logger.error("ID为{}的商铺图片 获取报错", bizShopId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + bizShopId + "的商铺图片 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(shopPictures);
     }
 
     @VisitLogger
@@ -107,75 +94,47 @@ public class ShopController {
             @ApiParam(name = "no", value = "商铺编号")
             @RequestParam("no") String shopNumber) {
 
-        Assert.notNull(shopNumber, "商铺编号为空");
+        Assert.notNull(shopNumber, "商铺编号不能为空");
 
         return shopVisitService.updateShopVisit(shopNumber);
     }
 
     @ApiOperation(value = "获取商铺访问数据列表")
     @GetMapping("/visits")
-    public Result getShopVisitList(PageQO<BizShop> pageQO, BizShop condition) {
+    public Result getShopVisitList(PageQO pageQO, BizShop condition) {
 
-        Result ret = null;
+        PageVO<ShopVisit> pageVO = shopVisitService.getShopVisitList(pageQO, condition);
 
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<ShopVisit> pageVO = shopVisitService.getShopVisitList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-
-            logger.error("商铺访问数据列表 获取错误", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺访问数据列表 获取错误", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
     //=========================以上为对外提供的API=================================
 
     @ApiOperation("上传商铺logo")
     @PostMapping("/logo")
-    public Result uploadLogo(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public Result uploadLogo(@RequestParam("file") MultipartFile file) {
 
-        return FileUtils.upload(file, request,fileDir.getShopLogoDir());
+        if (null == file || file.isEmpty()) {
+            throw new ParameterInvalidException("上传的文件是空的");
+        }
+
+        return FileUtils.upload(file, Result::success);
     }
 
     @ApiOperation(value = "上传商铺图片", notes = "表单控件中name属性的值必须为file")
     @PostMapping("/pictures")
     public Result uploadPicture(HttpServletRequest request) {
-        Result ret = null;
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
 
+        if (null == files || files.isEmpty()) {
+            throw new ParameterInvalidException("上传的文件是空的");
+        }
+
         ArrayList<Object> retList = new ArrayList<>();
 
-        files.forEach(file -> {
-            try {
-                Map<String, Object> map = new HashMap<String, Object>(5);
+        files.forEach(file -> FileUtils.upload(file, retList::add));
 
-                FileUtils.upload(file, request, fileDir.getShopPictureDir(), map);
-
-                //判断图片横屏还是竖屏
-                String path = urlConfig.getUrlPrefix() + map.get("filePath");
-
-                String orientation = FileUtils.getImageOrientation(path);
-
-                map.put("imageOrientation", orientation);
-
-                retList.add(map);
-
-            } catch (Exception e) {
-
-                logger.error("文件" + file.getOriginalFilename() + "上传 发生错误", e);
-            }
-        });
-
-        ret = new Result(retList);
-
-        return ret;
+        return Result.success(retList);
     }
 
     @ApiOperation("根据商铺ID获取商铺信息")
@@ -184,64 +143,31 @@ public class ShopController {
             @ApiParam(name = "id", value = "商铺的ID", required = true)
             @RequestParam("id") String shopId
     ) {
-        Result ret = null;
+        Assert.notNull(shopId, "商铺ID不能为空");
 
-        BizShopVo shop = null;
-        try {
-            shop = shopService.getBizShop(shopId);
+        BizShopVo shop = shopService.getBizShop(shopId);
 
-            ret = new Result(shop);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺数据 获取报错", shopId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + shopId + "的商铺数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(shop);
     }
     //==========================以下均被拦截============================
 
     @ApiOperation("获取商铺列表(需授权)")
     @GetMapping("/bizShops")
-    public Result getBizShops(PageQO<BizShop> pageQO, BizShop condition) {
-        Result ret = null;
+    public Result getBizShops(PageQO pageQO, BizShop condition) {
 
-        try {
-            pageQO.setCondition(condition);
+        PageVO<BizShop> pageVO = shopService.getBizShopList(pageQO, condition);
 
-            PageVO<BizShop> pageVO = shopService.getBizShopList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-
-            logger.error("商铺列表 获取错误", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺列表 获取错误", pageQO);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("修改商铺(需授权)")
     @PutMapping("/bizShop")
     public Result updateBizShop(@RequestBody BizShop bizShop) {
 
-        Result ret = null;
-        try {
+        Assert.notNull(bizShop, "商铺数据不能为空");
+        Assert.notNull(bizShop.getShopId(), "商铺ID不能为空");
 
-            ret = shopService.updateBizShop(bizShop);
-
-        } catch (Exception e) {
-
-            logger.error("商铺数据 修改报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺数据 修改报错", bizShop);
-        }
-        return ret;
+        return shopService.updateBizShop(bizShop);
     }
 
     @ApiOperation("启用/停用商铺(需授权)")
@@ -250,19 +176,9 @@ public class ShopController {
             @ApiParam(name = "ID", value = "商铺的ID", required = true)
                     String id
     ) {
-        Result ret = null;
-        try {
-            ret = shopService.triggerBizShop(id);
+        Assert.notNull(id, "商铺ID不能为空");
 
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺 状态(启用/停用)变更报错", id);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + id + "的商铺 状态切换报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return shopService.triggerBizShop(id);
     }
 
     @ApiOperation(value = "添加商铺(需授权)",
@@ -279,19 +195,12 @@ public class ShopController {
 
         List<Map<String, Object>> pictureList = param.pictureList;
 
-        Result ret = null;
+        Assert.notNull(pictureList, "商铺图片集合不能为空");
 
-        try {
-            ret = shopService.addBizShop(bizShop, pictureList);
+        pictureList.forEach(item -> Assert.notNull(item.get("shopPicturePath"), "商铺图片不能为空"));
 
-        } catch (Exception e) {
+        return shopService.addBizShop(bizShop, pictureList);
 
-            logger.error("商铺数据 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "商铺数据 添加报错", param);
-        }
-
-        return ret;
     }
 }
 

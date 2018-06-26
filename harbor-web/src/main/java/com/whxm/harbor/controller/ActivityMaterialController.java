@@ -1,10 +1,11 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.ActivityMaterialService;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,12 +13,9 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +29,6 @@ public class ActivityMaterialController {
 
     @Autowired
     private ActivityMaterialService activityMaterialService;
-
-    @Autowired
-    private FileDir fileDir;
 
     @ApiOperation(value = "根据活动ID获取活动素材列表")
     @PostMapping(value = "/activityMaterials")
@@ -50,13 +45,14 @@ public class ActivityMaterialController {
 
             List<BizActivityMaterial> list = activityMaterialService.getMaterialListByActivityId(activityId);
 
-            ret.build("data", list);
+            if (null == list || list.isEmpty())
+                throw new DataNotFoundException();
 
-            ret = list.isEmpty() ? ret.build("success", false) : ret.build("success", true);
+            ret.build("data", list).build("success", true);
 
         } catch (Exception e) {
 
-            logger.error("活动素材列表 获取报错", activity, e);
+            logger.error("活动素材列表 获取报错", e);
 
             ret.build("data", new Object[]{}).build("success", false);
         }
@@ -66,75 +62,34 @@ public class ActivityMaterialController {
 
     @ApiOperation("上传活动素材图片")
     @PostMapping("/picture")
-    public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public Result uploadPicture(@RequestParam("file") MultipartFile file) {
 
-        return FileUtils.upload(file, request, fileDir.getActivityMaterialImgDir());
+        if (null == file || file.isEmpty()) {
+            throw new ParameterInvalidException("上传的文件是空的");
+        }
+
+        return FileUtils.upload(file, Result::success);
     }
 
     //==========================以下均被拦截============================
 
     @ApiOperation("获取活动素材列表(需授权)")
     @GetMapping("/bizActivityMaterials")
-    public Result getBizActivityMaterials(PageQO<BizActivityMaterial> pageQO, BizActivityMaterial condition) {
+    public Result getBizActivityMaterials(PageQO pageQO, BizActivityMaterial condition) {
 
-        Result ret = null;
+        PageVO<BizActivityMaterial> pageVO = activityMaterialService.getBizActivityMaterialList(pageQO, condition);
 
-        PageVO<BizActivityMaterial> pageVO = null;
-        try {
-            pageQO.setCondition(condition);
-
-            pageVO = activityMaterialService.getBizActivityMaterialList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("活动素材列表 获取报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动素材列表 获取报错", pageQO);
-        }
-
-        return ret;
-    }
-
-    @ApiOperation("获取活动素材(需授权)")
-    @GetMapping("/bizActivityMaterial/{ID}")
-    public Result getBizActivityMaterial(
-            @ApiParam(name = "ID", value = "活动素材的ID", required = true)
-            @PathVariable("ID") Integer activityMaterialId
-    ) {
-        Result ret = null;
-        BizActivityMaterial activityMaterial = null;
-
-        logger.info("活动素材的ID为{}", activityMaterialId);
-
-        try {
-            activityMaterial = activityMaterialService.getBizActivityMaterial(activityMaterialId);
-
-            ret = new Result(activityMaterial);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}活动素材数据 获取报错", activityMaterialId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + activityMaterialId + "活动素材数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        return Result.success(pageVO);
     }
 
     @ApiOperation("修改活动素材(需授权)")
     @PutMapping("/bizActivityMaterial")
     public Result updateBizActivityMaterial(@RequestBody BizActivityMaterial bizActivityMaterial) {
-        Result result = null;
-        try {
-            result = activityMaterialService.updateBizActivityMaterial(bizActivityMaterial);
-        } catch (Exception e) {
 
-            logger.error("活动素材数据 修改报错", e);
+        Assert.notNull(bizActivityMaterial, "活动材料不能为空");
+        Assert.notNull(bizActivityMaterial.getActivityMaterialId(), "活动材料ID不能为空");
 
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动素材数据 修改报错", bizActivityMaterial);
-        }
-        return result;
+        return activityMaterialService.updateBizActivityMaterial(bizActivityMaterial);
     }
 
     @ApiOperation("删除活动素材(需授权)")
@@ -143,16 +98,9 @@ public class ActivityMaterialController {
             @ApiParam(name = "ID", value = "活动素材的ID", required = true)
                     Integer id
     ) {
-        Result result;
-        try {
-            result = activityMaterialService.deleteBizActivityMaterial(id);
-        } catch (Exception e) {
+        Assert.notNull(id, "活动材料ID不能为空");
 
-            logger.error("ID为{}的活动素材 删除报错", id, e);
-
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的活动素材 删除报错", Constant.NO_DATA);
-        }
-        return result;
+        return activityMaterialService.deleteBizActivityMaterial(id);
     }
 
     @ApiOperation("添加活动素材(需授权)")
@@ -161,18 +109,9 @@ public class ActivityMaterialController {
 
         Assert.notNull(list, "活动素材数据不能为空");
 
-        Result result;
+        list.forEach(item -> Assert.isNull(item.getActivityMaterialId(), "活动素材ID必须为空"));
 
-        try {
-            result = activityMaterialService.addBizActivityMaterials(list);
-
-        } catch (Exception e) {
-
-            logger.error("活动素材数据 添加报错", e);
-
-            result = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "活动素材数据 添加报错", list);
-        }
-        return result;
+        return activityMaterialService.addBizActivityMaterials(list);
     }
 
 }

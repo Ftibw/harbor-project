@@ -23,9 +23,10 @@ public interface FloorService {
      * 获取楼层列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<BizFloor> getBizFloorList(PageQO<BizFloor> pageQO);
+    PageVO<BizFloor> getBizFloorList(PageQO pageQO, BizFloor condition);
 
     /**
      * 获取全部楼层数据

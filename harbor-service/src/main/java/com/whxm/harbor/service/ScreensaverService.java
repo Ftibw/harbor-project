@@ -20,8 +20,9 @@ public interface ScreensaverService {
      *
      * @return list
      * @param pageQO
+     * @param condition
      */
-    PageVO<BizScreensaver> getBizScreensaverList(PageQO<BizScreensaver> pageQO);
+    PageVO<BizScreensaver> getBizScreensaverList(PageQO pageQO, BizScreensaver condition);
 
     /**
      * 根据ID删除屏保

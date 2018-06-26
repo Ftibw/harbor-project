@@ -21,9 +21,10 @@ public interface TerminalService {
      * 获取终端列表
      *
      * @param pageQO 分页查询对象
+     * @param condition
      * @return pageVO
      */
-    PageVO<BizTerminal> getBizTerminalList(PageQO<BizTerminal> pageQO);
+    PageVO<BizTerminal> getBizTerminalList(PageQO pageQO, BizTerminal condition);
 
     /**
      * 根据ID停用/启用终端
