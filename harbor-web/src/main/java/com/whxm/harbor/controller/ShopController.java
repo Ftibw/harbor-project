@@ -154,7 +154,7 @@ public class ShopController {
 
         files.forEach(file -> {
             try {
-                Map<String, Object> map = new HashMap<String, Object>(4);
+                Map<String, Object> map = new HashMap<String, Object>(5);
 
                 FileUtils.upload(file, request, fileDir.getShopPictureDir(), map);
 
