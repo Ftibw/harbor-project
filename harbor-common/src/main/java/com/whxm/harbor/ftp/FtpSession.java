@@ -364,7 +364,7 @@ public class FtpSession {
             return null;
         } finally {
             //noinspection ResultOfMethodCallIgnored
-            //localFile.delete();
+            localFile.delete();
         }
     }
 
