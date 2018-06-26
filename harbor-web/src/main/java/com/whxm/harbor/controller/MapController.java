@@ -67,6 +67,29 @@ public class MapController {
         return FileUtils.upload(file, request);
     }
 
+    @ApiOperation("根据楼层ID获取地图数据")
+    @GetMapping("/map")
+    public Result getBizMap(
+            @ApiParam(name = "floor", value = "楼层ID", required = true)
+            @RequestParam("floor") Integer floor
+    ) {
+        Result ret = null;
+        BizMap map = null;
+        try {
+            map = mapService.getBizMap(floor);
+
+            ret = new Result(map);
+
+        } catch (Exception e) {
+
+            logger.error("楼层ID为{}的地图数据 获取报错", floor, e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + floor + "的地图数据 获取报错", Constant.NO_DATA);
+        }
+
+        return ret;
+    }
+
     //==========================以下均被拦截============================
 
     @ApiOperation("获取地图列表(需授权)")
@@ -88,29 +111,6 @@ public class MapController {
             logger.error("地图列表 获取报错", e);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图列表 获取报错", pageQO);
-        }
-
-        return ret;
-    }
-
-    @ApiOperation("获取地图(需授权)")
-    @GetMapping("/bizMap/{ID}")
-    public Result getBizMap(
-            @ApiParam(name = "ID", value = "地图的ID", required = true)
-            @PathVariable("ID") Integer mapId
-    ) {
-        Result ret = null;
-        BizMap map = null;
-        try {
-            map = mapService.getBizMap(mapId);
-
-            ret = new Result(map);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的地图数据 获取报错", mapId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + mapId + "的地图数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;

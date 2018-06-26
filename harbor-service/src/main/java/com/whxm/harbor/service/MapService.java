@@ -12,12 +12,12 @@ import java.util.List;
  */
 public interface MapService {
     /**
-     * 根据地图ID获取地图数据
+     * 根据楼层ID获取地图数据
      *
-     * @param bizMapId 地图ID
+     * @param floorId 楼层ID
      * @return 地图数据
      */
-    BizMap getBizMap(Integer bizMapId);
+    BizMap getBizMap(Integer floorId);
 
     /**
      * 获取地图列表

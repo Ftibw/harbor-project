@@ -1,8 +1,10 @@
 package com.whxm.harbor.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.service.BuildingService;
+import com.whxm.harbor.utils.JacksonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,7 +37,10 @@ public class BuildingController {
 
     @ApiOperation("批量添加建筑")
     @PostMapping
-    public Result addBizBuilding(@RequestBody List<BizBuilding> list) {
+    public Result addBizBuilding(@RequestParam("buildings") String buildings) {
+
+        List<BizBuilding> list = JacksonUtils.readGenericTypeValue(buildings, new TypeReference<List<BizBuilding>>() {
+        });
 
         Assert.notNull(list, "建筑数据不能为空");
 
