@@ -1,9 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ActivityService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -64,7 +62,7 @@ public class ActivityController {
     @PostMapping("/logo")
     public Result uploadLogo(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request, fileDir.getActivityLogoDir());
     }
 
     //==========================以下均被拦截============================
@@ -154,20 +152,13 @@ public class ActivityController {
         return result;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation("添加活动(需授权)")
     @PostMapping(value = "/bizActivity")
-    public Result addBizActivity(@RequestBody BizActivity bizActivity, HttpServletRequest request) {
+    public Result addBizActivity(@RequestBody BizActivity bizActivity) {
 
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
+        Assert.notNull(bizActivity, "活动数据不能为空");
 
-        bizActivity.setActivityLogo(ftpSession.clearLocalFileAfterUpload(bizActivity.getActivityLogo(), fileDir.getActivityLogoDir(), request));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
+        Assert.isNull(bizActivity.getActivityId(), "活动ID必须为空");
 
         Result result = null;
         try {

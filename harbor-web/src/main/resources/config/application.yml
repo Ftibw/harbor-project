@@ -44,13 +44,8 @@ fileDir:
   screensaverMaterialImgDir: screensaverMaterialPicture
   mapPictureDir: mapPicture
 urlConfig:
-  urlPrefix: ${resourceServer:http://47.94.202.250/}
+  urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
 server:
   port: 9000
-ftp:
-  controlPort: 21
-  host: 47.94.202.250
-  user: ftpuser
-  password: 123456
 
 

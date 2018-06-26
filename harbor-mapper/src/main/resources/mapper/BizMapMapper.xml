@@ -101,4 +101,12 @@
             #{floorId,jdbcType=INTEGER})
         </foreach>
     </insert>
+
+    <select id="selectMapByFloorId" resultMap="ExtensionResultMap">
+        select
+        <include refid="Base_Column_List"/>,floor_name
+        from biz_map
+        LEFT JOIN biz_floor USING (floor_id)
+        where floor_id=#{floorId}
+    </select>
 </mapper>

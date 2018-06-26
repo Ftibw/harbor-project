@@ -1,6 +1,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizMap;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface BizMapMapper {
     List<BizMap> getBizMapList(BizMap condition);
 
     int batchInsert(List<BizMap> list);
+
+    BizMap selectMapByFloorId(Integer floorId);
 }

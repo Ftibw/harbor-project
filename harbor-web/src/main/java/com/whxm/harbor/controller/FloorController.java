@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,6 +78,10 @@ public class FloorController {
     @PostMapping("/bizFloor")
     public Result addBizFloor(@RequestBody BizFloor bizFloor) {
 
+        Assert.notNull(bizFloor, "楼层数据不能为空");
+
+        Assert.isNull(bizFloor.getFloorId(), "楼层ID必须为空");
+
         //楼层编号不能重复
         Result ret = null;
 
@@ -113,8 +118,9 @@ public class FloorController {
 
     @ApiOperation("删除楼层(需授权)")
     @DeleteMapping("/bizFloor")
-    public Result delBizFloor(@ApiParam(name = "ID", value = "楼层ID", required = true)
-                                      Integer id) {
+    public Result delBizFloor(
+            @ApiParam(name = "ID", value = "楼层ID", required = true)
+                    Integer id) {
         Result ret = null;
 
         try {

@@ -69,4 +69,5 @@ public interface TerminalService {
      * @param screensaverId
      */
     List<BizTerminal> getNotPublishedTerminal(Integer screensaverId);
+//  List<BizTerminal> getNotPublishedTerminal(BizTerminal condition);
 }

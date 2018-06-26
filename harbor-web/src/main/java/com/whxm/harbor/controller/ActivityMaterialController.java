@@ -1,9 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ActivityMaterialService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -15,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +68,7 @@ public class ActivityMaterialController {
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request, fileDir.getActivityMaterialImgDir());
     }
 
     //==========================以下均被拦截============================
@@ -156,21 +155,11 @@ public class ActivityMaterialController {
         return result;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation("添加活动素材(需授权)")
     @PostMapping("/bizActivityMaterial")
-    public Result addBizActivityMaterial(@RequestBody List<BizActivityMaterial> list, HttpServletRequest request) {
+    public Result addBizActivityMaterial(@RequestBody List<BizActivityMaterial> list) {
 
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
-
-        list.forEach(item -> item
-                .setActivityMaterialImgPath(ftpSession.clearLocalFileAfterUpload(item.getActivityMaterialImgPath(), fileDir.getActivityMaterialImgDir(), request)));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
+        Assert.notNull(list, "活动素材数据不能为空");
 
         Result result;
 

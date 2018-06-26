@@ -73,12 +73,12 @@
 
     <select id="getShopVisitList" parameterType="com.whxm.harbor.bean.BizShop" resultMap="ExtensionResultMap">
         SELECT
-            shop_number,
-            shop_visit_amount,
-            shop_name,
-            shop_visit_time
+        shop_number,
+        shop_visit_amount,
+        shop_name,
+        shop_visit_time
         FROM biz_shop_visit
-        JOIN biz_shop USING (shop_number)
+        LEFT JOIN biz_shop USING (shop_number)
         <where>
             <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
             <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>

@@ -6,11 +6,14 @@ import com.whxm.harbor.bean.BizMap;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.conf.FileDir;
+import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizMapMapper;
 import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,21 +30,27 @@ public class MapServiceImpl implements MapService {
     @Resource
     private BizMapMapper bizMapMapper;
 
+    @Autowired
+    private UrlConfig urlConfig;
+
     @Override
-    public BizMap getBizMap(Integer bizMapId) {
+    public BizMap getBizMap(Integer floorId) {
 
         BizMap bizMap;
 
         try {
-            bizMap = bizMapMapper.selectByPrimaryKey(bizMapId);
+            bizMap = bizMapMapper.selectMapByFloorId(floorId);
+
 
             if (this.logger.isDebugEnabled()) {
-                if (null == bizMap) logger.info("ID为{}的地图不存在", bizMapId);
+                if (null == bizMap) logger.info("楼层ID为{}的地图不存在", floorId);
             }
+            if (null != bizMap)
+                bizMap.setMapImgPath(urlConfig.getUrlPrefix() + bizMap.getMapImgPath());
 
         } catch (Exception e) {
 
-            logger.error("ID为{}的地图 获取报错", bizMapId, e);
+            logger.error("楼层ID为{}的地图 获取报错", floorId, e);
 
             throw new RuntimeException(e);
         }
@@ -59,7 +68,11 @@ public class MapServiceImpl implements MapService {
 
             pageVO = new PageVO<>(pageQO);
 
-            pageVO.setList(bizMapMapper.getBizMapList(pageQO.getCondition()));
+            List<BizMap> list = bizMapMapper.getBizMapList(pageQO.getCondition());
+
+            list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
+
+            pageVO.setList(list);
 
             pageVO.setTotal(page.getTotal());
 
@@ -131,6 +144,8 @@ public class MapServiceImpl implements MapService {
         }
 
         try {
+            bizMap.setMapImgPath(bizMap.getMapImgPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+
             int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 
             if (this.logger.isDebugEnabled()) {

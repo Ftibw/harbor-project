@@ -148,10 +148,11 @@ public class TerminalController {
     public Result getNotPublishedTerminals(
             @ApiParam(name = "id", value = "屏保的ID", required = true)
             @RequestParam("id") Integer id) {
-
+        //BizTerminal condition
         Result ret = null;
 
         try {
+            //List<BizTerminal> list = terminalService.getNotPublishedTerminal(condition);
             List<BizTerminal> list = terminalService.getNotPublishedTerminal(id);
 
             ret = new Result(list);

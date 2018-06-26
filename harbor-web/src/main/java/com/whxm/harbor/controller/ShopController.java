@@ -4,14 +4,11 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.service.ShopVisitService;
 import com.whxm.harbor.utils.FileUtils;
-import com.whxm.harbor.ftp.FtpSession;
-import com.whxm.harbor.utils.StringUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,8 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @Api(description = "商铺服务")
@@ -46,6 +41,9 @@ public class ShopController {
 
     @Autowired
     private FileDir fileDir;
+
+    @Autowired
+    private UrlConfig urlConfig;
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
     @PostMapping(value = "/shops")
@@ -142,13 +140,12 @@ public class ShopController {
     @PostMapping("/logo")
     public Result uploadLogo(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request,fileDir.getShopLogoDir());
     }
 
     @ApiOperation(value = "上传商铺图片", notes = "表单控件中name属性的值必须为file")
     @PostMapping("/pictures")
     public Result uploadPicture(HttpServletRequest request) {
-
         Result ret = null;
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
@@ -157,9 +154,16 @@ public class ShopController {
 
         files.forEach(file -> {
             try {
-                Map<String, Object> map = new HashMap<String, Object>(6);
+                Map<String, Object> map = new HashMap<String, Object>(5);
 
-                FileUtils.upload(file, request, map);
+                FileUtils.upload(file, request, fileDir.getShopPictureDir(), map);
+
+                //判断图片横屏还是竖屏
+                String path = urlConfig.getUrlPrefix() + map.get("filePath");
+
+                String orientation = FileUtils.getImageOrientation(path);
+
+                map.put("imageOrientation", orientation);
 
                 retList.add(map);
 
@@ -228,6 +232,7 @@ public class ShopController {
 
         Result ret = null;
         try {
+
             ret = shopService.updateBizShop(bizShop);
 
         } catch (Exception e) {
@@ -260,14 +265,11 @@ public class ShopController {
         return ret;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation(value = "添加商铺(需授权)",
             notes = "pictureList中元素为map,map有3个key," +
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
-    public Result addBizShop(@RequestBody ShopParam param, HttpServletRequest request) {
+    public Result addBizShop(@RequestBody ShopParam param) {
 
         Assert.notNull(param, "参数不能为空");
 
@@ -276,21 +278,6 @@ public class ShopController {
         Assert.notNull(bizShop, "商铺数据不能为空");
 
         List<Map<String, Object>> pictureList = param.pictureList;
-
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
-
-        bizShop.setShopLogoPath(ftpSession.clearLocalFileAfterUpload(bizShop.getShopLogoPath(), fileDir.getShopLogoDir(), request));
-
-        if (null != pictureList
-                && !pictureList.isEmpty()
-                && !pictureList.get(0).isEmpty()) {
-
-            pictureList.forEach(item ->
-                    item.put("shopPicturePath", ftpSession.clearLocalFileAfterUpload(String.valueOf(item.get("shopPicturePath")), fileDir.getShopPictureDir(), request)));
-        }
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
 
         Result ret = null;
 

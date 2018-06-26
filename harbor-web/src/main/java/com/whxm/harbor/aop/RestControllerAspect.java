@@ -1,7 +1,6 @@
 package com.whxm.harbor.aop;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
-import com.whxm.harbor.bean.User;
 import com.whxm.harbor.handler.GlobalExceptionHandler;
 import com.whxm.harbor.utils.IPv4Utils;
 import com.whxm.harbor.utils.JacksonUtils;

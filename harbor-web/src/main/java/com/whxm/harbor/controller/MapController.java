@@ -3,9 +3,7 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -64,7 +62,30 @@ public class MapController {
     @PostMapping("/picture")
     public Result uploadMap(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request, fileDir.getMapPictureDir());
+    }
+
+    @ApiOperation("根据楼层ID获取地图数据")
+    @GetMapping("/map")
+    public Result getBizMap(
+            @ApiParam(name = "floor", value = "楼层ID", required = true)
+            @RequestParam("floor") Integer floor
+    ) {
+        Result ret = null;
+        BizMap map = null;
+        try {
+            map = mapService.getBizMap(floor);
+
+            ret = new Result(map);
+
+        } catch (Exception e) {
+
+            logger.error("楼层ID为{}的地图数据 获取报错", floor, e);
+
+            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + floor + "的地图数据 获取报错", Constant.NO_DATA);
+        }
+
+        return ret;
     }
 
     //==========================以下均被拦截============================
@@ -88,29 +109,6 @@ public class MapController {
             logger.error("地图列表 获取报错", e);
 
             ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "地图列表 获取报错", pageQO);
-        }
-
-        return ret;
-    }
-
-    @ApiOperation("获取地图(需授权)")
-    @GetMapping("/bizMap/{ID}")
-    public Result getBizMap(
-            @ApiParam(name = "ID", value = "地图的ID", required = true)
-            @PathVariable("ID") Integer mapId
-    ) {
-        Result ret = null;
-        BizMap map = null;
-        try {
-            map = mapService.getBizMap(mapId);
-
-            ret = new Result(map);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的地图数据 获取报错", mapId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + mapId + "的地图数据 获取报错", Constant.NO_DATA);
         }
 
         return ret;
@@ -154,20 +152,13 @@ public class MapController {
         return result;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
-    public Result addBizMap(@RequestBody BizMap bizMap, HttpServletRequest request) {
+    public Result addBizMap(@RequestBody BizMap bizMap) {
 
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
+        Assert.notNull(bizMap,"地图数据不能为空");
 
-        bizMap.setMapImgPath(ftpSession.clearLocalFileAfterUpload(bizMap.getMapImgPath(), fileDir.getMapPictureDir(), request));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
+        Assert.isNull(bizMap.getMapId(),"ID必须为空");
 
         Result result = null;
         try {

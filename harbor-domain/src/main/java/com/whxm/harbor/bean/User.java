@@ -3,6 +3,7 @@ package com.whxm.harbor.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class User {
     private String userId;
@@ -20,6 +21,16 @@ public class User {
     private String userWechat;
     @JsonIgnore
     private Integer isDeleted;
+
+    private Timestamp addUserTime;
+
+    public Timestamp getAddUserTime() {
+        return addUserTime;
+    }
+
+    public void setAddUserTime(Timestamp addUserTime) {
+        this.addUserTime = addUserTime;
+    }
 
     public String getUserId() {
         return userId;
