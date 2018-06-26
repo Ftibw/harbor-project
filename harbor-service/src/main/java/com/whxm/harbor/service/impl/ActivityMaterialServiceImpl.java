@@ -48,28 +48,20 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO<BizActivityMaterial> pageQO) {
 
-        PageVO<BizActivityMaterial> pageVO;
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        PageVO<BizActivityMaterial> pageVO = new PageVO<>(pageQO);
 
-            pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(pageQO.getCondition());
+        List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(pageQO.getCondition());
 
-            list.forEach(item -> item.setActivityMaterialImgPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getActivityMaterialImgPath()
-            ));
+        list.forEach(item -> item.setActivityMaterialImgPath(
+                urlConfig.getUrlPrefix()
+                        + item.getActivityMaterialImgPath()
+        ));
 
-            pageVO.setList(list);
+        pageVO.setList(list);
 
-            pageVO.setTotal(page.getTotal());
-
-        } catch (Exception e) {
-            logger.error("活动素材列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -79,7 +71,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
         Result ret;
 
-        try {
+
             int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
 
             logger.info(1 == affectRow ?
@@ -88,14 +80,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
                     bizActivityMaterialId
             );
 
-            ret = new Result("活动素材数据删除了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("活动素材ID为{}的数据 删除错误", bizActivityMaterialId);
-
-            throw new RuntimeException(e);
-        }
+        1 == affectRow? Result.success();
 
         return ret;
     }

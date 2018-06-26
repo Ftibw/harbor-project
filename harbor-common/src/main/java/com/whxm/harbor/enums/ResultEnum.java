@@ -5,6 +5,15 @@ import java.util.List;
 
 public enum ResultEnum {
 
+    /**
+    当GET, PUT和PATCH请求成功时，要返回对应的数据，及状态码200，即SUCCESS
+    当POST创建数据成功时，要返回创建的数据，及状态码201，即CREATED
+    当DELETE删除数据成功时，不返回数据，状态码要返回204，即NO CONTENT
+    当GET 不到数据时，状态码要返回404，即NOT FOUND
+    任何时候，如果请求有问题，如校验请求数据时发现错误，要返回状态码 400，即BAD REQUEST
+    当API 请求需要用户认证时，如果request中的认证信息不正确，要返回状态码 401，即NOT AUTHORIZED
+    当API 请求需要验证用户权限时，如果当前用户无相应权限，要返回状态码 403，即FORBIDDEN
+    */
     /* 成功状态码 */
     SUCCESS(1, "成功"),
 
@@ -28,13 +37,13 @@ public enum ResultEnum {
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),
 
     /* 数据错误：50001-599999 */
-    RESULE_DATA_NONE(50001, "数据未找到"),
+    RESULT_DATA_NONE(50001, "数据未找到"),
     DATA_IS_WRONG(50002, "数据有误"),
     DATA_ALREADY_EXISTED(50003, "数据已存在"),
 
     /* 接口错误：60001-69999 */
     INTERFACE_INNER_INVOKE_ERROR(60001, "内部系统接口调用异常"),
-    INTERFACE_OUTTER_INVOKE_ERROR(60002, "外部系统接口调用异常"),
+    INTERFACE_OUTER_INVOKE_ERROR(60002, "外部系统接口调用异常"),
     INTERFACE_FORBID_VISIT(60003, "该接口禁止访问"),
     INTERFACE_ADDRESS_INVALID(60004, "接口地址无效"),
     INTERFACE_REQUEST_TIMEOUT(60005, "接口请求超时"),
