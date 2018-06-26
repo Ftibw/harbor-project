@@ -70,7 +70,7 @@ public class MapServiceImpl implements MapService {
 
             List<BizMap> list = bizMapMapper.getBizMapList(pageQO.getCondition());
 
-            list.forEach(item->item.setMapImgPath(urlConfig.getUrlPrefix()+item.getMapImgPath()));
+            list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
 
             pageVO.setList(list);
 
@@ -144,6 +144,8 @@ public class MapServiceImpl implements MapService {
         }
 
         try {
+            bizMap.setMapImgPath(bizMap.getMapImgPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+
             int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 
             if (this.logger.isDebugEnabled()) {

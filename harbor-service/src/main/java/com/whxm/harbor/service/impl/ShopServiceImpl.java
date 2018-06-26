@@ -47,6 +47,8 @@ public class ShopServiceImpl implements ShopService {
 
             if (null != po) {
 
+                po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+
                 vo = new BizShopVo();
 
                 BeanUtils.copyProperties(po, vo);
@@ -179,6 +181,7 @@ public class ShopServiceImpl implements ShopService {
 
         Result ret;
 
+
         if (null == bizShop
                 || "".equals(bizShop.getShopId())
                 || null == bizShop.getShopId()) {
@@ -187,6 +190,8 @@ public class ShopServiceImpl implements ShopService {
 
             return new Result(HttpStatus.OK.value(), "商铺数据不存在", Constant.NO_DATA);
         }
+
+        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
         try {
             int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);

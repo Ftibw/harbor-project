@@ -232,6 +232,7 @@ public class ShopController {
 
         Result ret = null;
         try {
+
             ret = shopService.updateBizShop(bizShop);
 
         } catch (Exception e) {

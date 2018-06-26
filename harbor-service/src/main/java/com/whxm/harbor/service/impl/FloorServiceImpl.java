@@ -157,6 +157,8 @@ public class FloorServiceImpl implements FloorService {
         int affectRow = 0;
 
         try {
+            bizFloor.setFloorId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+
             //已经做了编号的唯一索引,这里真浪费,暂时这样,优先保证状态正确性
             synchronized (this) {
 
