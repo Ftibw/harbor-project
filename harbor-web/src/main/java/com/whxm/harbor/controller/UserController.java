@@ -167,18 +167,30 @@ public class UserController {
 
         if (null != info) {
 
+            String userId = info.getUserId();
+
+            //设置String序列化器
+            StringRedisSerializer serializer = new StringRedisSerializer();
+
+            redisTemplate.setKeySerializer(serializer);
+
+            redisTemplate.setValueSerializer(serializer);
+
+            synchronized (UserController.class) {
+                String oldSalt = (String) redisTemplate.boundValueOps(userId).get();
+
+                if (null != oldSalt) {
+
+                    //发送推送消息给已登录用户是否确认允许登录
+
+                    return new Result(chaos(userId, oldSalt));
+                }
+            }
+
             if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
 
-                String userId = info.getUserId();
 
                 String salt = UUID.randomUUID().toString().replace("-", "");
-
-                //设置String序列化器
-                StringRedisSerializer serializer = new StringRedisSerializer();
-
-                redisTemplate.setKeySerializer(serializer);
-
-                redisTemplate.setValueSerializer(serializer);
 
                 //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
                 redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
