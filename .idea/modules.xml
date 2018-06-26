@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/harbor-project.iml" filepath="$PROJECT_DIR$/harbor-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/harbor-service/harbor-service.iml" filepath="$PROJECT_DIR$/harbor-service/harbor-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/harbor-web/harbor-web.iml" filepath="$PROJECT_DIR$/harbor-web/harbor-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/harbor-web/harbor-web.iml" filepath="$PROJECT_DIR$/harbor-web/harbor-web.iml" />
     </modules>
   </component>
 </project>
