@@ -118,7 +118,7 @@ public class UserController {
         User info = userService.login(user);
 
         if (null == info)
-            throw new DataNotFoundException("该用户不存在");
+            throw new DataNotFoundException(ResultEnum.USER_LOGIN_ERROR);
 
         String userId = info.getUserId();
 
