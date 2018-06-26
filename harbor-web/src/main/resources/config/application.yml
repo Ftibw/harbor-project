@@ -44,7 +44,7 @@ fileDir:
   screensaverMaterialImgDir: screensaverMaterialPicture
   mapPictureDir: mapPicture
 urlConfig:
-  urlPrefix: ${resourceServer:http://192.168.1.103/resources/}
+  urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
 server:
   port: 9000
 
