@@ -78,7 +78,7 @@
             <if test="activityLogo != null">
                 activity_logo = #{activityLogo,jdbcType=VARCHAR},
             </if>
-            <if test="activityNumber != null">
+            <if test="activityNumber != null and activityNumber!='-1'">
                 activity_number = #{activityNumber,jdbcType=VARCHAR},
             </if>
             <if test="activityLogoSize != null">

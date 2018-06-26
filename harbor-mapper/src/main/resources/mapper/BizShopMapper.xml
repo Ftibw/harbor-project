@@ -94,7 +94,7 @@
             <if test="shopId != null">
                 #{shopId,jdbcType=VARCHAR},
             </if>
-            <if test="shopNumber != null">
+            <if test="shopNumber != null and shopNumber!='-1'">
                 #{shopNumber,jdbcType=VARCHAR},
             </if>
             <if test="shopName != null">

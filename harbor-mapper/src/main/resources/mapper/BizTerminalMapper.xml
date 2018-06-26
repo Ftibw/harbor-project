@@ -148,7 +148,7 @@
             <if test="terminalName != null">
                 terminal_name = #{terminalName,jdbcType=VARCHAR},
             </if>
-            <if test="terminalNumber!=-1">
+            <if test="terminalNumber!='-1'">
                 terminal_number=#{terminalNumber,jdbcType=VARCHAR},
             </if>
             <if test="terminalIp != null">

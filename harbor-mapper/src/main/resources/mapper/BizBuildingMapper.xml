@@ -107,7 +107,7 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizBuilding">
         update biz_building
         <set>
-            <if test="number != null">
+            <if test="number != null and number!=-1">
                 number = #{number,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
