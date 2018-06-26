@@ -154,7 +154,11 @@ public class ActivityController {
 
     @ApiOperation("添加活动(需授权)")
     @PostMapping(value = "/bizActivity")
-    public Result addBizActivity(@RequestBody BizActivity bizActivity, HttpServletRequest request) {
+    public Result addBizActivity(@RequestBody BizActivity bizActivity) {
+
+        Assert.notNull(bizActivity, "活动数据不能为空");
+
+        Assert.isNull(bizActivity.getActivityId(), "活动ID必须为空");
 
         Result result = null;
         try {

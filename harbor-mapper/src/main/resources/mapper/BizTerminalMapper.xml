@@ -247,6 +247,8 @@
           WHERE screensaver_id=#{screensaverId}
         )
         AND is_deleted=1
+        <if test="floorId!=null">and floor_id=#{floor_id}</if>
+        <if test="terminalType!=null and terminalType!=''">and terminal_type=#{terminalType}</if>
         order by add_terminal_time desc
     </select>
 

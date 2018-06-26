@@ -155,7 +155,7 @@ public class ScreensaverMaterialController {
 
     @ApiOperation("添加屏保素材(需授权)")
     @PostMapping("/bizScreensaverMaterial")
-    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list, HttpServletRequest request) {
+    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
 
         Result ret = null;
         try {

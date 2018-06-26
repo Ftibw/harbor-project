@@ -42,8 +42,9 @@ public interface BizTerminalMapper {
 
     /**
      * 查找没有屏保的终端
+     *
+     * @param condition 查询条件
      * @return 终端列表
-     * @param screensaverId
      */
-    List<BizTerminal> selectNotPublishedTerminal(Object screensaverId);
+    List<BizTerminal> selectNotPublishedTerminal(Object condition);
 }

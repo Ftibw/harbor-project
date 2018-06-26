@@ -154,7 +154,11 @@ public class MapController {
 
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
-    public Result addBizMap(@RequestBody BizMap bizMap, HttpServletRequest request) {
+    public Result addBizMap(@RequestBody BizMap bizMap) {
+
+        Assert.notNull(bizMap,"地图数据不能为空");
+
+        Assert.isNull(bizMap.getMapId(),"ID必须为空");
 
         Result result = null;
         try {

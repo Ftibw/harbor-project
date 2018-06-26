@@ -269,7 +269,7 @@ public class ShopController {
             notes = "pictureList中元素为map,map有3个key," +
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
-    public Result addBizShop(@RequestBody ShopParam param, HttpServletRequest request) {
+    public Result addBizShop(@RequestBody ShopParam param) {
 
         Assert.notNull(param, "参数不能为空");
 

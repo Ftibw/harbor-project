@@ -51,7 +51,7 @@ public class FileUtils {
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的目录
-            String filePath = Constant.resourcePath + "/" + uploadRootDir;
+            String filePath = Constant.ABSOLUTE_RESOURCE_PATH + "/" + uploadRootDir;
             //分文件夹管理时的文件夹名
             String dirName = StringUtils.createDirName();
             //文件夹
