@@ -6,6 +6,8 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.UserMapper;
 import com.whxm.harbor.service.UserService;
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,57 +32,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(User user) {
 
-        User po = null;
-
-        try {
-            po = userMapper.selectUserLoginInfo(user);
-
-        } catch (Exception e) {
-
-            logger.error("用户信息 查询报错", e);
-        }
-
-        return po;
+        return userMapper.selectUserLoginInfo(user);
     }
 
     @Override
     public User getUser(String userId) {
 
-        User user;
-
-        try {
-            user = userMapper.selectByPrimaryKey(userId);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的用户数据 获取报错", userId, e);
-
-            throw new RuntimeException(e);
-        }
-
-        return user;
+        return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
     public PageVO<User> getUserList(PageQO pageQO, User condition) {
 
-        PageVO<User> pageVO;
+        PageVO<User> pageVO = new PageVO<>(pageQO);
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<User> list = userMapper.getUserList(condition);
 
-            pageVO.setList(userMapper.getUserList(pageQO.getCondition()));
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            pageVO.setTotal(page.getTotal());
+        pageVO.setList(list);
 
-        } catch (Exception e) {
-
-            logger.error("用户列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -87,24 +63,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result deleteUser(String userId) {
 
-        Result ret;
+        int affectRow = userMapper.deleteByPrimaryKey(userId);
 
-        try {
-            int affectRow = userMapper.deleteByPrimaryKey(userId);
-
-            logger.info(1 == affectRow ? "ID为的{}用户删除成功" : "ID为的{}用户删除失败", userId);
-
-            ret = new Result("ID为的" + userId + "用户 删除了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("用户数据 删除报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的用户,无法删除", userId))
+                : Result.success(ResultEnum.NO_CONTENT);
     }
 
     @Override
@@ -116,55 +79,32 @@ public class UserServiceImpl implements UserService {
 
         int affectRow = 0;
 
-        try {
-            user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
+        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 
-            //仅为了避免重复索引抛异常,就多查一次,贼浪费
-            synchronized (this) {
+        //仅为了避免重复索引抛异常,就多查一次,贼浪费
+        synchronized (this) {
 
-                exist = userMapper.selectUserLoginInfo(user);
+            exist = userMapper.selectUserLoginInfo(user);
 
-                if (null == exist) affectRow = userMapper.insert(user);
-            }
-
-            if (exist != null)
-                return Result.build(HttpStatus.NOT_ACCEPTABLE.value(), "账户名重复", user.getUserLoginname());
-
-            logger.info(1 == affectRow ? "用户添加成功" : "用户添加失败");
-
-
-            ret = new Result("用户数据 添加" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("用户数据 添加报错", e);
-
-            throw new RuntimeException(e);
+            if (null == exist) affectRow = userMapper.insert(user);
         }
 
-        return ret;
+        if (exist != null)
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的用户登录名%s重复", user.getUserId(), user.getUserLoginname()));
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "建筑无法添加")
+                : Result.success(user);
     }
 
     @Override
     public Result updateUser(User user) {
 
-        Result ret;
+        int affectRow = userMapper.updateByPrimaryKeySelective(user);
 
-        try {
-            int affectRow = userMapper.updateByPrimaryKeySelective(user);
-
-            logger.info(1 == affectRow ? "ID为的{}用户修改成功" : "ID为的{}用户修改失败", user.getUserId());
-
-            ret = new Result("用户数据 修改了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("用户数据 修改报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的用户数据,无法修改", user.getUserId()))
+                : Result.success(user);
     }
 
 }

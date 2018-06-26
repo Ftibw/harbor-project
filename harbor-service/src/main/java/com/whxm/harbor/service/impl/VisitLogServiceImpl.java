@@ -18,13 +18,6 @@ public class VisitLogServiceImpl implements VisitLogService {
     @Override
     public int recordVisit(String number, String ip, String message) {
 
-        int affectRow = 0;
-        try {
-            affectRow = logger.writeLog(number, ip, message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        }
-        return affectRow;
+        return logger.writeLog(number, ip, message);
     }
 }

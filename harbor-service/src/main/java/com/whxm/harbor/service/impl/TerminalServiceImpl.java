@@ -5,13 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,19 +37,10 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
 
-        BizTerminal terminal;
+        BizTerminal terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
 
-        try {
-            terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
-
-            if (null == terminal) {
-                logger.error("ID为{}的终端不存在", bizTerminalId);
-            }
-        } catch (Exception e) {
-
-            logger.error("终端ID为{}的数据 获取报错", bizTerminalId);
-
-            throw new RuntimeException(e);
+        if (null == terminal) {
+            throw new DataNotFoundException();
         }
 
         return terminal;
@@ -57,22 +49,17 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public PageVO<BizTerminal> getBizTerminalList(PageQO pageQO, BizTerminal condition) {
 
-        PageVO<BizTerminal> pageVO;
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        PageVO<BizTerminal> pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<BizTerminal> list = bizTerminalMapper.getBizTerminalList(condition);
 
-            pageVO.setList(bizTerminalMapper.getBizTerminalList(pageQO.getCondition()));
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            pageVO.setTotal(page.getTotal());
+        pageVO.setList(list);
 
-        } catch (Exception e) {
-
-            logger.error("终端列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -80,131 +67,77 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public Result deleteBizTerminal(String bizTerminalId) {
 
-        Result ret;
+        bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
 
-        try {
+        BizTerminal bizTerminal = new BizTerminal();
 
-            bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
+        bizTerminal.setTerminalId(bizTerminalId);
 
-            BizTerminal bizTerminal = new BizTerminal();
+        bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
 
-            bizTerminal.setTerminalId(bizTerminalId);
+        bizTerminal.setTerminalNumber(null);
 
-            bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
+        int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
-            bizTerminal.setTerminalNumber(null);
-
-            boolean isSuccess = updateBizTerminal(bizTerminal).getData().toString().contains("1");
-
-            logger.info(isSuccess ? "ID为{}的终端 删除成功" : "ID为{}的终端 删除失败", bizTerminalId);
-
-            ret = new Result(isSuccess ?
-                    "ID为" + bizTerminalId + "的终端 删除成功" :
-                    "ID为" + bizTerminalId + "的终端 删除失败"
-            );
-
-        } catch (Exception e) {
-
-            logger.error("终端ID为{}的数据 删除错误", bizTerminalId);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId))
+                : Result.success(ResultEnum.NO_CONTENT);
     }
 
     @Override
     public Result updateBizTerminal(BizTerminal bizTerminal) {
 
-        Result ret;
+        int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
-        try {
-
-            int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
-
-            logger.info(1 == affectRow ?
-                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改成功" :
-                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改失败"
-            );
-
-            ret = new Result("终端数据修改了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("终端数据 修改报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法修改", bizTerminal.getTerminalId()))
+                : Result.success(bizTerminal);
     }
 
     @Override
     public Result addBizTerminal(BizTerminal bizTerminal) {
 
-        Result ret;
-
         Object exist = null;
 
         int affectRow = 0;
 
-        try {
-            bizTerminal.setIsTerminalOnline(Constant.DISABLED_STATUS);
+        bizTerminal.setIsTerminalOnline(Constant.DISABLED_STATUS);
 
-            bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
-            //使用终端的类型(二维码/横屏/竖屏)来判断平台0/1/2
-            bizTerminal.setTerminalPlatform(Integer.parseInt(bizTerminal.getTerminalType()));
+        bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
+        //使用终端的类型(二维码/横屏/竖屏)来判断平台0/1/2
+        bizTerminal.setTerminalPlatform(Integer.parseInt(bizTerminal.getTerminalType()));
 
-            bizTerminal.setAddTerminalTime(new Date());
+        bizTerminal.setAddTerminalTime(new Date());
 
-            bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
+        bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
 
-            //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
-            synchronized (this) {
+        //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
+        synchronized (this) {
 
-                exist = bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber());
+            exist = bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber());
 
-                if (Objects.isNull(exist)) {
+            if (Objects.isNull(exist)) {
 
-                    affectRow = bizTerminalMapper.insert(bizTerminal);
-                }
+                affectRow = bizTerminalMapper.insert(bizTerminal);
             }
-
-            if (Objects.nonNull(exist))
-                return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
-
-            logger.info(1 == affectRow ?
-                    "终端数据添加成功" :
-                    "终端数据添加失败"
-            );
-
-            ret = new Result("终端数据添加了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("终端数据 添加报错", e);
-
-            throw new RuntimeException(e);
         }
 
-        return ret;
+        if (Objects.nonNull(exist))
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端编号%s重复", bizTerminal.getTerminalId(), bizTerminal.getTerminalNumber()));
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "新终端,无法添加")
+                : Result.success(bizTerminal);
     }
 
     @Override
     public BizTerminal register(Map<String, Object> params) {
 
-        try {
-            if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
+        if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
 
-                return bizTerminalMapper.selectIdByNumber(params.get("terminalNumber"));
-            }
-
-        } catch (Exception e) {
-
-            logger.error("终端是否注册 查询报错 ", e);
-
-            throw new RuntimeException(e);
+            return bizTerminalMapper.selectIdByNumber(params.get("terminalNumber"));
         }
+
         return null;
     }
 
@@ -262,6 +195,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         return ret;
     }
+
     /*
     * List<BizTerminal> getNotPublishedTerminal(BizTerminal condition);
     * {
@@ -286,20 +220,6 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public List<BizTerminal> getNotPublishedTerminal(Integer screensaverId) {
 
-        List<BizTerminal> list = null;
-
-        try {
-            list = bizTerminalMapper.selectNotPublishedTerminal(screensaverId);
-
-            logger.info(list.isEmpty() ? "无屏保的终端不存在" : "查询无屏保的终端列表OK");
-
-        } catch (Exception e) {
-
-            logger.error("无屏保的终端列表查询报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return list;
+        return bizTerminalMapper.selectNotPublishedTerminal(screensaverId);
     }
 }

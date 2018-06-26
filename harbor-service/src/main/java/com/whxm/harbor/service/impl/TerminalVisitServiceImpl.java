@@ -3,7 +3,7 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.TerminalVisitMapper;
 import com.whxm.harbor.service.TerminalVisitService;
 import org.slf4j.Logger;
@@ -76,25 +76,20 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
     }
 
     @Override
-    public PageVO<TerminalVisit> getTerminalVisitList(PageQO pageQO) {
+    public PageVO<TerminalVisit> getTerminalVisitList(PageQO pageQO, BizTerminal condition) {
 
-        PageVO<TerminalVisit> pageVO;
+        PageVO<TerminalVisit> pageVO = new PageVO<>(pageQO);
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<TerminalVisit> list = terminalVisitMapper.getTerminalVisitList(condition);
 
-            pageVO.setList(terminalVisitMapper.getTerminalVisitList(pageQO.getCondition()));
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            pageVO.setTotal(page.getTotal());
+        pageVO.setList(list);
 
-        } catch (Exception e) {
-
-            logger.error("终端访问列表获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -102,19 +97,7 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
     @Override
     public List<TerminalVisit> getTerminalVisitList() {
 
-        List<TerminalVisit> list;
-
-        try {
-            list = terminalVisitMapper.getTerminalVisitList((BizTerminal) Constant.DEFAULT_QUERY_CONDITION);
-
-        } catch (Exception e) {
-
-            logger.error("终端访问数据列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return list;
+        return terminalVisitMapper.getTerminalVisitList(null);
     }
 
 }

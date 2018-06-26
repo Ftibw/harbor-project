@@ -8,6 +8,8 @@ import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizMapMapper;
 import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
@@ -57,29 +59,22 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public PageVO<BizMap> getBizMapList(PageQO pageQO) {
+    public PageVO<BizMap> getBizMapList(PageQO pageQO, BizMap condition) {
 
-        PageVO<BizMap> pageVO;
+        PageVO<BizMap> pageVO = new PageVO<>(pageQO);
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<BizMap> list = bizMapMapper.getBizMapList(condition);
 
-            List<BizMap> list = bizMapMapper.getBizMapList(pageQO.getCondition());
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
+        list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
 
-            pageVO.setList(list);
+        pageVO.setList(list);
 
-            pageVO.setTotal(page.getTotal());
-
-        } catch (Exception e) {
-
-            logger.error("地图列表获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -87,17 +82,10 @@ public class MapServiceImpl implements MapService {
     @Override
     public List<BizMap> getBizMapList() {
 
-        List<BizMap> list;
+        List<BizMap> list = bizMapMapper.getBizMapList(null);
 
-        try {
-            list = bizMapMapper.getBizMapList((BizMap) Constant.DEFAULT_QUERY_CONDITION);
-
-        } catch (Exception e) {
-
-            logger.error("地图数据列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
         return list;
     }
@@ -105,112 +93,47 @@ public class MapServiceImpl implements MapService {
     @Override
     public Result deleteBizMap(Integer bizMapId) {
 
-        Result ret;
+        int affectRow = bizMapMapper.deleteByPrimaryKey(bizMapId);
 
-        try {
-
-            int affectRow = bizMapMapper.deleteByPrimaryKey(bizMapId);
-
-            if (this.logger.isDebugEnabled()) {
-                logger.info(0 == affectRow ? "ID为{}的地图删除失败" : "ID为{}的地图删除成功", bizMapId);
-            }
-
-            ret = new Result("ID为" + bizMapId + "的地图 删除了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的地图 删除报错", bizMapId, e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的地图,无法删除", bizMapId))
+                : Result.success(ResultEnum.NO_CONTENT);
     }
 
     @Override
     public Result updateBizMap(BizMap bizMap) {
 
-        Result ret;
 
-        if (null == bizMap) {
+        bizMap.setMapImgPath(bizMap.getMapImgPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
-            return new Result("地图数据为空");
+        int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 
-        } else if (null == bizMap.getMapId()) {
-
-            return new Result("该地图不存在");
-        }
-
-        try {
-            bizMap.setMapImgPath(bizMap.getMapImgPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
-
-            int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
-
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(1 == affectRow ?
-                        "ID为{}的地图数据修改成功" : "ID为{}的地图数据修改失败", bizMap.getMapId());
-            }
-
-            ret = new Result(1 == affectRow ? bizMap : "地图数据 修改了0行");
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的地图修改 报错", bizMap.getMapId(), e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的地图,无法修改", bizMap.getMapId()))
+                : Result.success(bizMap);
     }
 
     @Override
     public Result addBizMap(BizMap bizMap) {
 
-        Result ret;
+        int affectRow = bizMapMapper.insert(bizMap);
 
-        try {
-            int affectRow = bizMapMapper.insert(bizMap);
+        //楼层ID唯一判断
 
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(1 == affectRow ? "地图数据添加成功" : "地图数据添加失败");
-            }
-
-            ret = new Result(1 == affectRow ? bizMap : "地图数据 添加0行");
-
-        } catch (Exception e) {
-
-            logger.error("地图数据 添加报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的地图,无法添加", bizMap.getMapId()))
+                : Result.success(bizMap);
     }
 
     @Override
     public Result addBizMaps(List<BizMap> list) {
 
-        Result ret;
+        int affectRow = bizMapMapper.batchInsert(list);
 
-        try {
-            list.forEach(item -> item.setMapId(Constant.INCREMENT_ID_DEFAULT_VALUE));
+        //楼层ID唯一判断
 
-            int affectRow = bizMapMapper.batchInsert(list);
-
-            logger.info(0 == affectRow ?
-                    "地图数据 添加失败" :
-                    "地图数据 成功添加" + affectRow + "行"
-            );
-
-            ret = new Result("地图数据数据添加了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("地图数据数据 添加报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "地图数据列表,无法添加")
+                : Result.success(list);
     }
 }

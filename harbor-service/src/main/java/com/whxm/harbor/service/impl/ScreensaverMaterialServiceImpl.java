@@ -7,11 +7,10 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,30 +23,13 @@ import java.util.Objects;
 @Transactional
 public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialService {
 
-    private final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialServiceImpl.class);
-
     @Resource
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
 
     @Override
     public BizScreensaverMaterial getBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
-        BizScreensaverMaterial screensaverMaterial;
-
-        try {
-            screensaverMaterial = bizScreensaverMaterialMapper.selectByPrimaryKey(bizScreensaverMaterialId);
-
-            if (null == screensaverMaterial) {
-                logger.info("ID为{}的屏保素材不存在", bizScreensaverMaterialId);
-            }
-        } catch (Exception e) {
-
-            logger.error("屏保素材ID为{}的数据 获取报错", bizScreensaverMaterialId);
-
-            throw new RuntimeException(e);
-        }
-
-        return screensaverMaterial;
+        return bizScreensaverMaterialMapper.selectByPrimaryKey(bizScreensaverMaterialId);
     }
 
     @Autowired
@@ -56,38 +38,30 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO pageQO, BizScreensaverMaterial condition) {
 
-        PageVO<BizScreensaverMaterial> pageVO;
+        PageVO<BizScreensaverMaterial> pageVO = new PageVO<>(pageQO);
 
-        List<BizScreensaverMaterial> list = null;
+        List<BizScreensaverMaterial> list;
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
 
-            BizScreensaverMaterial condition = pageQO.getCondition();
+        if (Objects.nonNull(condition.getScreensaverId()))
+            list = bizScreensaverMaterialMapper
+                    .selectMaterialsByScreensaverId(condition.getScreensaverId());
+        else
+            list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition);
 
-            if (Objects.nonNull(condition.getScreensaverId()))
-                list = bizScreensaverMaterialMapper
-                        .selectMaterialsByScreensaverId(condition.getScreensaverId());
-            else
-                list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition);
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            list.forEach(item -> item.setScreensaverMaterialImgPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getScreensaverMaterialImgPath()
-            ));
+        list.forEach(item -> item.setScreensaverMaterialImgPath(
+                urlConfig.getUrlPrefix()
+                        + item.getScreensaverMaterialImgPath()
+        ));
 
-            pageVO.setList(list);
+        pageVO.setList(list);
 
-            pageVO.setTotal(page.getTotal());
-
-        } catch (Exception e) {
-
-            logger.error("屏保素材列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -95,82 +69,35 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
-        Result ret;
+        //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
+        int affectRow = bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
 
-        try {
-            //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
-            int affectRow = bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
+        int affectRow1 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
 
-            int affectRow1 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
-
-            logger.info(1 == affectRow1 ?
-                    "ID为{}的屏保素材删除成功" : "ID为{}的屏保素材删除失败", bizScreensaverMaterialId);
-
-            ret = new Result(String.format("ID为%d的屏保素材 删除了%d行,屏保-屏保素材关系表删除了%d行", bizScreensaverMaterialId, affectRow1, affectRow));
-
-        } catch (Exception e) {
-
-            logger.error("屏保素材ID为{}的数据 删除错误", bizScreensaverMaterialId);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow + affectRow1 ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId))
+                : Result.success(ResultEnum.NO_CONTENT);
     }
 
     @Override
     public Result updateBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
 
-        Result ret;
+        bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
-        try {
-            bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 
-            int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
-
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(1 == affectRow ?
-                                "ID为{}的屏保素材修改成功" : "ID为{}的屏保素材修改失败",
-                        bizScreensaverMaterial.getScreensaverMaterialId()
-                );
-            }
-
-            ret = new Result(1 == affectRow ? bizScreensaverMaterial : "屏保素材 修改了0行");
-
-        } catch (Exception e) {
-
-            logger.error("屏保素材数据 修改报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s屏保素材,无法修改", bizScreensaverMaterial.getScreensaverMaterialId()))
+                : Result.success(bizScreensaverMaterial);
     }
 
     @Override
     public Result addBizScreensaverMaterial(List<BizScreensaverMaterial> list) {
 
-        Result ret;
+        int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
 
-        try {
-            list.forEach(item -> item.setScreensaverMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE));
-
-            int affectRow = bizScreensaverMaterialMapper.batchInsert(list);
-
-            if (this.logger.isDebugEnabled()) {
-
-                logger.debug("屏保素材添加{}", 0 == affectRow ? "失败" : "成功添加" + affectRow + "行");
-            }
-
-            ret = new Result(0 != affectRow ? list : "屏保素材数据添加了0行");
-
-        } catch (Exception e) {
-
-            logger.error("屏保素材数据 添加报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "屏保素材列表,无法添加")
+                : Result.success(list);
     }
 }

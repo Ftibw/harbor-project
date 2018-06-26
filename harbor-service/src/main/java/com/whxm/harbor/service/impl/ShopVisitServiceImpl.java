@@ -3,14 +3,13 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.ShopVisitMapper;
 import com.whxm.harbor.service.ShopVisitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,19 +26,10 @@ public class ShopVisitServiceImpl implements ShopVisitService {
     @Override
     public ShopVisit getShopVisit(String ShopNumber) {
 
-        ShopVisit shopVisit;
+        ShopVisit shopVisit = shopVisitMapper.selectByPrimaryKey(ShopNumber);
 
-        try {
-            shopVisit = shopVisitMapper.selectByPrimaryKey(ShopNumber);
-
-            if (null == shopVisit) {
-                logger.info("编号为{}的商铺访问数据不存在", ShopNumber);
-            }
-        } catch (Exception e) {
-
-            logger.error("商铺访问数据 获取报错", e);
-
-            throw new RuntimeException(e);
+        if (null == shopVisit) {
+            throw new DataNotFoundException();
         }
 
         return shopVisit;
@@ -49,53 +39,32 @@ public class ShopVisitServiceImpl implements ShopVisitService {
     @Override
     public ResultMap<String, Object> updateShopVisit(String shopNumber) {
 
-        ResultMap<String, Object> ret = null;
+        int affectRow = shopVisitMapper.updateAmountByID(shopNumber);
 
-        try {
+        if (this.logger.isDebugEnabled()) {
 
-            int affectRow = shopVisitMapper.updateAmountByID(shopNumber);
-
-            if (this.logger.isDebugEnabled()) {
-
-                this.logger.debug(1 == affectRow ?
-                        "编号为{}的商铺访问数据更新成功" : "编号为{}的商铺访问数据更新失败", shopNumber);
-            }
-
-            ret = new ResultMap<String, Object>(1).build("success", 1 == affectRow);
-
-        } catch (Exception e) {
-
-            logger.error("编号为{}的商铺访问更新 报错", shopNumber, e);
-
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-
-            ret = new ResultMap<String, Object>(1).build("success", false);
-
+            this.logger.debug(1 == affectRow ?
+                    "编号为{}的商铺访问数据更新成功" : "编号为{}的商铺访问数据更新失败", shopNumber);
         }
 
-        return ret;
+        return new ResultMap<String, Object>(1).build("success", 1 == affectRow);
     }
 
     @Override
-    public PageVO<ShopVisit> getShopVisitList(PageQO pageQO) {
+    public PageVO<ShopVisit> getShopVisitList(PageQO pageQO, BizShop condition) {
 
-        PageVO<ShopVisit> pageVO;
+        PageVO<ShopVisit> pageVO = new PageVO<>(pageQO);
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<ShopVisit> list = shopVisitMapper.getShopVisitList(condition);
 
-            pageVO.setList(shopVisitMapper.getShopVisitList(pageQO.getCondition()));
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            pageVO.setTotal(page.getTotal());
+        pageVO.setList(list);
 
-        } catch (Exception e) {
-
-            logger.error("商铺访问列表获取报错", e);
-
-            throw new RuntimeException(e);
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -103,19 +72,7 @@ public class ShopVisitServiceImpl implements ShopVisitService {
     @Override
     public List<ShopVisit> getShopVisitList() {
 
-        List<ShopVisit> list;
-
-        try {
-            list = shopVisitMapper.getShopVisitList((BizShop) Constant.DEFAULT_QUERY_CONDITION);
-
-        } catch (Exception e) {
-
-            logger.error("商铺访问数据列表 获取报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return list;
+        return shopVisitMapper.getShopVisitList(null);
     }
 
 }

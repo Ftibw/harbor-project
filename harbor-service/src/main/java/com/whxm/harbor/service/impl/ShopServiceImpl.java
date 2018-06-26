@@ -5,15 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,6 @@ import java.util.*;
 @Transactional
 public class ShopServiceImpl implements ShopService {
 
-    private final Logger logger = LoggerFactory.getLogger(ShopServiceImpl.class);
 
     @Autowired
     private UrlConfig urlConfig;
@@ -35,28 +33,23 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public BizShopVo getBizShop(String bizShopId) {
 
-        BizShopVo vo = null;
+        BizShopVo vo = new BizShopVo();
 
-        try {
-            BizShop po = bizShopMapper.selectByPrimaryKey(bizShopId);
+        BizShop po = bizShopMapper.selectByPrimaryKey(bizShopId);
 
-            if (null != po) {
+        if (null == po)
+            throw new DataNotFoundException();
 
-                po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+        po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
 
-                vo = new BizShopVo();
+        BeanUtils.copyProperties(po, vo);
 
-                BeanUtils.copyProperties(po, vo);
+        List<ShopPicture> list = this.getShopPicturesById(bizShopId);
 
-                vo.setPictures(this.getShopPicturesById(bizShopId));
-            }
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺,获取报错", bizShopId);
-
-            throw new RuntimeException();
-        }
+        vo.setPictures(list);
 
         return vo;
     }
@@ -64,32 +57,23 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public PageVO<BizShop> getBizShopList(PageQO pageQO, BizShop condition) {
 
-        PageVO<BizShop> pageVO;
+        PageVO<BizShop> pageVO = new PageVO<>(pageQO);
 
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            pageVO = new PageVO<>(pageQO);
+        List<BizShop> list = bizShopMapper.getBizShopList(condition);
 
-            List<BizShop> list = bizShopMapper.getBizShopList(pageQO.getCondition());
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-            list.forEach(item -> item.setShopLogoPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getShopLogoPath()
-            ));
+        list.forEach(item -> item.setShopLogoPath(
+                urlConfig.getUrlPrefix()
+                        + item.getShopLogoPath()
+        ));
 
-            pageVO.setList(list);
+        pageVO.setList(list);
 
-            pageVO.setTotal(page.getTotal());
-
-            logger.info("商铺列表 获取成功");
-
-        } catch (Exception e) {
-
-            logger.error("商铺列表 获取错误", e);
-
-            throw new RuntimeException();
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -105,32 +89,23 @@ public class ShopServiceImpl implements ShopService {
 
         final List<BizShopVo> ret = new ArrayList<>();
 
-        try {
-            List<BizShop> list = bizShopMapper.getBizShopListOptional(params);
+        List<BizShop> list = bizShopMapper.getBizShopListOptional(params);
 
-            list.forEach(po -> {
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
 
-                po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+        list.forEach(po -> {
 
-                BizShopVo vo = new BizShopVo();
+            po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
 
-                BeanUtils.copyProperties(po, vo);
+            BizShopVo vo = new BizShopVo();
 
-                vo.setPictures(this.getShopPicturesById(vo.getShopId()));
+            BeanUtils.copyProperties(po, vo);
 
-                ret.add(vo);
-            });
+            vo.setPictures(this.getShopPicturesById(vo.getShopId()));
 
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(list.isEmpty() ? "{}条件下查询商铺列表无数据" : "{}条件下查询商铺列表成功", params);
-            }
-
-        } catch (Exception e) {
-
-            logger.error("商铺数据列表 获取报错", e);
-
-            throw new RuntimeException();
-        }
+            ret.add(vo);
+        });
 
         return ret;
     }
@@ -138,161 +113,85 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Result triggerBizShop(String bizShopId) {
 
-        Result ret;
+        BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
+        /*
+         * if(0==bizShop.getIsShopEnabled() ^ 1)
+         * bizShopMapper.delShopPicturesRelation(bizShopId);
+         * */
+        int status = bizShop.getIsShopEnabled() ^ 1;
 
-        if (null != bizShopId) {
+        bizShop.setIsShopEnabled(status);
 
-            try {
-                BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
-                /*
-                 * if(0==bizShop.getIsShopEnabled() ^ 1)
-                 * bizShopMapper.delShopPicturesRelation(bizShopId);
-                 * */
-                int status = bizShop.getIsShopEnabled() ^ 1;
+        int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
 
-                bizShop.setIsShopEnabled(status);
-
-                updateBizShop(bizShop);
-
-                ret = new Result(status);
-
-            } catch (Exception e) {
-
-                logger.error("ID为{}的商铺 状态(启用/停用)变更报错", bizShopId);
-
-                throw new RuntimeException();
-            }
-        } else {
-            logger.error("商铺ID为空");
-
-            ret = new Result(HttpStatus.NOT_FOUND.value(), "商铺ID为空", Constant.NO_DATA);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法启停", bizShopId))
+                : Result.success(bizShop);
     }
 
     @Override
     public Result updateBizShop(BizShop bizShop) {
 
-        Result ret;
+        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replace("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
+        int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
 
-        if (null == bizShop
-                || "".equals(bizShop.getShopId())
-                || null == bizShop.getShopId()) {
-
-            logger.error("商铺数据不存在");
-
-            return new Result(HttpStatus.OK.value(), "商铺数据不存在", Constant.NO_DATA);
-        }
-
-        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replace("^"+urlConfig.getUrlPrefix() + "(.*)$", "$1"));
-
-        try {
-            int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
-
-            if (this.logger.isDebugEnabled()) {
-                logger.debug(1 == affectRow ? "ID为{}的商铺 修改成功" : "ID为{}的商铺 修改失败", bizShop.getShopId());
-            }
-            ret = new Result("商铺数据修改了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺 修改错误", bizShop.getBizFormatId());
-
-            throw new RuntimeException(e);
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法修改", bizShop.getShopId()))
+                : Result.success(bizShop);
     }
 
     @Override
     public Result addBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
 
-        Result ret;
-
         Object exist = null;
 
         int affectRow = 0;
 
-        int affectRow2 = 0;
+        int affectRow1 = 0;
 
-        if (null != bizShop) {
-            try {
-                //赋值
-                String shopId = UUID.randomUUID().toString().replace("-", "");
+        //赋值
+        String shopId = UUID.randomUUID().toString().replace("-", "");
 
-                bizShop.setShopEnglishName(
-                        PinyinUtils.toPinyin(bizShop.getShopName())
-                );
-                bizShop.setShopId(shopId);
-                bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
-                bizShop.setAddShopTime(new Date());
+        bizShop.setShopEnglishName(
+                PinyinUtils.toPinyin(bizShop.getShopName())
+        );
+        bizShop.setShopId(shopId);
+        bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
+        bizShop.setAddShopTime(new Date());
 
-                //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
-                synchronized (this) {
+        //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
+        synchronized (this) {
 
-                    exist = bizShopMapper.selectIdByNumber(bizShop.getShopNumber());
+            exist = bizShopMapper.selectIdByNumber(bizShop.getShopNumber());
 
-                    if (Objects.isNull(exist)) {
+            if (Objects.isNull(exist)) {
 
-                        affectRow = bizShopMapper.insert(bizShop);
-                    }
-                }
-
-                if (Objects.nonNull(exist))
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "商铺编号重复", bizShop.getShopNumber());
-
-                affectRow2 = bizShopMapper.insertShopPictures(shopId, pictureList);
-
-                if (this.logger.isDebugEnabled()) {
-
-                    logger.debug("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
-                }
-
-                ret = new Result("新增" + affectRow + "行商铺记录,新增" + affectRow2 + "行商铺图片记录");
-
-            } catch (Exception e) {
-
-                logger.error("商铺数据 添加错误");
-
-                throw new RuntimeException(e);
+                affectRow = bizShopMapper.insert(bizShop);
             }
-
-        } else {
-            logger.error("要添加的商铺数据为空");
-
-            ret = new Result(HttpStatus.NOT_ACCEPTABLE.value(), "要添加的商铺数据为空", Constant.NO_DATA);
         }
 
-        return ret;
+        if (Objects.nonNull(exist))
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", bizShop.getShopId(), bizShop.getShopNumber()));
+
+        affectRow1 = bizShopMapper.insertShopPictures(shopId, pictureList);
+
+
+        return 0 == affectRow + affectRow1 ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", bizShop.getShopId()))
+                : Result.success(bizShop);
     }
 
     @Override
     public List<ShopPicture> getShopPicturesById(String bizShopId) {
 
-        List<ShopPicture> list;
+        List<ShopPicture> list = bizShopMapper.selectShopPicturesById(bizShopId);
 
-        try {
-            list = bizShopMapper.selectShopPicturesById(bizShopId);
-
-            list.forEach(picture ->
-                    picture.setShopPicturePath(
-                            urlConfig.getUrlPrefix() + picture.getShopPicturePath()
-                    )
-            );
-
-            if (this.logger.isDebugEnabled()) {
-
-                logger.debug(list.isEmpty() ? "ID为{}的商铺图片不存在" : "ID为{}的商铺图片查询成功", bizShopId);
-            }
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的商铺图片 获取报错", bizShopId, e);
-
-            throw new RuntimeException(e);
-        }
+        list.forEach(picture ->
+                picture.setShopPicturePath(
+                        urlConfig.getUrlPrefix() + picture.getShopPicturePath()
+                )
+        );
 
         return list;
     }
