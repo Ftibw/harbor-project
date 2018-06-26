@@ -227,7 +227,7 @@
             is_deleted=1
             <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
             <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
-            <if test="terminalType!=null">and terminal_type =#{terminalType}</if>
+            <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
             <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
             <if test="floorId!=null">and floor_id=#{floorId}</if>
             <if test="screensaverId!=null">and screensaver_id=#{screensaverId}</if>

@@ -76,7 +76,7 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端的屏保节目")
-    @PostMapping(value = "/program")
+    @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,

@@ -14,6 +14,7 @@ import com.whxm.harbor.service.ActivityMaterialService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,20 +70,12 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public Result deleteBizActivityMaterial(Integer bizActivityMaterialId) {
 
-        Result ret;
+        Result ret=new Result();
 
+        int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
 
-            int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
-
-            logger.info(1 == affectRow ?
-                            "ID为{}的活动素材 删除成功" :
-                            "ID为{}的活动素材 删除失败",
-                    bizActivityMaterialId
-            );
-
-        1 == affectRow? Result.success();
-
-        return ret;
+        ret.setCode(HttpStatus.NO_CONTENT.value());
+        return 1 == affectRow ? ;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ActivityController {
 
     @ApiOperation("终端获取全部活动数据")
     @GetMapping("/activities")
-    public ResultMap<String, Object> getBizFormats() {
+    public ResultMap<String, Object> getActivities() {
 
         ResultMap<String, Object> ret = new ResultMap<>(2);
 

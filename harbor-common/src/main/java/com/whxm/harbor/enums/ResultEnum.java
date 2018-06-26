@@ -16,6 +16,12 @@ public enum ResultEnum {
     */
     /* 成功状态码 */
     SUCCESS(1, "成功"),
+    //GET, PUT和PATCH
+    OK(200, "OK"),
+    //POST
+    CREATED(201, "Created"),
+    //DELETE
+    NO_CONTENT(204, "No Content"),
 
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
