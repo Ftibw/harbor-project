@@ -1,9 +1,7 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ActivityMaterialService;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
@@ -69,7 +67,7 @@ public class ActivityMaterialController {
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request, fileDir.getActivityMaterialImgDir());
     }
 
     //==========================以下均被拦截============================
@@ -156,21 +154,10 @@ public class ActivityMaterialController {
         return result;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation("添加活动素材(需授权)")
     @PostMapping("/bizActivityMaterial")
     public Result addBizActivityMaterial(@RequestBody List<BizActivityMaterial> list, HttpServletRequest request) {
 
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
-
-        list.forEach(item -> item
-                .setActivityMaterialImgPath(ftpSession.clearLocalFileAfterUpload(item.getActivityMaterialImgPath(), fileDir.getActivityMaterialImgDir(), request)));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
 
         Result result;
 

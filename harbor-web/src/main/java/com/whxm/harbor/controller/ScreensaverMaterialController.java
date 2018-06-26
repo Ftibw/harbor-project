@@ -3,10 +3,8 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -47,7 +45,22 @@ public class ScreensaverMaterialController {
     @PostMapping("/picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        Result ret = FileUtils.upload(file, request, fileDir.getScreensaverMaterialImgDir());
+
+        try {
+            Map<String, Object> map = (Map<String, Object>) ret.getData();
+            //判断图片横屏还是竖屏
+            String path = urlConfig.getUrlPrefix() + map.get("filePath");
+
+            String orientation = FileUtils.getImageOrientation(path);
+
+            map.put("imageOrientation", orientation);
+
+        } catch (IOException e) {
+
+            logger.error("屏保素材图片上传报错", e);
+        }
+        return ret;
     }
 
     //===============================以下均被拦截===============================
@@ -139,21 +152,10 @@ public class ScreensaverMaterialController {
         return ret;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
 
     @ApiOperation("添加屏保素材(需授权)")
     @PostMapping("/bizScreensaverMaterial")
     public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list, HttpServletRequest request) {
-
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
-
-        list.forEach(item -> item
-                .setScreensaverMaterialImgPath(ftpSession.clearLocalFileAfterUpload(item.getScreensaverMaterialImgPath(), fileDir.getScreensaverMaterialImgDir(), request)));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
 
         Result ret = null;
         try {

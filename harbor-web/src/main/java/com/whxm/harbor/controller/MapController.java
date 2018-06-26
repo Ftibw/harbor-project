@@ -3,9 +3,7 @@ package com.whxm.harbor.controller;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.FtpConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.ftp.FtpSession;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
@@ -64,7 +62,7 @@ public class MapController {
     @PostMapping("/picture")
     public Result uploadMap(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 
-        return FileUtils.upload(file, request);
+        return FileUtils.upload(file, request, fileDir.getMapPictureDir());
     }
 
     @ApiOperation("根据楼层ID获取地图数据")
@@ -154,20 +152,9 @@ public class MapController {
         return result;
     }
 
-    @Autowired
-    private FtpConfig ftpConfig;
-
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
     public Result addBizMap(@RequestBody BizMap bizMap, HttpServletRequest request) {
-
-        //---------------------------------------------------------------------------
-        FtpSession ftpSession = ftpConfig.openSession(true);
-
-        bizMap.setMapImgPath(ftpSession.clearLocalFileAfterUpload(bizMap.getMapImgPath(), fileDir.getMapPictureDir(), request));
-
-        ftpConfig.closeSession(ftpSession);
-        //---------------------------------------------------------------------------
 
         Result result = null;
         try {

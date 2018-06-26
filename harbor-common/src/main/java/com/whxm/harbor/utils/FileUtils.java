@@ -1,6 +1,7 @@
 package com.whxm.harbor.utils;
 
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @Author Ftibw
@@ -30,7 +30,7 @@ public class FileUtils {
 
             MultipartFile file, HttpServletRequest request,
 
-            Map<String, Object> result
+            String uploadRootDir, Map<String, Object> result
     ) {
 
         String originName = null;
@@ -41,39 +41,30 @@ public class FileUtils {
 
         String href = null;
 
-        String tempDir = null;
-
-        String orientation = null;
-
         try {
-            //临时文件根目录
-            String rootPath = request.getServletContext().getRealPath("/upload");
+            //资源服务器项目路径
+            //request.getServletContext().getRealPath("/" + uploadRootDir);
             //文件名称
             originName = file.getOriginalFilename();
             //文件大小
             size = file.getSize();
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
-            //文件缓存的临时目录
-            tempDir = UUID.randomUUID().toString().replace("-", "");
-            //创建缓存目录
-            File dirFile = new File(rootPath, tempDir);
+            //文件保存的目录
+            String filePath = Constant.resourcePath + "/" + uploadRootDir;
+            //分文件夹管理时的文件夹名
+            String dirName = StringUtils.createDirName();
+            //文件夹
+            File dirFile = new File(filePath, dirName);
 
             if (!dirFile.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 dirFile.mkdirs();
             }
 
-            href = "upload/" + tempDir + "/" + newName;
+            href = uploadRootDir + "/" + dirName + "/" + newName;
             //拷贝文件
-            file.transferTo(new File(dirFile.getAbsolutePath(), newName));
-
-            //判断图片横屏还是竖屏
-            String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
-
-            String url = appUrl + href;
-
-            orientation = FileUtils.getImageOrientation(url);
+            file.transferTo(new File(filePath + "/" + dirName, newName));
 
         } catch (IOException e) {
 
@@ -87,18 +78,16 @@ public class FileUtils {
             result.put("fileSize", size);
             result.put("fileNewName", newName);
             result.put("filePath", href);
-            result.put("tempDirName", tempDir);
-            result.put("imageOrientation", orientation);
         }
     }
 
-    public static Result upload(MultipartFile file, HttpServletRequest request) {
+    public static Result upload(MultipartFile file, HttpServletRequest request, String uploadRootDir) {
 
         if (!file.isEmpty()) {
             try {
-                HashMap<String, Object> map = new HashMap<>(6);
+                HashMap<String, Object> map = new HashMap<>(4);
 
-                FileUtils.upload(file, request, map);
+                FileUtils.upload(file, request, uploadRootDir, map);
 
                 return new Result(map);
 
