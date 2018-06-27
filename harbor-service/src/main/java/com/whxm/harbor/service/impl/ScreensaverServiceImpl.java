@@ -67,7 +67,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
         return 0 == affectRow + affectRow2 + affectRow3 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保,无法删除", bizScreensaverId))
-                : Result.success(ResultEnum.NO_CONTENT);
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

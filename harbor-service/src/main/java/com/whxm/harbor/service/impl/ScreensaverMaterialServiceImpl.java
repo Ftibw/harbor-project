@@ -76,7 +76,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
 
         return 0 == affectRow + affectRow1 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId))
-                : Result.success(ResultEnum.NO_CONTENT);
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

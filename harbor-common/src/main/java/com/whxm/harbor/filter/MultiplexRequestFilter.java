@@ -31,7 +31,7 @@ public class MultiplexRequestFilter implements Filter {
             if (Constant.DEFAULT_FILTER_METHOD.equals(req.getMethod().toUpperCase())
                     && Objects.nonNull(req.getContentType())
                     && req.getContentType().toLowerCase().contains(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
-                System.out.println("MultiplexRequestFilter:" + req.getMethod()+","+req.getContentType()+","+req.getRequestURL());
+
                 requestWrapper = new BodyReaderRequestWrapper((HttpServletRequest) request);
             }
         }

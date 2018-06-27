@@ -70,7 +70,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的活动素材,无法删除", bizActivityMaterialId))
-                : Result.success(ResultEnum.NO_CONTENT);
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

@@ -83,7 +83,7 @@ public class FloorServiceImpl implements FloorService {
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的楼层,无法删除", bizFloorId))
-                : Result.success(ResultEnum.NO_CONTENT);
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

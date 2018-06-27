@@ -17,6 +17,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -82,7 +84,7 @@ public class UserController {
     @DeleteMapping("/user")
     public Result delUser(
             @ApiParam(name = "ID", value = "用户的ID", required = true)
-                    String id
+            @Valid @NotNull String id
     ) {
         Assert.notNull(id, "用户ID不能为空");
 
@@ -110,7 +112,7 @@ public class UserController {
 
     @ApiOperation("登陆接口,token有效时间为2小时")
     @PostMapping("/login")
-    public Result userLogin(@RequestBody User user) {
+    public Result userLogin(@Valid @RequestBody User user) {
 
         Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
         Assert.notNull(user.getUserPassword(), "用户密码不能为空");
@@ -118,7 +120,7 @@ public class UserController {
         User info = userService.login(user);
 
         if (null == info)
-            throw new DataNotFoundException(ResultEnum.USER_LOGIN_ERROR);
+            return Result.failure(ResultEnum.USER_NOT_EXIST);
 
         String userId = info.getUserId();
 
@@ -158,7 +160,7 @@ public class UserController {
             return Result.success(chaos(userId, salt));
         }
 
-        return Result.failure(ResultEnum.USER_LOGIN_ERROR);
+        return Result.failure(ResultEnum.USER_PASSWORD_ERROR);
 
     }
 

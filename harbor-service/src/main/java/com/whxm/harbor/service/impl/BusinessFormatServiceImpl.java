@@ -72,7 +72,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的业态,无法删除", bizFormatId))
-                : Result.success(ResultEnum.NO_CONTENT);
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

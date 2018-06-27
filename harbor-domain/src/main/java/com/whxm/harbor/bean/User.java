@@ -1,15 +1,16 @@
 package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 public class User {
     private String userId;
-
+    @NotNull@NotEmpty
     private String userLoginname;
-
+    @NotNull@NotEmpty
     private String userPassword;
 
     private String userName;

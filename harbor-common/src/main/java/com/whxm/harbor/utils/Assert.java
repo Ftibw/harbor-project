@@ -1,5 +1,6 @@
 package com.whxm.harbor.utils;
 
+import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import org.springframework.util.StringUtils;
 

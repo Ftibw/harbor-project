@@ -16,13 +16,11 @@ public enum ResultEnum {
      */
     /* 成功状态码 */
     //GET, PUT和PATCH
-    OK(200, "成功"),
+    SUCCESS(200, "成功"),
     //POST
-    CREATED(201, "创建完成"),
+    SUCCESS_CREATED(201, "创建完成"),
     //DELETE
-    NO_CONTENT(204, "无数据"),
-
-    SUCCESS(1, "成功"),
+    SUCCESS_DELETED(204, "数据删除完成"),
 
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
@@ -36,10 +34,11 @@ public enum ResultEnum {
     USER_ACCOUNT_FORBIDDEN(20003, "账号已被禁用"),
     USER_NOT_EXIST(20004, "用户不存在"),
     USER_HAS_EXISTED(20005, "用户已存在"),
+    USER_PASSWORD_ERROR(20006, "用户密码错误"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
-    OPERATION_LOGIC_ERROR(30002, "被操作数据的逻辑出现问题"),
+    OPERATION_LOGIC_ERROR(30002, "业务逻辑出现问题"),
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

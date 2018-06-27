@@ -4,6 +4,7 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
@@ -160,7 +161,7 @@ public class TerminalController {
         BizTerminal terminal = terminalService.getBizTerminal(terminalId);
 
         if (null == terminal)
-            throw new DataNotFoundException();
+            return Result.failure(ResultEnum.RESULT_DATA_NONE);
 
         return Result.success(terminal);
     }
