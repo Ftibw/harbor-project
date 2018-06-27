@@ -104,7 +104,7 @@ public class MapServiceImpl implements MapService {
     public Result updateBizMap(BizMap bizMap) {
 
 
-        bizMap.setMapImgPath(bizMap.getMapImgPath().replace(urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizMap.setMapImgPath(bizMap.getMapImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
         int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 

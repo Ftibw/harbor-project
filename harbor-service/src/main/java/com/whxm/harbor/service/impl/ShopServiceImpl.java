@@ -132,7 +132,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Result updateBizShop(BizShop bizShop) {
 
-        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replace("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
         int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
 

@@ -98,7 +98,7 @@ public class MapController {
     public Result updateBizMap(@RequestBody BizMap bizMap) {
 
         Assert.notNull(bizMap, "地图数据不能为空");
-        Assert.isNull(bizMap.getMapId(), "地图ID必须为空");
+        Assert.notNull(bizMap.getMapId(), "地图ID不能为空");
 
         return mapService.updateBizMap(bizMap);
     }
