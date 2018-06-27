@@ -21,11 +21,12 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:192.168.1.80}
+    host: ${redishost:192.168.1.80}
   #配置全局时间返回格式
-#  jackson:
-#    date-format: yyyy-MM-dd HH:mm:ss
-#    time-zone: GMT+8
+  jackson:
+    default-property-inclusion: non_null
+#   date-format: yyyy-MM-dd HH:mm:ss
+#   time-zone: GMT+8
 mybatis:
   type-aliases-package: com.whxm.harbor.bean
   mapper-locations: mapper/*.xml
@@ -36,15 +37,8 @@ pagehelper:
   params: count=countSql
 swagger2:
   package: com.whxm.harbor.controller
-fileDir:
-  activityLogoDir: activityLogo
-  activityMaterialImgDir: activityMaterialPicture
-  shopLogoDir: shopLogo
-  shopPictureDir: shopPicture
-  screensaverMaterialImgDir: screensaverMaterialPicture
-  mapPictureDir: mapPicture
 urlConfig:
-  urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
+  urlPrefix: ${resourceServer:http://localhost:8080/resources/}
 server:
   port: 9000
 
