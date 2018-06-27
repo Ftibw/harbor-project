@@ -1,5 +1,6 @@
 package com.whxm.harbor.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
@@ -9,6 +10,7 @@ import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.service.ShopVisitService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
+import com.whxm.harbor.utils.JacksonUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -160,16 +162,6 @@ public class ShopController {
         return Result.success(pageVO);
     }
 
-    @ApiOperation("修改商铺(需授权)")
-    @PutMapping("/bizShop")
-    public Result updateBizShop(@RequestBody BizShop bizShop) {
-
-        Assert.notNull(bizShop, "商铺数据不能为空");
-        Assert.notNull(bizShop.getShopId(), "商铺ID不能为空");
-
-        return shopService.updateBizShop(bizShop);
-    }
-
     @ApiOperation("启用/停用商铺(需授权)")
     @DeleteMapping(value = "/bizShop")
     public Result triggerBizShop(
@@ -179,6 +171,30 @@ public class ShopController {
         Assert.notNull(id, "商铺ID不能为空");
 
         return shopService.triggerBizShop(id);
+    }
+
+    @ApiOperation("修改商铺(需授权)")
+    @PutMapping("/bizShop")
+    public Result updateBizShop(@RequestBody BizShopVo shopVo) {
+
+        Assert.notNull(shopVo, "商铺数据不能为空");
+
+        Assert.notNull(shopVo.getShopId(), "商铺ID不能为空");
+
+        Assert.notNull(shopVo.getShopLogoPath(), "商铺logo不能为空");
+
+        List<ShopPicture> pictures = shopVo.getPictures();
+
+        Assert.notNull(pictures, "商铺图片集合不能为空");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
+
+        String json = JacksonUtils.toJson(shopVo.getPictures());
+
+        List<Map<String, Object>> pictureList = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<Map<String, Object>>>() {
+        });
+
+        return shopService.updateBizShop(shopVo, pictureList);
     }
 
     @ApiOperation(value = "添加商铺(需授权)",

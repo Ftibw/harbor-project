@@ -238,6 +238,19 @@
         WHERE shop_number=#{shopNumber}
     </select>
 
+    <select id="isExistsDuplicateNumberExcludeSelf" parameterType="com.whxm.harbor.bean.BizShop">
+        SELECT 1
+        FROM
+            DUAL
+        WHERE
+            NOT EXISTS(SELECT shop_id
+                       FROM biz_shop
+                       WHERE shop_number = #{shopNumber})
+            OR EXISTS(SELECT 1
+                      FROM biz_shop
+                      WHERE shop_id = #{shopId} AND shop_number = #{shopNumber})
+    </select>
+
     <select id="getBizShopList" resultMap="ExtensionResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name,biz_format_type

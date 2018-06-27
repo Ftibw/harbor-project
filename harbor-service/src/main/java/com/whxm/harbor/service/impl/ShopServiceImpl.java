@@ -133,13 +133,39 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Result updateBizShop(BizShop bizShop) {
+    public Result updateBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
+
+        Object exist = null;
+
+        int affectRow = 0;
+
+        int affectRow1 = 0;
 
         bizShop.setShopLogoPath(bizShop.getShopLogoPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
 
-        int affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
+        bizShop.setShopEnglishName(
+                PinyinUtils.toPinyin(bizShop.getShopName())
+        );
 
-        return 0 == affectRow ?
+        synchronized (this) {
+
+            exist = bizShopMapper.isExistsDuplicateNumberExcludeSelf(bizShop);
+
+            if (null != exist) {
+
+                affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
+            }
+        }
+
+        if (null == exist)
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", bizShop.getShopId(), bizShop.getShopNumber()));
+
+        bizShopMapper.deleteShopPictures(bizShop.getShopId());
+
+        affectRow1 = bizShopMapper.insertShopPictures(bizShop.getShopId(), pictureList);
+
+
+        return 0 == affectRow || 0 == affectRow1 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法修改", bizShop.getShopId()))
                 : Result.success(bizShop);
     }
@@ -180,7 +206,7 @@ public class ShopServiceImpl implements ShopService {
         affectRow1 = bizShopMapper.insertShopPictures(shopId, pictureList);
 
 
-        return 0 == affectRow + affectRow1 ?
+        return 0 == affectRow || 0 == affectRow1 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", bizShop.getShopId()))
                 : Result.success(bizShop);
     }

@@ -30,7 +30,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         String token = request.getParameter("token");
 
-        System.out.println("TokenInterceptor:" + request.getMethod() + "\n" + request.getContentType() + "\n" + request.getRequestURL());
+        System.out.println("TokenInterceptor:" + request.getMethod() + "," + request.getContentType() + "," + request.getRequestURL());
 
         if (token != null && 64 == token.length()) {
             //分布式的时候,设置String序列化器

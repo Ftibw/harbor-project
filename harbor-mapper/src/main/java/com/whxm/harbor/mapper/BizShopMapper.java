@@ -2,6 +2,7 @@ package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,5 +36,10 @@ public interface BizShopMapper {
 
     BizShop selectIdByNumber(String shopNumber);
 
+    @Delete("delete from shop_picture_relation where shop_id=#{shopId}")
+    int deleteShopPictures(@Param("shopId") String shopId);
+
     //int delShopPicturesRelation(String shopId);
+
+    Integer isExistsDuplicateNumberExcludeSelf(BizShop bizShop);
 }

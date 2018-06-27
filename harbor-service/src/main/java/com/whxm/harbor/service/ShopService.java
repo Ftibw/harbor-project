@@ -45,9 +45,10 @@ public interface ShopService {
      * 修改商铺数据
      *
      * @param bizShop 商铺数据新值
+     * @param pictureList
      * @return ret
      */
-    Result updateBizShop(BizShop bizShop);
+    Result updateBizShop(BizShop bizShop, List<Map<String, Object>> pictureList);
 
     /**
      * 新增商铺数据
