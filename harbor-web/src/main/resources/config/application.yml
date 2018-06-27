@@ -2,7 +2,7 @@ spring:
   application:
     name: harbor-web
   datasource:
-    url: jdbc:mysql://${databasehost:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://${databasehost:localhost}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:47.94.202.250}
+      host: ${redishost:192.168.1.80}
   #配置全局时间返回格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
