@@ -59,8 +59,8 @@ public class ShopVisitServiceImpl implements ShopVisitService {
 
         List<ShopVisit> list = shopVisitMapper.getShopVisitList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 

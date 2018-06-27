@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
 
         List<User> list = userMapper.getUserList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 

@@ -54,8 +54,8 @@ public class TerminalServiceImpl implements TerminalService {
 
         List<BizTerminal> list = bizTerminalMapper.getBizTerminalList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 
