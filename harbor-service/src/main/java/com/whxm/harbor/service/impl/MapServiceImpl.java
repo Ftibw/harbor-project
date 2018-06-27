@@ -67,8 +67,8 @@ public class MapServiceImpl implements MapService {
 
         List<BizMap> list = bizMapMapper.getBizMapList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
 

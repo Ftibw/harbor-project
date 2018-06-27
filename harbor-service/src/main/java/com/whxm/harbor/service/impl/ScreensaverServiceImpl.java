@@ -44,8 +44,8 @@ public class ScreensaverServiceImpl implements ScreensaverService {
 
         List<BizScreensaver> list = bizScreensaverMapper.getBizScreensaverList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 

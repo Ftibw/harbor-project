@@ -63,8 +63,8 @@ public class ShopServiceImpl implements ShopService {
 
         List<BizShop> list = bizShopMapper.getBizShopList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setShopLogoPath(
                 urlConfig.getUrlPrefix()

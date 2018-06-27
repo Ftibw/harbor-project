@@ -84,8 +84,8 @@ public class TerminalVisitServiceImpl implements TerminalVisitService {
 
         List<TerminalVisit> list = terminalVisitMapper.getTerminalVisitList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+       /* if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 

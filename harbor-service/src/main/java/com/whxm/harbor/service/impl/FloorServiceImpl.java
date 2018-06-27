@@ -60,8 +60,8 @@ public class FloorServiceImpl implements FloorService {
 
         List<BizFloor> list = bizFloorMapper.getBizFloorList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 
@@ -73,7 +73,7 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public List<BizFloor> getBizFloorList() {
 
-        return bizFloorMapper.getBizFloorList((BizFloor) Constant.DEFAULT_QUERY_CONDITION);
+        return bizFloorMapper.getBizFloorList(null);
     }
 
     @Override

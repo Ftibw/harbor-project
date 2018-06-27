@@ -14,6 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -55,6 +56,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 //防止表单重复提交,主要是防止不幂等的新增请求
                 //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
                 if (Constant.DEFAULT_FILTER_METHOD.equals(request.getMethod().toUpperCase())
+                        && Objects.nonNull(request.getContentType())
                         && request.getContentType().toLowerCase().contains(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
 
                     String uri = request.getRequestURI();

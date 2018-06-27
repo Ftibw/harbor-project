@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public class MultiplexRequestFilter implements Filter {
 
+
+
     @Override
     public void destroy() {
 
@@ -31,7 +33,7 @@ public class MultiplexRequestFilter implements Filter {
             if (Constant.DEFAULT_FILTER_METHOD.equals(req.getMethod().toUpperCase())
                     && Objects.nonNull(req.getContentType())
                     && req.getContentType().toLowerCase().contains(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
-
+                System.out.println(req.getMethod()+"\n"+req.getContentType()+"\n"+req.getRequestURL());
                 requestWrapper = new BodyReaderRequestWrapper((HttpServletRequest) request);
             }
         }

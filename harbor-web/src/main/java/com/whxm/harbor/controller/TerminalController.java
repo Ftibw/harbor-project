@@ -102,7 +102,7 @@ public class TerminalController {
             convert.clean()
                     .build("code", 0)
                     .build("prog", prog)
-                    .build("on_off", Constant.NO_DATA)
+                    .build("on_off", "")
                     .build("data", new Object[]{});
         }
         return convert;

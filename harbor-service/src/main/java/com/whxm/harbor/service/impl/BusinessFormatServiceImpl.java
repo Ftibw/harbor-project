@@ -40,8 +40,8 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         List<BizFormat> list = bizFormatMapper.getBizFormatList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         pageVO.setList(list);
 
