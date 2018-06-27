@@ -39,4 +39,6 @@ public interface BizBuildingMapper {
     BizBuilding selectByNumber(@Param("number") String number);
 
     int batchInsert(List<BizBuilding> list);
+
+    List<String> isExistsDuplicateNumber(List<BizBuilding> list);
 }

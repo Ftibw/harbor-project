@@ -53,6 +53,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 activityMaterial/bizActivityMaterial
                 activity/bizActivity*/
 
+                System.out.println(request.getMethod()+"\n"+request.getContentType()+"\n"+request.getRequestURL());
+
                 //防止表单重复提交,主要是防止不幂等的新增请求
                 //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
                 if (Constant.DEFAULT_FILTER_METHOD.equals(request.getMethod().toUpperCase())

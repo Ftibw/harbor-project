@@ -94,7 +94,6 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
 
-        bizFormat.setBizFormatId(null);
         //仅为了避免重复索引抛异常,就多查一次,贼浪费
         synchronized (this) {
             exist = bizFormatMapper.selectIdByNumber(bizFormat.getBizFormatNumber());

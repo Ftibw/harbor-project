@@ -2,6 +2,7 @@ package com.whxm.harbor.service.impl;
 
 import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.service.BuildingService;
@@ -81,10 +82,21 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Result addBizBuildings(List<BizBuilding> list) {
 
-        int affectRow = bizBuildingMapper.batchInsert(list);
+        List<String> exist = null;
 
+        int affectRow = 0;
 
-        return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "数据列表无法添加")
+        //仅为了避免重复索引抛异常,就多查一次,贼浪费
+        synchronized (this) {
+            exist = bizBuildingMapper.isExistsDuplicateNumber(list);
+            if (null == exist || exist.isEmpty()) {
+                affectRow = bizBuildingMapper.batchInsert(list);
+            }
+        }
+        if (null != exist && !exist.isEmpty())
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("业态列表中编号为{%s}的数据重复", exist));
+
+        return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "业态列表无法添加")
                 : Result.success(list);
     }
 }
