@@ -30,6 +30,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         String token = request.getParameter("token");
 
+        System.out.println(request.getMethod()+"\n"+request.getContentType()+"\n"+request.getRequestURL());
+
         if (token != null && 64 == token.length()) {
             //分布式的时候,设置String序列化器
             StringRedisSerializer serializer = new StringRedisSerializer();
@@ -52,8 +54,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 bizFormat/bizFormat
                 activityMaterial/bizActivityMaterial
                 activity/bizActivity*/
-
-                System.out.println(request.getMethod()+"\n"+request.getContentType()+"\n"+request.getRequestURL());
 
                 //防止表单重复提交,主要是防止不幂等的新增请求
                 //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
