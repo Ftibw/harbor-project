@@ -193,6 +193,8 @@ public class ShopController {
 
         Assert.notNull(bizShop, "商铺数据不能为空");
 
+        Assert.notNull(bizShop.getShopLogoPath(), "商铺logo不能为空");
+
         List<Map<String, Object>> pictureList = param.pictureList;
 
         Assert.notNull(pictureList, "商铺图片集合不能为空");
