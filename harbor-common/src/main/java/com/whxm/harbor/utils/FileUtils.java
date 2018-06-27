@@ -5,7 +5,6 @@ import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.exception.InternalServerException;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
-import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -32,7 +31,7 @@ public class FileUtils {
             MultipartFile file,
             Callback<Map<String, Object>, R> callback) {
 
-        Assert.notNull(file, "警告:{文件不能为空}");
+        Assert.notNull(file, "文件不能为空");
 
         String originName = null;
 
@@ -94,12 +93,12 @@ public class FileUtils {
 
             URL url = new URL(path);
 
-        /*URLConnection con = url.openConnection();
-        //不超时
-        con.setConnectTimeout(0);
-        //不允许缓存
-        con.setUseCaches(false);
-        con.setDefaultUseCaches(false);*/
+            /*URLConnection con = url.openConnection();
+            //不超时
+            con.setConnectTimeout(0);
+            //不允许缓存
+            con.setUseCaches(false);
+            con.setDefaultUseCaches(false);*/
 
             InputStream is = url.openConnection().getInputStream();
 

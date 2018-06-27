@@ -19,7 +19,5 @@ public class Constant {
 
     public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
 
-    public static final String RESOURCE_APPLICATION_PATH = "http://192.168.1.103:8080/resources/";
-
     public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "picture";
 }
