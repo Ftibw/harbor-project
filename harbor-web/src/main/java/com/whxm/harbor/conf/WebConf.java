@@ -29,7 +29,6 @@ public class WebConf extends WebMvcConfigurerAdapter {
                         "/activityMaterial/biz*",
                         "/shop/biz*",
                         "/screensaverMaterial/biz*",
-                        "/screensaverMaterial/unbound*",
                         "/screensaver/biz*",
                         "/screensaver/publish*",
                         "/terminal/biz*",

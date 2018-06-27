@@ -3,18 +3,19 @@ package com.whxm.harbor.utils;
 import com.whxm.harbor.bean.ResultMap;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.exception.InternalServerException;
-import com.whxm.harbor.exception.ParameterInvalidException;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -61,12 +62,12 @@ public class FileUtils {
             }
 
             href = Constant.PICTURE_UPLOAD_ROOT_DIRECTORY + "/" + dateDirectoryName + "/" + newName;
+
+            File uploadedFile = new File(uploadRootDirectory + "/" + dateDirectoryName, newName);
             //拷贝文件
-            file.transferTo(new File(uploadRootDirectory + "/" + dateDirectoryName, newName));
+            file.transferTo(uploadedFile);
 
-            String url = Constant.RESOURCE_APPLICATION_PATH + href;
-
-            String imageOrientation = getImageOrientation(url);
+            String imageOrientation = getImageOrientation(uploadedFile);
 
             return callback.call(new ResultMap<String, Object>(5)
                     .build("fileOriginName", originName)
@@ -115,6 +116,36 @@ public class FileUtils {
 
             throw new InternalServerException();
         }
+    }
 
+    /**
+     * 判断图片是横屏还是竖屏
+     */
+    public static String getImageOrientation(File file) {
+
+        try {
+            BufferedImage bufferedImg = ImageIO.read(file);
+
+            int imgWidth = bufferedImg.getWidth();
+
+            int imgHeight = bufferedImg.getHeight();
+
+            return imgWidth > imgHeight ? "横屏" : "竖屏";
+        } catch (IOException e) {
+
+            logger.error("图片资源读取异常", e);
+
+            throw new InternalServerException();
+        }
+
+    }
+
+    //解决异常:Numbers of source Raster bands and source color space components do not match
+    //reader: com.twelvemonkeys.imageio.plugins.jpeg.JPEGImageReader@233c0b17
+    public static void main(String[] args) {
+        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("JPEG");
+        while (readers.hasNext()) {
+            System.out.println("reader: " + readers.next());
+        }
     }
 }

@@ -45,8 +45,8 @@ public class ActivityMaterialController {
 
             List<BizActivityMaterial> list = activityMaterialService.getMaterialListByActivityId(activityId);
 
-            if (null == list || list.isEmpty())
-                throw new DataNotFoundException();
+            /*if (null == list || list.isEmpty())
+                throw new DataNotFoundException();*/
 
             ret.build("data", list).build("success", true);
 

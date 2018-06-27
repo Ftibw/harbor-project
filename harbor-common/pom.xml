@@ -63,6 +63,16 @@
            <artifactId>junit-jupiter-api</artifactId>
            <version>RELEASE</version>
        </dependency>-->
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.3.2</version> <!-- Alternatively, build your own version -->
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.3.2</version> <!-- Alternatively, build your own version -->
+        </dependency>
     </dependencies>
 
 </project>

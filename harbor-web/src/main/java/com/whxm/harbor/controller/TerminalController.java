@@ -135,9 +135,6 @@ public class TerminalController {
     @GetMapping("/bizTerminalsNotPublished")
     public Result getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
 
-        Assert.notNull(condition, "查询参数的不能为空");
-        Assert.notNull(condition.getScreensaverId(), "屏保的ID不能为空");
-
         PageVO<BizTerminal> pageVO = terminalService.getNotPublishedTerminals(pageQO,condition);
 
         return Result.success(pageVO);
