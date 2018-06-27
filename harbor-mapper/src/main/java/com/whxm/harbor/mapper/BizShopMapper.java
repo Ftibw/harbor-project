@@ -41,5 +41,5 @@ public interface BizShopMapper {
 
     //int delShopPicturesRelation(String shopId);
 
-    Integer isExistsDuplicateNumberExcludeSelf(BizShop bizShop);
+    Integer couldUpdateUniqueNumber(BizShop bizShop);
 }

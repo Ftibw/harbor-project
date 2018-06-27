@@ -135,7 +135,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Result updateBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
 
-        Object exist = null;
+        Object could = null;
 
         int affectRow = 0;
 
@@ -149,15 +149,15 @@ public class ShopServiceImpl implements ShopService {
 
         synchronized (this) {
 
-            exist = bizShopMapper.isExistsDuplicateNumberExcludeSelf(bizShop);
+            could = bizShopMapper.couldUpdateUniqueNumber(bizShop);
 
-            if (null != exist) {
+            if (null != could) {
 
                 affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
             }
         }
 
-        if (null == exist)
+        if (null == could)
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", bizShop.getShopId(), bizShop.getShopNumber()));
 
         bizShopMapper.deleteShopPictures(bizShop.getShopId());
