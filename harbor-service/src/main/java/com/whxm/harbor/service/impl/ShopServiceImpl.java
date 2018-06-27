@@ -55,27 +55,41 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public PageVO<BizShop> getBizShopList(PageQO pageQO, BizShop condition) {
+    public PageVO<BizShopVo> getBizShopList(PageQO pageQO, BizShop condition) {
 
-        PageVO<BizShop> pageVO = new PageVO<>(pageQO);
+        PageVO<BizShopVo> pageVO = new PageVO<>(pageQO);
 
         Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+
+        final List<BizShopVo> ret = new ArrayList<>();
 
         List<BizShop> list = bizShopMapper.getBizShopList(condition);
 
         /*if (null == list || list.isEmpty())
             throw new DataNotFoundException();*/
 
-        list.forEach(item -> item.setShopLogoPath(
-                urlConfig.getUrlPrefix()
-                        + item.getShopLogoPath()
-        ));
+        selectShopPictures(ret, list);
 
-        pageVO.setList(list);
+        pageVO.setList(ret);
 
         pageVO.setTotal(page.getTotal());
 
         return pageVO;
+    }
+
+    private void selectShopPictures(List<BizShopVo> ret, List<BizShop> list) {
+        list.forEach(po -> {
+
+            po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+
+            BizShopVo vo = new BizShopVo();
+
+            BeanUtils.copyProperties(po, vo);
+
+            vo.setPictures(this.getShopPicturesById(vo.getShopId()));
+
+            ret.add(vo);
+        });
     }
 
     /**
@@ -94,18 +108,7 @@ public class ShopServiceImpl implements ShopService {
         if (null == list || list.isEmpty())
             throw new DataNotFoundException();
 
-        list.forEach(po -> {
-
-            po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
-
-            BizShopVo vo = new BizShopVo();
-
-            BeanUtils.copyProperties(po, vo);
-
-            vo.setPictures(this.getShopPicturesById(vo.getShopId()));
-
-            ret.add(vo);
-        });
+        selectShopPictures(ret, list);
 
         return ret;
     }

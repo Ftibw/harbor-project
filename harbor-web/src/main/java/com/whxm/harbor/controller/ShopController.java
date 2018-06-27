@@ -155,7 +155,7 @@ public class ShopController {
     @GetMapping("/bizShops")
     public Result getBizShops(PageQO pageQO, BizShop condition) {
 
-        PageVO<BizShop> pageVO = shopService.getBizShopList(pageQO, condition);
+        PageVO<BizShopVo> pageVO = shopService.getBizShopList(pageQO, condition);
 
         return Result.success(pageVO);
     }

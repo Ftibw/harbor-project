@@ -25,7 +25,7 @@ public interface ShopService {
      * @param condition
      * @return list
      */
-    PageVO<BizShop> getBizShopList(PageQO pageQO, BizShop condition);
+    PageVO<BizShopVo> getBizShopList(PageQO pageQO, BizShop condition);
 
 
     /**
