@@ -46,5 +46,5 @@ public interface BizTerminalMapper {
      * @param condition 查询条件
      * @return 终端列表
      */
-    List<BizTerminal> selectNotPublishedTerminal(Object condition);
+    List<BizTerminal> selectNotPublishedTerminal(BizTerminal condition);
 }

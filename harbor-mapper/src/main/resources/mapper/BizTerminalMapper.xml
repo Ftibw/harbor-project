@@ -235,7 +235,7 @@
         order by add_terminal_time desc
     </select>
     <!--查询指定ID的屏保未发布的终端-->
-    <select id="selectNotPublishedTerminal" resultMap="ExtensionResultMap">
+    <select id="selectNotPublishedTerminal" parameterType="com.whxm.harbor.bean.BizTerminal" resultMap="ExtensionResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name,floor_number
         from biz_terminal
@@ -247,7 +247,7 @@
           WHERE screensaver_id=#{screensaverId}
         )
         AND is_deleted=1
-        <if test="floorId!=null">and floor_id=#{floor_id}</if>
+        <if test="floorId!=null">and floor_id=#{floorId}</if>
         <if test="terminalType!=null and terminalType!=''">and terminal_type=#{terminalType}</if>
         order by add_terminal_time desc
     </select>

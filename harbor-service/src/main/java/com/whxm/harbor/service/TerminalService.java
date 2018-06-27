@@ -67,7 +67,8 @@ public interface TerminalService {
 
     /**
      *获取无屏保的终端
+     * @param pageQO
      * @param condition
      */
-    List<BizTerminal> getNotPublishedTerminal(BizTerminal condition);
+    PageVO<BizTerminal> getNotPublishedTerminals(PageQO pageQO, BizTerminal condition);
 }

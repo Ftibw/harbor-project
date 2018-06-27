@@ -196,30 +196,21 @@ public class TerminalServiceImpl implements TerminalService {
         return ret;
     }
 
-    /*
-    * List<BizTerminal> getNotPublishedTerminal(BizTerminal condition);
-    * {
-    *
-        List<BizTerminal> list = null;
-
-        try {
-            list = bizTerminalMapper.selectNotPublishedTerminal(condition);
-
-            logger.info(list.isEmpty() ? "无屏保的终端不存在" : "查询无屏保的终端列表OK");
-
-        } catch (Exception e) {
-
-            logger.error("无屏保的终端列表查询报错", e);
-
-            throw new RuntimeException(e);
-        }
-
-        return list;
-    }
-    * */
     @Override
-    public List<BizTerminal> getNotPublishedTerminal(BizTerminal condition) {
+    public PageVO<BizTerminal> getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
 
-        return bizTerminalMapper.selectNotPublishedTerminal(condition);
+        PageVO<BizTerminal> pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+
+        List<BizTerminal> list = bizTerminalMapper.selectNotPublishedTerminal(condition);
+
+        if (null == list || list.isEmpty())
+            throw new DataNotFoundException();
+
+        pageVO.setList(list);
+
+        pageVO.setTotal(page.getTotal());
+
+        return pageVO;
     }
 }
