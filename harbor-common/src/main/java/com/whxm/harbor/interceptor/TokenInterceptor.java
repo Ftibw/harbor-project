@@ -55,7 +55,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 //防止表单重复提交,主要是防止不幂等的新增请求
                 //只是为了防止数据重复的请求,而不是对数据进行逻辑过滤
                 if (Constant.DEFAULT_FILTER_METHOD.equals(request.getMethod().toUpperCase())
-                        && request.getContentType().equalsIgnoreCase(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
+                        && request.getContentType().toLowerCase().contains(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
 
                     String uri = request.getRequestURI();
 
@@ -63,7 +63,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
                     String lockKey = uri + userId + MD5Utils.MD5(params);
 
-                    //System.out.println(lockKey);
+                    System.out.println(lockKey);
+
                     if (lock.lock(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
 
                     else {

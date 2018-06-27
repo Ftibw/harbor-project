@@ -51,8 +51,8 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         else
             list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+        /*if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setScreensaverMaterialImgPath(
                 urlConfig.getUrlPrefix()

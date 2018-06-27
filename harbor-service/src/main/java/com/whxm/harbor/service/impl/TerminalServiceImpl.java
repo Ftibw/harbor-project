@@ -218,8 +218,8 @@ public class TerminalServiceImpl implements TerminalService {
     }
     * */
     @Override
-    public List<BizTerminal> getNotPublishedTerminal(Integer screensaverId) {
+    public List<BizTerminal> getNotPublishedTerminal(BizTerminal condition) {
 
-        return bizTerminalMapper.selectNotPublishedTerminal(screensaverId);
+        return bizTerminalMapper.selectNotPublishedTerminal(condition);
     }
 }

@@ -30,7 +30,7 @@ public class MultiplexRequestFilter implements Filter {
 
             if (Constant.DEFAULT_FILTER_METHOD.equals(req.getMethod().toUpperCase())
                     && Objects.nonNull(req.getContentType())
-                    && req.getContentType().equalsIgnoreCase(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
+                    && req.getContentType().toLowerCase().contains(Constant.DEFAULT_FILTER_CONTENT_TYPE)) {
 
                 requestWrapper = new BodyReaderRequestWrapper((HttpServletRequest) request);
             }
@@ -47,5 +47,4 @@ public class MultiplexRequestFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
 
     }
-
-}  
+}

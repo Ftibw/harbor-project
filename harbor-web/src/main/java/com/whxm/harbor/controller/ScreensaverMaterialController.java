@@ -88,12 +88,12 @@ public class ScreensaverMaterialController {
 
 
     @ApiOperation("添加屏保素材(需授权)")
-    @PostMapping("/bizScreensaverMaterial")
+    @PostMapping(value = "/bizScreensaverMaterial",consumes = "application/json")
     public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
 
         Assert.notNull(list, "屏保数据不能为空");
 
-        list.forEach(item -> Assert.notNull(item.getScreensaverMaterialId(), "屏保素材ID不能为null"));
+        list.forEach(item -> Assert.isNull(item.getScreensaverMaterialId(), "屏保素材ID必须为null"));
 
         return screensaverMaterialService.addBizScreensaverMaterial(list);
     }

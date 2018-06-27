@@ -134,14 +134,12 @@ public class TerminalController {
     @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
     @GetMapping("/bizTerminalsNotPublished")
     public Result getNotPublishedTerminals(
-            @ApiParam(name = "id", value = "屏保的ID", required = true)
-            @RequestParam("id") Integer id) {
-        //BizTerminal condition
+            @ApiParam(name = "condition", value = "屏保的ID和过滤条件", required = true)
+                    BizTerminal condition) {
 
-        Assert.notNull(id, "屏保的ID不能为空");
+        Assert.notNull(condition, "屏保的ID不能为空");
 
-        //List<BizTerminal> list = terminalService.getNotPublishedTerminal(condition);
-        List<BizTerminal> list = terminalService.getNotPublishedTerminal(id);
+        List<BizTerminal> list = terminalService.getNotPublishedTerminal(condition);
 
         if (null == list || list.isEmpty())
             throw new DataNotFoundException();
