@@ -275,8 +275,8 @@
         LEFT JOIN biz_format USING (biz_format_id)
         <where>
             <if test="floorId!=null">AND floor_id=#{floorId}</if>
-            <if test="bizFormatId!=null">AND biz_format_id=#{bizFormatId}</if>
-            <if test="initial!=null">AND shop_english_name like concat(#{initial},'%')</if>
+            <if test="bizFormatId!=null and bizFormatId!=''">AND biz_format_id=#{bizFormatId}</if>
+            <if test="initial!=null and initial!=''">AND shop_english_name like concat(#{initial},'%')</if>
         </where>
         order by shop_weight desc
     </select>

@@ -106,8 +106,8 @@ public class ShopServiceImpl implements ShopService {
 
         List<BizShop> list = bizShopMapper.getBizShopListOptional(params);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+       /* if (null == list || list.isEmpty())
+            throw new DataNotFoundException();*/
 
         selectShopPictures(ret, list);
 
