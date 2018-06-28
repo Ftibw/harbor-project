@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -37,8 +36,8 @@ public class KeepAliveAspect {
         redisTemplate.setKeySerializer(serializer);
         redisTemplate.setValueSerializer(serializer);
         //String.valueOf(System.currentTimeMillis())
-        redisTemplate.boundHashOps("terminalsStatus").put(terminalNumber, System.currentTimeMillis());
-
+        BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps("terminalsStatus");
+        hashOps.put(terminalNumber, System.currentTimeMillis());
         terminalService.updateTerminalOnline(terminalNumber);
 
         return joinPoint.proceed();
