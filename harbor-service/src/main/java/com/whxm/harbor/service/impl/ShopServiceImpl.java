@@ -190,7 +190,7 @@ public class ShopServiceImpl implements ShopService {
 
         List<ShopPicture> pictures = shopVo.getPictures();
 
-        Assert.notNull(pictures, "商铺图片集合不能为空");
+        Assert.notEmpty(pictures, "商铺图片集合不能为空");
 
         pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
 
