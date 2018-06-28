@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class KeepAliveAspect {
 
         String terminalNumber = String.valueOf(joinPoint.getArgs()[0]);
 
-        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+        StringRedisSerializer serializer = new StringRedisSerializer();
         redisTemplate.setKeySerializer(serializer);
         redisTemplate.setValueSerializer(serializer);
         //String.valueOf(System.currentTimeMillis())
@@ -45,7 +46,7 @@ public class KeepAliveAspect {
 
     @Scheduled(initialDelay = 10, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
-        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+        StringRedisSerializer serializer = new StringRedisSerializer();
         redisTemplate.setKeySerializer(serializer);
         redisTemplate.setValueSerializer(serializer);
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps("terminalsStatus");

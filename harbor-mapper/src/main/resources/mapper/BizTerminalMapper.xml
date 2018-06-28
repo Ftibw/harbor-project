@@ -287,7 +287,9 @@
      ")")-->
     <!--终端离线-->
     <update id="offLine">
-        update biz_terminal set is_terminal_online=0 where terminal_number in (
+        update biz_terminal
+        set is_terminal_online=0, terminal_switch_time=CURRENT_TIMESTAMP
+        where terminal_number in (
         <foreach collection="list" separator="," item="item">
             #{item}
         </foreach>

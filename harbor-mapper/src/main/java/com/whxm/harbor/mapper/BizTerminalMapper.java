@@ -44,7 +44,7 @@ public interface BizTerminalMapper {
 
     List<BizTerminal> getBizTerminalListWithPublishedFlag(BizTerminal condition);
 
-    @Update("update biz_terminal set is_terminal_online=1 where terminal_number=#{terminalNumber}")
+    @Update("update biz_terminal set is_terminal_online=1,terminal_switch_time=CURRENT_TIMESTAMP where terminal_number=#{terminalNumber}")
     int keepOnline(@Param("terminalNumber") String terminalNumber);
 
     int offLine(List<Object> terminalNumbers);
