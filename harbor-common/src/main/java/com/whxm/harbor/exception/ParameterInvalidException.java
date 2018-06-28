@@ -9,8 +9,6 @@ import com.whxm.harbor.enums.ResultEnum;
  */
 public class ParameterInvalidException extends BusinessException {
 
-    private static final long serialVersionUID = 3721036867889297081L;
-
     public ParameterInvalidException() {
         super();
     }

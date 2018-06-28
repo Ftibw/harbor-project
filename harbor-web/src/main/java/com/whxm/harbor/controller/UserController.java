@@ -84,7 +84,7 @@ public class UserController {
     @DeleteMapping("/user")
     public Result delUser(
             @ApiParam(name = "ID", value = "用户的ID", required = true)
-            @Valid @NotNull String id
+                    String id
     ) {
         Assert.notNull(id, "用户ID不能为空");
 
