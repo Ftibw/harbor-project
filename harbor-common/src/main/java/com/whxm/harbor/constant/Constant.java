@@ -8,7 +8,7 @@ public class Constant {
 
     public static final Integer ENABLED_STATUS = 1;
 
-    public static final Integer DISABLED_STATUS = 1;
+    public static final Integer DISABLED_STATUS = 0;
 
     public static final String DEFAULT_FILTER_METHOD = "POST";
 
