@@ -1,5 +1,6 @@
 package com.whxm.harbor.aop;
 
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.TerminalService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -42,8 +43,7 @@ public class KeepAliveAspect {
         return joinPoint.proceed();
     }
 
-
-    @Scheduled(initialDelay = 10, fixedRate = 10000)
+    @Scheduled(initialDelay = 10, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
         RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         redisTemplate.setKeySerializer(serializer);
@@ -54,11 +54,10 @@ public class KeepAliveAspect {
         List<Object> list = new ArrayList<>();
 
         map.forEach((terminalNumber, lastTimePoint) -> {
-            if (System.currentTimeMillis() > (Long.parseLong(String.valueOf(lastTimePoint)) + 10000)) {
+            if (System.currentTimeMillis() > (Long.parseLong(String.valueOf(lastTimePoint)) + Constant.KEEP_ALIVE_INTERVAL)) {
                 list.add(String.valueOf(terminalNumber));
             }
         });
-
 
         if (!list.isEmpty()) {
             terminalService.updateTerminalOffline(list);
@@ -66,4 +65,5 @@ public class KeepAliveAspect {
             logger.info("编号为{}的终端离线", list);
         }
     }
+
 }

@@ -60,7 +60,7 @@ public class TerminalController {
             if (null != terminal) {
 
                 ret.build("success", true)
-                        .build("floor", terminal.getFloorNumber())
+                        .build("floor", terminal.getFloorId())
                         .build("rotate", terminal.getTerminalRotationAngle());
 
             } else {

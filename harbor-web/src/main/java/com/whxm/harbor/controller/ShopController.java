@@ -65,7 +65,7 @@ public class ShopController {
             );
 
             if (null == list || list.isEmpty())
-                throw new DataNotFoundException();
+                ret.build("data", new byte[]{}).build("success", false);
 
             ret.build("data", list).build("success", true);
 
