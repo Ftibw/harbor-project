@@ -179,22 +179,15 @@ public class ShopController {
 
     @ApiOperation("修改商铺(需授权)")
     @PutMapping("/bizShop")
-    public Result updateBizShop(@RequestBody BizShopVo shopVo) {
+    public Result updateBizShop(@RequestBody ShopParam param) {
 
-        Assert.notNull(shopVo, "商铺数据不能为空");
+        Assert.notNull(param, "提交数据不能为空");
 
-        Assert.notNull(shopVo.getShopId(), "商铺ID不能为空");
+        Assert.notNull(param.bizShop, "商铺数据不能为空");
 
-        Assert.notNull(shopVo.getShopLogoPath(), "商铺logo不能为空");
+        Assert.notNull(param.bizShop.getShopId(), "商铺ID不能为空");
 
-        return shopService.updateBizShop(shopVo);
-    }
-
-    @ApiOperation(value = "添加商铺(需授权)",
-            notes = "pictureList中元素为map,map有3个key," +
-                    "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
-    @PostMapping("/bizShop")
-    public Result addBizShop(@RequestBody ShopParam param) {
+        Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空");
 
         //-----------做适配---------------
         BizShopVo shopVo = new BizShopVo();
@@ -212,15 +205,44 @@ public class ShopController {
 
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
 
-        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
-
         shopVo.setPictures(pictures);
 
-        Assert.notNull(shopVo, "商铺数据不能为空");
+        return shopService.updateBizShop(shopVo);
+    }
 
-        Assert.isNull(shopVo.getShopId(), "商铺ID必须为空");
+    @ApiOperation(value = "添加商铺(需授权)",
+            notes = "pictureList中元素为map,map有3个key," +
+                    "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
+    @PostMapping("/bizShop")
+    public Result addBizShop(@RequestBody ShopParam param) {
 
-        Assert.notNull(shopVo.getShopLogoPath(), "商铺logo不能为空");
+        Assert.notNull(param, "提交数据不能为空");
+
+        Assert.notNull(param.bizShop, "商铺数据不能为空");
+
+        Assert.isNull(param.bizShop.getShopId(), "商铺ID必须为空");
+
+        Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空");
+
+        //-----------做适配---------------
+        BizShopVo shopVo = new BizShopVo();
+
+        BeanUtils.copyProperties(param.bizShop, shopVo);
+
+        List<Map<String, Object>> pictureList = param.pictureList;
+
+        String json = JacksonUtils.toJson(pictureList);
+
+        List<ShopPicture> pictures = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<ShopPicture>>() {
+        });
+
+        //--------------------------------
+
+       /* Assert.notEmpty(pictures, "商铺图片集合不能为空");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));*/
+
+        shopVo.setPictures(pictures);
 
         return shopService.addBizShop(shopVo);
     }

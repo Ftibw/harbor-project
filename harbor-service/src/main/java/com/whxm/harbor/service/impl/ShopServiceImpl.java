@@ -186,8 +186,6 @@ public class ShopServiceImpl implements ShopService {
 
         int affectRow = 0;
 
-        int affectRow1 = 0;
-
         //赋值
         String shopId = UUID.randomUUID().toString().replace("-", "");
 
@@ -210,10 +208,13 @@ public class ShopServiceImpl implements ShopService {
         if (Objects.nonNull(exist))
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
 
-        affectRow1 = bizShopMapper.insertShopPictures(shopId, shopVo.getPictures());
+        List<ShopPicture> pictures = shopVo.getPictures();
+
+        if (null != pictures && !pictures.isEmpty())
+            bizShopMapper.insertShopPictures(shopId, pictures);
 
 
-        return 0 == affectRow || 0 == affectRow1 ?
+        return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", shopVo.getShopId()))
                 : Result.success(shopVo);
     }

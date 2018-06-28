@@ -4,7 +4,6 @@ import com.whxm.harbor.annotation.KeepAliveDetect;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Api(description = "终端服务")
 @RestController
@@ -77,7 +77,7 @@ public class TerminalController {
         return ret;
     }
 
-    @KeepAliveDetect(KeepAliveDetect.Interval.TWO_HOUR)
+    @KeepAliveDetect(value = 30, unit = TimeUnit.MINUTES)
     @ApiOperation("获取终端的屏保节目")
     @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> program(
