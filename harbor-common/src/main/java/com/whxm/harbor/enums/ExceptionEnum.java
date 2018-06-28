@@ -11,9 +11,9 @@ public enum ExceptionEnum {
     PARAMETER_INVALID(ParameterInvalidException.class, HttpStatus.BAD_REQUEST, ResultEnum.PARAM_IS_INVALID),
 
     /**
-     * 数据未找到,将404换成了204无数据
+     * 数据未找到
      */
-    NOT_FOUND(DataNotFoundException.class, HttpStatus.NO_CONTENT, ResultEnum.RESULT_DATA_NONE),
+    NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultEnum.RESULT_DATA_NONE),
 
     /**
      * 数据已存在

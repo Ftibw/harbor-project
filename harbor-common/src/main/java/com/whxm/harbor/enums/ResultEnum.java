@@ -14,13 +14,13 @@ public enum ResultEnum {
      * 当API 请求需要用户认证时，如果request中的认证信息不正确，要返回状态码 401，即NOT AUTHORIZED
      * 当API 请求需要验证用户权限时，如果当前用户无相应权限，要返回状态码 403，即FORBIDDEN
      */
-    /* 成功状态码 */
+    /* 请求成功：1-10000 */
     //GET, PUT和PATCH
-    SUCCESS(200, "成功"),
+    SUCCESS(1, "成功"),
     //POST
-    SUCCESS_CREATED(201, "创建完成"),
+    SUCCESS_CREATED(2, "创建完成"),
     //DELETE
-    SUCCESS_DELETED(204, "数据删除完成"),
+    SUCCESS_DELETED(3, "数据删除完成"),
 
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
@@ -116,15 +116,17 @@ public enum ResultEnum {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public ResultEnum setCode(Integer code) {
         this.code = code;
+        return this;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public ResultEnum setMessage(String message) {
         this.message = message;
+        return this;
     }
 }

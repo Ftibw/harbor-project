@@ -67,17 +67,20 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      */
     protected ResponseEntity<Result> handleBusinessException(BusinessException e, HttpServletRequest request) {
         LOGGER.info("handleBusinessException start, uri:{}, exceptions:{}, caused by: {}", request.getRequestURI(), e.getClass(), e.getMessage());
-
+        //根据异常的真实类型,获取限定死的的异常枚举常量,仅仅是为了从找到的常量中设置响应的HTTP状态码
         ExceptionEnum ee = ExceptionEnum.getByEClass(e.getClass());
         if (ee != null) {
             return ResponseEntity
                     .status(ee.getHttpStatus())
-                    .body(Result.failure(ee.getResultEnum(), e.getData()));
+                    .body(Result.failure(e.getResultEnum(), e.getData()));
         }
-
+        //e为BusinessException类本身的实例时 ExceptionEnum == null,
+        //其成员属性code/message/data/resultEnum均有可能为null
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(e.getResultEnum() == null ? Result.failure(e.getResultEnum()) : Result.failure(e.getResultEnum(), e.getData()));
+                //成员resultEnum=null,说明异常发生情况无法与ResultEnum中定义的任意一种匹配,默认为系统内部错误...
+                //成员resultEnum!=null,说明是自己手动配置的各个成员属性
+                .body(e.getResultEnum() == null ? Result.failure(ResultEnum.SYSTEM_INNER_ERROR) : Result.failure(e.getResultEnum(), e.getData()));
     }
 
     /**

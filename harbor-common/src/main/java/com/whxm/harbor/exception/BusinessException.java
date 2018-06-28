@@ -5,16 +5,12 @@ import com.whxm.harbor.enums.ResultEnum;
 import org.apache.commons.lang3.StringUtils;
 
 
-
 /**
- * @desc 业务异常类
- * 
  * @author zhumaer
+ * @desc 业务异常类
  * @since 9/18/2017 3:00 PM
  */
 public class BusinessException extends RuntimeException {
-
-    private static final long serialVersionUID = 194906846739586856L;
 
     protected String code;
 
@@ -48,7 +44,7 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String msg, Throwable cause, Object... objects) {
         this();
         String format = StringUtils.replace(msg, "{}", "%s");
-        this.message= String.format(format, objects);
+        this.message = String.format(format, objects);
     }
 
     public BusinessException(ResultEnum resultEnum, Object data) {
@@ -62,16 +58,13 @@ public class BusinessException extends RuntimeException {
         this.message = resultEnum.message();
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public BusinessException setCode(String code) {
         this.code = code;
+        return this;
     }
 
     @Override
@@ -79,23 +72,26 @@ public class BusinessException extends RuntimeException {
         return message;
     }
 
-    public void setMessage(String message) {
+    public BusinessException setMessage(String message) {
         this.message = message;
+        return this;
     }
 
     public ResultEnum getResultEnum() {
         return resultEnum;
     }
 
-    public void setResultEnum(ResultEnum resultEnum) {
+    public BusinessException setResultEnum(ResultEnum resultEnum) {
         this.resultEnum = resultEnum;
+        return this;
     }
 
     public Object getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public BusinessException setData(Object data) {
         this.data = data;
+        return this;
     }
 }
