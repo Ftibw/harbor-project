@@ -77,7 +77,7 @@ public class TerminalController {
         return ret;
     }
 
-    @KeepAliveDetect(Constant.KEEP_ALIVE_INTERVAL)
+    @KeepAliveDetect(KeepAliveDetect.Interval.TWO_HOUR)
     @ApiOperation("获取终端的屏保节目")
     @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> program(

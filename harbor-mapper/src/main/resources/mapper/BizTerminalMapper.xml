@@ -247,7 +247,7 @@
         <include refid="Base_Column_List"/>
         FROM biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
-        JOIN screensaver_published_terminal_relation USING (terminal_id)
+        LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         where
         is_deleted=1
         <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
