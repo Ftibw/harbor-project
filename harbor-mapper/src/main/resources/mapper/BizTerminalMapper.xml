@@ -32,7 +32,8 @@
         DELETE FROM biz_terminal
         WHERE terminal_id = #{terminalId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizTerminal">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="terminalId"
+            parameterType="com.whxm.harbor.bean.BizTerminal">
         INSERT INTO biz_terminal (terminal_id, terminal_name, terminal_number,
                                   terminal_ip, terminal_type, terminal_location,
                                   terminal_rotation_angle, is_terminal_online,

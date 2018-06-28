@@ -19,7 +19,8 @@
     delete from biz_floor
     where floor_id = #{floorId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizFloor">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="floorId"
+            parameterType="com.whxm.harbor.bean.BizFloor">
     insert into biz_floor (floor_id, floor_number, floor_name
       )
     values (#{floorId,jdbcType=INTEGER}, #{floorNumber,jdbcType=VARCHAR}, #{floorName,jdbcType=VARCHAR}

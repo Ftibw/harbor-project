@@ -23,7 +23,8 @@
         DELETE FROM biz_screensaver_material
         WHERE screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="screensaverMaterialId"
+            parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
         INSERT INTO biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
                                               screensaver_material_size, screensaver_material_name, screensaver_material_img_name,
                                               screensaver_material_type)

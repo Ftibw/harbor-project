@@ -26,7 +26,8 @@
         DELETE FROM sys_user
         WHERE user_id = #{userId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.User">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userId"
+            parameterType="com.whxm.harbor.bean.User">
         INSERT INTO sys_user (user_id, user_loginname, user_password,
                               user_name, user_alias, user_email,
                               user_wechat, is_deleted, add_user_time)

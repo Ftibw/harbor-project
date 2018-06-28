@@ -20,7 +20,8 @@
         DELETE FROM biz_map
         WHERE map_id = #{mapId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizMap">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="mapId"
+            parameterType="com.whxm.harbor.bean.BizMap">
         INSERT INTO biz_map (map_id, map_name, map_img_path,
                              floor_id)
         VALUES (#{mapId,jdbcType=INTEGER}, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},

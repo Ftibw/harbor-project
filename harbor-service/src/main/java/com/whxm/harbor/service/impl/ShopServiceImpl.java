@@ -39,7 +39,7 @@ public class ShopServiceImpl implements ShopService {
         BizShop po = bizShopMapper.selectByPrimaryKey(bizShopId);
 
         if (null == po)
-            throw new DataNotFoundException();
+            return null;
 
         po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
 
@@ -48,7 +48,7 @@ public class ShopServiceImpl implements ShopService {
         List<ShopPicture> list = this.getShopPicturesById(bizShopId);
 
         if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
+            return null;
 
         vo.setPictures(list);
 
@@ -188,12 +188,6 @@ public class ShopServiceImpl implements ShopService {
 
         int affectRow1 = 0;
 
-        List<ShopPicture> pictures = shopVo.getPictures();
-
-        Assert.notEmpty(pictures, "商铺图片集合不能为空");
-
-        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
-
         //赋值
         String shopId = UUID.randomUUID().toString().replace("-", "");
 
@@ -216,7 +210,7 @@ public class ShopServiceImpl implements ShopService {
         if (Objects.nonNull(exist))
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
 
-        affectRow1 = bizShopMapper.insertShopPictures(shopId, pictures);
+        affectRow1 = bizShopMapper.insertShopPictures(shopId, shopVo.getPictures());
 
 
         return 0 == affectRow || 0 == affectRow1 ?

@@ -20,7 +20,8 @@
         DELETE FROM biz_format
         WHERE biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizFormat">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="bizFormatId"
+            parameterType="com.whxm.harbor.bean.BizFormat">
         INSERT INTO biz_format (biz_format_id, biz_format_number, biz_format_type,
                                 is_deleted)
         VALUES (#{bizFormatId,jdbcType=INTEGER}, #{bizFormatNumber,jdbcType=VARCHAR}, #{bizFormatType,jdbcType=VARCHAR},

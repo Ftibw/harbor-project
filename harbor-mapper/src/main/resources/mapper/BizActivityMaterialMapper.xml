@@ -23,7 +23,8 @@
         DELETE FROM biz_activity_material
         WHERE activity_material_id = #{activityMaterialId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizActivityMaterial">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="activityMaterialId"
+            parameterType="com.whxm.harbor.bean.BizActivityMaterial">
         INSERT INTO biz_activity_material (activity_material_id, activity_material_img_path,
                                            activity_material_img_name, activity_material_name,
                                            activity_material_size, activity_id)

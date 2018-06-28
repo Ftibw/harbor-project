@@ -5,6 +5,7 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.ShopService;
@@ -18,12 +19,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Type;
 import java.util.*;
 
 @Api(description = "商铺服务")
@@ -150,7 +153,7 @@ public class ShopController {
 
         BizShopVo shop = shopService.getBizShop(shopId);
 
-        return Result.success(shop);
+        return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE) : Result.success(shop);
     }
     //==========================以下均被拦截============================
 
@@ -191,7 +194,27 @@ public class ShopController {
             notes = "pictureList中元素为map,map有3个key," +
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
-    public Result addBizShop(@RequestBody BizShopVo shopVo) {
+    public Result addBizShop(@RequestBody ShopParam param) {
+
+        //-----------做适配---------------
+        BizShopVo shopVo = new BizShopVo();
+
+        BeanUtils.copyProperties(param.bizShop, shopVo);
+
+        List<Map<String, Object>> pictureList = param.pictureList;
+
+        String json = JacksonUtils.toJson(pictureList);
+
+        List<ShopPicture> pictures = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<ShopPicture>>() {
+        });
+
+        //--------------------------------
+
+        Assert.notEmpty(pictures, "商铺图片集合不能为空");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
+
+        shopVo.setPictures(pictures);
 
         Assert.notNull(shopVo, "商铺数据不能为空");
 
@@ -201,4 +224,12 @@ public class ShopController {
 
         return shopService.addBizShop(shopVo);
     }
+}
+
+//商铺+商铺图片数据封装
+class ShopParam {
+
+    public BizShop bizShop;
+
+    public List<Map<String, Object>> pictureList;
 }

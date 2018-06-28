@@ -81,7 +81,7 @@ public class ScreensaverServiceImpl implements ScreensaverService {
     }
 
     @Override
-    public Result addBizScreensaver(BizScreensaver bizScreensaver, Integer[] screensaverMaterialIds) {
+    public Result addBizScreensaver(BizScreensaver bizScreensaver, Integer[] screensaverMaterialIds, String[] terminalIds) {
 
         bizScreensaver.setAddScreensaverTime(new Date());
 
@@ -91,6 +91,9 @@ public class ScreensaverServiceImpl implements ScreensaverService {
                 bizScreensaver.getScreensaverId(),
                 screensaverMaterialIds
         );
+        //添加时,若选择了终端,则进行发布
+        if (null != terminalIds && terminalIds.length > 0)
+            publishScreensaver(bizScreensaver.getScreensaverId(), terminalIds);
 
         return 0 == affectRow + affectRow2 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保,无法添加", bizScreensaver.getScreensaverId()))

@@ -1,5 +1,6 @@
 package com.whxm.harbor.controller;
 
+import com.whxm.harbor.annotation.KeepAliveDetect;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
@@ -78,6 +79,7 @@ public class TerminalController {
         return ret;
     }
 
+    @KeepAliveDetect(Constant.KEEP_ALIVE_INTERVAL)
     @ApiOperation("获取终端的屏保节目")
     @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> program(
@@ -136,7 +138,7 @@ public class TerminalController {
     @GetMapping("/bizTerminalsNotPublished")
     public Result getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
 
-        PageVO<BizTerminal> pageVO = terminalService.getNotPublishedTerminals(pageQO,condition);
+        PageVO<BizTerminal> pageVO = terminalService.getNotPublishedTerminals(pageQO, condition);
 
         return Result.success(pageVO);
     }

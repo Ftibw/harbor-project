@@ -29,7 +29,8 @@
         DELETE FROM biz_shop
         WHERE shop_id = #{shopId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizShop">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="shopId"
+            parameterType="com.whxm.harbor.bean.BizShop">
         INSERT INTO biz_shop (shop_id, shop_number, shop_name,
                               shop_english_name, floor_id, biz_format_id,
                               shop_house_number, is_shop_enabled, shop_logo_path,

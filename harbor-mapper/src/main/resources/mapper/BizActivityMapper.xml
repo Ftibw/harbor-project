@@ -22,7 +22,8 @@
         DELETE FROM biz_activity
         WHERE activity_id = #{activityId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizActivity">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="activityId"
+            parameterType="com.whxm.harbor.bean.BizActivity">
         INSERT INTO biz_activity (activity_id, activity_number, activity_logo, activity_logo_size,
                                   activity_type, is_deleted)
         VALUES (#{activityId,jdbcType=INTEGER}, #{activityNumber,jdbcType=VARCHAR}, #{activityLogo,jdbcType=VARCHAR},

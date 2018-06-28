@@ -80,7 +80,7 @@ public class ScreensaverController {
         Assert.isNull(param.bizScreensaver.getScreensaverId(), "屏保ID必须为空");
         Assert.notNull(param.screensaverMaterialIds, "屏保材料ID集合不能为空");
 
-        return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds);
+        return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds,param.terminalIds);
     }
 
     @ApiOperation(value = "发布屏保(需授权)",
@@ -109,5 +109,7 @@ class ScreensaverParam {
     public BizScreensaver bizScreensaver;
 
     public Integer[] screensaverMaterialIds;
+
+    public String[] terminalIds;
 }
 
