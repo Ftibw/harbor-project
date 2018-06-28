@@ -9,6 +9,7 @@ import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import org.springframework.beans.BeanUtils;
@@ -133,7 +134,8 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Result updateBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
+    public Result updateBizShop(BizShopVo shopVo) {
+
 
         Object could = null;
 
@@ -141,37 +143,44 @@ public class ShopServiceImpl implements ShopService {
 
         int affectRow1 = 0;
 
-        bizShop.setShopLogoPath(bizShop.getShopLogoPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        List<ShopPicture> pictures = shopVo.getPictures();
 
-        bizShop.setShopEnglishName(
-                PinyinUtils.toPinyin(bizShop.getShopName())
-        );
+        Assert.notNull(pictures, "商铺图片集合不能为空");
+
+        shopVo.setShopLogoPath(shopVo.getShopLogoPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+
+        pictures.forEach(item -> {
+            Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空");
+            item.setShopPicturePath(item.getShopPicturePath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        });
+
+        shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
 
         synchronized (this) {
 
-            could = bizShopMapper.couldUpdateUniqueNumber(bizShop);
+            could = bizShopMapper.couldUpdateUniqueNumber(shopVo);
 
             if (null != could) {
 
-                affectRow = bizShopMapper.updateByPrimaryKeySelective(bizShop);
+                affectRow = bizShopMapper.updateByPrimaryKeySelective(shopVo);
             }
         }
 
         if (null == could)
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", bizShop.getShopId(), bizShop.getShopNumber()));
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
 
-        bizShopMapper.deleteShopPictures(bizShop.getShopId());
+        bizShopMapper.deleteShopPictures(shopVo.getShopId());
 
-        affectRow1 = bizShopMapper.insertShopPictures(bizShop.getShopId(), pictureList);
+        affectRow1 = bizShopMapper.insertShopPictures(shopVo.getShopId(), pictures);
 
 
         return 0 == affectRow || 0 == affectRow1 ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法修改", bizShop.getShopId()))
-                : Result.success(bizShop);
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法修改", shopVo.getShopId()))
+                : Result.success(shopVo);
     }
 
     @Override
-    public Result addBizShop(BizShop bizShop, List<Map<String, Object>> pictureList) {
+    public Result addBizShop(BizShopVo shopVo) {
 
         Object exist = null;
 
@@ -179,36 +188,40 @@ public class ShopServiceImpl implements ShopService {
 
         int affectRow1 = 0;
 
+        List<ShopPicture> pictures = shopVo.getPictures();
+
+        Assert.notNull(pictures, "商铺图片集合不能为空");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
+
         //赋值
         String shopId = UUID.randomUUID().toString().replace("-", "");
 
-        bizShop.setShopEnglishName(
-                PinyinUtils.toPinyin(bizShop.getShopName())
-        );
-        bizShop.setShopId(shopId);
-        bizShop.setIsShopEnabled(Constant.ENABLED_STATUS);
-        bizShop.setAddShopTime(new Date());
+        shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
+        shopVo.setShopId(shopId);
+        shopVo.setIsShopEnabled(Constant.ENABLED_STATUS);
+        shopVo.setAddShopTime(new Date());
 
         //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
         synchronized (this) {
 
-            exist = bizShopMapper.selectIdByNumber(bizShop.getShopNumber());
+            exist = bizShopMapper.selectIdByNumber(shopVo.getShopNumber());
 
             if (Objects.isNull(exist)) {
 
-                affectRow = bizShopMapper.insert(bizShop);
+                affectRow = bizShopMapper.insert(shopVo);
             }
         }
 
         if (Objects.nonNull(exist))
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", bizShop.getShopId(), bizShop.getShopNumber()));
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
 
-        affectRow1 = bizShopMapper.insertShopPictures(shopId, pictureList);
+        affectRow1 = bizShopMapper.insertShopPictures(shopId, pictures);
 
 
         return 0 == affectRow || 0 == affectRow1 ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", bizShop.getShopId()))
-                : Result.success(bizShop);
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", shopVo.getShopId()))
+                : Result.success(shopVo);
     }
 
     @Override

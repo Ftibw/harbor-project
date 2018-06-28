@@ -16,6 +16,13 @@ public class BizShopVo extends BizShop {
     public void setPictures(List<ShopPicture> pictures) {
         this.pictures = pictures;
     }
+
+    @Override
+    public String toString() {
+        return "BizShopVo{" +
+                "pictures=" + pictures +
+                '}';
+    }
 }
 
 

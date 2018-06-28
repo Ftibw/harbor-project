@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.ShopService;
@@ -183,49 +184,21 @@ public class ShopController {
 
         Assert.notNull(shopVo.getShopLogoPath(), "商铺logo不能为空");
 
-        List<ShopPicture> pictures = shopVo.getPictures();
-
-        Assert.notNull(pictures, "商铺图片集合不能为空");
-
-        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
-
-        String json = JacksonUtils.toJson(shopVo.getPictures());
-
-        List<Map<String, Object>> pictureList = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<Map<String, Object>>>() {
-        });
-
-        return shopService.updateBizShop(shopVo, pictureList);
+        return shopService.updateBizShop(shopVo);
     }
 
     @ApiOperation(value = "添加商铺(需授权)",
             notes = "pictureList中元素为map,map有3个key," +
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
-    public Result addBizShop(@RequestBody ShopParam param) {
+    public Result addBizShop(@RequestBody BizShopVo shopVo) {
 
-        Assert.notNull(param, "参数不能为空");
+        Assert.notNull(shopVo, "商铺数据不能为空");
 
-        BizShop bizShop = param.bizShop;
+        Assert.isNull(shopVo.getShopId(), "商铺ID必须为空");
 
-        Assert.notNull(bizShop, "商铺数据不能为空");
+        Assert.notNull(shopVo.getShopLogoPath(), "商铺logo不能为空");
 
-        Assert.notNull(bizShop.getShopLogoPath(), "商铺logo不能为空");
-
-        List<Map<String, Object>> pictureList = param.pictureList;
-
-        Assert.notNull(pictureList, "商铺图片集合不能为空");
-
-        pictureList.forEach(item -> Assert.notNull(item.get("shopPicturePath"), "商铺图片不能为空"));
-
-        return shopService.addBizShop(bizShop, pictureList);
-
+        return shopService.addBizShop(shopVo);
     }
-}
-
-//商铺+商铺图片数据封装
-class ShopParam {
-
-    public BizShop bizShop;
-
-    public List<Map<String, Object>> pictureList;
 }

@@ -44,19 +44,18 @@ public interface ShopService {
     /**
      * 修改商铺数据
      *
-     * @param bizShop 商铺数据新值
-     * @param pictureList
+     * @param shopVo 商铺数据新值
      * @return ret
      */
-    Result updateBizShop(BizShop bizShop, List<Map<String, Object>> pictureList);
+    Result updateBizShop(BizShopVo shopVo);
 
     /**
      * 新增商铺数据
      *
-     * @param bizShop 商铺数据新值
+     * @param shopVo 商铺数据新值
      * @return ret
      */
-    Result addBizShop(BizShop bizShop, List<Map<String, Object>> pictureList);
+    Result addBizShop(BizShopVo shopVo);
 
     /**
      * @param bizShopId 商铺ID

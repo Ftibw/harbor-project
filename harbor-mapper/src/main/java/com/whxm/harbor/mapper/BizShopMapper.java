@@ -15,7 +15,7 @@ public interface BizShopMapper {
 
     int insertShopPictures(
             @Param("shopId") String shopId,
-            @Param("pictures") List<Map<String, Object>> pictures
+            @Param("pictures") List<ShopPicture> pictures
     );
 
     int insertSelective(BizShop record);
