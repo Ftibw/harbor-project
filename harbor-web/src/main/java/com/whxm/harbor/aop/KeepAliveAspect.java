@@ -1,22 +1,19 @@
 package com.whxm.harbor.aop;
 
-import com.whxm.harbor.annotation.KeepAliveDetect;
-import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.service.TerminalService;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 @Aspect
 @Component
@@ -37,14 +34,36 @@ public class KeepAliveAspect {
         RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
         redisTemplate.setKeySerializer(serializer);
         redisTemplate.setValueSerializer(serializer);
-
-        redisTemplate.boundValueOps(terminalNumber).set(String.valueOf(System.currentTimeMillis()));
-
-
+        //String.valueOf(System.currentTimeMillis())
+        redisTemplate.boundHashOps("terminalsStatus").put(terminalNumber, System.currentTimeMillis());
 
         terminalService.updateTerminalOnline(terminalNumber);
 
         return joinPoint.proceed();
     }
 
+
+    @Scheduled(initialDelay = 10, fixedRate = 10000)
+    public void keepAliveDetect() {
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+        redisTemplate.setKeySerializer(serializer);
+        redisTemplate.setValueSerializer(serializer);
+        BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps("terminalsStatus");
+        Map<Object, Object> map = hashOps.entries();
+
+        List<Object> list = new ArrayList<>();
+
+        map.forEach((terminalNumber, lastTimePoint) -> {
+            if (System.currentTimeMillis() > (Long.parseLong(String.valueOf(lastTimePoint)) + 10000)) {
+                list.add(String.valueOf(terminalNumber));
+            }
+        });
+
+
+        if (!list.isEmpty()) {
+            terminalService.updateTerminalOffline(list);
+            hashOps.delete(list.toArray());
+            logger.info("编号为{}的终端离线", list);
+        }
+    }
 }

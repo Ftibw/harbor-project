@@ -179,29 +179,13 @@ public class ShopController {
 
     @ApiOperation("修改商铺(需授权)")
     @PutMapping("/bizShop")
-    public Result updateBizShop(@RequestBody ShopParam param) {
+    public Result updateBizShop(@RequestBody BizShopVo shopVo) {
 
-        Assert.notNull(param, "提交数据不能为空");
+        Assert.notNull(shopVo, "商铺数据不能为空");
 
-        Assert.notNull(param.bizShop, "商铺数据不能为空");
+        Assert.notNull(shopVo.getShopId(), "商铺ID不能为空");
 
-        Assert.notNull(param.bizShop.getShopId(), "商铺ID不能为空");
-
-        Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空");
-
-        //-----------做适配---------------
-        BizShopVo shopVo = new BizShopVo();
-
-        BeanUtils.copyProperties(param.bizShop, shopVo);
-
-        List<Map<String, Object>> pictureList = param.pictureList;
-
-        String json = JacksonUtils.toJson(pictureList);
-
-        List<ShopPicture> pictures = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<ShopPicture>>() {
-        });
-
-        //--------------------------------
+        List<ShopPicture> pictures = shopVo.getPictures();
 
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
 

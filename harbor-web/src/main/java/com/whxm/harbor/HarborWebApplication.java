@@ -5,11 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.servlet.MultipartConfigElement;
 
 @SpringBootApplication
 @MapperScan("com.whxm.harbor.mapper")
+@EnableScheduling
 public class HarborWebApplication {
 
     public static void main(String[] args) {

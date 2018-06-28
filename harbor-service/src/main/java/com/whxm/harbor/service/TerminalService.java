@@ -80,4 +80,12 @@ public interface TerminalService {
      * @return
      */
     int updateTerminalOnline(String terminalNumber);
+
+    /**
+     * 批量更新终端在线状态
+     *
+     * @param terminalNumbers
+     * @return
+     */
+    int updateTerminalOffline(List<Object> terminalNumbers);
 }

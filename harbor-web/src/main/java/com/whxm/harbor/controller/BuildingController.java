@@ -51,9 +51,12 @@ public class BuildingController {
 
         Assert.notEmpty(buildings, "建筑数据不能为空");
 
-        Assert.notNull(list, "建筑数据结构解析失败");
+        Assert.notEmpty(list, "建筑数据结构解析失败");
 
-        list.forEach(item -> Assert.isNull(item.getId(), "建筑ID必须为空"));
+        list.forEach(item -> {
+            Assert.isNull(item.getId(), "建筑ID必须为空");
+            Assert.hasText(item.getNumber(), "建筑编号不能为空");
+        });
 
         return buildingService.addBizBuildings(list);
     }

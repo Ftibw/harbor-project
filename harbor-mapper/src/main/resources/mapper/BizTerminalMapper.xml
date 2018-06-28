@@ -281,4 +281,16 @@
             LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         WHERE terminal_number = #{terminalNumber}
     </select>
+
+    <!-- @Update("update biz_terminal set is_terminal_online=0 where terminal_number in (" +
+     "<foreach collection='list' separator=',' item='item' >#{item}</foreach>" +
+     ")")-->
+    <!--终端离线-->
+    <update id="offLine">
+        update biz_terminal set is_terminal_online=0 where terminal_number in (
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </update>
 </mapper>

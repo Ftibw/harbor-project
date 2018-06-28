@@ -216,6 +216,11 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public int updateTerminalOnline(String terminalNumber) {
-        return bizTerminalMapper.updateStatusByNumber(terminalNumber);
+        return bizTerminalMapper.keepOnline(terminalNumber);
+    }
+
+    @Override
+    public int updateTerminalOffline(List<Object> terminalNumbers) {
+        return bizTerminalMapper.offLine(terminalNumbers);
     }
 }
