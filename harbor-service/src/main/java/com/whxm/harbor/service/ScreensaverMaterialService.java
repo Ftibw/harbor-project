@@ -26,6 +26,16 @@ public interface ScreensaverMaterialService {
      */
     PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO pageQO, BizScreensaverMaterial condition);
 
+
+    /**
+     * 获取指定屏保绑定的屏保素材列表
+     *
+     * @param pageQO
+     * @param condition
+     * @return list
+     */
+    PageVO<BizScreensaverMaterial> getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition);
+
     /**
      * 根据ID删除屏保素材
      *

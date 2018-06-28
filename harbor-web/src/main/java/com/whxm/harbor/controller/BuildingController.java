@@ -45,10 +45,11 @@ public class BuildingController {
     @PostMapping
     public Result addBizBuilding(@RequestParam("buildings") String buildings) {
 
-        Assert.notNull(buildings, "建筑数据不能为空");
 
         List<BizBuilding> list = JacksonUtils.readGenericTypeValue(buildings, new TypeReference<List<BizBuilding>>() {
         });
+
+        Assert.notEmpty(buildings, "建筑数据不能为空");
 
         Assert.notNull(list, "建筑数据结构解析失败");
 

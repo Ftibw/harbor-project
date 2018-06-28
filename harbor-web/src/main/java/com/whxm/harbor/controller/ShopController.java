@@ -153,7 +153,7 @@ public class ShopController {
 
         BizShopVo shop = shopService.getBizShop(shopId);
 
-        return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE) : Result.success(shop);
+        return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
     }
     //==========================以下均被拦截============================
 

@@ -29,7 +29,7 @@ public class RedisDistributedLock {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    public Boolean lock(String lockKey, String requestId, int expireTime) {
+    public Boolean lock(String lockKey, String requestId, long expireTime) {
 
         return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
 

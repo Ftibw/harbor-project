@@ -48,6 +48,15 @@ public class ScreensaverMaterialController {
         return Result.success(pageVO);
     }
 
+    @ApiOperation("获取指定屏保绑定的屏保素材(需授权)")
+    @GetMapping("/bizScreensaverMaterialsBound")
+    public Result getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition) {
+
+        PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getMaterialsByScreensaverId(pageQO, condition);
+
+        return Result.success(pageVO);
+    }
+
     @ApiOperation("获取屏保素材(需授权)")
     @GetMapping("/bizScreensaverMaterial/{ID}")
     public Result getBizScreensaverMaterial(
@@ -88,7 +97,7 @@ public class ScreensaverMaterialController {
 
 
     @ApiOperation("添加屏保素材(需授权)")
-    @PostMapping(value = "/bizScreensaverMaterial",consumes = "application/json")
+    @PostMapping(value = "/bizScreensaverMaterial", consumes = "application/json")
     public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
 
         Assert.notNull(list, "屏保数据不能为空");

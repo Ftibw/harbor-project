@@ -213,4 +213,9 @@ public class TerminalServiceImpl implements TerminalService {
 
         return pageVO;
     }
+
+    @Override
+    public int updateTerminalOnline(String terminalNumber) {
+        return bizTerminalMapper.updateStatusByNumber(terminalNumber);
+    }
 }

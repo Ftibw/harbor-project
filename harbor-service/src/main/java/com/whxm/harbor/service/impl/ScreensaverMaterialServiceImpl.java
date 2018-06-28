@@ -8,9 +8,9 @@ import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,21 +35,13 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Autowired
     private UrlConfig urlConfig;
 
-    @Override
-    public PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO pageQO, BizScreensaverMaterial condition) {
+    private PageVO<BizScreensaverMaterial> getListTemplate(final PageQO pageQO, final BizScreensaverMaterial condition, Callback<Object, List<BizScreensaverMaterial>> callback) {
 
         PageVO<BizScreensaverMaterial> pageVO = new PageVO<>(pageQO);
 
-        List<BizScreensaverMaterial> list;
-
         Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
-
-
-        if (Objects.nonNull(condition.getScreensaverId()))
-            list = bizScreensaverMaterialMapper
-                    .selectMaterialsByScreensaverId(condition.getScreensaverId());
-        else
-            list = bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition);
+        //目前参数用不上
+        List<BizScreensaverMaterial> list = callback.call(null);
 
         /*if (null == list || list.isEmpty())
             throw new DataNotFoundException();*/
@@ -64,6 +56,16 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         pageVO.setTotal(page.getTotal());
 
         return pageVO;
+    }
+
+    @Override
+    public PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO pageQO, BizScreensaverMaterial condition) {
+        return getListTemplate(pageQO, condition, param -> bizScreensaverMaterialMapper.getBizScreensaverMaterialList(condition));
+    }
+
+    @Override
+    public PageVO<BizScreensaverMaterial> getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition) {
+        return getListTemplate(pageQO, condition, param -> bizScreensaverMaterialMapper.selectMaterialsByScreensaverId(condition.getScreensaverId()));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BizScreensaverMaterial {
     private Integer screensaverMaterialId;
@@ -15,11 +16,19 @@ public class BizScreensaverMaterial {
 
     private String screensaverMaterialType;
 
-    public Integer getScreensaverMaterialId() {
-        return screensaverMaterialId;
+    private Integer screensaverId;
+
+    @JsonProperty("checked")
+    private Integer hasBindThisScreensaver;
+
+    public Integer getHasBindThisScreensaver() {
+        return hasBindThisScreensaver;
     }
 
-    public Integer screensaverId;
+    public void setHasBindThisScreensaver(Integer hasBindThisScreensaver) {
+        this.hasBindThisScreensaver = hasBindThisScreensaver;
+    }
+
 
     public String getScreensaverMaterialImgName() {
         return screensaverMaterialImgName;
@@ -36,6 +45,10 @@ public class BizScreensaverMaterial {
 
     public void setScreensaverId(Integer screensaverId) {
         this.screensaverId = screensaverId;
+    }
+
+    public Integer getScreensaverMaterialId() {
+        return screensaverMaterialId;
     }
 
     public void setScreensaverMaterialId(Integer screensaverMaterialId) {

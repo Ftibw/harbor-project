@@ -1,6 +1,8 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizTerminal;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -41,4 +43,7 @@ public interface BizTerminalMapper {
     Map<String, Object> selectTerminalWithScreensaver(String terminalId);
 
     List<BizTerminal> getBizTerminalListWithPublishedFlag(BizTerminal condition);
+
+    @Update("update biz_terminal set is_terminal_online=1 where terminal_number=#{terminalNumber}")
+    int updateStatusByNumber(@Param("terminalNumber") String terminalNumber);
 }

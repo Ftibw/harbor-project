@@ -1,6 +1,7 @@
 package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
@@ -45,6 +46,7 @@ public class BizTerminal {
     //终端是否有指定屏保ID的屏保
     private Integer hasThisScreensaver;
 
+    @JsonProperty("checked")
     public Integer getHasThisScreensaver() {
         return hasThisScreensaver;
     }

@@ -20,7 +20,7 @@ public interface TerminalService {
     /**
      * 获取终端列表
      *
-     * @param pageQO 分页查询对象
+     * @param pageQO    分页查询对象
      * @param condition
      * @return pageVO
      */
@@ -66,9 +66,18 @@ public interface TerminalService {
     ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params);
 
     /**
-     *获取无屏保的终端
+     * 获取无屏保的终端
+     *
      * @param pageQO
      * @param condition
      */
     PageVO<BizTerminal> getBizTerminalListWithPublishedFlag(PageQO pageQO, BizTerminal condition);
+
+    /**
+     * 维持终端在线状态
+     *
+     * @param terminalNumber
+     * @return
+     */
+    int updateTerminalOnline(String terminalNumber);
 }
