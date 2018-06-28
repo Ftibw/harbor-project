@@ -197,12 +197,12 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public PageVO<BizTerminal> getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
+    public PageVO<BizTerminal> getBizTerminalListWithPublishedFlag(PageQO pageQO, BizTerminal condition) {
 
         PageVO<BizTerminal> pageVO = new PageVO<>(pageQO);
         Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
-
-        List<BizTerminal> list = bizTerminalMapper.selectNotPublishedTerminal(condition);
+        //[terminalType],[floorId],screensaverId
+        List<BizTerminal> list = bizTerminalMapper.getBizTerminalListWithPublishedFlag(condition);
 
        /* if (null == list || list.isEmpty())
             throw new DataNotFoundException();*/

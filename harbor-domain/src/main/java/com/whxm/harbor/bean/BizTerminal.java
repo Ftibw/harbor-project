@@ -42,6 +42,17 @@ public class BizTerminal {
     //join screensaver_published_terminal_relation 查询指定屏保已发布的终端列表
     private Integer screensaverId;
 
+    //终端是否有指定屏保ID的屏保
+    private Integer hasThisScreensaver;
+
+    public Integer getHasThisScreensaver() {
+        return hasThisScreensaver;
+    }
+
+    public void setHasThisScreensaver(Integer hasThisScreensaver) {
+        this.hasThisScreensaver = hasThisScreensaver;
+    }
+
     @JsonIgnore
     public Integer getScreensaverId() {
         return screensaverId;

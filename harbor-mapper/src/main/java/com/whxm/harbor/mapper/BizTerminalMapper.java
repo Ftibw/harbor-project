@@ -40,11 +40,5 @@ public interface BizTerminalMapper {
      */
     Map<String, Object> selectTerminalWithScreensaver(String terminalId);
 
-    /**
-     * 查找没有屏保的终端
-     *
-     * @param condition 查询条件
-     * @return 终端列表
-     */
-    List<BizTerminal> selectNotPublishedTerminal(BizTerminal condition);
+    List<BizTerminal> getBizTerminalListWithPublishedFlag(BizTerminal condition);
 }

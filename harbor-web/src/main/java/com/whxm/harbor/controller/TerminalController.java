@@ -6,7 +6,6 @@ import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
 import com.whxm.harbor.utils.Assert;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Api(description = "终端服务")
@@ -138,7 +136,7 @@ public class TerminalController {
     @GetMapping("/bizTerminalsNotPublished")
     public Result getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
 
-        PageVO<BizTerminal> pageVO = terminalService.getNotPublishedTerminals(pageQO, condition);
+        PageVO<BizTerminal> pageVO = terminalService.getBizTerminalListWithPublishedFlag(pageQO, condition);
 
         return Result.success(pageVO);
     }

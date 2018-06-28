@@ -70,5 +70,5 @@ public interface TerminalService {
      * @param pageQO
      * @param condition
      */
-    PageVO<BizTerminal> getNotPublishedTerminals(PageQO pageQO, BizTerminal condition);
+    PageVO<BizTerminal> getBizTerminalListWithPublishedFlag(PageQO pageQO, BizTerminal condition);
 }

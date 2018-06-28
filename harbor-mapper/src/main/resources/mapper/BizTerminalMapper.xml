@@ -209,7 +209,8 @@
     <!--以下为自定义部分-->
     <select id="selectIdByNumber" resultMap="ExtensionResultMap">
         SELECT
-        <include refid="Base_Column_List"/>,floor_number
+        floor_number,
+        <include refid="Base_Column_List"/>
         FROM biz_terminal
         JOIN biz_floor USING (floor_id)
         WHERE terminal_number=#{terminalNumber}
@@ -218,44 +219,46 @@
 
     <select id="getBizTerminalList" resultMap="ExtensionResultMap">
         SELECT
-        <include refid="Base_Column_List"/>,floor_name,floor_number
+        floor_name,
+        floor_number,
+        <include refid="Base_Column_List"/>
         FROM biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
         <if test="screensaverId!=null">
             JOIN screensaver_published_terminal_relation USING (terminal_id)
         </if>
-        <where>
-            is_deleted=1
-            <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
-            <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
-            <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
-            <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
-            <if test="floorId!=null">and floor_id=#{floorId}</if>
-            <if test="screensaverId!=null">and screensaver_id=#{screensaverId}</if>
-        </where>
+        WHERE
+        is_deleted=1
+        <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
+        <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
+        <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
+        <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
+        <if test="floorId!=null">and floor_id=#{floorId}</if>
+        <if test="screensaverId!=null">and screensaver_id=#{screensaverId}</if>
         order by add_terminal_time desc
     </select>
-    <!--查询指定ID的屏保未发布的终端-->
-    <select id="selectNotPublishedTerminal" parameterType="com.whxm.harbor.bean.BizTerminal" resultMap="ExtensionResultMap">
-        select
-        <include refid="Base_Column_List"/>,floor_name,floor_number
-        from biz_terminal
+
+    <!--发布前查询全部终端并标记当前屏保发布过的终端-->
+    <select id="getBizTerminalListWithPublishedFlag" resultMap="ExtensionResultMap">
+        SELECT
+        floor_name,
+        floor_number,
+        if(screensaver_id is not null and screensaver_id=#{screensaverId},1,0) has_this_screensaver,
+        <include refid="Base_Column_List"/>
+        FROM biz_terminal
         LEFT JOIN biz_floor USING (floor_id)
-        WHERE terminal_id
-        not in(
-          select terminal_id
-          FROM screensaver_published_terminal_relation
-          WHERE screensaver_id=#{screensaverId}
-        )
-        AND is_deleted=1
+        JOIN screensaver_published_terminal_relation USING (terminal_id)
+        where
+        is_deleted=1
+        <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
         <if test="floorId!=null">and floor_id=#{floorId}</if>
-        <if test="terminalType!=null and terminalType!=''">and terminal_type=#{terminalType}</if>
         order by add_terminal_time desc
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizTerminal" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
         <result column="floor_number" property="floorNumber" jdbcType="VARCHAR"/>
+        <result column="has_this_screensaver" property="hasThisScreensaver" jdbcType="INTEGER"/>
     </resultMap>
     <!--终端主动清除屏保发布终端关系表-->
     <delete id="delScreensaverTerminalRelation">
