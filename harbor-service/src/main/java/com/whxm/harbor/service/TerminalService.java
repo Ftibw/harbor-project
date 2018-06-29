@@ -88,4 +88,6 @@ public interface TerminalService {
      * @return
      */
     int updateTerminalOffline(List<Object> terminalNumbers);
+
+    Result terminalConfigInit(Map<String, Object> map);
 }

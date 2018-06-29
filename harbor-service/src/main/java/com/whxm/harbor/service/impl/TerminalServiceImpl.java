@@ -167,8 +167,9 @@ public class TerminalServiceImpl implements TerminalService {
             }
             //先存了list引用再说
             ret.build("prog", screensaverId)
-                    .build("on_off", "00:00-24:00")
                     .build("data", list)
+                    //以下数据从内存/Redis中读取
+                    .build("on_off", "00:00-24:00")
                     .build("delay", 10)
                     .build("protect", 300);
 

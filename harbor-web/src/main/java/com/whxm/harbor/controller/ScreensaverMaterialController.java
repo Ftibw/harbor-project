@@ -90,7 +90,9 @@ public class ScreensaverMaterialController {
 
         Assert.notNull(bizScreensaverMaterial, "屏保素材不能为null");
         Assert.notNull(bizScreensaverMaterial.getScreensaverMaterialId(), "屏保素材ID不能为null");
-        Assert.notNull(bizScreensaverMaterial.getIsFirstPage(), "素材是否为首页素材必须填");
+        //Assert.notNull(bizScreensaverMaterial.getIsFirstPage(), "素材是否为首页素材必须填");
+        if (null == bizScreensaverMaterial.getIsFirstPage())
+            bizScreensaverMaterial.setIsFirstPage(0);
 
         return screensaverMaterialService.updateBizScreensaverMaterial(bizScreensaverMaterial);
     }
@@ -115,7 +117,9 @@ public class ScreensaverMaterialController {
 
         list.forEach(item -> {
             Assert.isNull(item.getScreensaverMaterialId(), "屏保素材ID必须为null");
-            Assert.notNull(item.getIsFirstPage(), "素材是否为首页素材必须填");
+            //Assert.notNull(item.getIsFirstPage(), "素材是否为首页素材必须填");
+            if (null == item.getIsFirstPage())
+                item.setIsFirstPage(0);
         });
 
         return screensaverMaterialService.addBizScreensaverMaterial(list);

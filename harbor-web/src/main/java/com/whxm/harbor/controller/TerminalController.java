@@ -104,7 +104,7 @@ public class TerminalController {
                     .build("code", 0)
                     .build("prog", prog)
                     .build("data", new Object[]{})
-                    //以下数据从内存中读取
+                    //以下数据从内存/Redis中读取
                     .build("on_off", "")
                     .build("delay", 10)
                     .build("protect", 300);
@@ -203,4 +203,15 @@ public class TerminalController {
         return terminalService.addBizTerminal(bizTerminal);
     }
 
+    @PostMapping("/config")
+    public Result terminalConfigInit(@RequestParam Map<String, Object> map) {
+        //以下数据从内存/Redis中读取
+        /*
+        .build("on_off", "")
+        .build("delay", 10)
+        .build("protect", 300);
+        */
+        terminalService.terminalConfigInit(map);
+        return null;
+    }
 }
