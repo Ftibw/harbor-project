@@ -1,7 +1,6 @@
 package com.whxm.harbor.utils;
 
 import com.whxm.harbor.exception.ParameterInvalidException;
-import io.swagger.models.auth.In;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -80,7 +79,7 @@ public class Assert<T> {
 
     public static boolean isEmptyForBase(Object object) {
         if (null == object) return true;
-        if (object instanceof String) return object.toString().isEmpty() || object.toString().trim().isEmpty();
+        if (object.toString().isEmpty() || object.toString().trim().isEmpty()) return true;
         if (object instanceof List) return ((List) object).isEmpty();
         if (object instanceof String[]) return 0 == ((String[]) object).length;
         if (object instanceof Integer[]) return 0 == ((Integer[]) object).length;
