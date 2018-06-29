@@ -113,7 +113,7 @@ public class ScreensaverMaterialController {
     @PostMapping(value = "/bizScreensaverMaterial", consumes = "application/json")
     public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
 
-        Assert.notNull(list, "屏保数据不能为空");
+        Assert.notEmpty(list, "屏保数据不能为空");
         new Assert<BizScreensaverMaterial>().notRepeat(list, "屏保素材不能重复");
 
         list.forEach(item -> {

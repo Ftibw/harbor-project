@@ -165,7 +165,7 @@ public class TerminalController {
 
         Assert.notNull(param, "参数不能为空");
         Assert.notNull(param.terminalId, "终端ID不能为空[param:{}]", param);
-        Assert.notNull(param.firstPageIds, "首页轮播图的ID集合不能为空[param:{}]", param);
+        Assert.notEmpty(param.firstPageIds, "首页轮播图的ID集合不能为空[param:{}]", param);
         Assert.notRepeat(param.firstPageIds, "首页轮播图的ID集合不能重复");
 
         return terminalService.bindFirstPage(param.terminalId, param.firstPageIds);
@@ -248,6 +248,12 @@ public class TerminalController {
         Assert.notNull(terminalConfig.getProtect(), "终端保护时间不能为空[params:{}]", terminalConfig);
 
         return terminalService.updateTerminalConfig(terminalConfig);
+    }
+
+    @GetMapping("/config")
+    public Result getTerminalConfig() {
+
+        return terminalService.getTerminalConfig();
     }
 }
 

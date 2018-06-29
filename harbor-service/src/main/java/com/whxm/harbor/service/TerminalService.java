@@ -91,14 +91,6 @@ public interface TerminalService {
     int updateTerminalOffline(List<Object> terminalNumbers);
 
     /**
-     * 更新终端配置
-     *
-     * @param terminalConfig 配置参数
-     * @return 结果
-     */
-    Result updateTerminalConfig(TerminalConfig terminalConfig);
-
-    /**
      * 获取终端首页轮播图
      *
      * @param sn  终端编号
@@ -115,4 +107,20 @@ public interface TerminalService {
      * @return 结果
      */
     Result bindFirstPage(String terminalId, Integer[] firstPageIds);
+
+    /**
+     * 更新终端配置
+     *
+     * @param terminalConfig 配置参数
+     * @return 结果
+     */
+    Result updateTerminalConfig(TerminalConfig terminalConfig);
+
+    /**
+     * 更新终端配置
+     *
+     * @param terminalConfig 配置参数
+     * @return 结果
+     */
+    Result getTerminalConfig();
 }

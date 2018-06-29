@@ -107,7 +107,7 @@ public class ActivityMaterialController {
     @PostMapping("/bizActivityMaterial")
     public Result addBizActivityMaterial(@RequestBody List<BizActivityMaterial> list) {
 
-        Assert.notNull(list, "活动素材数据不能为空");
+        Assert.notEmpty(list, "活动素材数据不能为空");
 
         new Assert<BizActivityMaterial>().notRepeat(list, "活动素材不能重复");
 

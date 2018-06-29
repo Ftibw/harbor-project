@@ -11,13 +11,13 @@ import java.util.*;
  * @CreateTime 2018/6/26 04:30
  */
 public class Assert<T> {
-
+    //非集合,分数组对象用此方法
     public static void notNull(Object object, String message, Object... params) {
         if (object == null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
-
+    //集合或数组一定要用这个方法
     public static void notEmpty(Object object, String message, Object... params) {
         if (object == null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
@@ -26,13 +26,13 @@ public class Assert<T> {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
-
+    //非集合,分数组对象用此方法
     public static void isNull(Object object, String message, Object... params) {
         if (object != null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
-
+    //String对象用此方法
     public static void hasText(String text, String message, Object... params) {
         if (!StringUtils.hasText(text)) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));

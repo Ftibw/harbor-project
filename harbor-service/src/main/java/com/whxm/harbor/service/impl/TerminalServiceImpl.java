@@ -236,17 +236,6 @@ public class TerminalServiceImpl implements TerminalService {
         return bizTerminalMapper.offLine(terminalNumbers);
     }
 
-//    @Cacheable(key = "")
-    @Override
-    public Result updateTerminalConfig(TerminalConfig terminalConfig) {
-        /*
-        .build("on_off", "")
-        .build("delay", 10)
-        .build("protect", 300);
-        */
-        return null;
-    }
-
     @Override
     public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
         List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
@@ -267,5 +256,21 @@ public class TerminalServiceImpl implements TerminalService {
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法设置ID为%s的首页轮播图", terminalId, Arrays.asList(firstPageIds)))
                 : Result.success(firstPageIds);
+    }
+
+    //    @Cacheable(key = "")
+    @Override
+    public Result updateTerminalConfig(TerminalConfig terminalConfig) {
+        /*
+        .build("on_off", "")
+        .build("delay", 10)
+        .build("protect", 300);
+        */
+        return null;
+    }
+
+    @Override
+    public Result getTerminalConfig() {
+        return null;
     }
 }
