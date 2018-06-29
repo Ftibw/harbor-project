@@ -74,12 +74,11 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException setMessage(String message) {
         this.message = message;
-        this.resultEnum.setMessage(message);
         return this;
     }
 
     public ResultEnum getResultEnum() {
-        return resultEnum;
+        return null != resultEnum ? resultEnum.setMessage(message) : null;
     }
 
     public BusinessException setResultEnum(ResultEnum resultEnum) {
