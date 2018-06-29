@@ -197,4 +197,15 @@
         </if>
         ORDER BY screensaver_material_id DESC
     </select>
+
+    <!--获取终端的首页轮播素材-->
+    <select id="getFirstPageByTerminalNumber" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM biz_screensaver_material
+        JOIN terminal_first_page_relation
+        USING (screensaver_material_id)
+        JOIN biz_terminal USING (terminal_id)
+        WHERE is_first_page = 1 AND terminal_number=#{terminalNumber}
+    </select>
 </mapper>

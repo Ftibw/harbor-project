@@ -40,4 +40,4 @@ swagger2:
 urlConfig:
   urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
 server:
-  port: 9000
+  port: 10000

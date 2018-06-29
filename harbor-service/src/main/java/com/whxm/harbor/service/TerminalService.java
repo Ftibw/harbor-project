@@ -89,5 +89,20 @@ public interface TerminalService {
      */
     int updateTerminalOffline(List<Object> terminalNumbers);
 
-    Result terminalConfigInit(Map<String, Object> map);
+    /**
+     * 更新终端配置
+     *
+     * @param map 配置参数
+     * @return 结果
+     */
+    Result updateTerminalConfig(Map<String, Object> map);
+
+    /**
+     * 获取终端首页轮播图
+     *
+     * @param sn  终端编号
+     * @param ret 结果Map
+     * @return 结果
+     */
+    Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret);
 }

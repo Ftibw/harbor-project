@@ -13,9 +13,11 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +35,10 @@ public class TerminalController {
 
     @Autowired
     private TerminalVisitService terminalVisitService;
+
+    @Autowired
+    @Qualifier("terminalConfig")
+    private Map<String, Object> terminalConfig;
 
     @ApiOperation("终端注册")
     @PostMapping(value = "/register")
@@ -104,12 +110,30 @@ public class TerminalController {
                     .build("code", 0)
                     .build("prog", prog)
                     .build("data", new Object[]{})
-                    //以下数据从内存/Redis中读取
-                    .build("on_off", "")
-                    .build("delay", 10)
-                    .build("protect", 300);
+                    .putAll((Map<String, Object>) terminalConfig.get("terminalConfig"));
         }
         return convert;
+    }
+
+    @ApiOperation("获取终端的首页轮播图")
+    @PostMapping("/first-page")
+    public Map<String, Object> getTerminalFirstPage(
+            @ApiParam(name = "sn", value = "终端编号", required = true)
+                    String sn
+    ) {
+        ResultMap<String, Object> ret = new ResultMap<String, Object>(2)
+                .build("success", false)
+                .build("data", Arrays.toString(new Object[]{}));
+        if (null == sn) return ret;
+
+        try {
+            return terminalService.getTerminalFirstPage(sn, ret);
+
+        } catch (Exception e) {
+
+            logger.error("终端首页轮播图 获取报错", e);
+            return ret;
+        }
     }
 
     @VisitLogger
@@ -211,7 +235,6 @@ public class TerminalController {
         .build("delay", 10)
         .build("protect", 300);
         */
-        terminalService.terminalConfigInit(map);
-        return null;
+        return terminalService.updateTerminalConfig(map);
     }
 }

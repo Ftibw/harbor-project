@@ -4,6 +4,7 @@ import com.whxm.harbor.bean.BizScreensaverMaterial;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -33,4 +34,6 @@ public interface BizScreensaverMaterialMapper {
 
     @Delete("DELETE FROM terminal_first_page_relation WHERE screensaver_material_id=#{bizScreensaverMaterialId}")
     int delTerminalFirstPageMaterialRelation(@Param("bizScreensaverMaterialId") Integer bizScreensaverMaterialId);
+
+    List<BizScreensaverMaterial> getFirstPageByTerminalNumber(@Param("terminalNumber") String terminalNumber);
 }

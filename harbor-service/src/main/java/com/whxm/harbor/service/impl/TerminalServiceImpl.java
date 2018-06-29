@@ -13,6 +13,9 @@ import com.whxm.harbor.service.TerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,10 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Resource
     private BizTerminalMapper bizTerminalMapper;
+
+    @Autowired
+    @Qualifier("terminalConfig")
+    private Map<String, Object> terminalConfig;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -141,6 +148,7 @@ public class TerminalServiceImpl implements TerminalService {
         return null;
     }
 
+    //    @Cacheable
     @Override
     public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
 
@@ -168,10 +176,11 @@ public class TerminalServiceImpl implements TerminalService {
             //先存了list引用再说
             ret.build("prog", screensaverId)
                     .build("data", list)
-                    //以下数据从内存/Redis中读取
-                    .build("on_off", "00:00-24:00")
+                    .putAll((Map<String, Object>) terminalConfig.get("terminalConfig"));
+            //以下数据从内存/Redis中读取
+                    /*.build("on_off", "00:00-24:00")
                     .build("delay", 10)
-                    .build("protect", 300);
+                    .build("protect", 300);*/
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);
@@ -224,5 +233,24 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public int updateTerminalOffline(List<Object> terminalNumbers) {
         return bizTerminalMapper.offLine(terminalNumbers);
+    }
+
+    @Override
+    public Result updateTerminalConfig(Map<String, Object> map) {
+        /*
+        .build("on_off", "")
+        .build("delay", 10)
+        .build("protect", 300);
+        */
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
+        List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
+        if (null != list && !list.isEmpty()) {
+            return ret.build("success", true)
+                    .build("data", list);
+        } else return ret;
     }
 }
