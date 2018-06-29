@@ -39,7 +39,7 @@ public class ScreensaverMaterialController {
 
     //===============================以下均被拦截===============================
 
-    @ApiOperation("获取首页素材列表(需授权),当参数terminalId值存在时,则查询指定终端绑定的首页素材列表")
+    @ApiOperation("获取首页素材列表(需授权)")
     @GetMapping("/bizScreensaverMaterials/first")
     public Result getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
 

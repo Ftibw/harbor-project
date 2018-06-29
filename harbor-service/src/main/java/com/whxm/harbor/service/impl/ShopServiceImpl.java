@@ -24,7 +24,6 @@ import java.util.*;
 @Transactional
 public class ShopServiceImpl implements ShopService {
 
-
     @Autowired
     private UrlConfig urlConfig;
 
@@ -136,7 +135,6 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Result updateBizShop(BizShopVo shopVo) {
 
-
         Object could = null;
 
         int affectRow = 0;
@@ -210,9 +208,7 @@ public class ShopServiceImpl implements ShopService {
 
         List<ShopPicture> pictures = shopVo.getPictures();
 
-        if (null != pictures && !pictures.isEmpty())
-            bizShopMapper.insertShopPictures(shopId, pictures);
-
+        bizShopMapper.insertShopPictures(shopId, pictures);
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法添加", shopVo.getShopId()))
