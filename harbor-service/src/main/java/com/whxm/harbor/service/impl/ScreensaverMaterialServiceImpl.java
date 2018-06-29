@@ -77,11 +77,14 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
         //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
-        int affectRow = bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
+        bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
 
-        int affectRow1 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+        //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
+        bizScreensaverMaterialMapper.delTerminalFirstPageMaterialRelation(bizScreensaverMaterialId);
 
-        return 0 == affectRow + affectRow1 ?
+        int affectRow2 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+
+        return 0 == affectRow2 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
