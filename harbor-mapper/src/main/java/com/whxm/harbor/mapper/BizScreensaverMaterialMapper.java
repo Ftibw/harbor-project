@@ -28,4 +28,6 @@ public interface BizScreensaverMaterialMapper {
 
     @Delete("DELETE FROM screensaver_material_relation WHERE screensaver_material_id=#{bizScreensaverMaterialId}")
     int delScreensaverMaterialRelation(@Param("bizScreensaverMaterialId") Integer bizScreensaverMaterialId);
+
+    List<BizScreensaverMaterial> selectFirstPageMaterials(BizScreensaverMaterial condition);
 }

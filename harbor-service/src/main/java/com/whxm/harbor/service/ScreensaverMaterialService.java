@@ -37,6 +37,15 @@ public interface ScreensaverMaterialService {
     PageVO<BizScreensaverMaterial> getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition);
 
     /**
+     * 获取指定终端绑定的首页素材列表
+     *
+     * @param pageQO
+     * @param condition
+     * @return list
+     */
+    PageVO<BizScreensaverMaterial> getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition);
+
+    /**
      * 根据ID删除屏保素材
      *
      * @param screensaverMaterialId 屏保素材ID
@@ -59,5 +68,4 @@ public interface ScreensaverMaterialService {
      * @return 添加操作结果
      */
     Result addBizScreensaverMaterial(List<BizScreensaverMaterial> screensaverMaterial);
-
 }

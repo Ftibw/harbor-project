@@ -69,6 +69,11 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     }
 
     @Override
+    public PageVO<BizScreensaverMaterial> getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
+        return getListTemplate(pageQO, condition, param -> bizScreensaverMaterialMapper.selectFirstPageMaterials(condition));
+    }
+
+    @Override
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
         //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表

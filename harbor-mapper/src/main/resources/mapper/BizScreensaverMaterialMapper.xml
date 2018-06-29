@@ -8,11 +8,12 @@
         <result column="screensaver_material_name" property="screensaverMaterialName" jdbcType="VARCHAR"/>
         <result column="screensaver_material_type" property="screensaverMaterialType" jdbcType="VARCHAR"/>
         <result column="screensaver_material_img_name" property="screensaverMaterialImgName" jdbcType="VARCHAR"/>
-        <result column="has_bind_this_screensaver" property="hasBindThisScreensaver" jdbcType="INTEGER"/>
+        <result column="has_bind_this" property="hasBindThis" jdbcType="INTEGER"/>
+        <result column="is_first_page" property="isFirstPage" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         screensaver_material_id, screensaver_material_img_path, screensaver_material_size,
-        screensaver_material_name, screensaver_material_img_name, screensaver_material_type
+        screensaver_material_name, screensaver_material_img_name, screensaver_material_type, is_first_page
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -28,11 +29,11 @@
             parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
         INSERT INTO biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
                                               screensaver_material_size, screensaver_material_name, screensaver_material_img_name,
-                                              screensaver_material_type)
+                                              screensaver_material_type, is_first_page)
         VALUES (#{screensaverMaterialId,jdbcType=INTEGER}, #{screensaverMaterialImgPath,jdbcType=VARCHAR},
                 #{screensaverMaterialSize,jdbcType=BIGINT}, #{screensaverMaterialName,jdbcType=VARCHAR},
                 #{screensaverMaterialImgName,jdbcType=VARCHAR},
-                #{screensaverMaterialType,jdbcType=VARCHAR})
+                #{screensaverMaterialType,jdbcType=VARCHAR}, #{isFirstPage})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizScreensaverMaterial">
         insert into biz_screensaver_material
@@ -55,6 +56,9 @@
             <if test="screensaverMaterialType != null">
                 screensaver_material_type,
             </if>
+            <if test="isFirstPage != null">
+                is_first_page,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="screensaverMaterialId != null">
@@ -74,6 +78,9 @@
             </if>
             <if test="screensaverMaterialType != null">
                 #{screensaverMaterialType,jdbcType=VARCHAR},
+            </if>
+            <if test="isFirstPage != null">
+                #{isFirstPage},
             </if>
         </trim>
     </insert>
@@ -95,6 +102,9 @@
             <if test="screensaverMaterialType != null">
                 screensaver_material_type = #{screensaverMaterialType,jdbcType=VARCHAR},
             </if>
+            <if test="isFirstPage != null">
+                is_first_page=#{isFirstPage},
+            </if>
         </set>
         where screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
     </update>
@@ -104,7 +114,8 @@
             screensaver_material_size     = #{screensaverMaterialSize,jdbcType=BIGINT},
             screensaver_material_name     = #{screensaverMaterialName,jdbcType=VARCHAR},
             screensaver_material_img_name = #{screensaverMaterialImgName,jdbcType=VARCHAR},
-            screensaver_material_type     = #{screensaverMaterialType,jdbcType=VARCHAR}
+            screensaver_material_type     = #{screensaverMaterialType,jdbcType=VARCHAR},
+            is_first_page                 = #{isFirstPage,jdbcType=INTEGER}
         WHERE screensaver_material_id = #{screensaverMaterialId,jdbcType=INTEGER}
     </update>
 
@@ -120,14 +131,14 @@
     <select id="getBizScreensaverMaterialList" resultMap="BaseResultMap">
         select
         <if test="screensaverId!=null">
-            sum(if(screensaver_id is not null and screensaver_id=#{screensaverId},1,0)) has_bind_this_screensaver,
+            sum(if(screensaver_id is not null and screensaver_id=#{screensaverId},1,0)) has_bind_this,
         </if>
         <include refid="Base_Column_List"/>
         from biz_screensaver_material
         <if test="screensaverId!=null">
             LEFT JOIN screensaver_material_relation USING(screensaver_material_id)
         </if>
-        WHERE 1=1
+        WHERE is_first_page=0
         <if test="screensaverMaterialName!=null">and screensaver_material_name like
             concat('%',#{screensaverMaterialName},'%')
         </if>
@@ -150,19 +161,40 @@
         <include refid="Base_Column_List"/>
         from biz_screensaver_material
         JOIN screensaver_material_relation USING (screensaver_material_id)
-        WHERE screensaver_id=#{screensaverId}
+        WHERE is_first_page=0 AND screensaver_id=#{screensaverId}
     </select>
 
     <insert id="batchInsert">
         INSERT INTO biz_screensaver_material (screensaver_material_id, screensaver_material_img_path,
         screensaver_material_size, screensaver_material_name, screensaver_material_img_name,
-        screensaver_material_type)
+        screensaver_material_type,is_first_page)
         VALUES
         <foreach collection="list" separator="," item="item">
             (#{item.screensaverMaterialId,jdbcType=INTEGER}, #{item.screensaverMaterialImgPath,jdbcType=VARCHAR},
             #{item.screensaverMaterialSize,jdbcType=BIGINT}, #{item.screensaverMaterialName,jdbcType=VARCHAR},
             #{item.screensaverMaterialImgName,jdbcType=VARCHAR},
-            #{item.screensaverMaterialType,jdbcType=VARCHAR})
+            #{item.screensaverMaterialType,jdbcType=VARCHAR},#{item.isFirstPage,jdbcType=INTEGER})
         </foreach>
     </insert>
+    <!--获取首页素材,若绑定了指定ID的终端,则hasBindThis=1-->
+    <select id="selectFirstPageMaterials" resultMap="BaseResultMap">
+        SELECT
+        <if test="terminalId!=null">
+            sum(if(terminal_id is not null and terminal_id=#{terminalId},1,0)) has_bind_this,
+        </if>
+        <include refid="Base_Column_List"/>
+        from biz_screensaver_material
+        <if test="terminalId!=null">
+            LEFT JOIN terminal_first_page_relation USING (screensaver_material_id)
+        </if>
+        WHERE is_first_page=1
+        <if test="screensaverMaterialType!=null and screensaverMaterialType!=''">
+            and screensaver_material_type = #{screensaverMaterialType}
+        </if>
+        <if test="terminalId!=null">
+            GROUP BY
+            screensaver_material_id
+        </if>
+        ORDER BY screensaver_material_id DESC
+    </select>
 </mapper>

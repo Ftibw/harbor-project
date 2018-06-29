@@ -39,6 +39,16 @@ public class ScreensaverMaterialController {
 
     //===============================以下均被拦截===============================
 
+    @ApiOperation("获取首页素材列表(需授权),当参数terminalId值存在时,则查询指定终端绑定的首页素材列表")
+    @GetMapping("/bizScreensaverMaterials/first")
+    public Result getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
+
+        PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getFirstPageMaterials(pageQO, condition);
+
+        return Result.success(pageVO);
+    }
+
+
     @ApiOperation("获取屏保素材列表(需授权)")
     @GetMapping("/bizScreensaverMaterials")
     public Result getBizScreensaverMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
@@ -80,6 +90,7 @@ public class ScreensaverMaterialController {
 
         Assert.notNull(bizScreensaverMaterial, "屏保素材不能为null");
         Assert.notNull(bizScreensaverMaterial.getScreensaverMaterialId(), "屏保素材ID不能为null");
+        Assert.notNull(bizScreensaverMaterial.getIsFirstPage(), "素材是否为首页素材必须填");
 
         return screensaverMaterialService.updateBizScreensaverMaterial(bizScreensaverMaterial);
     }
@@ -102,7 +113,10 @@ public class ScreensaverMaterialController {
 
         Assert.notNull(list, "屏保数据不能为空");
 
-        list.forEach(item -> Assert.isNull(item.getScreensaverMaterialId(), "屏保素材ID必须为null"));
+        list.forEach(item -> {
+            Assert.isNull(item.getScreensaverMaterialId(), "屏保素材ID必须为null");
+            Assert.notNull(item.getIsFirstPage(), "素材是否为首页素材必须填");
+        });
 
         return screensaverMaterialService.addBizScreensaverMaterial(list);
     }
