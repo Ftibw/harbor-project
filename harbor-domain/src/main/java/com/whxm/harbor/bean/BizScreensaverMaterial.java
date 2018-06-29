@@ -41,7 +41,6 @@ public class BizScreensaverMaterial {
         this.terminalId = terminalId;
     }
 
-
     public Integer getHasBindThis() {
         return hasBindThis;
     }

@@ -1,6 +1,7 @@
 package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.conf.TerminalConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public interface TerminalService {
     ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params);
 
     /**
-     * 获取无屏保的终端
+     * 某个屏保发布前,查询全部终端,并将该屏保发布过的终端标记为checked
      *
      * @param pageQO
      * @param condition
@@ -92,10 +93,10 @@ public interface TerminalService {
     /**
      * 更新终端配置
      *
-     * @param map 配置参数
+     * @param terminalConfig 配置参数
      * @return 结果
      */
-    Result updateTerminalConfig(Map<String, Object> map);
+    Result updateTerminalConfig(TerminalConfig terminalConfig);
 
     /**
      * 获取终端首页轮播图

@@ -171,8 +171,8 @@ public class TerminalController {
         return terminalService.bindFirstPage(param.terminalId, param.firstPageIds);
     }
 
-    @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
-    @GetMapping("/bizTerminalsNotPublished")
+    @ApiOperation("指定ID的屏保发布前,查询全部终端,并将该屏保发布过的终端标记为checked(需授权)")
+    @GetMapping("/bizTerminalsWithPublishedFlag")
     public Result getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
 
         PageVO<BizTerminal> pageVO = terminalService.getBizTerminalListWithPublishedFlag(pageQO, condition);
@@ -240,14 +240,14 @@ public class TerminalController {
     }
 
     @PostMapping("/config")
-    public Result updateTerminalConfig(@RequestBody Map<String, Object> map) {
-        //以下数据从内存/Redis中读取
-        /*
-        .build("on_off", "")
-        .build("delay", 10)
-        .build("protect", 300);
-        */
-        return terminalService.updateTerminalConfig(map);
+    public Result updateTerminalConfig(@RequestBody TerminalConfig terminalConfig) {
+
+        Assert.notNull(terminalConfig, "参数不能为空");
+        Assert.notNull(terminalConfig.getOn_off(), "终端开关机时间不能为空[params:{}]", terminalConfig);
+        Assert.notNull(terminalConfig.getDelay(), "终端延时不能为空[params:{}]", terminalConfig);
+        Assert.notNull(terminalConfig.getProtect(), "终端保护时间不能为空[params:{}]", terminalConfig);
+
+        return terminalService.updateTerminalConfig(terminalConfig);
     }
 }
 
