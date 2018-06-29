@@ -65,8 +65,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
                     String lockKey = uri + userId + MD5Utils.MD5(params);
 
-                    System.out.println(lockKey);
-
                     if (lock.lock(lockKey, token, Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) return true;
 
                     else {

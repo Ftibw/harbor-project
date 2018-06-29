@@ -78,9 +78,12 @@ public class ScreensaverController {
         Assert.notNull(param, "参数不能为空");
         Assert.notNull(param.bizScreensaver, "屏保数据不能为空");
         Assert.isNull(param.bizScreensaver.getScreensaverId(), "屏保ID必须为空");
-        Assert.notNull(param.screensaverMaterialIds, "屏保材料ID集合不能为空");
+        Assert.notNull(param.screensaverMaterialIds, "屏保素材ID集合不能为空");
+        Assert.notRepeat(param.screensaverMaterialIds, "屏保素材ID集合重复");
+        Assert.notNull(param.terminalIds, "终端ID集合不能为空");
+        Assert.notRepeat(param.terminalIds, "终端ID集合重复");
 
-        return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds,param.terminalIds);
+        return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds, param.terminalIds);
     }
 
     @ApiOperation(value = "发布屏保(需授权)",

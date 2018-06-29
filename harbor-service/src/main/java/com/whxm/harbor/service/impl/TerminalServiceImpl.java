@@ -144,7 +144,7 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
 
-        ResultMap<String, Object> ret = new ResultMap<>(4);
+        ResultMap<String, Object> ret = new ResultMap<>(6);
 
         final List<Map<String, Object>> list = new ArrayList<>();
 
@@ -154,7 +154,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         Object screensaverId = null;
 
-        Object terminalSwitchTime = null;
+        //Object terminalSwitchTime = null;
 
         try {
             terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
@@ -163,13 +163,14 @@ public class TerminalServiceImpl implements TerminalService {
                 //屏保ID
                 screensaverId = terminalInfo.get("screensaverId");
                 //终端开关机时间
-                terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
+                //terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
             }
             //先存了list引用再说
             ret.build("prog", screensaverId)
-                    .build("on_off", terminalSwitchTime)
+                    .build("on_off", "00:00-24:00")
                     .build("data", list)
-                    .build("delay", 10);
+                    .build("delay", 10)
+                    .build("protect", 300);
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);

@@ -89,7 +89,7 @@ public class TerminalController {
 
         Assert.notNull(sn, "终端编号不能为空");
 
-        ResultMap<String, Object> convert = new ResultMap<>(4);
+        ResultMap<String, Object> convert = new ResultMap<>(6);
 
         try {
             convert.build("terminalNumber", sn).build("screensaverId", prog);
@@ -103,8 +103,11 @@ public class TerminalController {
             convert.clean()
                     .build("code", 0)
                     .build("prog", prog)
+                    .build("data", new Object[]{})
+                    //以下数据从内存中读取
                     .build("on_off", "")
-                    .build("data", new Object[]{});
+                    .build("delay", 10)
+                    .build("protect", 300);
         }
         return convert;
     }

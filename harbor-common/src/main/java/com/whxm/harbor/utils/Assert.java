@@ -30,13 +30,13 @@ public class Assert<T> {
 
     public static void isNull(Object object, String message, Object... params) {
         if (object != null) {
-            throw new ParameterInvalidException(JacksonUtils.toJson(params));
+            throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
 
     public static void hasText(String text, String message, Object... params) {
         if (!StringUtils.hasText(text)) {
-            throw new ParameterInvalidException(JacksonUtils.toJson(params));
+            throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
 
@@ -45,6 +45,8 @@ public class Assert<T> {
         //char[] arr = {};
         Assert[] arr = {};
         System.out.println(test.isEmpty(arr, Assert.class));
+
+        System.out.println(String.format("%s", Arrays.asList(new String[]{"2", "3", "4"})));
     }
 
     //数组的toString结果
@@ -105,4 +107,21 @@ public class Assert<T> {
     /*private static <R> R test(Object object, R... r) {
         return r[0];
     }*/
+
+    //判断数组中是否有重复值
+    public static void notRepeat(String[] array, String message) {
+        Set<String> set = new HashSet<>();
+        Collections.addAll(set, array);
+        if (set.size() != array.length) {
+            throw new ParameterInvalidException(message, Arrays.asList(array));
+        }
+    }
+
+    public static void notRepeat(Integer[] array, String message) {
+        Set<Integer> set = new HashSet<>();
+        Collections.addAll(set, array);
+        if (set.size() != array.length) {
+            throw new ParameterInvalidException(message, Arrays.asList(array));
+        }
+    }
 }
