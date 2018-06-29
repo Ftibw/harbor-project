@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class BusinessException extends RuntimeException {
 
-    protected String code;
+    protected Integer code;
 
     protected String message;
 
@@ -24,7 +24,7 @@ public class BusinessException extends RuntimeException {
         ExceptionEnum exceptionEnum = ExceptionEnum.getByEClass(this.getClass());
         if (exceptionEnum != null) {
             resultEnum = exceptionEnum.getResultEnum();
-            code = exceptionEnum.getResultEnum().code().toString();
+            code = exceptionEnum.getResultEnum().code();
             message = exceptionEnum.getResultEnum().message();
         }
 
@@ -54,15 +54,15 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(ResultEnum resultEnum) {
         this.resultEnum = resultEnum;
-        this.code = resultEnum.code().toString();
+        this.code = resultEnum.code();
         this.message = resultEnum.message();
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public BusinessException setCode(String code) {
+    public BusinessException setCode(int code) {
         this.code = code;
         return this;
     }
@@ -74,6 +74,7 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException setMessage(String message) {
         this.message = message;
+        this.resultEnum.setMessage(message);
         return this;
     }
 

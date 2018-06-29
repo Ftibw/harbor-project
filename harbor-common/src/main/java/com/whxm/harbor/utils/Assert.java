@@ -14,29 +14,29 @@ public class Assert<T> {
 
     public static void notNull(Object object, String message, Object... params) {
         if (object == null) {
-            throw new ParameterInvalidException(message, params);
+            throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
 
     public static void notEmpty(Object object, String message, Object... params) {
         if (object == null) {
-            throw new ParameterInvalidException(message, params);
+            throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
         if (object instanceof List && ((List) object).isEmpty()) {
-            throw new ParameterInvalidException(message, params);
+            throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
         if (object.getClass().isArray()) ;
     }
 
     public static void isNull(Object object, String message, Object... params) {
         if (object != null) {
-            throw new ParameterInvalidException(message);
+            throw new ParameterInvalidException(JacksonUtils.toJson(params));
         }
     }
 
     public static void hasText(String text, String message, Object... params) {
         if (!StringUtils.hasText(text)) {
-            throw new ParameterInvalidException(message);
+            throw new ParameterInvalidException(JacksonUtils.toJson(params));
         }
     }
 

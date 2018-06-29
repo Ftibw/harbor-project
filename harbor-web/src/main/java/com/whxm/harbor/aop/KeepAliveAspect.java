@@ -43,7 +43,7 @@ public class KeepAliveAspect {
         return joinPoint.proceed();
     }
 
-    @Scheduled(initialDelay = 10, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
+    @Scheduled(initialDelay = 20000, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
         StringRedisSerializer serializer = new StringRedisSerializer();
         redisTemplate.setKeySerializer(serializer);

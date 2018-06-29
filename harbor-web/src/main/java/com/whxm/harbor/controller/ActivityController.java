@@ -80,7 +80,7 @@ public class ActivityController {
 
         Assert.notNull(bizActivity, "活动数据不能为空");
 
-        Assert.notNull(bizActivity.getActivityId(), "活动ID不能为空");
+        Assert.notNull(bizActivity.getActivityId(), "活动ID不能为空,params:{}",bizActivity);
 
         return activityService.updateBizActivity(bizActivity);
     }
