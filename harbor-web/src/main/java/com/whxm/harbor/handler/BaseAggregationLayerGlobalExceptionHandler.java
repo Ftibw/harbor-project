@@ -72,7 +72,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
         if (ee != null) {
             return ResponseEntity
                     .status(ee.getHttpStatus())
-                    .body(Result.failure(e.getResultEnum().setMessage(e.getMessage()), e.getData()));
+                    .body(Result.failure(e.getResultEnum(), e.getData()));
         }
         //e为BusinessException类本身的实例时 ExceptionEnum == null,
         //其成员属性code/message/data/resultEnum均有可能为null

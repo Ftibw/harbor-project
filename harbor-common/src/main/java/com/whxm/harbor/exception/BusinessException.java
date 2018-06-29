@@ -25,6 +25,10 @@ public class BusinessException extends RuntimeException {
         if (exceptionEnum != null) {
             resultEnum = exceptionEnum.getResultEnum();
             code = exceptionEnum.getResultEnum().code();
+            //这个message是resultEnum常量中的死信息,不够详细
+            //因为全局异常处理最后返回给前端的code和message
+            //都来自BusinessException的resultEnum属性,仅有data时自己设置的
+            //需要在调用getResultEnum()时,将BusinessException中的message覆盖到resultEnum中去
             message = exceptionEnum.getResultEnum().message();
         }
 
