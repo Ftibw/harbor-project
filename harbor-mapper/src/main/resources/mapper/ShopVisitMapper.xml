@@ -79,13 +79,13 @@
         shop_visit_time
         FROM biz_shop_visit
         LEFT JOIN biz_shop USING (shop_number)
-        <where>
-            <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
-            <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>
-            <if test="isShopEnabled!=null">and is_shop_enabled=#{shopName}</if>
-            <if test="floorId!=null">and floor_id=#{floorId}</if>
-            <if test="bizFormatId!=null">and biz_format_id=#{bizFormatId}</if>
-        </where>
+        WHERE 1=1
+        <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
+        <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>
+        <if test="isShopEnabled!=null">and is_shop_enabled=#{shopName}</if>
+        <if test="floorId!=null">and floor_id=#{floorId}</if>
+        <if test="bizFormatId!=null">and biz_format_id=#{bizFormatId}</if>
+        ORDER BY shop_visit_time DESC
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.ShopVisit" extends="BaseResultMap">

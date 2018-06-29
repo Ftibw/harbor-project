@@ -167,7 +167,7 @@ public class ShopController {
     }
 
     @ApiOperation("启用/停用商铺(需授权)")
-    @DeleteMapping(value = "/bizShop")
+    @DeleteMapping(value = "/bizShop/status")
     public Result triggerBizShop(
             @ApiParam(name = "ID", value = "商铺的ID", required = true)
                     String id
@@ -229,6 +229,17 @@ public class ShopController {
         shopVo.setPictures(pictures);
 
         return shopService.addBizShop(shopVo);
+    }
+
+    @ApiOperation("删除商铺(需授权)")
+    @DeleteMapping(value = "/bizShop")
+    public Result deleteBizShop(
+            @ApiParam(name = "ID", value = "商铺的ID", required = true)
+                    String id
+    ) {
+        Assert.notNull(id, "商铺ID不能为空");
+
+        return shopService.deleteBizShop(id);
     }
 }
 

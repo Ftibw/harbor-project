@@ -117,10 +117,7 @@ public class ShopServiceImpl implements ShopService {
     public Result triggerBizShop(String bizShopId) {
 
         BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
-        /*
-         * if(0==bizShop.getIsShopEnabled() ^ 1)
-         * bizShopMapper.delShopPicturesRelation(bizShopId);
-         * */
+
         int status = bizShop.getIsShopEnabled() ^ 1;
 
         bizShop.setIsShopEnabled(status);
@@ -227,5 +224,17 @@ public class ShopServiceImpl implements ShopService {
         );
 
         return list;
+    }
+
+    @Override
+    public Result deleteBizShop(String bizShopId) {
+
+        bizShopMapper.deleteShopPictures(bizShopId);
+
+        int affectRow = bizShopMapper.deleteByPrimaryKey(bizShopId);
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId))
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 }
