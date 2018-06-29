@@ -3,6 +3,7 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
@@ -36,10 +37,8 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Resource
     private BizTerminalMapper bizTerminalMapper;
-
     @Autowired
-    @Qualifier("terminalConfig")
-    private Map<String, Object> terminalConfig;
+    private TerminalConfig terminalConfig;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -75,6 +74,8 @@ public class TerminalServiceImpl implements TerminalService {
     public Result deleteBizTerminal(String bizTerminalId) {
 
         bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
+
+        bizTerminalMapper.delTerminalFirstPageRelation(bizTerminalId);
 
         BizTerminal bizTerminal = new BizTerminal();
 
@@ -174,9 +175,11 @@ public class TerminalServiceImpl implements TerminalService {
                 //terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
             }
             //先存了list引用再说
-            ret.build("prog", screensaverId)
+            ret.build("prog", null == screensaverId ? 0 : screensaverId)
                     .build("data", list)
-                    .putAll((Map<String, Object>) terminalConfig.get("terminalConfig"));
+                    .build("on_off", terminalConfig.getOn_off())
+                    .build("delay", terminalConfig.getDelay())
+                    .build("protect", terminalConfig.getProtect());
             //以下数据从内存/Redis中读取
                     /*.build("on_off", "00:00-24:00")
                     .build("delay", 10)
@@ -249,8 +252,21 @@ public class TerminalServiceImpl implements TerminalService {
     public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
         List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
         if (null != list && !list.isEmpty()) {
+            list.forEach(item -> item.setScreensaverMaterialImgPath(urlConfig.getUrlPrefix() + item.getScreensaverMaterialImgPath()));
             return ret.build("success", true)
                     .build("data", list);
         } else return ret;
+    }
+
+    @Override
+    public Result bindFirstPage(String terminalId, Integer[] firstPageIds) {
+
+        bizTerminalMapper.delTerminalFirstPageRelation(terminalId);
+
+        int affectRow = bizTerminalMapper.insertTerminalFirstPageRelation(terminalId, firstPageIds);
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法设置ID为%s的首页轮播图", terminalId, Arrays.asList(firstPageIds)))
+                : Result.success(firstPageIds);
     }
 }

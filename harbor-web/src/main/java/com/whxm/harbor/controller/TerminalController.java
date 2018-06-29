@@ -4,6 +4,7 @@ import com.whxm.harbor.annotation.KeepAliveDetect;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
@@ -13,11 +14,9 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -37,8 +36,7 @@ public class TerminalController {
     private TerminalVisitService terminalVisitService;
 
     @Autowired
-    @Qualifier("terminalConfig")
-    private Map<String, Object> terminalConfig;
+    private TerminalConfig terminalConfig;
 
     @ApiOperation("终端注册")
     @PostMapping(value = "/register")
@@ -108,9 +106,11 @@ public class TerminalController {
 
             convert.clean()
                     .build("code", 0)
-                    .build("prog", "")
+                    .build("prog", 0)
                     .build("data", new Object[]{})
-                    .putAll((Map<String, Object>) terminalConfig.get("terminalConfig"));
+                    .build("on_off", terminalConfig.getOn_off())
+                    .build("delay", terminalConfig.getDelay())
+                    .build("protect", terminalConfig.getProtect());
         }
         return convert;
     }
@@ -158,6 +158,18 @@ public class TerminalController {
     }
 
     //==========================以下均被拦截============================
+
+    @ApiOperation("终端绑定的(需授权)")
+    @PostMapping("/boundFirstPage")
+    public Result terminalBindFirstPage(@RequestBody TerminalFirstPageParam param) {
+
+        Assert.notNull(param, "参数不能为空");
+        Assert.notNull(param.terminalId, "终端ID不能为空[param:{}]", param);
+        Assert.notNull(param.firstPageIds, "首页轮播图的ID集合不能为空[param:{}]", param);
+        Assert.notRepeat(param.firstPageIds, "首页轮播图的ID集合不能重复");
+
+        return terminalService.bindFirstPage(param.terminalId,param.firstPageIds);
+    }
 
     @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
     @GetMapping("/bizTerminalsNotPublished")
@@ -228,7 +240,7 @@ public class TerminalController {
     }
 
     @PostMapping("/config")
-    public Result terminalConfigInit(@RequestParam Map<String, Object> map) {
+    public Result terminalConfigInit(@RequestBody Map<String, Object> map) {
         //以下数据从内存/Redis中读取
         /*
         .build("on_off", "")
@@ -237,4 +249,11 @@ public class TerminalController {
         */
         return terminalService.updateTerminalConfig(map);
     }
+}
+
+class TerminalFirstPageParam {
+
+    public String terminalId;
+
+    public Integer[] firstPageIds;
 }

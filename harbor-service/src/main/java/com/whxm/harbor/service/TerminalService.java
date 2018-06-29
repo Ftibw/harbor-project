@@ -105,4 +105,13 @@ public interface TerminalService {
      * @return 结果
      */
     Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret);
+
+    /**
+     * 终端绑定首页轮播图
+     *
+     * @param terminalId             终端ID
+     * @param firstPageIds 首页轮播图ID
+     * @return 结果
+     */
+    Result bindFirstPage(String terminalId, Integer[] firstPageIds);
 }

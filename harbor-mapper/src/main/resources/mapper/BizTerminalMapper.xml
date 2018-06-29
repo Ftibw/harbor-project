@@ -295,4 +295,12 @@
         </foreach>
         )
     </update>
+
+    <!--给终端绑定首页轮播图-->
+    <insert id="insertTerminalFirstPageRelation">
+        INSERT INTO terminal_first_page_relation(terminal_id, screensaver_material_id) VALUES
+        <foreach collection="firstPageIds" item="item" separator=",">
+            (#{terminalId},#{item})
+        </foreach>
+    </insert>
 </mapper>

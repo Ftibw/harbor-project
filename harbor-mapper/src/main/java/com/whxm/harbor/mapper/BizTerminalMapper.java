@@ -1,6 +1,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizTerminal;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -48,4 +49,9 @@ public interface BizTerminalMapper {
     int keepOnline(@Param("terminalNumber") String terminalNumber);
 
     int offLine(List<Object> terminalNumbers);
+
+    @Delete("delete from terminal_first_page_relation where terminal_id=#{terminalId}")
+    int delTerminalFirstPageRelation(@Param("terminalId") String terminalId);
+
+    int insertTerminalFirstPageRelation(@Param("terminalId")String terminalId,@Param("firstPageIds") Integer[] firstPageIds);
 }
