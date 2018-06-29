@@ -240,7 +240,7 @@ public class TerminalController {
     }
 
     @PostMapping("/config")
-    public Result terminalConfigInit(@RequestBody Map<String, Object> map) {
+    public Result updateTerminalConfig(@RequestBody Map<String, Object> map) {
         //以下数据从内存/Redis中读取
         /*
         .build("on_off", "")
