@@ -116,7 +116,7 @@ public class TerminalController {
     }
 
     @ApiOperation("获取终端的首页轮播图")
-    @PostMapping("/first-page")
+    @PostMapping("/firstPage")
     public Map<String, Object> getTerminalFirstPage(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn
