@@ -108,7 +108,7 @@ public class TerminalController {
 
             convert.clean()
                     .build("code", 0)
-                    .build("prog", prog)
+                    .build("prog", "")
                     .build("data", new Object[]{})
                     .putAll((Map<String, Object>) terminalConfig.get("terminalConfig"));
         }
