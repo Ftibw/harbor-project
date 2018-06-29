@@ -53,6 +53,8 @@ public class BuildingController {
 
         Assert.notEmpty(list, "建筑数据结构解析失败");
 
+        new Assert<BizBuilding>().notRepeat(list, "建筑数据不能重复");
+
         list.forEach(item -> {
             Assert.isNull(item.getId(), "建筑ID必须为空");
             Assert.hasText(item.getNumber(), "建筑编号不能为空");

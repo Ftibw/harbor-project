@@ -202,11 +202,11 @@ public class ShopController {
 
         Assert.notNull(param, "提交数据不能为空");
 
-        Assert.notNull(param.bizShop, "商铺数据不能为空");
+        Assert.notNull(param.bizShop, "商铺数据不能为空[params:{}]", param);
 
-        Assert.isNull(param.bizShop.getShopId(), "商铺ID必须为空");
+        Assert.isNull(param.bizShop.getShopId(), "商铺ID必须为空[params:{}]", param);
 
-        Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空");
+        Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空[params:{}]", param);
 
         //-----------做适配---------------
         BizShopVo shopVo = new BizShopVo();
@@ -224,7 +224,9 @@ public class ShopController {
 
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
 
-        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空"));
+        new Assert<ShopPicture>().notRepeat(pictures, "商铺图片不能重复");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空[params:{}]", item));
 
         shopVo.setPictures(pictures);
 

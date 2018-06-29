@@ -22,10 +22,9 @@ public class Assert<T> {
         if (object == null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
-        if (object instanceof List && ((List) object).isEmpty()) {
+        if (isEmptyForBase(object)) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
-        if (object.getClass().isArray()) ;
     }
 
     public static void isNull(Object object, String message, Object... params) {
@@ -108,12 +107,14 @@ public class Assert<T> {
         return r[0];
     }*/
 
+    private final static String paramsFormat = "[params:{}]";
+
     //判断数组中是否有重复值
     public static void notRepeat(String[] array, String message) {
         Set<String> set = new HashSet<>();
         Collections.addAll(set, array);
         if (set.size() != array.length) {
-            throw new ParameterInvalidException(message, Arrays.asList(array));
+            throw new ParameterInvalidException(message + paramsFormat, Arrays.asList(array));
         }
     }
 
@@ -121,9 +122,22 @@ public class Assert<T> {
         Set<Integer> set = new HashSet<>();
         Collections.addAll(set, array);
         if (set.size() != array.length) {
-            throw new ParameterInvalidException(message, Arrays.asList(array));
+            throw new ParameterInvalidException(message + paramsFormat, Arrays.asList(array));
         }
     }
 
+    public void notRepeat(T[] array, String message) {
+        Set<T> set = new HashSet<>();
+        Collections.addAll(set, array);
+        if (set.size() != array.length) {
+            throw new ParameterInvalidException(message + paramsFormat, Arrays.asList(array));
+        }
+    }
 
+    public void notRepeat(List<T> list, String message) {
+        Set<T> set = new HashSet<>(list);
+        if (set.size() != list.size()) {
+            throw new ParameterInvalidException(message + paramsFormat, list);
+        }
+    }
 }
