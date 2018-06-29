@@ -159,7 +159,7 @@ public class TerminalController {
 
     //==========================以下均被拦截============================
 
-    @ApiOperation("终端绑定的(需授权)")
+    @ApiOperation("终端绑定首页轮播图(需授权)")
     @PostMapping("/boundFirstPage")
     public Result terminalBindFirstPage(@RequestBody TerminalFirstPageParam param) {
 
@@ -168,7 +168,7 @@ public class TerminalController {
         Assert.notNull(param.firstPageIds, "首页轮播图的ID集合不能为空[param:{}]", param);
         Assert.notRepeat(param.firstPageIds, "首页轮播图的ID集合不能重复");
 
-        return terminalService.bindFirstPage(param.terminalId,param.firstPageIds);
+        return terminalService.bindFirstPage(param.terminalId, param.firstPageIds);
     }
 
     @ApiOperation("获取当前屏保未发布过的终端列表(需授权)")
