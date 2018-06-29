@@ -123,7 +123,7 @@ public class TerminalController {
     ) {
         ResultMap<String, Object> ret = new ResultMap<String, Object>(2)
                 .build("success", false)
-                .build("data", Arrays.toString(new Object[]{}));
+                .build("data", new Object[]{});
         if (null == sn) return ret;
 
         try {
