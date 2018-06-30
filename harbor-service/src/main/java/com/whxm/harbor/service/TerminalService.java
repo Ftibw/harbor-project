@@ -114,13 +114,12 @@ public interface TerminalService {
      * @param terminalConfig 配置参数
      * @return 结果
      */
-    TerminalConfig updateTerminalConfig(TerminalConfig terminalConfig);
+    Result updateTerminalConfig(TerminalConfig terminalConfig);
 
     /**
      * 获取终端配置
      *
      * @return 结果
-     * @param cachekey
      */
-    TerminalConfig getTerminalConfig(String cachekey);
+    Result getTerminalConfig();
 }

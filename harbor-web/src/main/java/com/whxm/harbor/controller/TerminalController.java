@@ -14,12 +14,12 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 @Api(description = "终端服务")
 @RestController
@@ -247,17 +247,13 @@ public class TerminalController {
         Assert.notNull(config.getDelay(), "终端延时不能为空[params:{}]", config);
         Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
 
-        TerminalConfig terminalConfig = terminalService.updateTerminalConfig(config);
-
-        return Result.success(terminalConfig);
+        return terminalService.updateTerminalConfig(config);
     }
 
     @GetMapping("/config")
     public Result getTerminalConfig() {
 
-        TerminalConfig terminalConfig = terminalService.getTerminalConfig(TerminalConfig.cacheKey);
-
-        return Result.success(terminalConfig);
+        return terminalService.getTerminalConfig();
     }
 }
 

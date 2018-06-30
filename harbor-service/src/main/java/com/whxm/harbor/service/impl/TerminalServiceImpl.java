@@ -3,6 +3,7 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.cache.TerminalCacheService;
 import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
@@ -11,6 +12,7 @@ import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
+import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +42,7 @@ public class TerminalServiceImpl implements TerminalService {
     private BizTerminalMapper bizTerminalMapper;
 
     @Autowired
-    private TerminalConfig terminalConfig;
+    private TerminalCacheService terminalCacheService;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -176,7 +178,10 @@ public class TerminalServiceImpl implements TerminalService {
                 //terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
             }
 
-            TerminalConfig config = getTerminalConfig(TerminalConfig.cacheKey);
+            TerminalConfig config = JacksonUtils.readValue(terminalCacheService.getTerminalConfig(TerminalConfig.cacheKey), TerminalConfig.class);
+
+            if (null == config)
+                throw new DataNotFoundException();
 
             //先存了list引用再说
             ret.build("prog", null == screensaverId ? 0 : screensaverId)
@@ -264,23 +269,13 @@ public class TerminalServiceImpl implements TerminalService {
                 : Result.success(firstPageIds);
     }
 
-    @CacheEvict(cacheNames = "terminal", key = "#config.cacheKey")
     @Override
-    public TerminalConfig updateTerminalConfig(TerminalConfig config) {
-
-        BeanUtils.copyProperties(config, terminalConfig);
-
-        return config;
+    public Result updateTerminalConfig(TerminalConfig terminalConfig) {
+        return Result.success(terminalCacheService.updateTerminalConfig(terminalConfig));
     }
 
-    @Cacheable(cacheNames = "terminal", key = "#cacheKey")
     @Override
-    public TerminalConfig getTerminalConfig(String cacheKey) {
-
-        TerminalConfig config = new TerminalConfig();
-
-        BeanUtils.copyProperties(terminalConfig, config);
-
-        return config;
+    public Result getTerminalConfig() {
+        return Result.success(JacksonUtils.readValue(terminalCacheService.getTerminalConfig(TerminalConfig.cacheKey), TerminalConfig.class));
     }
 }
