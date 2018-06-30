@@ -1,12 +1,16 @@
 package com.whxm.harbor.conf;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class TerminalConfig {
+import java.io.Serializable;
 
+@Configuration
+public class TerminalConfig implements Serializable {
+
+    @JsonProperty("on_off")
     @Value("${terminal.on-off}")
     private String onOff;
 
@@ -16,7 +20,6 @@ public class TerminalConfig {
     @Value("${terminal.protect}")
     private String protect;
 
-    @JsonProperty("on_off")
     public String getOnOff() {
         return onOff;
     }
@@ -40,4 +43,7 @@ public class TerminalConfig {
     public void setProtect(String protect) {
         this.protect = protect;
     }
+
+    @JsonIgnore
+    public static final String cacheKey = "terminalCacheKey";
 }

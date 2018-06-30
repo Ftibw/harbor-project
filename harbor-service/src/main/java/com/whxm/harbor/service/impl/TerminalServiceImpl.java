@@ -15,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -258,22 +261,23 @@ public class TerminalServiceImpl implements TerminalService {
                 : Result.success(firstPageIds);
     }
 
-    //    @Cacheable(key = "")
+    @CacheEvict(cacheNames = "terminal",key = "#config.cacheKey")
     @Override
-    public Result updateTerminalConfig(TerminalConfig config) {
+    public TerminalConfig updateTerminalConfig(TerminalConfig config) {
 
         BeanUtils.copyProperties(config, terminalConfig);
 
-        return Result.success(config);
+        return config;
     }
 
+    @Cacheable(cacheNames = "terminal", key = "#cacheKey")
     @Override
-    public Result getTerminalConfig() {
+    public TerminalConfig getTerminalConfig(String cacheKey) {
 
         TerminalConfig config = new TerminalConfig();
 
         BeanUtils.copyProperties(terminalConfig, config);
 
-        return Result.success(config);
+        return config;
     }
 }
