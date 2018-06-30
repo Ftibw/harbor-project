@@ -1,9 +1,9 @@
 package com.whxm.harbor.utils;
 
 import com.whxm.harbor.bean.ResultMap;
+import com.whxm.harbor.callback.Callback;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.exception.InternalServerException;
-import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
