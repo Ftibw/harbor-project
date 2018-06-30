@@ -8,8 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -19,15 +19,13 @@ import java.util.Date;
  * 而是使用StringRedisSerializer序列化器(只能序列化String类型的返回值)
  */
 @Service
+@Transactional
 public class TerminalCacheService {
 
     private final Logger logger = LoggerFactory.getLogger(TerminalCacheService.class);
 
     @Autowired
     private TerminalConfig terminalConfig;
-
-    @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
 
     @CacheEvict(cacheNames = "terminal", key = "#config.cacheKey")
     public TerminalConfig updateTerminalConfig(TerminalConfig config) {
