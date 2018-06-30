@@ -103,6 +103,7 @@ public class RestControllerAspect {
      * 判断是否需要记录日志
      */
     private boolean needToLog(Method method) {
+        //即不是get请求方法也不是全局异常处理器中的方法时,才记录日志
         return method.getAnnotation(GetMapping.class) == null
                 && !method.getDeclaringClass().equals(GlobalExceptionHandler.class);
     }
