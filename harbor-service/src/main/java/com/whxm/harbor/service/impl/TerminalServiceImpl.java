@@ -38,6 +38,7 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Resource
     private BizTerminalMapper bizTerminalMapper;
+
     @Autowired
     private TerminalConfig terminalConfig;
 
@@ -174,12 +175,15 @@ public class TerminalServiceImpl implements TerminalService {
                 //终端开关机时间
                 //terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
             }
+
+            TerminalConfig config = getTerminalConfig(TerminalConfig.cacheKey);
+
             //先存了list引用再说
             ret.build("prog", null == screensaverId ? 0 : screensaverId)
                     .build("data", list)
-                    .build("on_off", terminalConfig.getOnOff())
-                    .build("delay", terminalConfig.getDelay())
-                    .build("protect", terminalConfig.getProtect());
+                    .build("on_off", config.getOnOff())
+                    .build("delay", config.getDelay())
+                    .build("protect", config.getProtect());
             //以下数据从内存/Redis中读取
                     /*.build("on_off", "00:00-24:00")
                     .build("delay", 10)
@@ -260,7 +264,7 @@ public class TerminalServiceImpl implements TerminalService {
                 : Result.success(firstPageIds);
     }
 
-    @CacheEvict(cacheNames = "terminal",key = "#config.cacheKey")
+    @CacheEvict(cacheNames = "terminal", key = "#config.cacheKey")
     @Override
     public TerminalConfig updateTerminalConfig(TerminalConfig config) {
 
