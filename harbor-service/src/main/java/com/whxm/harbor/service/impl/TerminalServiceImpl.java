@@ -175,7 +175,7 @@ public class TerminalServiceImpl implements TerminalService {
             //先存了list引用再说
             ret.build("prog", null == screensaverId ? 0 : screensaverId)
                     .build("data", list)
-                    .build("on_off", terminalConfig.getOn_off())
+                    .build("on_off", terminalConfig.getOnOff())
                     .build("delay", terminalConfig.getDelay())
                     .build("protect", terminalConfig.getProtect());
             //以下数据从内存/Redis中读取

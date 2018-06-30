@@ -41,3 +41,7 @@ urlConfig:                          # 192.168.1.103
   urlPrefix: ${resourceServer:http://localhost:8080/resources/}
 server:
   port: 9000
+terminal:
+  on-off:  00:00-24:00
+  delay:  10
+  protect:  300

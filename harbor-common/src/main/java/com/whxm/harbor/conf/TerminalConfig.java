@@ -1,20 +1,28 @@
 package com.whxm.harbor.conf;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TerminalConfig {
 
-    private String on_off = "00:00-24:00";
-    private String delay = "10";
-    private String protect = "300";
+    @Value("${terminal.on-off}")
+    private String onOff;
 
-    public String getOn_off() {
-        return on_off;
+    @Value("${terminal.delay}")
+    private String delay;
+
+    @Value("${terminal.protect}")
+    private String protect;
+
+    @JsonProperty("on_off")
+    public String getOnOff() {
+        return onOff;
     }
 
-    public void setOn_off(String on_off) {
-        this.on_off = on_off;
+    public void setOnOff(String onOff) {
+        this.onOff = onOff;
     }
 
     public String getDelay() {

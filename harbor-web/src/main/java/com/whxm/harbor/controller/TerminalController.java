@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Api(description = "终端服务")
 @RestController
@@ -108,7 +107,7 @@ public class TerminalController {
                     .build("code", 0)
                     .build("prog", 0)
                     .build("data", new Object[]{})
-                    .build("on_off", terminalConfig.getOn_off())
+                    .build("on_off", terminalConfig.getOnOff())
                     .build("delay", terminalConfig.getDelay())
                     .build("protect", terminalConfig.getProtect());
         }
@@ -243,7 +242,7 @@ public class TerminalController {
     public Result updateTerminalConfig(@RequestBody TerminalConfig config) {
 
         Assert.notNull(config, "参数不能为空");
-        Assert.notNull(config.getOn_off(), "终端开关机时间不能为空[params:{}]", config);
+        Assert.notNull(config.getOnOff(), "终端开关机时间不能为空[params:{}]", config);
         Assert.notNull(config.getDelay(), "终端延时不能为空[params:{}]", config);
         Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
 
