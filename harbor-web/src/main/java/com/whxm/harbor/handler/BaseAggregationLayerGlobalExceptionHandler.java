@@ -21,6 +21,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.List;
 
 /**
+ * @updateBy Ftibw 2018/6/28 02:37 AM
  * @desc 聚合层全局异常处理类
  */
 public class BaseAggregationLayerGlobalExceptionHandler {

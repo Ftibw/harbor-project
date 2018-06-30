@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author zhumaer
  * @desc 请求参数、响应体统一日志打印
+ * @updateBy Ftibw 2018/6/29 10:30 PM
  * @since 10/10/2017 9:54 AM
  */
 @Aspect
