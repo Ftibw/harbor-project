@@ -6,18 +6,17 @@ import com.whxm.harbor.bean.BizScreensaverMaterial;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.callback.Callback;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
-import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional

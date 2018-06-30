@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
@@ -208,5 +209,11 @@ public class UserController {
         }
 
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
+    }
+
+    @GetMapping("/info")
+    public String info(HttpServletRequest request) {
+
+        return "ContextRealPath = " + request.getServletContext().getRealPath("/");
     }
 }

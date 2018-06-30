@@ -129,6 +129,13 @@
                 <artifactId>pinyin4j</artifactId>
                 <version>${pinyin.version}</version>
             </dependency>
+            <!--打成war包的配置-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+                <scope>provided</scope>
+                <version>${springboot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

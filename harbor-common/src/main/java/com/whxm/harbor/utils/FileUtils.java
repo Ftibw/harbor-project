@@ -49,7 +49,7 @@ public class FileUtils {
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的绝对目录 = 资源服务器项目路径+项目中文件保存根目录
-            String uploadRootDirectory = Constant.RESOURCE_ABSOLUTE_DIRECTORY_PATH + "/" + Constant.PICTURE_UPLOAD_ROOT_DIRECTORY;
+            String uploadRootDirectory = Constant.RESOURCE_ABSOLUTE_DIRECTORY_PATH + File.separator + Constant.PICTURE_UPLOAD_ROOT_DIRECTORY;
             //分文件夹管理时的文件夹名
             String dateDirectoryName = StringUtils.createDirName();
             //文件夹
@@ -60,9 +60,9 @@ public class FileUtils {
                 dirFile.mkdirs();
             }
 
-            href = Constant.PICTURE_UPLOAD_ROOT_DIRECTORY + "/" + dateDirectoryName + "/" + newName;
+            href = Constant.PICTURE_UPLOAD_ROOT_DIRECTORY + File.separator + dateDirectoryName + File.separator + newName;
 
-            File uploadedFile = new File(uploadRootDirectory + "/" + dateDirectoryName, newName);
+            File uploadedFile = new File(uploadRootDirectory + File.separator + dateDirectoryName, newName);
             //拷贝文件
             file.transferTo(uploadedFile);
 
