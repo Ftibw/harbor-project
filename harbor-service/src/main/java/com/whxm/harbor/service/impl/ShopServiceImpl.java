@@ -6,7 +6,6 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
@@ -186,7 +185,7 @@ public class ShopServiceImpl implements ShopService {
 
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
         shopVo.setShopId(shopId);
-        shopVo.setIsShopEnabled(Constant.ENABLED_STATUS);
+        shopVo.setIsShopEnabled(Constant.YES);
         shopVo.setAddShopTime(new Date());
 
         //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性

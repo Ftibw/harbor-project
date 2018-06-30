@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.ActivityService;
 import com.whxm.harbor.bean.BizActivity;
 import com.whxm.harbor.bean.PageQO;
@@ -98,7 +97,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         activity.setActivityId(bizActivityId);
 
-        activity.setIsDeleted(Constant.RECORD_IS_DELETED);
+        activity.setIsDeleted(Constant.YES);
 
         int affectRow = bizActivityMapper.updateByPrimaryKeySelective(activity);
 
@@ -123,7 +122,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Result addBizActivity(BizActivity bizActivity) {
 
 
-        bizActivity.setIsDeleted(Constant.RECORD_NOT_DELETED);
+        bizActivity.setIsDeleted(Constant.NO);
 
         int affectRow = bizActivityMapper.insert(bizActivity);
 

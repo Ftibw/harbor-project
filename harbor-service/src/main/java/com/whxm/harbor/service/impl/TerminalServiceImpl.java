@@ -14,7 +14,6 @@ import com.whxm.harbor.service.TerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,7 +78,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         bizTerminal.setTerminalId(bizTerminalId);
 
-        bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
+        bizTerminal.setIsDeleted(Constant.YES);
 
         bizTerminal.setTerminalNumber(null);
 
@@ -107,9 +106,9 @@ public class TerminalServiceImpl implements TerminalService {
 
         int affectRow = 0;
 
-        bizTerminal.setIsTerminalOnline(Constant.DISABLED_STATUS);
+        bizTerminal.setIsTerminalOnline(Constant.NO);
 
-        bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
+        bizTerminal.setIsDeleted(Constant.NO);
         //使用终端的类型(二维码/横屏/竖屏)来判断平台0/1/2
         bizTerminal.setTerminalPlatform(Integer.parseInt(bizTerminal.getTerminalType()));
 

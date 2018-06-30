@@ -55,7 +55,7 @@ public class ScreensaverController {
     public Result updateBizScreensaver(@RequestBody BizScreensaver bizScreensaver) {
 
         Assert.notNull(bizScreensaver, "屏保数据不能为空");
-        Assert.isNull(bizScreensaver.getScreensaverId(), "屏保ID必须为空");
+        Assert.notNull(bizScreensaver.getScreensaverId(), "屏保ID不能为空");
 
         return screensaverService.updateBizScreensaver(bizScreensaver);
     }

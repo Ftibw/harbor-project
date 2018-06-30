@@ -155,7 +155,9 @@
         SELECT
         <include refid="Base_Column_List"/>
         from sys_user
-        where user_loginname != 'admin'
+        where
+        is_deleted=0
+        AND user_loginname != 'admin'
         order by add_user_time DESC
     </select>
 </mapper>

@@ -107,7 +107,7 @@
     <select id="getBizActivityList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from biz_activity where is_deleted = 1
+        from biz_activity where is_deleted = 0
         ORDER BY activity_id DESC
     </select>
 </mapper>

@@ -8,7 +8,6 @@ import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.BusinessFormatService;
 import com.whxm.harbor.mapper.BizFormatMapper;
 import org.springframework.stereotype.Service;
@@ -64,7 +63,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         bizFormat.setBizFormatId(bizFormatId);
 
-        bizFormat.setIsDeleted(Constant.RECORD_IS_DELETED);
+        bizFormat.setIsDeleted(Constant.YES);
 
         bizFormat.setBizFormatNumber(null);
 
@@ -92,7 +91,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         int affectRow = 0;
 
-        bizFormat.setIsDeleted(Constant.RECORD_NOT_DELETED);
+        bizFormat.setIsDeleted(Constant.NO);
 
         //仅为了避免重复索引抛异常,就多查一次,贼浪费
         synchronized (this) {

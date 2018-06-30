@@ -84,7 +84,7 @@
         FROM biz_terminal
         LEFT JOIN biz_terminal_visit USING (terminal_number)
         LEFT JOIN biz_floor USING (floor_id)
-        WHERE is_deleted=1
+        WHERE is_deleted=0
         <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
         <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
         <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
