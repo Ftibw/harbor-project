@@ -81,6 +81,9 @@ public class BusinessException extends RuntimeException {
         return this;
     }
 
+    /**
+     * 需要将自定义的message覆盖ResultEnum的默认message
+     */
     public ResultEnum getResultEnum() {
         return null != resultEnum ? resultEnum.setMessage(message) : null;
     }
