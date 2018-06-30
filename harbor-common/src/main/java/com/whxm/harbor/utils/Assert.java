@@ -18,6 +18,7 @@ public class Assert<T> {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
+
     //集合或数组一定要用这个方法
     public static void notEmpty(Object object, String message, Object... params) {
         if (object == null) {
@@ -27,12 +28,14 @@ public class Assert<T> {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
+
     //非集合,非数组对象用此方法
     public static void isNull(Object object, String message, Object... params) {
         if (object != null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
+
     //String对象用此方法
     public static void hasText(String text, String message, Object... params) {
         if (!StringUtils.hasText(text)) {
@@ -63,7 +66,7 @@ public class Assert<T> {
      * @return 数组是否为空
      */
     @SuppressWarnings("unchecked")
-    public boolean isEmpty(Object object, Class<T> clazz) {
+    public static <T> boolean isEmpty(Object object, Class<T> clazz) {
         return (isEmptyForBase(object)
                 || object.getClass().isArray()
                 && object.toString().matches("^\\[L" + clazz.getName() + ";@.*$"))
