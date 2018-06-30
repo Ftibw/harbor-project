@@ -224,7 +224,7 @@ public class ShopController {
 
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
 
-        new Assert<ShopPicture>().notRepeat(pictures, "商铺图片不能重复");
+        Assert.notRepeat(pictures, "商铺图片不能重复");
 
         pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空[params:{}]", item));
 

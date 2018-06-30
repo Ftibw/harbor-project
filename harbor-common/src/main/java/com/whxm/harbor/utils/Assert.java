@@ -10,7 +10,7 @@ import java.util.*;
  * @Email ftibw@live.com
  * @CreateTime 2018/6/26 04:30
  */
-public class Assert<T> {
+public class Assert {
 
     //非集合,非数组对象用此方法
     public static void notNull(Object object, String message, Object... params) {
@@ -121,7 +121,7 @@ public class Assert<T> {
         }
     }
 
-    public void notRepeat(T[] array, String message) {
+    public static <T> void notRepeat(T[] array, String message) {
         Set<T> set = new HashSet<>();
         Collections.addAll(set, array);
         if (set.size() != array.length) {
@@ -129,7 +129,7 @@ public class Assert<T> {
         }
     }
 
-    public void notRepeat(List<T> list, String message) {
+    public static <T> void notRepeat(List<T> list, String message) {
         Set<T> set = new HashSet<>(list);
         if (set.size() != list.size()) {
             throw new ParameterInvalidException(message + paramsFormat, list);

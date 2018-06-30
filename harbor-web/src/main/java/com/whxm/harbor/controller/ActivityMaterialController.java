@@ -109,7 +109,7 @@ public class ActivityMaterialController {
 
         Assert.notEmpty(list, "活动素材数据不能为空");
 
-        new Assert<BizActivityMaterial>().notRepeat(list, "活动素材不能重复");
+        Assert.notRepeat(list, "活动素材不能重复");
 
         list.forEach(item -> Assert.isNull(item.getActivityMaterialId(), "活动素材ID必须为空"));
 
