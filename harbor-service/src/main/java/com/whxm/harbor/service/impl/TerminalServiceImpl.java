@@ -150,7 +150,6 @@ public class TerminalServiceImpl implements TerminalService {
         return null;
     }
 
-    //    @Cacheable
     @Override
     public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
 
