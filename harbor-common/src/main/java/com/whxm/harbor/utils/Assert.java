@@ -11,7 +11,8 @@ import java.util.*;
  * @CreateTime 2018/6/26 04:30
  */
 public class Assert<T> {
-    //非集合,分数组对象用此方法
+
+    //非集合,非数组对象用此方法
     public static void notNull(Object object, String message, Object... params) {
         if (object == null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
@@ -26,7 +27,7 @@ public class Assert<T> {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
     }
-    //非集合,分数组对象用此方法
+    //非集合,非数组对象用此方法
     public static void isNull(Object object, String message, Object... params) {
         if (object != null) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
@@ -37,15 +38,6 @@ public class Assert<T> {
         if (!StringUtils.hasText(text)) {
             throw new ParameterInvalidException(message, JacksonUtils.toJson(params));
         }
-    }
-
-    public static void main(String[] args) {
-        Assert<Assert> test = new Assert<>();
-        //char[] arr = {};
-        Assert[] arr = {};
-        System.out.println(test.isEmpty(arr, Assert.class));
-
-        System.out.println(String.format("%s", Arrays.asList(new String[]{"2", "3", "4"})));
     }
 
     //数组的toString结果

@@ -102,7 +102,7 @@ public interface TerminalService {
     /**
      * 终端绑定首页轮播图
      *
-     * @param terminalId             终端ID
+     * @param terminalId   终端ID
      * @param firstPageIds 首页轮播图ID
      * @return 结果
      */
@@ -117,9 +117,8 @@ public interface TerminalService {
     Result updateTerminalConfig(TerminalConfig terminalConfig);
 
     /**
-     * 更新终端配置
+     * 获取终端配置
      *
-     * @param terminalConfig 配置参数
      * @return 结果
      */
     Result getTerminalConfig();

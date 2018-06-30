@@ -92,7 +92,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     }
 
     /**
-     * 请求完成后,释放redis分布式锁
+     * 整个业务流程完成后,释放redis分布式锁
      */
     /*@Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {

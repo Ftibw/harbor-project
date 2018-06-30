@@ -13,6 +13,7 @@ import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -259,17 +260,20 @@ public class TerminalServiceImpl implements TerminalService {
 
     //    @Cacheable(key = "")
     @Override
-    public Result updateTerminalConfig(TerminalConfig terminalConfig) {
-        /*
-        .build("on_off", "")
-        .build("delay", 10)
-        .build("protect", 300);
-        */
-        return null;
+    public Result updateTerminalConfig(TerminalConfig config) {
+
+        BeanUtils.copyProperties(config, terminalConfig);
+
+        return Result.success(config);
     }
 
     @Override
     public Result getTerminalConfig() {
-        return null;
+
+        TerminalConfig config = new TerminalConfig();
+
+        BeanUtils.copyProperties(terminalConfig, config);
+
+        return Result.success(config);
     }
 }

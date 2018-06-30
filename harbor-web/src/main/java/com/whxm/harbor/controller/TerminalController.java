@@ -81,7 +81,7 @@ public class TerminalController {
         return ret;
     }
 
-    @KeepAliveDetect(value = 30, unit = TimeUnit.MINUTES)
+    @KeepAliveDetect
     @ApiOperation("获取终端的屏保节目")
     @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
     public Map<String, Object> program(
@@ -240,14 +240,14 @@ public class TerminalController {
     }
 
     @PostMapping("/config")
-    public Result updateTerminalConfig(@RequestBody TerminalConfig terminalConfig) {
+    public Result updateTerminalConfig(@RequestBody TerminalConfig config) {
 
-        Assert.notNull(terminalConfig, "参数不能为空");
-        Assert.notNull(terminalConfig.getOn_off(), "终端开关机时间不能为空[params:{}]", terminalConfig);
-        Assert.notNull(terminalConfig.getDelay(), "终端延时不能为空[params:{}]", terminalConfig);
-        Assert.notNull(terminalConfig.getProtect(), "终端保护时间不能为空[params:{}]", terminalConfig);
+        Assert.notNull(config, "参数不能为空");
+        Assert.notNull(config.getOn_off(), "终端开关机时间不能为空[params:{}]", config);
+        Assert.notNull(config.getDelay(), "终端延时不能为空[params:{}]", config);
+        Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
 
-        return terminalService.updateTerminalConfig(terminalConfig);
+        return terminalService.updateTerminalConfig(config);
     }
 
     @GetMapping("/config")
