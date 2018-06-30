@@ -44,6 +44,7 @@ public class TerminalConfig implements Serializable {
         this.protect = protect;
     }
 
+    //来个终端编号...
     @JsonIgnore
     public static final String cacheKey = "terminalCacheKey";
 }
