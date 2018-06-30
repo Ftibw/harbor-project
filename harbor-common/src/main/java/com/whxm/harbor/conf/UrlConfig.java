@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UrlConfig {
+
     @Value("${urlConfig.urlPrefix}")
     private String urlPrefix;
 

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author zhumaer
  * @desc 业务异常类
+ * @updateBy Ftibw 2018/6/28 23:47 PM
  * @since 9/18/2017 3:00 PM
  */
 public class BusinessException extends RuntimeException {

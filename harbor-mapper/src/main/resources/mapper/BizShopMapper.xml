@@ -219,10 +219,10 @@
 
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
         select
-        <include refid="Base_Column_List"/>
-        ,
+        floor_name,
+        biz_format_type,
+        <include refid="Base_Column_List"/>,
         <include refid="Blob_Column_List"/>
-        ,floor_name,biz_format_type
         from biz_shop
         LEFT JOIN biz_floor USING(floor_id)
         LEFT JOIN biz_format USING (biz_format_id)
@@ -270,15 +270,16 @@
 
     <select id="getBizShopListOptional" resultMap="ExtensionResultMap">
         select
-        <include refid="Base_Column_List"/>,floor_name,biz_format_type
+        floor_name,
+        biz_format_type,
+        <include refid="Base_Column_List"/>
         from biz_shop
         LEFT JOIN biz_floor USING(floor_id)
         LEFT JOIN biz_format USING (biz_format_id)
-        <where>
-            <if test="floorId!=null">AND floor_id=#{floorId}</if>
-            <if test="bizFormatId!=null and bizFormatId!=''">AND biz_format_id=#{bizFormatId}</if>
-            <if test="initial!=null and initial!=''">AND shop_english_name like concat(#{initial},'%')</if>
-        </where>
+        WHERE 1=1
+        <if test="floorId!=null">AND floor_id=#{floorId}</if>
+        <if test="bizFormatId!=null and bizFormatId!=''">AND biz_format_id=#{bizFormatId}</if>
+        <if test="initial!=null and initial!=''">AND shop_english_name like concat(#{initial},'%')</if>
         order by shop_weight desc
     </select>
 
@@ -295,7 +296,7 @@
         </foreach>
     </insert>
 
-    <!--清除商铺-商铺图片关系表数据-->
+    <!--清除商铺-商铺图片关系表数据,直接用注解写的-->
     <!--<delete id="delShopPicturesRelation">
         DELETE FROM shop_picture_relation
         WHERE shop_id=#{shopId}
