@@ -67,9 +67,8 @@ public class GlobalExceptionHandler extends BaseAggregationLayerGlobalExceptionH
     /*
      * mysql键冲突异常
      */
-    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public Result handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
+    public ResponseEntity<Result> handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
         return super.handleConstraintViolationException(e, request);
     }
 

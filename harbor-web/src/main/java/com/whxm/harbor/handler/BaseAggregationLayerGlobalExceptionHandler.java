@@ -99,9 +99,11 @@ public class BaseAggregationLayerGlobalExceptionHandler {
     /*
      * 处理数据库键完整性约束异常
      */
-    protected Result handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
+    protected ResponseEntity<Result> handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
         LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getRequestURI(), e);
-        return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, dataIntegrityMessageFormat(e.getMessage()));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, dataIntegrityMessageFormat(e.getMessage())));
     }
 
     private String dataIntegrityMessageFormat(String message) {
