@@ -102,7 +102,7 @@ public class ActivityServiceImpl implements ActivityService {
         int affectRow = bizActivityMapper.setIsDeleted(activity);
 
         return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("活动素材使用了ID为%s的活动数据,活动数据无法删除", bizActivityId))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的活动数据正在被使用中,无法删除", bizActivityId))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
