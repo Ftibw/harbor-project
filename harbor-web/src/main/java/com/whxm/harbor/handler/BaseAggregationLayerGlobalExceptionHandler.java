@@ -12,6 +12,7 @@ import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.utils.ConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -19,6 +20,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @updateBy Ftibw 2018/6/28 02:37 AM
@@ -88,9 +91,62 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理运行时系统异常（反500错误码）
      */
     protected Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
-        LOGGER.error("handleRuntimeException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        LOGGER.error("handleRuntimeException start, uri:{}, caused by:", request.getRequestURI(), e);
         //TODO 可通过邮件、微信公众号等方式发送信息至开发人员、记录存档等操作
         return Result.failure(ResultEnum.SYSTEM_INNER_ERROR);
     }
 
+    /*
+     * 处理数据库键完整性约束异常
+     */
+    protected Result handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
+        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, dataIntegrityMessageFormat(e.getMessage()));
+    }
+
+    private String dataIntegrityMessageFormat(String message) {
+
+        String ret = null;
+
+        Pattern pattern = Pattern.compile(
+                "### Cause.*Cannot delete or update a parent row: (a foreign key constraint fails \\((.*\\.`(.*)`, CONSTRAINT.*REFERENCES `(.*)` \\(.*)\\))"
+        );
+
+        Matcher matcher = pattern.matcher(message);
+
+        while (matcher.find()) {
+
+            ret = matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除";
+            //System.out.println(matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除");
+        }
+
+        return ret;
+    }
+
+    public static void main(String[] args) {
+        String msg = "\r\n" +
+                "### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`harbor`.`biz_map`, CONSTRAINT `biz_map_ibfk_1` FOREIGN KEY (`floor_id`) REFERENCES `biz_floor` (`floor_id`))" +
+                "\r\n" +
+                "### The error may involve com.whxm.harbor.mapper.BizFloorMapper.deleteByPrimaryKey-Inline" +
+                "\r\n" +
+                "### The error occurred while setting parameters" +
+                "\r\n" +
+                "### SQL: delete from biz_floor     where floor_id = ?" +
+                "\r\n" +
+                "### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`harbor`.`biz_map`, CONSTRAINT `biz_map_ibfk_1` FOREIGN KEY (`floor_id`) REFERENCES `biz_floor` (`floor_id`))" +
+                "\n" +
+                "; SQL []; Cannot delete or update a parent row: a foreign key constraint fails (`harbor`.`biz_map`, CONSTRAINT `biz_map_ibfk_1` FOREIGN KEY (`floor_id`) REFERENCES `biz_floor` (`floor_id`)); nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`harbor`.`biz_map`, CONSTRAINT `biz_map_ibfk_1` FOREIGN KEY (`floor_id`) REFERENCES `biz_floor` (`floor_id`))";
+
+        Pattern pattern = Pattern.compile(
+                "### Cause.*Cannot delete or update a parent row: (a foreign key constraint fails \\((.*\\.`(.*)`, CONSTRAINT.*REFERENCES `(.*)` \\(.*)\\))"
+        );
+
+        Matcher matcher = pattern.matcher(msg);
+
+        while (matcher.find()) {
+            System.out.println(matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除");
+        }
+
+
+    }
 }

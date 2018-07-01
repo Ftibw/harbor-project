@@ -5,6 +5,7 @@ import javax.validation.ConstraintViolationException;
 
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.exception.BusinessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,9 +17,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @desc 统一异常处理器
- *
  * @author zhumaer
+ * @desc 统一异常处理器
  * @since 8/31/2017 3:00 PM
  */
 @RestController
@@ -37,6 +37,7 @@ public class GlobalExceptionHandler extends BaseAggregationLayerGlobalExceptionH
     public Result handleConstraintViolationException(HttpMessageNotReadableException e, HttpServletRequest request) {
         return super.handleConstraintViolationException(e, request);
     }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
@@ -61,6 +62,15 @@ public class GlobalExceptionHandler extends BaseAggregationLayerGlobalExceptionH
     @ExceptionHandler(RuntimeException.class)
     public Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         return super.handleRuntimeException(e, request);
+    }
+
+    /*
+     * mysql键冲突异常
+     */
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public Result handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
+        return super.handleConstraintViolationException(e, request);
     }
 
 }
