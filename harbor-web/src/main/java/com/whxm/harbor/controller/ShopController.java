@@ -141,7 +141,7 @@ public class ShopController {
         return Result.success(retList);
     }
 
-    @ApiOperation("根据商铺ID获取商铺信息")
+    @ApiOperation("根据商铺ID或商铺编号获取商铺信息")
     @GetMapping("/shop")
     public Result getBizShop(
             @ApiParam(name = "id", value = "商铺的ID", required = true)
@@ -149,7 +149,13 @@ public class ShopController {
     ) {
         Assert.notNull(shopId, "商铺ID不能为空");
 
-        BizShopVo shop = shopService.getBizShop(shopId);
+        BizShopVo shop = null;
+        if (32 == shopId.length()) {
+            shop = shopService.getBizShop(shopId);
+        } else {
+            String shopNumber = shopId;
+            shop = shopService.getBizShopByNumber(shopNumber);
+        }
 
         return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
     }

@@ -19,6 +19,14 @@ public interface ShopService {
     BizShopVo getBizShop(String bizShopId);
 
     /**
+     * 根据商铺编号获取商铺数据
+     *
+     * @param shopNumber 商铺编号
+     * @return 商铺数据
+     */
+    BizShopVo getBizShopByNumber(String shopNumber);
+
+    /**
      * 获取商铺列表
      *
      * @param pageQO
