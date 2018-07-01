@@ -23,7 +23,7 @@ public class User {
     private String userWechat;
     @JsonIgnore
     private Integer isDeleted;
-
+    @JsonIgnore
     private Timestamp addUserTime;
 
     public Timestamp getAddUserTime() {
