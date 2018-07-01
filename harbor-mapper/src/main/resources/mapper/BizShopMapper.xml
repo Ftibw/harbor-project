@@ -226,7 +226,7 @@
         from biz_shop
         LEFT JOIN biz_floor USING(floor_id)
         LEFT JOIN biz_format USING (biz_format_id)
-        where shop_id = #{shopId,jdbcType=VARCHAR}
+        where shop_id = #{shopId,jdbcType=VARCHAR} OR shop_number = #{shopId,jdbcType=VARCHAR}
     </select>
     <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="ExtensionResultMap">
         <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>

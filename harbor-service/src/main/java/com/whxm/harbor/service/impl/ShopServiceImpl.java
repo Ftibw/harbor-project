@@ -54,16 +54,6 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public BizShopVo getBizShopByNumber(String shopNumber) {
-
-        BizShop shop = bizShopMapper.selectIdByNumber(shopNumber);
-
-        if (null == shop) return null;
-
-        return getBizShop(shop.getShopId());
-    }
-
-    @Override
     public PageVO<BizShopVo> getBizShopList(PageQO pageQO, BizShop condition) {
 
         PageVO<BizShopVo> pageVO = new PageVO<>(pageQO);
