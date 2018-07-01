@@ -67,10 +67,10 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         bizFormat.setBizFormatNumber(null);
 
-        int affectRow = bizFormatMapper.updateByPrimaryKeySelective(bizFormat);
+        int affectRow = bizFormatMapper.setIsDeleted(bizFormat);
 
         return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的业态,无法删除", bizFormatId))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的业态数据正在被使用中,无法删除", bizFormatId))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 

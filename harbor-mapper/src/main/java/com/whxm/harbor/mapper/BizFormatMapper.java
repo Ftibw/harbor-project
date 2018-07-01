@@ -20,4 +20,6 @@ public interface BizFormatMapper {
     List<BizFormat> getBizFormatList(BizFormat condition);
 
     BizFormat selectIdByNumber(String bizFormatNumber);
+
+    int setIsDeleted(BizFormat bizFormat);
 }

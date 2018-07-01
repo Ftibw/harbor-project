@@ -96,4 +96,20 @@
         WHERE biz_format_number = #{bizFormatNumber}
               AND is_deleted = 0
     </select>
+
+    <!--如果符合条件则置为删除状态-->
+    <update id="setIsDeleted" parameterType="com.whxm.harbor.bean.BizFormat">
+        UPDATE biz_format
+        SET is_deleted = #{isDeleted,jdbcType=INTEGER}
+        WHERE NOT exists(
+                SELECT biz_format_id
+                FROM biz_shop
+                WHERE biz_shop.biz_format_id = biz_format.biz_format_id)
+              AND
+              NOT exists(
+                      SELECT type
+                      FROM biz_building
+                      WHERE biz_building.type = biz_format.biz_format_id)
+              AND biz_format_id = #{bizFormatId,jdbcType=INTEGER}
+    </update>
 </mapper>

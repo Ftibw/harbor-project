@@ -15,6 +15,8 @@ public interface BizActivityMapper {
 
     int updateByPrimaryKeySelective(BizActivity record);
 
+    int setIsDeleted(BizActivity record);
+
     int updateByPrimaryKey(BizActivity record);
 
     List<BizActivity> getBizActivityList(BizActivity condition);
