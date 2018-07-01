@@ -255,6 +255,12 @@ public class TerminalController {
 
         return terminalService.getTerminalConfig();
     }
+
+    @GetMapping("/config/reset")
+    public Result resetTerminalConfig() {
+
+        return terminalService.resetTerminalConfig();
+    }
 }
 
 class TerminalFirstPageParam {

@@ -2,6 +2,7 @@ package com.whxm.harbor.conf;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.whxm.harbor.flag.MementoIF;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -47,4 +48,64 @@ public class TerminalConfig implements Serializable {
     //来个终端编号...
     @JsonIgnore
     public static final String cacheKey = "terminalCacheKey";
+
+    /**
+     * 创建备忘录
+     */
+    public Memento createMemento() {
+
+        return new Memento(this);
+    }
+
+    /**
+     * 将发起人恢复到备忘录对象所记录的状态上
+     */
+    public void restoreMemento(MementoIF memento) {
+
+        Memento m = (Memento) memento;
+
+        this.delay = m.getState().delay;
+
+        this.onOff = m.getState().onOff;
+
+        this.protect = m.getState().protect;
+    }
+
+    /**
+     * 备忘录
+     */
+    private class Memento implements MementoIF {
+
+        private String onOff;
+
+        private String delay;
+
+        private String protect;
+
+        /**
+         * 构造方法
+         */
+        private Memento(TerminalConfig state) {
+
+            this.delay = state.delay;
+
+            this.onOff = state.onOff;
+
+            this.protect = state.protect;
+        }
+
+        private TerminalConfig getState() {
+
+            TerminalConfig state = new TerminalConfig();
+
+            state.setDelay(delay);
+
+            state.setOnOff(onOff);
+
+            state.setProtect(protect);
+
+            return state;
+        }
+
+    }
 }

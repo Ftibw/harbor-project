@@ -122,4 +122,9 @@ public interface TerminalService {
      * @return 结果
      */
     Result getTerminalConfig();
+
+    /**
+     * 重置终端配置为初始值
+     */
+    Result resetTerminalConfig();
 }

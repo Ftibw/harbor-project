@@ -1,6 +1,7 @@
 package com.whxm.harbor.cache;
 
 import com.whxm.harbor.conf.TerminalConfig;
+import com.whxm.harbor.flag.MementoIF;
 import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +25,23 @@ public class TerminalCacheService {
 
     private final Logger logger = LoggerFactory.getLogger(TerminalCacheService.class);
 
+    private final TerminalConfig terminalConfig;
+
+    private final MementoIF memento;
+
     @Autowired
-    private TerminalConfig terminalConfig;
+    public TerminalCacheService(TerminalConfig terminalConfig) {
+
+        this.terminalConfig = terminalConfig;
+
+        this.memento = terminalConfig.createMemento();
+    }
+
+/*    @Autowired
+    private TerminalConfig terminalConfig;*/
 
     @CacheEvict(cacheNames = "terminal", key = "#config.cacheKey")
-    public TerminalConfig updateTerminalConfig(TerminalConfig config) {
+    public TerminalConfig updateConfig(TerminalConfig config) {
 
         logger.info("update terminal config:{} at:{}", config, new Date());
 
@@ -38,7 +51,7 @@ public class TerminalCacheService {
     }
 
     @Cacheable(cacheNames = "terminal", key = "#cacheKey")
-    public String getTerminalConfig(String cacheKey) {
+    public String getConfig(String cacheKey) {
 
         logger.info("get terminal config cacheKey:{} at:{}", cacheKey, new Date());
 
@@ -47,5 +60,13 @@ public class TerminalCacheService {
         BeanUtils.copyProperties(terminalConfig, config);
 
         return JacksonUtils.toJson(config);
+    }
+
+    @CacheEvict(cacheNames = "terminal", key = "#cacheKey")
+    public void resetConfig(String cacheKey) {
+
+        terminalConfig.restoreMemento(memento);
+
+        logger.info("reset terminal config cacheKey:{} at:{}", cacheKey, new Date());
     }
 }
