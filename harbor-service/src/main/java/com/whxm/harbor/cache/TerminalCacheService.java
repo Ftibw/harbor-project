@@ -37,9 +37,6 @@ public class TerminalCacheService {
         this.memento = terminalConfig.createMemento();
     }
 
-/*    @Autowired
-    private TerminalConfig terminalConfig;*/
-
     @CacheEvict(cacheNames = "terminal", key = "#config.cacheKey")
     public TerminalConfig updateConfig(TerminalConfig config) {
 
