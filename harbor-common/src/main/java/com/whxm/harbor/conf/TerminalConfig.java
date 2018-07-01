@@ -50,9 +50,9 @@ public class TerminalConfig implements Serializable {
     public static final String cacheKey = "terminalCacheKey";
 
     /**
-     * 创建备忘录
+     * 创建备忘录返回标识接口
      */
-    public Memento createMemento() {
+    public MementoIF createMemento() {
 
         return new Memento(this);
     }
