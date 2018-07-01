@@ -4,6 +4,7 @@ import com.whxm.harbor.bean.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;

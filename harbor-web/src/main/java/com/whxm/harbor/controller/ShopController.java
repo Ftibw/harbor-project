@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
@@ -152,6 +151,19 @@ public class ShopController {
         Assert.notNull(shopId, "商铺ID不能为空");
 
         BizShopVo shop = shopService.getBizShop(shopId);
+
+        return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
+    }
+
+    @ApiOperation("根据商铺编号获取商铺信息")
+    @GetMapping("/shop/number")
+    public Result getBizShopByNumber(
+            @ApiParam(name = "NUMBER", value = "商铺的编号", required = true)
+            @RequestParam("number") String number
+    ) {
+        Assert.notNull(number, "商铺的编号不能为空");
+
+        BizShopVo shop = shopService.getBizShopByNumber(number);
 
         return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
     }
