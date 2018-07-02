@@ -210,10 +210,4 @@ public class UserController {
 
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
-
-    @GetMapping("/info")
-    public String info(HttpServletRequest request) {
-
-        return "ContextRealPath = " + request.getServletContext().getRealPath("/");
-    }
 }
