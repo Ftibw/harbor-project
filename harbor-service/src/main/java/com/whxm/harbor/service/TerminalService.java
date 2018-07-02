@@ -59,7 +59,7 @@ public interface TerminalService {
     BizTerminal register(Map<String, Object> params);
 
     /**
-     * 根据终端编号和屏保ID
+     * 根据终端编号查询屏保ID
      *
      * @param terminalNumber
      * @return

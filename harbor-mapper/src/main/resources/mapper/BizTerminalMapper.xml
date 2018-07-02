@@ -268,15 +268,13 @@
     <!--根据终端编号和终端平台,更新终端注册时间-->
     <update id="updateRegisteredTime">
         UPDATE biz_terminal
-        SET register_terminal_time = #{registerTerminalTime},terminal_ip=#{ip}
+        SET register_terminal_time = #{registerTerminalTime}, terminal_ip = #{ip}
         WHERE terminal_number = #{terminalNumber} AND terminal_platform = #{terminalPlatform}
     </update>
 
     <!--根据终端编号查询:终端开关机时间, 屏保ID(通过终端关联屏保发布终端表)-->
     <select id="selectTerminalWithScreensaver" resultType="java.util.HashMap">
-        SELECT
-            screensaver_id       screensaverId,
-            terminal_switch_time terminalSwitchTime
+        SELECT screensaver_id screensaverId
         FROM biz_terminal
             LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         WHERE terminal_number = #{terminalNumber}
