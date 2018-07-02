@@ -6,13 +6,12 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.UserMapper;
 import com.whxm.harbor.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +80,7 @@ public class UserServiceImpl implements UserService {
 
         user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 
+        user.setIsDeleted(Constant.NO);
         //仅为了避免重复索引抛异常,就多查一次,贼浪费
         synchronized (this) {
 
