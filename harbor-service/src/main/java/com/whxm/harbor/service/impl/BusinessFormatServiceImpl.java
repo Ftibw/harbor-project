@@ -76,7 +76,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
     @Override
     public Result updateBizFormat(BizFormat bizFormat) {
-
+        //couldUpdateNumber
         int affectRow = bizFormatMapper.updateByPrimaryKeySelective(bizFormat);
 
         return 0 == affectRow ?
