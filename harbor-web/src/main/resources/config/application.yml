@@ -2,7 +2,7 @@ spring:
   application:
     name: harbor-web
   datasource:
-    url: jdbc:mysql://${databasehost:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://${server-address:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-    host: ${redishost:47.94.202.250}
+    host: ${server-address:47.94.202.250}
   #配置全局时间返回格式
   jackson:
     default-property-inclusion: non_null
@@ -38,7 +38,7 @@ pagehelper:
 swagger2:
   package: com.whxm.harbor.controller
 urlConfig:                          # 192.168.1.103
-  urlPrefix: ${resourceServer:http://47.94.202.250:8080/resources/}
+  urlPrefix: http://${server-address:47.94.202.250}:8080/resources/
 server:
   port: 9000
 terminal:
