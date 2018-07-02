@@ -2,9 +2,7 @@ package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 public class User {
