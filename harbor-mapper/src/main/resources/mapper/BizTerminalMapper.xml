@@ -268,7 +268,7 @@
     <!--根据终端编号和终端平台,更新终端注册时间-->
     <update id="updateRegisteredTime">
         UPDATE biz_terminal
-        SET register_terminal_time = #{registerTerminalTime}
+        SET register_terminal_time = #{registerTerminalTime},terminal_ip=#{ip}
         WHERE terminal_number = #{terminalNumber} AND terminal_platform = #{terminalPlatform}
     </update>
 

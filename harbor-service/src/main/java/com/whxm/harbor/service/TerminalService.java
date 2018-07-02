@@ -61,10 +61,10 @@ public interface TerminalService {
     /**
      * 根据终端编号和屏保ID
      *
-     * @param params
+     * @param terminalNumber
      * @return
      */
-    ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params);
+    ResultMap<String, Object> getTerminalScreensaverProgram(String terminalNumber);
 
     /**
      * 某个屏保发布前,查询全部终端,并将该屏保发布过的终端标记为checked

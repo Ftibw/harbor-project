@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -150,34 +151,26 @@ public class TerminalServiceImpl implements TerminalService {
     }
 
     @Override
-    public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
+    public ResultMap<String, Object> getTerminalScreensaverProgram(String terminalNumber) {
 
         ResultMap<String, Object> ret = new ResultMap<>(6);
 
         final List<Map<String, Object>> list = new ArrayList<>();
 
-        Map<String, Object> terminalInfo;
-
-        String terminalNumber = (String) params.get("terminalNumber");
-
         Object screensaverId = null;
 
-        //Object terminalSwitchTime = null;
+        TerminalConfig config = JacksonUtils.readValue(terminalCacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class);
+
+        if (null == config)
+            throw new DataNotFoundException();
 
         try {
-            terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
+            Map<String, Object> terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
 
             if (null != terminalInfo) {
                 //屏保ID
                 screensaverId = terminalInfo.get("screensaverId");
-                //终端开关机时间
-                //terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
             }
-
-            TerminalConfig config = JacksonUtils.readValue(terminalCacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class);
-
-            if (null == config)
-                throw new DataNotFoundException();
 
             //先存了list引用再说
             ret.build("prog", null == screensaverId ? 0 : screensaverId)
@@ -201,14 +194,21 @@ public class TerminalServiceImpl implements TerminalService {
                 ret = list.isEmpty() ? ret.build("code", 0) : ret.build("code", 1);
             }
 
+            return ret;
+
         } catch (Exception e) {
 
             logger.error("编号为{}的终端屏保信息 查询报错", terminalNumber, e);
 
-            throw new RuntimeException(e);
-        }
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-        return ret;
+            return ret.build("code", 0)
+                    .build("prog", 0)
+                    .build("data", new Object[]{})
+                    .build("on_off", config.getOnOff())
+                    .build("delay", config.getDelay())
+                    .build("protect", config.getProtect());
+        }
     }
 
     @Override

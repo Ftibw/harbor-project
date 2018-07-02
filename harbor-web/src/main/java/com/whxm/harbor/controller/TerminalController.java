@@ -35,16 +35,14 @@ public class TerminalController {
     @Autowired
     private TerminalVisitService terminalVisitService;
 
-    @Autowired
-    private TerminalConfig terminalConfig;
-
     @ApiOperation("终端注册")
     @PostMapping(value = "/register")
     public Map<String, Object> register(
             @ApiParam(name = "sn", value = "终端编号", required = true)
                     String sn,
             @ApiParam(name = "os", value = "终端类型(1=android,2=windows)", required = true)
-                    Integer os
+                    Integer os,
+            HttpServletRequest request
     ) {
 
         Assert.notNull(sn, "终端编号不能为空");
@@ -53,6 +51,8 @@ public class TerminalController {
         ResultMap<String, Object> ret = new ResultMap<>(3);
 
         try {
+            String ip = IPv4Utils.getIpAddress(request);
+
             //"floor":"楼层编号","rotate":45
             //终端注册然后获取注册状态
             BizTerminal terminal = terminalService.register(
@@ -60,6 +60,7 @@ public class TerminalController {
                             .build("terminalNumber", sn)
                             .build("terminalPlatform", os)
                             .build("registerTerminalTime", new Date())
+                            .build("ip", ip)
             );
             if (null != terminal) {
 
@@ -83,36 +84,16 @@ public class TerminalController {
 
     @KeepAliveDetect
     @ApiOperation("获取终端的屏保节目")
-    @RequestMapping(value = "/program", method = {RequestMethod.POST, RequestMethod.GET})
+    @PostMapping(value = "/program")
     public Map<String, Object> program(
             @ApiParam(name = "sn", value = "终端编号", required = true)
-                    String sn,
+            @RequestParam("sn") String terminalNumber,
             @ApiParam(name = "prog", value = "前正在播放的屏保编号")
                     Integer prog
     ) {
+        Assert.notNull(terminalNumber, "终端编号不能为空");
 
-        Assert.notNull(sn, "终端编号不能为空");
-
-        ResultMap<String, Object> convert = new ResultMap<>(6);
-
-        try {
-            convert.build("terminalNumber", sn).build("screensaverId", prog);
-
-            convert = terminalService.getTerminalScreensaverProgram(convert);
-
-        } catch (Exception e) {
-
-            logger.error("编号为{}的终端的屏保数据 获取报错", sn, e);
-
-            convert.clean()
-                    .build("code", 0)
-                    .build("prog", 0)
-                    .build("data", new Object[]{})
-                    .build("on_off", terminalConfig.getOnOff())
-                    .build("delay", terminalConfig.getDelay())
-                    .build("protect", terminalConfig.getProtect());
-        }
-        return convert;
+        return terminalService.getTerminalScreensaverProgram(terminalNumber);
     }
 
     @ApiOperation("获取终端的首页轮播图")
@@ -158,6 +139,19 @@ public class TerminalController {
     }
 
     //==========================以下均被拦截============================
+
+    @ApiOperation("获取终端的屏保节目(需授权)")
+    @GetMapping(value = "/bizProgram")
+    public Result bizProgram(
+            @ApiParam(name = "sn", value = "终端编号", required = true)
+            @RequestParam("sn") String terminalNumber) {
+
+        Assert.notNull(terminalNumber, "终端编号不能为空");
+
+        ResultMap<String, Object> ret = terminalService.getTerminalScreensaverProgram(terminalNumber);
+
+        return Result.success(ret.get("data"));
+    }
 
     @ApiOperation("终端绑定首页轮播图(需授权)")
     @PostMapping("/boundFirstPage")
@@ -229,12 +223,10 @@ public class TerminalController {
 
     @ApiOperation("添加终端(需授权)")
     @PostMapping("/bizTerminal")
-    public Result addBizTerminal(@RequestBody BizTerminal bizTerminal, HttpServletRequest request) {
+    public Result addBizTerminal(@RequestBody BizTerminal bizTerminal) {
 
         Assert.notNull(bizTerminal, "终端的数据不能为空");
         Assert.isNull(bizTerminal.getTerminalId(), "终端的ID必须为空");
-
-        bizTerminal.setTerminalIp(IPv4Utils.getIpAddress(request));
 
         return terminalService.addBizTerminal(bizTerminal);
     }
