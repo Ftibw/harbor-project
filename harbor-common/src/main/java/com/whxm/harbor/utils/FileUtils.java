@@ -108,7 +108,7 @@ public class FileUtils {
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? "横屏" : "竖屏";
+            return imgWidth > imgHeight ? Constant.HORIZONTAL_SCREEN_PICTURE : Constant.VERTICAL_SCREEN_PICTURE;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
@@ -129,7 +129,7 @@ public class FileUtils {
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? "横屏" : "竖屏";
+            return imgWidth > imgHeight ? Constant.HORIZONTAL_SCREEN_PICTURE : Constant.VERTICAL_SCREEN_PICTURE;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);

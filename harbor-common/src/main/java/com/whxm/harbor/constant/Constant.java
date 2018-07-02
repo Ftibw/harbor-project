@@ -22,4 +22,8 @@ public class Constant {
     public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "picture";
     //终端keep alive时间间隔5分钟(300000毫秒)
     public static final long KEEP_ALIVE_INTERVAL = 300000;
+
+    public static final String VERTICAL_SCREEN_PICTURE="1";
+
+    public static final String HORIZONTAL_SCREEN_PICTURE="2";
 }
