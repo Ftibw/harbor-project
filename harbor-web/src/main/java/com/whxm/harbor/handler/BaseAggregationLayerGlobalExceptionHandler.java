@@ -109,7 +109,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
     private String dataIntegrityMessageFormat(String message) {
 
         String ret = null;
-
+        //外键约束异常
         Pattern pattern = Pattern.compile(
                 "### Cause.*Cannot delete or update a parent row: (a foreign key constraint fails \\((.*\\.`(.*)`, CONSTRAINT.*REFERENCES `(.*)` \\(.*)\\))"
         );
@@ -120,6 +120,21 @@ public class BaseAggregationLayerGlobalExceptionHandler {
 
             ret = matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除";
             //System.out.println(matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除");
+        }
+
+        //键重复异常
+        if (null == ret) {
+
+            Pattern pattern2 = Pattern.compile(
+                    "### Cause.*Duplicate entry '(.*)' for key '(.*)'"
+            );
+
+            Matcher matcher2 = pattern2.matcher(message);
+
+            while (matcher2.find()) {
+
+                ret = "值为[" + matcher2.group(1) + "]的[" + matcher2.group(2) + "]重复";
+            }
         }
 
         return ret;
@@ -149,6 +164,21 @@ public class BaseAggregationLayerGlobalExceptionHandler {
             System.out.println(matcher.group(3) + "使用了" + matcher.group(4) + "中的数据," + matcher.group(4) + "数据无法删除");
         }
 
+        String detail = "### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'A0003' for key 'biz_format_number'\n" +
+                "### The error may involve com.whxm.harbor.mapper.BizFormatMapper.updateByPrimaryKeySelective-Inline\n" +
+                "### The error occurred while setting parameters\n" +
+                "### SQL: update biz_format          SET biz_format_type = ?,                                           biz_format_number = ?          where biz_format_id = ?\n" +
+                "### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'A0003' for key 'biz_format_number'\n" +
+                "; SQL []; Duplicate entry 'A0003' for key 'biz_format_number'";
 
+        Pattern pattern2 = Pattern.compile(
+                "### Cause.*Duplicate entry '(.*)' for key '(.*)'"
+        );
+
+        Matcher matcher2 = pattern2.matcher(detail);
+
+        while (matcher2.find()) {
+            System.out.println("值为[" + matcher2.group(1) + "]的[" + matcher2.group(2) + "]重复");
+        }
     }
 }
