@@ -15,10 +15,13 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -142,6 +145,8 @@ public class UserController {
 
             hashOps.put(userId, info);
 
+            redisTemplate.boundSetOps(Constant.REDIS_USERS_KEY).add(userId);
+
             //将userId和盐搅拌生成token
             return Result.success(chaos(userId, salt));
         }
@@ -172,8 +177,7 @@ public class UserController {
             }
 
             if (null != lastTimePoint &&
-                    System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
-                            + lastTimePoint) {
+                    System.currentTimeMillis() < Constant.LOGIN_EXPIRE + lastTimePoint) {
 
                 hashOps.put(salt, System.currentTimeMillis());
 
@@ -196,5 +200,23 @@ public class UserController {
         }
 
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
+    }
+
+    @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.LOGIN_EXPIRE)
+    public void loginExpire() {
+
+        Set<Object> loginKeys = redisTemplate.boundSetOps(Constant.REDIS_USERS_KEY).members();
+
+        loginKeys.stream().map(
+                key -> redisTemplate.boundHashOps(key)
+        ).forEach(
+                hashOps -> hashOps.entries().forEach(
+                        (salt, lastTimePoint) -> {
+                            if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE + (Long) lastTimePoint) {
+                                hashOps.delete(salt);
+                            }
+                        }
+                )
+        );
     }
 }

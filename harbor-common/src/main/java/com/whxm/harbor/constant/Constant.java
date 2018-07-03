@@ -30,4 +30,10 @@ public class Constant {
     public static final String HORIZONTAL_SCREEN_PICTURE = "2";
 
     public static final String REQUEST_USER_KEY = "LOGIN_USER_KEY";
+
+    public static final String REDIS_USERS_KEY = "LOGIN_KEYS_KEY";
+
+    public static final long LOGIN_EXPIRE = 7200000;
+
+    public static final long TASK_INIT_DELAY=1000;
 }

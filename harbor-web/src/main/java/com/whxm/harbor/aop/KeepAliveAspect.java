@@ -69,7 +69,7 @@ public class KeepAliveAspect {
         return joinPoint.proceed();
     }
 
-    @Scheduled(initialDelay = 1000, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
+    @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
 
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
