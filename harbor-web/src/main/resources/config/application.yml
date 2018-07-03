@@ -2,7 +2,7 @@ spring:
   application:
     name: harbor-web
   datasource:       #&useSSL=false  47.94.202.250 or 192.168.1.146
-    url: jdbc:mysql://${mysql.address:192.168.1.146}:3306/harbor?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://${mysql.address:192.168.1.80}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
