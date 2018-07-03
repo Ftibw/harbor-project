@@ -26,12 +26,12 @@ public interface BuildingService {
     List<BizBuilding> getBizBuildingList(Integer floor);
 
     /**
-     * 根据ID删除建筑
+     * 根据编号删除建筑
      *
-     * @param bizBuildingId 建筑ID
+     * @param number 建筑编号
      * @return ret
      */
-    Result deleteBizBuilding(Integer bizBuildingId);
+    Result deleteBizBuilding(String number);
 
     /**
      * 修改建筑数据

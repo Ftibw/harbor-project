@@ -34,12 +34,12 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Result deleteBizBuilding(Integer bizBuildingId) {
+    public Result deleteBizBuilding(String number) {
 
-        int affectRow = bizBuildingMapper.deleteByPrimaryKey(bizBuildingId);
+        int affectRow = bizBuildingMapper.deleteByNumber(number);
 
         return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法删除", bizBuildingId))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("编号为%s的建筑,无法删除", number))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
 
     }

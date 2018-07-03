@@ -79,10 +79,10 @@ public class BuildingController {
     @DeleteMapping
     public Result delBizBuilding(
             @ApiParam(name = "ID", value = "建筑ID", required = true)
-            @RequestParam("id") Integer id) {
+            @RequestParam("id") String number) {
 
-        Assert.notNull(id, "建筑ID不能为空");
+        Assert.notNull(number, "建筑编号不能为空");
 
-        return buildingService.deleteBizBuilding(id);
+        return buildingService.deleteBizBuilding(number);
     }
 }
