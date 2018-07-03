@@ -28,4 +28,6 @@ public class Constant {
     public static final String VERTICAL_SCREEN_PICTURE = "1";
 
     public static final String HORIZONTAL_SCREEN_PICTURE = "2";
+
+    public static final String REQUEST_USER_KEY = "LOGIN_USER_KEY";
 }

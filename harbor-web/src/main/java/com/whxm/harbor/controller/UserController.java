@@ -5,26 +5,26 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.service.UserService;
-import com.whxm.harbor.utils.Assert;
-import com.whxm.harbor.utils.MD5Utils;
-import com.whxm.harbor.utils.TokenUtils;
+import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.whxm.harbor.utils.TokenUtils.chaos;
 import static com.whxm.harbor.utils.TokenUtils.order;
+import static com.whxm.harbor.utils.TokenUtils.salt;
 
 @Api(description = "用户服务")
 @RestController
@@ -111,12 +111,19 @@ public class UserController {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
+    @Autowired
+    private RedisDistributedLock lock;
+
     @ApiOperation("登陆接口,token有效时间为2小时")
     @PostMapping("/login")
-    public Result userLogin(@Valid @RequestBody User user) {
+    public Result userLogin(@Valid @RequestBody User user, HttpServletRequest request) {
 
-        Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
-        Assert.notNull(user.getUserPassword(), "用户密码不能为空");
+        if (!lock.lock(IPv4Utils.getIpAddress(request) + MD5Utils.MD5(JacksonUtils.toJson(user)),
+                String.valueOf(request.getRequestURL()),
+                Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) {
+
+            return Result.failure(ResultEnum.INTERFACE_EXCEED_LOAD, "请勿重复登录");
+        }
 
         User info = userService.login(user);
 
@@ -125,37 +132,15 @@ public class UserController {
 
         String userId = info.getUserId();
 
-        //设置String序列化器
-//        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-//
-//        redisTemplate.setKeySerializer(serializer);
-//
-//        redisTemplate.setValueSerializer(serializer);
-
-        //----------------已登录过的放行-------------------
-        synchronized (UserController.class) {
-
-            String oldSalt = (String) redisTemplate.boundValueOps(userId).get();
-
-            if (null != oldSalt) {
-
-                //发送推送消息给已登录用户是否确认允许登录
-
-                return Result.success(chaos(userId, oldSalt));
-            }
-        }
-        //----------------验证成功的放行-------------------
         if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
-
 
             String salt = UUID.randomUUID().toString().replace("-", "");
 
-            //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
-            redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
+            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(userId);
 
-            //redisTemplate.boundHashOps(userId).put("salt",salt);
-            //redisTemplate.boundHashOps(userId).put("user",JacksonUtils.toJSon(info));
-            //redisTemplate.boundHashOps(userId).expire(2, TimeUnit.HOURS);
+            hashOps.put(salt, System.currentTimeMillis());
+
+            hashOps.put(userId, info);
 
             //将userId和盐搅拌生成token
             return Result.success(chaos(userId, salt));
@@ -171,26 +156,28 @@ public class UserController {
             @ApiParam(name = "token", value = "token值", required = true) String token) {
 
         if (token != null && 64 == token.length()) {
-            //设置String序列化器
-//            RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-//
-//            redisTemplate.setKeySerializer(serializer);
-//
-//            redisTemplate.setValueSerializer(serializer);
 
             String userId = order(token);
 
+            String salt = salt(token);
+
             //从redis获取盐信息
-            String salt = (String) redisTemplate.boundValueOps(userId).get();
+            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(userId);
 
-            if (null != salt && salt.equals(TokenUtils.salt(token))) {
+            Long lastTimePoint = null;
 
-                String newSalt = UUID.randomUUID().toString().replace("-", "");
+            if (null != hashOps) {
 
-                redisTemplate.boundValueOps(userId).set(newSalt, 2, TimeUnit.HOURS);
+                lastTimePoint = (Long) hashOps.get(salt);
+            }
 
-                return Result.success(chaos(userId, newSalt));
+            if (null != lastTimePoint &&
+                    System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS)
+                            + lastTimePoint) {
 
+                hashOps.put(salt, System.currentTimeMillis());
+
+                return Result.success(token);
             }
         }
 
@@ -203,7 +190,7 @@ public class UserController {
 
         if (token != null && 64 == token.length()) {
 
-            redisTemplate.delete(order(token));
+            redisTemplate.boundHashOps(order(token)).delete(salt(token));
 
             return Result.success("登出成功");
         }

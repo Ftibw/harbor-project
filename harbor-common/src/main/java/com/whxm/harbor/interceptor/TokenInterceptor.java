@@ -1,13 +1,15 @@
 package com.whxm.harbor.interceptor;
 
+import com.whxm.harbor.bean.User;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.lock.RedisDistributedLock;
+import com.whxm.harbor.utils.JacksonUtils;
 import com.whxm.harbor.utils.MD5Utils;
 import com.whxm.harbor.utils.RequestJsonUtils;
 import com.whxm.harbor.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -34,10 +37,19 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
             //从redis获取user信息
             String userId = TokenUtils.order(token);
+
             String salt = TokenUtils.salt(token);
-            if (null != userId
-                    && null != salt
-                    && salt.equals(redisTemplate.boundValueOps(userId).get())) {
+
+            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(userId);
+
+            Long lastTimePoint = (Long) hashOps.get(salt);
+
+            if (null != lastTimePoint &&
+                    System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) + lastTimePoint) {
+                //instanceof LinkedHashMap
+                Object useInfo = hashOps.get(userId);
+
+                request.setAttribute(Constant.REQUEST_USER_KEY, JacksonUtils.readValue(JacksonUtils.toJson(useInfo), User.class));
 
                 //不幂等的操作如下(均为POST)
                 /*terminal/bizTerminal

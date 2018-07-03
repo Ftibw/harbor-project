@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
+import com.whxm.harbor.bean.User;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.handler.GlobalExceptionHandler;
 import com.whxm.harbor.utils.IPv4Utils;
 import com.whxm.harbor.utils.JacksonUtils;
@@ -55,12 +57,12 @@ public class RestControllerAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        //登录拦截器会将登录用户信息存入request,getUserInfoFromRequest(request)
+        Object userInfo = request.getAttribute(Constant.REQUEST_USER_KEY);
 
         String ip = IPv4Utils.getIpAddress(request);
         String methodName = this.getMethodName(joinPoint);
         String params = this.getParamsJson(joinPoint);
-        String requester = "unknown";
+        String requester = null == userInfo ? "unknown" : ((User) userInfo).getUserLoginname();
         String userAgent = request.getHeader("user-agent");
 
         logger.info("Started request requester [{}] method [{}] params [{}] IP [{}] userAgent [{}]", requester, methodName, params, ip, userAgent);

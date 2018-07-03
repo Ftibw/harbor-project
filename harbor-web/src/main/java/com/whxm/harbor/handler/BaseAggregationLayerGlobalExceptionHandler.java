@@ -100,10 +100,29 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理数据库键完整性约束异常
      */
     protected ResponseEntity<Result> handleConstraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
-        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getRequestURI(), e);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, dataIntegrityMessageFormat(e.getMessage())));
+
+        String message = e.getMessage();
+
+        String msgWrapper = dataIntegrityMessageFormat(message);
+
+        String desc = "handleConstraintViolationException start, uri:{}, caused by: ";
+
+        if (String.valueOf(message).equals(String.valueOf(msgWrapper))) {
+
+            LOGGER.info(desc, request.getRequestURI(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Result.failure(ResultEnum.SYSTEM_INNER_ERROR));
+
+        } else {
+
+            LOGGER.info(desc + "{}", request.getRequestURI(), msgWrapper);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, msgWrapper));
+        }
     }
 
     private String dataIntegrityMessageFormat(String message) {

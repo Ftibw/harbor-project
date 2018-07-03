@@ -12,7 +12,6 @@ import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
-import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +82,8 @@ public class TerminalServiceImpl implements TerminalService {
         bizTerminal.setTerminalId(bizTerminalId);
 
         bizTerminal.setIsDeleted(Constant.YES);
+
+        bizTerminal.setIsTerminalOnline(Constant.NO);
 
         bizTerminal.setTerminalNumber(null);
 

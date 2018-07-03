@@ -52,7 +52,7 @@ public class KeepAliveAspect {
 
         PageVO<BizTerminal> pageVO = terminalService.getBizTerminalList(new PageQO(), null);
 
-        pageVO.getList().forEach(item -> hashOps.put(item.getTerminalNumber(), System.currentTimeMillis()));
+        pageVO.getList().forEach(item -> hashOps.putIfAbsent(item.getTerminalNumber(), System.currentTimeMillis()));
     }
 
     @Around("@within(com.whxm.harbor.annotation.KeepAliveDetect)||@annotation(com.whxm.harbor.annotation.KeepAliveDetect)")
@@ -69,28 +69,30 @@ public class KeepAliveAspect {
         return joinPoint.proceed();
     }
 
-    @Scheduled(initialDelay = 20000, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
+    @Scheduled(initialDelay = 1000, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
 
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
 
         Map<Object, Object> map = hashOps.entries();
 
-        List<Object> list = new ArrayList<>();
+        List<Object> keys = new ArrayList<>();
 
         map.forEach((terminalNumber, lastTimePoint) -> {
 
-            if (System.currentTimeMillis() > (Long.parseLong(String.valueOf(lastTimePoint)) + Constant.KEEP_ALIVE_INTERVAL)) {
+            if (System.currentTimeMillis() > ((Long) lastTimePoint) + Constant.KEEP_ALIVE_INTERVAL) {
 
-                list.add(String.valueOf(terminalNumber));
+                keys.add(String.valueOf(terminalNumber));
             }
         });
 
-        if (!list.isEmpty()) {
+        if (!keys.isEmpty()) {
 
-            terminalService.updateTerminalOffline(list);
+            terminalService.updateTerminalOffline(keys);
 
-            logger.info("编号为{}的终端离线", list);
+            hashOps.delete(keys.toArray());
+
+            logger.info("编号为{}的终端离线", keys);
         }
     }
 
