@@ -9,6 +9,16 @@ public class BizFormat {
 
     private String bizFormatType;
 
+    private Integer bizFormatPid;
+
+    public Integer getBizFormatPid() {
+        return bizFormatPid;
+    }
+
+    public void setBizFormatPid(Integer bizFormatPid) {
+        this.bizFormatPid = bizFormatPid;
+    }
+
     @JsonIgnore
     private Integer isDeleted;
 
