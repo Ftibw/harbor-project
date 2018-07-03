@@ -14,6 +14,7 @@ import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -205,7 +206,11 @@ public class UserController {
     @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.LOGIN_EXPIRE)
     public void loginExpire() {
 
-        Set<Object> loginKeys = redisTemplate.boundSetOps(Constant.REDIS_USERS_KEY).members();
+        BoundSetOperations<Object, Object> setOps = redisTemplate.boundSetOps(Constant.REDIS_USERS_KEY);
+
+        if (null == setOps) return;
+
+        Set<Object> loginKeys = setOps.members();
 
         loginKeys.stream().map(
                 key -> redisTemplate.boundHashOps(key)
