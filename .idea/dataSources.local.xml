@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="harbor@192.168.1.80" uuid="3aac6b10-f1c5-462e-b933-ec794d092eb2">
+    <data-source name="harbor@192.168.1.80" uuid="f67584fb-0fdc-48ab-a834-0fe924f25962">
       <database-info product="MySQL" version="5.7.22" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
