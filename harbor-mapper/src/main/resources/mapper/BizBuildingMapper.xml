@@ -182,7 +182,7 @@
         )
     </select>
 
-    <insert id="batchReplace" useGeneratedKeys="true">
+    <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">
         REPLACE INTO biz_building
         (<include refid="Base_Column_List"/>)
         VALUES
