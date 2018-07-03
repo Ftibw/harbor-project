@@ -30,7 +30,7 @@ public class FloorController {
 
     @ApiOperation("获取全部楼层数据")
     @GetMapping("/floors")
-    public Map<String, Object> getBizFormats() {
+    public Map<String, Object> getBizFloors() {
 
         ResultMap<String, Object> ret = new ResultMap<>(2);
 

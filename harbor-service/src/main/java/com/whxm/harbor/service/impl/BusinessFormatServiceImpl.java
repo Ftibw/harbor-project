@@ -6,10 +6,13 @@ import com.whxm.harbor.bean.BizFormat;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.service.BusinessFormatService;
 import com.whxm.harbor.mapper.BizFormatMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,14 +53,16 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         return pageVO;
     }
 
-    @Cacheable(cacheNames = "bizFormat",keyGenerator = "cacheKeyGenerator")
+    @Autowired
+    private CacheService cacheService;
+
     @Override
     public List<BizFormat> getBizFormatList() {
 
-        return bizFormatMapper.getBizFormatList(null);
+        return cacheService.getFormatList();
     }
 
-
+    @CacheEvict(cacheNames = "bizFormat", allEntries = true)
     @Override
     public Result deleteBizFormat(Integer bizFormatId) {
 
@@ -77,6 +82,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
+    @CacheEvict(cacheNames = "bizFormat", allEntries = true)
     @Override
     public Result updateBizFormat(BizFormat bizFormat) {
         //couldUpdateNumber
@@ -87,6 +93,7 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
                 : Result.success(bizFormat);
     }
 
+    @CacheEvict(cacheNames = "bizFormat", allEntries = true)
     @Override
     public Result addBizFormat(BizFormat bizFormat) {
 

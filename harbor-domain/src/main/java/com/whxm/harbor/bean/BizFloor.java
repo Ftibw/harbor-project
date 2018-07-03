@@ -1,6 +1,8 @@
 package com.whxm.harbor.bean;
 
-public class BizFloor {
+import java.io.Serializable;
+
+public class BizFloor implements Serializable{
     private Integer floorId;
 
     private String floorNumber;

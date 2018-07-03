@@ -3,7 +3,7 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.cache.TerminalCacheService;
+import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
@@ -39,7 +39,7 @@ public class TerminalServiceImpl implements TerminalService {
     private BizTerminalMapper bizTerminalMapper;
 
     @Autowired
-    private TerminalCacheService terminalCacheService;
+    private CacheService cacheService;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -159,7 +159,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         Object screensaverId = null;
 
-        TerminalConfig config = JacksonUtils.readValue(terminalCacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class);
+        TerminalConfig config = JacksonUtils.readValue(cacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class);
 
         if (null == config)
             throw new DataNotFoundException();
@@ -263,18 +263,18 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result updateTerminalConfig(TerminalConfig terminalConfig) {
-        return Result.success(terminalCacheService.updateConfig(terminalConfig));
+        return Result.success(cacheService.updateConfig(terminalConfig));
     }
 
     @Override
     public Result getTerminalConfig() {
-        return Result.success(JacksonUtils.readValue(terminalCacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class));
+        return Result.success(JacksonUtils.readValue(cacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class));
     }
 
     @Override
     public Result resetTerminalConfig() {
 
-        terminalCacheService.resetConfig(TerminalConfig.cacheKey);
+        cacheService.resetConfig(TerminalConfig.cacheKey);
 
         return Result.success();
     }

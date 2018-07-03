@@ -6,6 +6,7 @@ import com.whxm.harbor.bean.BizFloor;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
@@ -13,6 +14,8 @@ import com.whxm.harbor.service.FloorService;
 import com.whxm.harbor.mapper.BizFloorMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,12 +73,16 @@ public class FloorServiceImpl implements FloorService {
         return pageVO;
     }
 
+    @Autowired
+    private CacheService cacheService;
+
     @Override
     public List<BizFloor> getBizFloorList() {
 
-        return bizFloorMapper.getBizFloorList(null);
+        return cacheService.getFloorList();
     }
 
+    @CacheEvict(cacheNames = "bizFloor", allEntries = true)
     @Override
     public Result deleteBizFloor(Integer bizFloorId) {
 
@@ -86,6 +93,7 @@ public class FloorServiceImpl implements FloorService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
+    @CacheEvict(cacheNames = "bizFloor", allEntries = true)
     @Override
     public Result updateBizFloor(BizFloor bizFloor) {
 
@@ -96,6 +104,7 @@ public class FloorServiceImpl implements FloorService {
                 : Result.success(bizFloor);
     }
 
+    @CacheEvict(cacheNames = "bizFloor", allEntries = true)
     @Override
     public Result addBizFloor(BizFloor bizFloor) {
 
