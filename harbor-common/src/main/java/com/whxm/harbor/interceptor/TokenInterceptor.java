@@ -31,12 +31,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         String token = request.getParameter("token");
 
         if (token != null && 64 == token.length()) {
-            //分布式的时候,设置String序列化器
-            StringRedisSerializer serializer = new StringRedisSerializer();
-
-            redisTemplate.setKeySerializer(serializer);
-
-            redisTemplate.setValueSerializer(serializer);
 
             //从redis获取user信息
             String userId = TokenUtils.order(token);

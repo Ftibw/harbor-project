@@ -39,9 +39,6 @@ public class CacheService {
     private final MementoIF memento;
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
-
-    @Autowired
     public CacheService(TerminalConfig terminalConfig) {
 
         this.terminalConfig = terminalConfig;
@@ -60,7 +57,7 @@ public class CacheService {
     }
 
     @Cacheable(cacheNames = "terminal", key = "#cacheKey")
-    public String getConfig(String cacheKey) {
+    public TerminalConfig getConfig(String cacheKey) {
 
         logger.info("get terminal config cacheKey:{} at:{}", cacheKey, new Date());
 
@@ -68,7 +65,7 @@ public class CacheService {
 
         BeanUtils.copyProperties(terminalConfig, config);
 
-        return JacksonUtils.toJson(config);
+        return config;
     }
 
     @CacheEvict(cacheNames = "terminal", key = "#cacheKey")
@@ -85,12 +82,6 @@ public class CacheService {
     @Cacheable(cacheNames = "bizFormat", keyGenerator = "cacheKeyGenerator")
     public List<BizFormat> getFormatList() {
 
-        Jackson2JsonRedisSerializer<BizFormat> serializer = new Jackson2JsonRedisSerializer<>(BizFormat.class);
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
-
         return bizFormatMapper.getBizFormatList(null);
     }
 
@@ -99,12 +90,6 @@ public class CacheService {
 
     @Cacheable(cacheNames = "bizFloor", keyGenerator = "cacheKeyGenerator")
     public List<BizFloor> getFloorList() {
-
-        Jackson2JsonRedisSerializer<BizFloor> serializer = new Jackson2JsonRedisSerializer<>(BizFloor.class);
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
 
         return bizFloorMapper.getBizFloorList(null);
     }

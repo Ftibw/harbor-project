@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -32,15 +33,20 @@ public class KeepAliveAspect {
     @Autowired
     public KeepAliveAspect(TerminalService terminalService, RedisTemplate<Object, Object> redisTemplate) {
 
+        //构造函数中配置全局redisTemplate序列化方式
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
+
+        //------------------------------------------------------------------------------------
+
         this.terminalService = terminalService;
 
         this.redisTemplate = redisTemplate;
-
-        StringRedisSerializer serializer = new StringRedisSerializer();
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
 
         final BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
 
@@ -54,12 +60,6 @@ public class KeepAliveAspect {
 
         String terminalNumber = String.valueOf(joinPoint.getArgs()[0]);
 
-        StringRedisSerializer serializer = new StringRedisSerializer();
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
-
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
 
         hashOps.put(terminalNumber, System.currentTimeMillis());
@@ -71,12 +71,6 @@ public class KeepAliveAspect {
 
     @Scheduled(initialDelay = 20000, fixedRate = Constant.KEEP_ALIVE_INTERVAL)
     public void keepAliveDetect() {
-
-        StringRedisSerializer serializer = new StringRedisSerializer();
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
 
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
 

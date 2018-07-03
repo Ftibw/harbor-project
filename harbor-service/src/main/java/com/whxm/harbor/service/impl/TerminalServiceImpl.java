@@ -159,7 +159,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         Object screensaverId = null;
 
-        TerminalConfig config = JacksonUtils.readValue(cacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class);
+        TerminalConfig config = cacheService.getConfig(TerminalConfig.cacheKey);
 
         if (null == config)
             throw new DataNotFoundException();
@@ -268,7 +268,7 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result getTerminalConfig() {
-        return Result.success(JacksonUtils.readValue(cacheService.getConfig(TerminalConfig.cacheKey), TerminalConfig.class));
+        return Result.success(cacheService.getConfig(TerminalConfig.cacheKey));
     }
 
     @Override

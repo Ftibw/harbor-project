@@ -126,11 +126,11 @@ public class UserController {
         String userId = info.getUserId();
 
         //设置String序列化器
-        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-
-        redisTemplate.setKeySerializer(serializer);
-
-        redisTemplate.setValueSerializer(serializer);
+//        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+//
+//        redisTemplate.setKeySerializer(serializer);
+//
+//        redisTemplate.setValueSerializer(serializer);
 
         //----------------已登录过的放行-------------------
         synchronized (UserController.class) {
@@ -172,11 +172,11 @@ public class UserController {
 
         if (token != null && 64 == token.length()) {
             //设置String序列化器
-            RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-
-            redisTemplate.setKeySerializer(serializer);
-
-            redisTemplate.setValueSerializer(serializer);
+//            RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+//
+//            redisTemplate.setKeySerializer(serializer);
+//
+//            redisTemplate.setValueSerializer(serializer);
 
             String userId = order(token);
 
