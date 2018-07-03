@@ -29,8 +29,8 @@ public class HarborWebApplication {
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxFileSize("10240KB");
-        factory.setMaxRequestSize("10240KB");
+        factory.setMaxFileSize("10240000KB");
+        factory.setMaxRequestSize("10240000KB");
         return factory.createMultipartConfig();
     }
 
