@@ -4,6 +4,7 @@ import com.whxm.harbor.bean.ResultMap;
 import com.whxm.harbor.callback.Callback;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.exception.InternalServerException;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +47,10 @@ public class FileUtils {
             originName = file.getOriginalFilename();
             //文件大小
             size = file.getSize();
+
+            if (size >= 83886080)
+                throw new ParameterInvalidException("文件大小超出了10MB,上传失败");
+
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的绝对目录 = 资源服务器项目路径+项目中文件保存根目录
