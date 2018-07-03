@@ -56,4 +56,12 @@ public interface BuildingService {
      * @return 添加操作结果
      */
     Result addBizBuildings(List<BizBuilding> list);
+
+    /**
+     * 批量修改建筑数据
+     *
+     * @param list 新建筑数据
+     * @return 添加操作结果
+     */
+    Result updateBizBuildings(List<BizBuilding> list);
 }

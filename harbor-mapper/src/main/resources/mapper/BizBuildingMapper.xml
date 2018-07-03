@@ -181,4 +181,16 @@
         </foreach>
         )
     </select>
+
+    <insert id="batchReplace" useGeneratedKeys="true">
+        REPLACE INTO biz_building
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (NULL , #{item.number,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
+            #{item.color,jdbcType=VARCHAR}, #{item.layer,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER},
+            #{item.width,jdbcType=VARCHAR}, #{item.height,jdbcType=VARCHAR}, #{item.pageX,jdbcType=VARCHAR},
+            #{item.pageY,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
 </mapper>

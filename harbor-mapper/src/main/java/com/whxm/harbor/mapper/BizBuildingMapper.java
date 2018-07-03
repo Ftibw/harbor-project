@@ -40,8 +40,7 @@ public interface BizBuildingMapper {
 
     int batchInsert(List<BizBuilding> list);
 
-    List<String> isExistsDuplicateNumber(List<BizBuilding> list);
+    int batchReplace(List<BizBuilding> list);
 
-    @Delete("delete from biz_building where number=#{number}")
-    int deleteByNumber(@Param("number") String number);
+    List<String> isExistsDuplicateNumber(List<BizBuilding> list);
 }

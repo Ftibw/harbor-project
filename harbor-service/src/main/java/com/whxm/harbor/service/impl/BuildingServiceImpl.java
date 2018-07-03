@@ -47,11 +47,9 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Result updateBizBuilding(BizBuilding bizBuilding) {
 
-        int affectRow0 = bizBuildingMapper.deleteByNumber(bizBuilding.getNumber());
-
         int affectRow = bizBuildingMapper.updateByPrimaryKeySelective(bizBuilding);
 
-        return 0 == affectRow + affectRow0 ?
+        return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法修改", bizBuilding.getId()))
                 : Result.success(bizBuilding);
     }
@@ -84,21 +82,28 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Result addBizBuildings(List<BizBuilding> list) {
 
-        List<String> exist = null;
-
-        int affectRow = 0;
+        int affectRow = bizBuildingMapper.batchReplace(list);
 
         //仅为了避免重复索引抛异常,就多查一次,贼浪费
-        synchronized (this) {
+        /*synchronized (this) {
             exist = bizBuildingMapper.isExistsDuplicateNumber(list);
             if (null == exist || exist.isEmpty()) {
                 affectRow = bizBuildingMapper.batchInsert(list);
             }
-        }
-        if (null != exist && !exist.isEmpty())
+        }*/
+        /*if (null != exist && !exist.isEmpty())
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("业态列表中编号为{%s}的数据重复", exist));
-
+        */
         return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "业态列表无法添加")
+                : Result.success(list);
+    }
+
+    @Override
+    public Result updateBizBuildings(List<BizBuilding> list) {
+
+        int affectRow = bizBuildingMapper.batchReplace(list);
+
+        return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "业态列表无法修改")
                 : Result.success(list);
     }
 }
