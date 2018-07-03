@@ -6,6 +6,7 @@
         <result column="biz_format_number" property="bizFormatNumber" jdbcType="VARCHAR"/>
         <result column="biz_format_type" property="bizFormatType" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
+        <result column="biz_format_pid" property="bizFormatPid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         biz_format_id, biz_format_number, biz_format_type, is_deleted, biz_format_pid

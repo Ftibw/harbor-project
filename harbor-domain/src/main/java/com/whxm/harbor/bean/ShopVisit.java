@@ -10,9 +10,28 @@ public class ShopVisit {
     private BigDecimal shopVisitAmount;
 
     private Date shopVisitTime;
-
+    //连接biz_format
+    private String bizFormatType;
+    //连接biz_floor
+    private String floorName;
     //shopNumber连接biz_shop
     private String shopName;
+
+    public String getBizFormatType() {
+        return bizFormatType;
+    }
+
+    public void setBizFormatType(String bizFormatType) {
+        this.bizFormatType = bizFormatType;
+    }
+
+    public String getFloorName() {
+        return floorName;
+    }
+
+    public void setFloorName(String floorName) {
+        this.floorName = floorName;
+    }
 
     public String getShopName() {
         return shopName;

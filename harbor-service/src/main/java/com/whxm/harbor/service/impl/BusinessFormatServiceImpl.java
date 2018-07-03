@@ -10,6 +10,7 @@ import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.service.BusinessFormatService;
 import com.whxm.harbor.mapper.BizFormatMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,11 +50,13 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
         return pageVO;
     }
 
+    @Cacheable(cacheNames = "bizFormat",keyGenerator = "cacheKeyGenerator")
     @Override
     public List<BizFormat> getBizFormatList() {
 
         return bizFormatMapper.getBizFormatList(null);
     }
+
 
     @Override
     public Result deleteBizFormat(Integer bizFormatId) {

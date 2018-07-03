@@ -76,9 +76,13 @@
         shop_number,
         shop_visit_amount,
         shop_name,
-        shop_visit_time
+        shop_visit_time,
+        floor_name,
+        biz_format_type
         FROM biz_shop_visit
         LEFT JOIN biz_shop USING (shop_number)
+        LEFT JOIN biz_floor USING (floor_id)
+        LEFT JOIN biz_format USING (biz_format_id)
         WHERE 1=1
         <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
         <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>
@@ -90,6 +94,8 @@
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.ShopVisit" extends="BaseResultMap">
         <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
+        <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <result column="biz_format_type" property="bizFormatType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <update id="updateAmountByID">
