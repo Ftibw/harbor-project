@@ -47,9 +47,11 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public Result updateBizBuilding(BizBuilding bizBuilding) {
 
+        int affectRow0 = bizBuildingMapper.deleteByNumber(bizBuilding.getNumber());
+
         int affectRow = bizBuildingMapper.updateByPrimaryKeySelective(bizBuilding);
 
-        return 0 == affectRow ?
+        return 0 == affectRow + affectRow0 ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法修改", bizBuilding.getId()))
                 : Result.success(bizBuilding);
     }
