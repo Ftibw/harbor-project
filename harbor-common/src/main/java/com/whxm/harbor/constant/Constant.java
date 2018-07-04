@@ -16,8 +16,8 @@ public class Constant {
     /**
      * windows中
      */
-    //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
-    public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/resources";
+    public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
+    //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/resources";
 
     public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "picture";
     //终端keep alive时间间隔5分钟(300000毫秒)
@@ -30,10 +30,12 @@ public class Constant {
     public static final String HORIZONTAL_SCREEN_PICTURE = "2";
 
     public static final String REQUEST_USER_KEY = "LOGIN_USER_KEY";
-
+    //登录用户得key
     public static final String REDIS_USERS_KEY = "LOGIN_KEYS_KEY";
 
     public static final long LOGIN_EXPIRE = 7200000;
 
-    public static final long TASK_INIT_DELAY=10000;
+    public static final long TASK_INIT_DELAY = 10000;
+
+    public static final long NEGATIVE_TIME_POINT_HOLDER = -10000000000L;
 }

@@ -31,9 +31,10 @@ public class LogoutDetect {
         ).forEach(
                 hashOps -> hashOps.entries().forEach(
                         (salt, lastTimePoint) -> {
-                            if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE + (Long) lastTimePoint) {
-                                hashOps.delete(salt);
-                            }
+                            if (lastTimePoint instanceof Long)
+                                if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE + (Long) lastTimePoint) {
+                                    hashOps.delete(salt);
+                                }
                         }
                 )
         );
