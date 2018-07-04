@@ -12,6 +12,7 @@ import com.whxm.harbor.service.UserService;
 import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -115,7 +116,7 @@ public class UserController {
 
     @ApiOperation("登录接口,token有效时间为2小时")
     @PostMapping("/login")
-    public Result userLogin(@Valid @RequestBody User user) {
+    public Result userLogin(@Valid @RequestBody User user, @Value("${account.login-limit}") Integer limit) {
 
         User info = userService.login(user);
 
@@ -127,8 +128,6 @@ public class UserController {
         if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
 
             String key = "USER_LIMIT_" + userId;
-
-            Integer limit = 10;
 
             String is_ok = lock.StringLuaTemplate(""
                     + "local is_exist = redis.call('get', '" + key + "')"

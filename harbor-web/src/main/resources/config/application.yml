@@ -50,3 +50,5 @@ logging:
         com.whxm: DEBUG
     file: /var/logs/harbor.log
     root: INFO
+account:
+  login-limit: 10
