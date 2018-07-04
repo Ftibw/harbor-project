@@ -137,21 +137,24 @@ public class UserController {
 
             String salt = UUID.randomUUID().toString().replace("-", "");
 
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
-
             Map<Object, Object> map = new LinkedHashMap<>();
 
             map.put(salt, System.currentTimeMillis());
 
             map.put(Constant.REDIS_USER_INFO_KEY, info);
 
-            Object obj = hashOps.get(userId);
+            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
 
-            if (null != obj && obj instanceof Map) {
+            synchronized (UserController.class) {
 
-                map.putAll((Map) obj);
+                Object obj = hashOps.get(userId);
+
+                if (null != obj && obj instanceof Map) {
+
+                    map.putAll((Map) obj);
+                }
+                hashOps.put(userId, map);
             }
-            hashOps.put(userId, map);
 
             //将userId和盐搅拌生成token
             return Result.success(chaos(userId, salt));
