@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -44,7 +45,10 @@ public class LogoutDetect {
                         }
                     }
                 }
-                hashOps.put(userId, _map);
+                if (1 == _map.size())
+                    hashOps.delete(userId);
+                else
+                    hashOps.put(userId, _map);
 
                 logger.info("ID为{}的账号,过期盐清理后账号登录状态:[{}]", userId, _map);
             }

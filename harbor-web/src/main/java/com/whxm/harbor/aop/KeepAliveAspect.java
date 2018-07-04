@@ -82,7 +82,7 @@ public class KeepAliveAspect {
 
             Long timePoint = (Long) lastTimePoint;
             //标记一下超时终端,防止加入离线列表,造成重复离线
-            if (Constant.NEGATIVE_TIME_POINT_HOLDER == timePoint) return;
+            if (Constant.NEGATIVE_TIME_POINT_HOLDER.equals(timePoint)) return;
 
             if (System.currentTimeMillis() > timePoint + Constant.KEEP_ALIVE_INTERVAL) {
 
