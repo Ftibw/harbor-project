@@ -29,16 +29,6 @@ public class Constant {
 
     public static final String HORIZONTAL_SCREEN_PICTURE = "2";
 
-    public static final String REQUEST_USER_KEY = "LOGIN_USER_KEY";
-    //登录用户得key
-    public static final String REDIS_USERS_KEY = "LOGIN_KEYS_KEY";
-
-    public static final String REDIS_USER_INFO_KEY = "LOGIN_INFO_KEY";
-
-    public static final long LOGIN_EXPIRE_INTERVAL = 7200000;
-
-    public static final long LOGIN_EXPIRE_DETECT = 1800000;
-
     public static final long TASK_INIT_DELAY = 1000;
 
     public static final int NEGATIVE_TIME_POINT_HOLDER = 0;
