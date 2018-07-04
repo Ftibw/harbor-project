@@ -43,9 +43,19 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
             BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
 
-            Map map = (Map) hashOps.get(userId);
+            Map map = null;
 
-            Long lastTimePoint = (Long) map.get(salt);
+            Long lastTimePoint = null;
+
+            if (null != hashOps) {
+
+                map = (Map) hashOps.get(userId);
+
+                if (null != map) {
+
+                    lastTimePoint = (Long) map.get(salt);
+                }
+            }
 
             if (null != lastTimePoint &&
                     System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) + lastTimePoint) {
