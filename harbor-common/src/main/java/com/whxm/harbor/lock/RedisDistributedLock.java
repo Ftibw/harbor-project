@@ -56,17 +56,24 @@ public class RedisDistributedLock {
                 + "then return redis.call('del', KEYS[1]) "
                 + "else return 0 end";
 
+        List<String> keys = Collections.singletonList(lockKey);
+
+        List<String> args = Collections.singletonList(requestId);
+
+        return luaTemplate(keys, args, script, Boolean.TYPE, ReturnType.BOOLEAN);
+
+    }
+
+    public <T> T luaTemplate(List<String> keys, List<String> args, String script, Class<T> returnClass, ReturnType returnType) {
+
         DefaultRedisScript<Object> redisScript = new DefaultRedisScript<>();
 
         redisScript.setScriptText(script);
 
-        List<String> keys = Collections.singletonList(lockKey);
-        List<String> args = Collections.singletonList(requestId);
-
         return redisTemplate.execute(
-                (RedisCallback<Boolean>) connection -> connection.eval(
+                (RedisCallback<T>) connection -> connection.eval(
                         SafeEncoder.encode(script),
-                        ReturnType.BOOLEAN,
+                        returnType,
                         keys.size(),
                         getByteParams(getParams(keys, args))
                 )
@@ -98,3 +105,61 @@ public class RedisDistributedLock {
     }
 
 }
+//关于ReturnType的说明,见代码
+/*
+ * Copyright 2013 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+public class JedisScriptReturnConverter implements Converter<Object, Object> {
+
+    private final ReturnType returnType;
+
+    public JedisScriptReturnConverter(ReturnType returnType) {
+        this.returnType = returnType;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Object convert(Object result) {
+        if (result instanceof String) {
+            // evalsha converts byte[] to String. Convert back for consistency
+            return SafeEncoder.encode((String) result);
+        }
+        if (returnType == ReturnType.STATUS) {
+            return JedisConverters.toString((byte[]) result);
+        }
+        if (returnType == ReturnType.BOOLEAN) {
+            // Lua false comes back as a null bulk reply
+            if (result == null) {
+                return Boolean.FALSE;
+            }
+            return ((Long) result == 1);
+        }
+        if (returnType == ReturnType.MULTI) {
+            List<Object> resultList = (List<Object>) result;
+            List<Object> convertedResults = new ArrayList<Object>();
+            for (Object res : resultList) {
+                if (res instanceof String) {
+                    // evalsha converts byte[] to String. Convert back for
+                    // consistency
+                    convertedResults.add(SafeEncoder.encode((String) res));
+                } else {
+                    convertedResults.add(res);
+                }
+            }
+            return convertedResults;
+        }
+        return result;
+    }
+}
+* */

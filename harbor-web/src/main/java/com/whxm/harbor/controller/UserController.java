@@ -7,10 +7,13 @@ import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.service.UserService;
 import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.ReturnType;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,6 +110,9 @@ public class UserController {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
+    @Autowired
+    private RedisDistributedLock lock;
+
     @ApiOperation("登录接口,token有效时间为2小时")
     @PostMapping("/login")
     public Result userLogin(@Valid @RequestBody User user) {
@@ -119,7 +125,21 @@ public class UserController {
         String userId = info.getUserId();
 
         if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
+            //-------------------------------------------------------------------------------------
+            List<String> keys = Collections.singletonList(userId);
 
+            List<String> args = Collections.singletonList(String.valueOf(10));
+
+            String script = "local flag=redis.call('get', 'user_id_'..KEYS[1])"
+                    + "local count=flag and tonumber(flag) or 0 "
+                    + "if count< tonumber(ARGV[1]) then return redis.call('set', 'user_id_'..KEYS[1],count+1)"
+                    + "else return 'NO' end";
+
+            String is_ok = lock.luaTemplate(keys, args, script, String.class, ReturnType.STATUS);
+
+            if (!"OK".equals(is_ok))
+                return Result.failure(ResultEnum.USER_HAS_EXISTED, "超出同时登录上限");
+            //-------------------------------------------------------------------------------------
             String salt = UUID.randomUUID().toString().replace("-", "");
 
             redisTemplate.boundValueOps(salt).set(userId, 2, TimeUnit.HOURS);
@@ -148,7 +168,7 @@ public class UserController {
 
                 String newSalt = UUID.randomUUID().toString().replace("-", "");
 
-                redisTemplate.boundValueOps(newSalt).set(userId, 2, TimeUnit.HOURS);
+                redisTemplate.boundValueOps(newSalt + userId).set(userId, 2, TimeUnit.HOURS);
 
                 return Result.success(chaos(userId, newSalt));
             }
@@ -170,6 +190,15 @@ public class UserController {
 
                 redisTemplate.delete(salt);
 
+                //-------------------------------------------------------------------------------------
+                List<String> keys = Collections.singletonList(userId);
+
+                String script = "local flag=redis.call('get', 'user_id_'..KEYS[1])"
+                        + "local count=flag and tonumber(flag) or 0 "
+                        + "if count > 0 then return redis.call('set', 'user_id_'..KEYS[1],count-1) end";
+
+                lock.luaTemplate(keys, Collections.singletonList(""), script, String.class, ReturnType.STATUS);
+                //-------------------------------------------------------------------------------------
                 return Result.success("登出成功");
             }
         }
