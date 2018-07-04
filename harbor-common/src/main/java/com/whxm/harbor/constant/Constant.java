@@ -23,7 +23,7 @@ public class Constant {
     //终端keep alive时间间隔5分钟(300000毫秒)
     public static final long KEEP_ALIVE_INTERVAL = 300000;
     //状态状态存储key
-    public static final String TERMINAL_STATUS_KEY = "terminalsStatus";
+    public static final String TERMINAL_STATUS_KEY = "TERMINAL_STATUS_KEY";
 
     public static final String VERTICAL_SCREEN_PICTURE = "1";
 
