@@ -49,11 +49,18 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
             if (null != hashOps) {
 
-                map = (Map) hashOps.get(userId);
+                Object mapObj = hashOps.get(userId);
 
-                if (null != map) {
+                if (null != mapObj && mapObj instanceof Map) {
 
-                    lastTimePoint = (Long) map.get(salt);
+                    map = (Map) mapObj;
+
+                    Object valueObj = map.get(salt);
+
+                    if (null != valueObj && valueObj instanceof Long) {
+
+                        lastTimePoint = (Long) valueObj;
+                    }
                 }
             }
 
