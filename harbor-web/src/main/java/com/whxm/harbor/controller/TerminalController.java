@@ -150,7 +150,13 @@ public class TerminalController {
 
         ResultMap<String, Object> ret = terminalService.getTerminalScreensaverProgram(terminalNumber);
 
-        return Result.success(ret.get("data"));
+        Object data = ret.get("data");
+
+        Object screensaverProgramName = ret.get("screensaverProgramName");
+
+        ret.clean().build("data", data).build("screensaverProgramName", screensaverProgramName);
+
+        return Result.success(ret);
     }
 
     @ApiOperation("终端绑定首页轮播图(需授权)")

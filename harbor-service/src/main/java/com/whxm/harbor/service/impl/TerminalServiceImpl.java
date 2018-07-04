@@ -12,6 +12,7 @@ import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
 import com.whxm.harbor.service.TerminalService;
+import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,8 @@ public class TerminalServiceImpl implements TerminalService {
 
         bizTerminal.setTerminalNumber(null);
 
+        bizTerminal.setTerminalName(null);
+
         int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
         return 0 == affectRow ?
@@ -154,13 +157,15 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public ResultMap<String, Object> getTerminalScreensaverProgram(String terminalNumber) {
 
-        ResultMap<String, Object> ret = new ResultMap<>(6);
+        ResultMap<String, Object> ret = new ResultMap<>(8);
 
         final List<Map<String, Object>> list = new ArrayList<>();
 
         Object screensaverId = null;
 
-        TerminalConfig config = cacheService.getConfig(TerminalConfig.cacheKey);
+        Object screensaverProgramName = null;
+
+        TerminalConfig config = JacksonUtils.readValue(JacksonUtils.toJson(cacheService.getConfig(TerminalConfig.cacheKey).get(0)), TerminalConfig.class);
 
         if (null == config)
             throw new DataNotFoundException();
@@ -171,6 +176,9 @@ public class TerminalServiceImpl implements TerminalService {
             if (null != terminalInfo) {
                 //屏保ID
                 screensaverId = terminalInfo.get("screensaverId");
+
+                screensaverProgramName = terminalInfo.get("screensaverProgramName");
+
             }
 
             //先存了list引用再说
@@ -178,7 +186,9 @@ public class TerminalServiceImpl implements TerminalService {
                     .build("data", list)
                     .build("on_off", config.getOnOff())
                     .build("delay", config.getDelay())
-                    .build("protect", config.getProtect());
+                    .build("protect", config.getProtect())
+                    //这个字段给后台使用的
+                    .build("screensaverProgramName", screensaverProgramName);
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);
@@ -208,7 +218,8 @@ public class TerminalServiceImpl implements TerminalService {
                     .build("data", new Object[]{})
                     .build("on_off", config.getOnOff())
                     .build("delay", config.getDelay())
-                    .build("protect", config.getProtect());
+                    .build("protect", config.getProtect())
+                    .build("screensaverProgramName", "");
         }
     }
 
@@ -269,7 +280,8 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Override
     public Result getTerminalConfig() {
-        return Result.success(cacheService.getConfig(TerminalConfig.cacheKey));
+
+        return Result.success(cacheService.getConfig(TerminalConfig.cacheKey).get(0));
     }
 
     @Override

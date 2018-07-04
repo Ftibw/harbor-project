@@ -75,6 +75,8 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
         bizFormat.setBizFormatNumber(null);
 
+        bizFormat.setBizFormatType(null);
+
         int affectRow = bizFormatMapper.setIsDeleted(bizFormat);
 
         return 0 == affectRow ?

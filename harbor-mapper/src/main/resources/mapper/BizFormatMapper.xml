@@ -112,6 +112,12 @@
     <update id="setIsDeleted" parameterType="com.whxm.harbor.bean.BizFormat">
         UPDATE biz_format
         SET is_deleted = #{isDeleted,jdbcType=INTEGER}
+        <if test="bizFormatNumber != '-1'">
+            ,biz_format_number = #{bizFormatNumber}
+        </if>
+        <if test="bizFormatType != '-1'">
+            ,biz_format_type = #{bizFormatType}
+        </if>
         WHERE NOT exists(
                 SELECT biz_format_id
                 FROM biz_shop

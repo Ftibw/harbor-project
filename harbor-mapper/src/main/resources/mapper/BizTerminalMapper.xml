@@ -146,7 +146,7 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizTerminal">
         update biz_terminal
         <set>
-            <if test="terminalName != null">
+            <if test="terminalName !='-1'">
                 terminal_name = #{terminalName,jdbcType=VARCHAR},
             </if>
             <if test="terminalNumber!='-1'">
@@ -274,9 +274,12 @@
 
     <!--根据终端编号查询:终端开关机时间, 屏保ID(通过终端关联屏保发布终端表)-->
     <select id="selectTerminalWithScreensaver" resultType="java.util.HashMap">
-        SELECT screensaver_id screensaverId
+        SELECT
+            screensaver_id           screensaverId,
+            screensaver_program_name screensaverProgramName
         FROM biz_terminal
             LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
+            LEFT JOIN biz_screensaver USING (screensaver_id)
         WHERE terminal_number = #{terminalNumber}
     </select>
 

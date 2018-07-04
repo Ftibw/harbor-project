@@ -55,8 +55,6 @@ public class RestControllerAspect {
         if (!logFlag) {
             return joinPoint.proceed();
         }
-        Object o= RequestContextHolder.getRequestAttributes();
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         Object userInfo = request.getAttribute(Constant.REQUEST_USER_KEY);

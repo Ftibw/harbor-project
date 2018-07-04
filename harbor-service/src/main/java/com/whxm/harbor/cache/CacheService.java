@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class CacheService {
     }
 
     @Cacheable(cacheNames = "terminal", key = "#cacheKey")
-    public TerminalConfig getConfig(String cacheKey) {
+    public List<TerminalConfig> getConfig(String cacheKey) {
 
         logger.info("get terminal config cacheKey:{} at:{}", cacheKey, new Date());
 
@@ -65,7 +66,7 @@ public class CacheService {
 
         BeanUtils.copyProperties(terminalConfig, config);
 
-        return config;
+        return Collections.singletonList(config);
     }
 
     @CacheEvict(cacheNames = "terminal", key = "#cacheKey")
