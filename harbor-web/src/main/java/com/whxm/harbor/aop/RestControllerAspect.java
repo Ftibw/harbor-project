@@ -57,12 +57,12 @@ public class RestControllerAspect {
         //注意不要在RestController中创建定时Task,这样会造成无请求却走切点,抛出空指针
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        Object userInfo = request.getAttribute(Constant.REQUEST_USER_KEY);
+        //Object userInfo = request.getAttribute(Constant.REQUEST_USER_KEY);
 
         String ip = IPv4Utils.getIpAddress(request);
         String methodName = this.getMethodName(joinPoint);
         String params = this.getParamsJson(joinPoint);
-        String requester = null == userInfo ? "unknown" : ((User) userInfo).getUserLoginname();
+        String requester = "unknown";
         String userAgent = request.getHeader("user-agent");
 
         logger.info("Started request requester [{}] method [{}] params [{}] IP [{}] userAgent [{}]", requester, methodName, params, ip, userAgent);

@@ -36,40 +36,12 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         if (token != null && 64 == token.length()) {
 
-            //从redis获取user信息
+            //从redis获取userId
             String userId = TokenUtils.order(token);
 
             String salt = TokenUtils.salt(token);
 
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
-
-            Map map = null;
-
-            Long lastTimePoint = null;
-
-            if (null != hashOps) {
-
-                Object mapObj = hashOps.get(userId);
-
-                if (null != mapObj && mapObj instanceof Map) {
-
-                    map = (Map) mapObj;
-
-                    Object valueObj = map.get(salt);
-
-                    if (null != valueObj && valueObj instanceof Long) {
-
-                        lastTimePoint = (Long) valueObj;
-                    }
-                }
-            }
-
-            if (null != lastTimePoint &&
-                    System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) + lastTimePoint) {
-                //instanceof LinkedHashMap
-                Object useInfo = map.get(Constant.REDIS_USER_INFO_KEY);
-
-                request.setAttribute(Constant.REQUEST_USER_KEY, JacksonUtils.readValue(JacksonUtils.toJson(useInfo), User.class));
+            if (userId.equals(redisTemplate.boundValueOps(salt).get())) {
 
                 //不幂等的操作如下(均为POST)
                 /*terminal/bizTerminal

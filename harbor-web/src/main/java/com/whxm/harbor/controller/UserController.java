@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.whxm.harbor.utils.TokenUtils.chaos;
 import static com.whxm.harbor.utils.TokenUtils.order;
@@ -110,21 +111,9 @@ public class UserController {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    /*@Autowired
-    private RedisDistributedLock lock;*/
-
     @ApiOperation("登录接口,token有效时间为2小时")
     @PostMapping("/login")
     public Result userLogin(@Valid @RequestBody User user) {
-        //, HttpServletRequest request
-        //现在得问题是同一个人只登录不登出就会冗余,只能用定时任务清理了
-
-        /*if (!lock.lock(IPv4Utils.getIpAddress(request) + MD5Utils.MD5(JacksonUtils.toJson(user)),
-                String.valueOf(request.getRequestURL()),
-                Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) {
-
-            return Result.failure(ResultEnum.INTERFACE_EXCEED_LOAD, "请勿重复登录");
-        }*/
 
         User info = userService.login(user);
 
@@ -137,29 +126,10 @@ public class UserController {
 
             String salt = UUID.randomUUID().toString().replace("-", "");
 
-            Map<Object, Object> map = new LinkedHashMap<>();
-
-            map.put(salt, System.currentTimeMillis());
-
-            map.put(Constant.REDIS_USER_INFO_KEY, info);
-
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
-
-            synchronized (UserController.class) {
-
-                Object obj = hashOps.get(userId);
-
-                if (null != obj && obj instanceof Map) {
-
-                    map.putAll((Map) obj);
-                }
-                hashOps.put(userId, map);
-            }
-
+            redisTemplate.boundValueOps(salt).set(userId, 2, TimeUnit.HOURS);
             //将userId和盐搅拌生成token
             return Result.success(chaos(userId, salt));
         }
-
         return Result.failure(ResultEnum.USER_PASSWORD_ERROR);
 
     }
@@ -175,36 +145,18 @@ public class UserController {
 
             String salt = salt(token);
 
-            //从redis获取盐信息
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
+            //从redis获取存储的userId
+            if (userId.equals(redisTemplate.boundValueOps(salt).get())) {
 
-            List<Map<Object, Object>> _map = new ArrayList<>(1);
+                redisTemplate.delete(salt);
 
-            if (null != hashOps) {
+                String newSalt = UUID.randomUUID().toString().replace("-", "");
 
-                hashOps.entries().forEach((id, map) -> {
-                    if (id.equals(userId) && map instanceof Map) {
-                        _map.add((Map) map);
-                    }
-                });
+                redisTemplate.boundValueOps(newSalt).set(userId, 2, TimeUnit.HOURS);
 
-                Map<Object, Object> info = _map.get(0);
-
-                Object tmp = info.get(salt);
-
-                if (null != tmp
-                        && tmp instanceof Long
-                        && System.currentTimeMillis() < Constant.LOGIN_EXPIRE_INTERVAL + (Long) tmp) {
-
-                    info.put(salt, System.currentTimeMillis());
-
-                    hashOps.put(userId, info);
-
-                    return Result.success(token);
-                }
+                return Result.success(chaos(userId, newSalt));
             }
         }
-
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
 
@@ -218,24 +170,13 @@ public class UserController {
 
             String salt = salt(token);
 
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
+            if (userId.equals(redisTemplate.boundValueOps(salt).get())) {
 
-            Object tmp = null;
-
-            if (null != hashOps
-                    && null != (tmp = hashOps.get(userId))
-                    && tmp instanceof Map) {
-
-                Map map = (Map) tmp;
-
-                map.remove(salt);
-
-                hashOps.put(userId, map);
+                redisTemplate.delete(salt);
 
                 return Result.success("登出成功");
             }
         }
-
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
 }
