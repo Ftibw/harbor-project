@@ -110,19 +110,21 @@ public class UserController {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @Autowired
-    private RedisDistributedLock lock;
+    /*@Autowired
+    private RedisDistributedLock lock;*/
 
     @ApiOperation("登录接口,token有效时间为2小时")
     @PostMapping("/login")
-    public Result userLogin(@Valid @RequestBody User user, HttpServletRequest request) {
+    public Result userLogin(@Valid @RequestBody User user) {
+        //, HttpServletRequest request
         //现在得问题是同一个人只登录不登出就会冗余,只能用定时任务清理了
-        if (!lock.lock(IPv4Utils.getIpAddress(request) + MD5Utils.MD5(JacksonUtils.toJson(user)),
+
+        /*if (!lock.lock(IPv4Utils.getIpAddress(request) + MD5Utils.MD5(JacksonUtils.toJson(user)),
                 String.valueOf(request.getRequestURL()),
                 Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) {
 
             return Result.failure(ResultEnum.INTERFACE_EXCEED_LOAD, "请勿重复登录");
-        }
+        }*/
 
         User info = userService.login(user);
 
