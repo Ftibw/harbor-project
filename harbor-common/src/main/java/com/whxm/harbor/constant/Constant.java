@@ -35,5 +35,5 @@ public class Constant {
 
     public static final long LOGIN_EXPIRE = 7200000;
 
-    public static final long TASK_INIT_DELAY=1000;
+    public static final long TASK_INIT_DELAY=10000;
 }

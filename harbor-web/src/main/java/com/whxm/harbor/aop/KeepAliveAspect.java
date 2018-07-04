@@ -82,13 +82,13 @@ public class KeepAliveAspect {
 
             Long timePoint = (Long) lastTimePoint;
 
-            if (0 == timePoint) return;
+            if (0L == timePoint) return;
 
             if (System.currentTimeMillis() > timePoint + Constant.KEEP_ALIVE_INTERVAL) {
 
                 keys.add(String.valueOf(terminalNumber));
 
-                hashOps.put(terminalNumber, 0);
+                hashOps.put(terminalNumber, 0L);
             }
         });
 

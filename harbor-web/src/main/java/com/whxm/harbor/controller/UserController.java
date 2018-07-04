@@ -119,7 +119,7 @@ public class UserController {
     @ApiOperation("登陆接口,token有效时间为2小时")
     @PostMapping("/login")
     public Result userLogin(@Valid @RequestBody User user, HttpServletRequest request) {
-
+        //现在得问题是同一个人只登录不登出就会冗余,只能用定时任务清理了
         if (!lock.lock(IPv4Utils.getIpAddress(request) + MD5Utils.MD5(JacksonUtils.toJson(user)),
                 String.valueOf(request.getRequestURL()),
                 Constant.DEFAULT_SUBMIT_EXPIRE_TIME)) {
@@ -199,27 +199,5 @@ public class UserController {
         }
 
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
-    }
-
-    @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.LOGIN_EXPIRE)
-    public void loginExpire() {
-
-        BoundSetOperations<Object, Object> setOps = redisTemplate.boundSetOps(Constant.REDIS_USERS_KEY);
-
-        if (null == setOps) return;
-
-        Set<Object> loginKeys = setOps.members();
-
-        loginKeys.stream().map(
-                key -> redisTemplate.boundHashOps(key)
-        ).forEach(
-                hashOps -> hashOps.entries().forEach(
-                        (salt, lastTimePoint) -> {
-                            if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE + (Long) lastTimePoint) {
-                                hashOps.delete(salt);
-                            }
-                        }
-                )
-        );
     }
 }
