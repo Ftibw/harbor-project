@@ -155,7 +155,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
             }
         }
 
-        return ret;
+        return null == ret ? message : ret;
     }
 
     public static void main(String[] args) {
