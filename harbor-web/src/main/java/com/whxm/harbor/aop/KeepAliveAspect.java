@@ -80,9 +80,15 @@ public class KeepAliveAspect {
 
         map.forEach((terminalNumber, lastTimePoint) -> {
 
-            if (System.currentTimeMillis() > ((Long) lastTimePoint) + Constant.KEEP_ALIVE_INTERVAL) {
+            Long timePoint = (Long) lastTimePoint;
+
+            if (0 == timePoint) return;
+
+            if (System.currentTimeMillis() > timePoint + Constant.KEEP_ALIVE_INTERVAL) {
 
                 keys.add(String.valueOf(terminalNumber));
+
+                hashOps.put(terminalNumber, 0);
             }
         });
 
@@ -90,7 +96,7 @@ public class KeepAliveAspect {
 
             terminalService.updateTerminalOffline(keys);
 
-            hashOps.delete(keys.toArray());
+            //hashOps.delete(keys.toArray());
 
             logger.info("编号为{}的终端离线", keys);
         }
