@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * @Author Ftibw
+ * @CreateTime forget...
+ * @UpdateTime 2018/7/5 00:54
  * 本质上还是乐观锁
  */
 @Component
@@ -85,6 +88,11 @@ public class RedisDistributedLock {
         List<String> empty = Collections.singletonList("");
 
         return luaTemplate(empty, empty, script, returnClass, returnType);
+    }
+
+    public String StringLuaTemplate(String script) {
+        //ReturnType.STATUS 返回字节数组
+        return luaTemplate(script, String.class, ReturnType.STATUS);
     }
 
     //恶心,参数序列化格式连文档说明都没有,还是对比jedis源码,然后粘贴过来的...

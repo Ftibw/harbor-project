@@ -125,21 +125,21 @@ public class UserController {
         String userId = info.getUserId();
 
         if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
-            //-------------------------------------------------------------------------------------
+
             String key = "USER_LIMIT_" + userId;
 
             Integer limit = 10;
 
-            String script = "local flag=redis.call('get', '" + key + "')"
-                    + "local count=flag and tonumber(flag) or 0 "
-                    + "if count< " + limit + " then return redis.call('set', '" + key + "',count+1)"
-                    + "else return 'NO' end";
-
-            String is_ok = lock.luaTemplate(script, String.class, ReturnType.STATUS);
+            String is_ok = lock.StringLuaTemplate(""
+                    + "local flag = redis.call('get', '" + key + "')"
+                    + "local count = flag and tonumber(flag) or 0 "
+                    + "if count < " + limit + " then return redis.call('set', '" + key + "',count + 1)"
+                    + "else return 'NO' end"
+            );
 
             if (!"OK".equals(is_ok))
                 return Result.failure(ResultEnum.USER_HAS_EXISTED, "超出同时登录上限");
-            //-------------------------------------------------------------------------------------
+
             String salt = UUID.randomUUID().toString().replace("-", "");
 
             redisTemplate.boundValueOps(salt).set(userId, 2, TimeUnit.HOURS);
@@ -190,15 +190,14 @@ public class UserController {
 
                 redisTemplate.delete(salt);
 
-                //-------------------------------------------------------------------------------------
                 String key = "USER_LIMIT_" + userId;
 
-                String script = "local flag=redis.call('get', '" + key + "')"
-                        + "local count=flag and tonumber(flag) or 0 "
-                        + "if count > 0 then return redis.call('set', '" + key + "',count-1) end";
+                lock.StringLuaTemplate(""
+                        + "local flag = redis.call('get', '" + key + "')"
+                        + "local count = flag and tonumber(flag) or 0 "
+                        + "if count > 0 then return redis.call('set', '" + key + "',count - 1) end"
+                );
 
-                lock.luaTemplate(script, String.class, ReturnType.STATUS);
-                //-------------------------------------------------------------------------------------
                 return Result.success("登出成功");
             }
         }
