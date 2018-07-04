@@ -16,6 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -40,14 +41,16 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
             String salt = TokenUtils.salt(token);
 
-            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(userId);
+            BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
 
-            Long lastTimePoint = (Long) hashOps.get(salt);
+            Map map = (Map) hashOps.get(userId);
+
+            Long lastTimePoint = (Long) map.get(salt);
 
             if (null != lastTimePoint &&
                     System.currentTimeMillis() < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) + lastTimePoint) {
                 //instanceof LinkedHashMap
-                Object useInfo = hashOps.get(userId);
+                Object useInfo = map.get(Constant.REDIS_USER_INFO_KEY);
 
                 request.setAttribute(Constant.REQUEST_USER_KEY, JacksonUtils.readValue(JacksonUtils.toJson(useInfo), User.class));
 

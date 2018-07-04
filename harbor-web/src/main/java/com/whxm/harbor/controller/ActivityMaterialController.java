@@ -111,7 +111,12 @@ public class ActivityMaterialController {
 
         Assert.notRepeat(list, "活动素材不能重复");
 
-        list.forEach(item -> Assert.isNull(item.getActivityMaterialId(), "活动素材ID必须为空"));
+        list.forEach(item -> {
+
+            Assert.isNull(item.getActivityMaterialId(), "活动素材ID必须为空");
+
+            Assert.notNull(item.getActivityId(), "活动ID不能为空");
+        });
 
         return activityMaterialService.addBizActivityMaterials(list);
     }

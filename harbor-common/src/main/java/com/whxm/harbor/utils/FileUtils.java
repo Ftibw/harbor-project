@@ -47,8 +47,8 @@ public class FileUtils {
             originName = file.getOriginalFilename();
             //文件大小
             size = file.getSize();
-
-            if (size >= 83886080)
+            //10MB = 10485760BIT
+            if (size >= 10485760)
                 throw new ParameterInvalidException("文件大小超出了10MB,上传失败");
 
             //uuid生成新名称
