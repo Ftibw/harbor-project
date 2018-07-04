@@ -131,8 +131,8 @@ public class UserController {
             Integer limit = 10;
 
             String is_ok = lock.StringLuaTemplate(""
-                    + "local flag = redis.call('get', '" + key + "')"
-                    + "local count = flag and tonumber(flag) or 0 "
+                    + "local is_exist = redis.call('get', '" + key + "')"
+                    + "local count = is_exist and tonumber(is_exist) or 0 "
                     + "if count < " + limit + " then return redis.call('set', '" + key + "',count + 1)"
                     + "else return 'NO' end"
             );
@@ -193,9 +193,10 @@ public class UserController {
                 String key = "USER_LIMIT_" + userId;
 
                 lock.StringLuaTemplate(""
-                        + "local flag = redis.call('get', '" + key + "')"
-                        + "local count = flag and tonumber(flag) or 0 "
-                        + "if count > 0 then return redis.call('set', '" + key + "',count - 1) end"
+                        + "local is_exist = redis.call('get', '" + key + "') "
+                        + "local count = is_exist and tonumber(is_exist) or 0 "
+                        + "if count > 1 then return redis.call('set', '" + key + "',count - 1) "
+                        + "else return ''..redis.call('del','" + key + "') end "
                 );
 
                 return Result.success("登出成功");

@@ -53,6 +53,9 @@ public class RedisDistributedLock {
         });
     }
 
+    /**
+     * call set返回的是字符串可以转[B,而call del返回的是Long无法转[B
+     */
     public Boolean unlock(String lockKey, String requestId) {
 
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] "
