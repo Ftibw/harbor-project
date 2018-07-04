@@ -126,16 +126,16 @@ public class UserController {
 
         if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
             //-------------------------------------------------------------------------------------
-            List<String> keys = Collections.singletonList(userId);
+            String key = "USER_LIMIT_" + userId;
 
-            List<String> args = Collections.singletonList(String.valueOf(10));
+            Integer limit = 10;
 
-            String script = "local flag=redis.call('get', 'user_id_'..KEYS[1])"
+            String script = "local flag=redis.call('get', '" + key + "')"
                     + "local count=flag and tonumber(flag) or 0 "
-                    + "if count< tonumber(ARGV[1]) then return redis.call('set', 'user_id_'..KEYS[1],count+1)"
+                    + "if count< " + limit + " then return redis.call('set', '" + key + "',count+1)"
                     + "else return 'NO' end";
 
-            String is_ok = lock.luaTemplate(keys, args, script, String.class, ReturnType.STATUS);
+            String is_ok = lock.luaTemplate(script, String.class, ReturnType.STATUS);
 
             if (!"OK".equals(is_ok))
                 return Result.failure(ResultEnum.USER_HAS_EXISTED, "超出同时登录上限");
@@ -191,13 +191,13 @@ public class UserController {
                 redisTemplate.delete(salt);
 
                 //-------------------------------------------------------------------------------------
-                List<String> keys = Collections.singletonList(userId);
+                String key = "USER_LIMIT_" + userId;
 
-                String script = "local flag=redis.call('get', 'user_id_'..KEYS[1])"
+                String script = "local flag=redis.call('get', '" + key + "')"
                         + "local count=flag and tonumber(flag) or 0 "
-                        + "if count > 0 then return redis.call('set', 'user_id_'..KEYS[1],count-1) end";
+                        + "if count > 0 then return redis.call('set', '" + key + "',count-1) end";
 
-                lock.luaTemplate(keys, Collections.singletonList(""), script, String.class, ReturnType.STATUS);
+                lock.luaTemplate(script, String.class, ReturnType.STATUS);
                 //-------------------------------------------------------------------------------------
                 return Result.success("登出成功");
             }

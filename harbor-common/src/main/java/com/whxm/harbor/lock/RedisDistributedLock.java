@@ -80,6 +80,13 @@ public class RedisDistributedLock {
         );
     }
 
+    public <T> T luaTemplate(String script, Class<T> returnClass, ReturnType returnType) {
+
+        List<String> empty = Collections.singletonList("");
+
+        return luaTemplate(empty, empty, script, returnClass, returnType);
+    }
+
     //恶心,参数序列化格式连文档说明都没有,还是对比jedis源码,然后粘贴过来的...
     private String[] getParams(List<String> keys, List<String> args) {
         int keyCount = keys.size();
