@@ -41,5 +41,5 @@ public class Constant {
 
     public static final long TASK_INIT_DELAY = 1000;
 
-    public static final Long NEGATIVE_TIME_POINT_HOLDER = -1L;
+    public static final int NEGATIVE_TIME_POINT_HOLDER = 0;
 }

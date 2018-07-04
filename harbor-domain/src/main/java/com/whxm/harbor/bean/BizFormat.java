@@ -2,9 +2,8 @@ package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.Serializable;
 
-public class BizFormat implements Serializable{
+public class BizFormat{
     private Integer bizFormatId;
 
     private String bizFormatNumber;
