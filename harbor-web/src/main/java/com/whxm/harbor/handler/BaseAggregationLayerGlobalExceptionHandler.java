@@ -114,7 +114,6 @@ public class BaseAggregationLayerGlobalExceptionHandler {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Result.failure(ResultEnum.SYSTEM_INNER_ERROR));
-
         } else {
 
             LOGGER.info(desc + "{}", request.getRequestURI(), msgWrapper);

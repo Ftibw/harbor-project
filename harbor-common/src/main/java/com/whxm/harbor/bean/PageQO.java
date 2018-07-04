@@ -3,7 +3,6 @@ package com.whxm.harbor.bean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Range;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @desc 分页查询对象

@@ -39,7 +39,7 @@ public class KeepAliveAspect {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
-
+        //反序列化的Map将全都是LinkedHashMap<Object,Object>
         redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
 
         //------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ public class KeepAliveAspect {
         map.forEach((terminalNumber, lastTimePoint) -> {
 
             Long timePoint = (Long) lastTimePoint;
-
+            //标记一下超时终端,防止加入离线列表,造成重复离线
             if (Constant.NEGATIVE_TIME_POINT_HOLDER == timePoint) return;
 
             if (System.currentTimeMillis() > timePoint + Constant.KEEP_ALIVE_INTERVAL) {

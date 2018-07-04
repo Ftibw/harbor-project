@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,6 +54,7 @@ public class RestControllerAspect {
         if (!logFlag) {
             return joinPoint.proceed();
         }
+        //注意不要在RestController中创建定时Task,这样会造成无请求却走切点,抛出空指针
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         Object userInfo = request.getAttribute(Constant.REQUEST_USER_KEY);
