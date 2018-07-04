@@ -21,7 +21,7 @@ public class LogoutDetect {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.LOGIN_EXPIRE)
+    @Scheduled(initialDelay = Constant.TASK_INIT_DELAY, fixedRate = Constant.LOGIN_EXPIRE_DETECT)
     public void loginExpire() {
         //由于全局序列化的配置过,所以redis中取出来的Map全是Map<Object,Object>
         BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
@@ -39,7 +39,7 @@ public class LogoutDetect {
                     Object value = it.next().getValue();
 
                     if (value instanceof Long) {
-                        if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE + (Long) value) {
+                        if (System.currentTimeMillis() > Constant.LOGIN_EXPIRE_INTERVAL + (Long) value) {
                             it.remove();
                         }
                     }

@@ -137,7 +137,7 @@ public class UserController {
 
             BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
 
-            Map map = new LinkedHashMap<>();
+            Map<Object, Object> map = new LinkedHashMap<>();
 
             map.put(salt, System.currentTimeMillis());
 
@@ -173,9 +173,7 @@ public class UserController {
             //从redis获取盐信息
             BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.REDIS_USERS_KEY);
 
-            List<Map> _map = new ArrayList<>(1);
-
-            Map info = _map.get(0);
+            List<Map<Object, Object>> _map = new ArrayList<>(1);
 
             if (null != hashOps) {
 
@@ -185,11 +183,13 @@ public class UserController {
                     }
                 });
 
+                Map<Object, Object> info = _map.get(0);
+
                 Object tmp = info.get(salt);
 
                 if (null != tmp
                         && tmp instanceof Long
-                        && System.currentTimeMillis() < Constant.LOGIN_EXPIRE + (Long) tmp) {
+                        && System.currentTimeMillis() < Constant.LOGIN_EXPIRE_INTERVAL + (Long) tmp) {
 
                     info.put(salt, System.currentTimeMillis());
 

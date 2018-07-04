@@ -35,7 +35,9 @@ public class Constant {
 
     public static final String REDIS_USER_INFO_KEY = "LOGIN_INFO_KEY";
 
-    public static final long LOGIN_EXPIRE = 7200000;
+    public static final long LOGIN_EXPIRE_INTERVAL = 7200000;
+
+    public static final long LOGIN_EXPIRE_DETECT = 1800000;
 
     public static final long TASK_INIT_DELAY = 1000;
 
