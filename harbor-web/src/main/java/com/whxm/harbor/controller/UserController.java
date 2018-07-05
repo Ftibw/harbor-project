@@ -1,5 +1,7 @@
 package com.whxm.harbor.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
@@ -13,8 +15,6 @@ import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.connection.ReturnType;
-import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -129,14 +129,14 @@ public class UserController {
 
             String key = "USER_LIMIT_" + userId;
 
-            String is_ok = lock.StringLuaTemplate(""
+            String isOK = lock.StringLuaTemplate(""
                     + "local is_exist = redis.call('get', '" + key + "')"
                     + "local count = is_exist and tonumber(is_exist) or 0 "
                     + "if count < " + limit + " then return redis.call('set', '" + key + "',count + 1)"
                     + "else return 'NO' end"
             );
 
-            if (!"OK".equals(is_ok))
+            if (!"OK".equals(isOK))
                 return Result.failure(ResultEnum.USER_HAS_EXISTED, "超出同时登录上限");
 
             String salt = UUID.randomUUID().toString().replace("-", "");
