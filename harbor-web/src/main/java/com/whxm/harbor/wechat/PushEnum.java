@@ -13,7 +13,7 @@ public enum PushEnum {
 
     public String key;
 
-    public Map<Object, Object> values = new HashMap<>();
+    public Map<Object, Object> values = new HashMap<>(2);
 
     PushEnum(String key) {
         this.key = key;

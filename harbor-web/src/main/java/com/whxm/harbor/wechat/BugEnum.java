@@ -12,7 +12,7 @@ public enum BugEnum {
 
     public String key;
 
-    public Map<Object, Object> values = new HashMap<>();
+    public Map<Object, Object> values = new HashMap<>(2);
 
     BugEnum(String key) {
         this.key = key;
