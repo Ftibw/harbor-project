@@ -99,8 +99,8 @@ public class WeChatTask {
             try {
                 e.printStackTrace(new PrintStream(new FileOutputStream(logFile, true)));
 
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
+            } catch (FileNotFoundException fe) {
+                fe.printStackTrace();
             }
 
             pushBean.setToUser(openid)
