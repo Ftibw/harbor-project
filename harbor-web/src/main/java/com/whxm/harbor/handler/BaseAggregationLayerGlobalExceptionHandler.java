@@ -18,8 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,6 +96,8 @@ public class BaseAggregationLayerGlobalExceptionHandler {
     protected Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         LOGGER.error("handleRuntimeException start, uri:{}, caused by:", request.getRequestURI(), e);
         //TODO 可通过邮件、微信公众号等方式发送信息至开发人员、记录存档等操作
+        //RestTemplate client = new RestTemplate();
+        //client.getForObject("url", Map.class, new HashMap<>());
         return Result.failure(ResultEnum.SYSTEM_INNER_ERROR);
     }
 
