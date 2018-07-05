@@ -22,7 +22,8 @@ public class PinyinUtils {
         for (char aNewChar : newChar) {
             if (aNewChar > 128) {
                 try {
-                    pinyinStr.append(PinyinHelper.toHanyuPinyinStringArray(aNewChar, defaultFormat)[0]);
+                    String[] strings = PinyinHelper.toHanyuPinyinStringArray(aNewChar, defaultFormat);
+                    pinyinStr.append(strings[0]);
                 } catch (BadHanyuPinyinOutputFormatCombination e) {
                     e.printStackTrace();
                 }

@@ -1,6 +1,7 @@
 package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.utils.BizShop;
 import com.whxm.harbor.vo.BizShopVo;
 
 import java.util.List;
@@ -61,4 +62,6 @@ public interface ShopService {
      * @return 商铺的图片路径集合
      */
     List<ShopPicture> getShopPicturesById(String bizShopId);
+
+    int batchInsert(List<BizShop> shops);
 }

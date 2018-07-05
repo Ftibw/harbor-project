@@ -1,6 +1,6 @@
 package com.whxm.harbor.vo;
 
-import com.whxm.harbor.bean.BizShop;
+import com.whxm.harbor.utils.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
 
 import java.util.List;

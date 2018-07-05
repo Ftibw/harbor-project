@@ -1,6 +1,6 @@
 package com.whxm.harbor.mapper;
 
-import com.whxm.harbor.bean.BizShop;
+import com.whxm.harbor.utils.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
 import org.apache.ibatis.annotations.Param;
 
@@ -34,6 +34,8 @@ public interface BizShopMapper {
     List<BizShop> getBizShopListOptional(Map<String, Object> params);
 
     BizShop selectIdByNumber(String shopNumber);
+
+    int batchSelectiveInsert(List<BizShop> shops);
 
     //int delShopPicturesRelation(String shopId);
 }

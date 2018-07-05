@@ -5,13 +5,12 @@ import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.FileDir;
 import com.whxm.harbor.conf.FtpConfig;
-import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.service.ShopVisitService;
+import com.whxm.harbor.utils.BizShop;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.ftp.FtpSession;
-import com.whxm.harbor.utils.StringUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,8 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @Api(description = "商铺服务")

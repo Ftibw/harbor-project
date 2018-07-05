@@ -71,7 +71,7 @@
 
     <!--以下是自定义部分-->
 
-    <select id="getShopVisitList" parameterType="com.whxm.harbor.bean.BizShop" resultMap="ExtensionResultMap">
+    <select id="getShopVisitList" parameterType="com.whxm.harbor.utils.BizShop" resultMap="ExtensionResultMap">
         SELECT
         shop_number,
         shop_visit_amount,

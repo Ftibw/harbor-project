@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.whxm.harbor.mapper.BizShopMapper">
-    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizShop">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.utils.BizShop">
         <id column="shop_id" property="shopId" jdbcType="VARCHAR"/>
         <result column="shop_number" property="shopNumber" jdbcType="VARCHAR"/>
         <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
@@ -29,7 +29,7 @@
         DELETE FROM biz_shop
         WHERE shop_id = #{shopId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizShop">
+    <insert id="insert" parameterType="com.whxm.harbor.utils.BizShop">
         INSERT INTO biz_shop (shop_id, shop_number, shop_name,
                               shop_english_name, floor_id, biz_format_id,
                               shop_house_number, is_shop_enabled, shop_logo_path,
@@ -44,7 +44,7 @@
                 #{shopCheckinTime,jdbcType=TIMESTAMP},
                 #{shopWeight,jdbcType=INTEGER}, #{shopDescript,jdbcType=LONGVARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizShop">
+    <insert id="insertSelective" parameterType="com.whxm.harbor.utils.BizShop">
         insert into biz_shop
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="shopId != null">
@@ -135,7 +135,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizShop">
+    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.utils.BizShop">
         update biz_shop
         <set>
             <if test="shopNumber != null">
@@ -180,7 +180,7 @@
         </set>
         where shop_id = #{shopId,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whxm.harbor.bean.BizShop">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whxm.harbor.utils.BizShop">
         UPDATE biz_shop
         SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
@@ -197,7 +197,7 @@
             shop_descript     = #{shopDescript,jdbcType=LONGVARCHAR}
         WHERE shop_id = #{shopId,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizShop">
+    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.utils.BizShop">
         UPDATE biz_shop
         SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
         LEFT JOIN biz_format USING (biz_format_id)
         where shop_id = #{shopId,jdbcType=VARCHAR}
     </select>
-    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="ExtensionResultMap">
+    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.utils.BizShop" extends="ExtensionResultMap">
         <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
     </resultMap>
 
@@ -268,7 +268,7 @@
         order by shop_weight desc
     </select>
 
-    <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizShop" extends="BaseResultMap">
+    <resultMap id="ExtensionResultMap" type="com.whxm.harbor.utils.BizShop" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
         <result column="biz_format_type" property="bizFormatType" jdbcType="VARCHAR"/>
     </resultMap>
@@ -296,4 +296,37 @@
         FROM shop_picture_relation
         WHERE shop_id = #{bizShopId}
     </select>
+
+    <!--批量选择性添加-->
+    <insert id="batchSelectiveInsert">
+        insert into biz_shop(
+        shop_id,
+        shop_name,
+        shop_english_name,
+        biz_format_id,
+        floor_id,
+        shop_number,
+        shop_house_number,
+        shop_tel,
+        shop_descript,
+        shop_logo_path,
+        shop_weight,
+        is_shop_enabled,
+        add_shop_time) VALUES
+        <foreach collection="list" item="item" separator="," >
+            (#{item.shopId}
+            ,#{item.shopName},
+            #{item.shopEnglishName},
+            #{item.bizFormatId},
+            #{item.floorId},
+            #{item.shopNumber},
+            #{item.shopNumber},
+            #{item.shopTel},
+            #{item.shopDescript},
+            #{item.shopLogoPath},
+            1,
+            0,
+            CURRENT_TIMESTAMP)
+        </foreach>
+    </insert>
 </mapper>

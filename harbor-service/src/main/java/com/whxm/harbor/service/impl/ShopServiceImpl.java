@@ -7,6 +7,7 @@ import com.whxm.harbor.conf.UrlConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.ShopService;
+import com.whxm.harbor.utils.BizShop;
 import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import org.slf4j.Logger;
@@ -16,11 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -295,5 +291,11 @@ public class ShopServiceImpl implements ShopService {
         }
 
         return list;
+    }
+
+    @Override
+    public int batchInsert(List<BizShop> shops) {
+
+        return bizShopMapper.batchSelectiveInsert(shops);
     }
 }

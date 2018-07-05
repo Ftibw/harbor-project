@@ -2,11 +2,11 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.mapper.ShopVisitMapper;
 import com.whxm.harbor.service.ShopVisitService;
+import com.whxm.harbor.utils.BizShop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

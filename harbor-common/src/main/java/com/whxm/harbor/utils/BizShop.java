@@ -1,4 +1,4 @@
-package com.whxm.harbor.bean;
+package com.whxm.harbor.utils;
 
 
 import java.util.Date;

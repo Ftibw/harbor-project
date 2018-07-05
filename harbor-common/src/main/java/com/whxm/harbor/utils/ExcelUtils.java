@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ExcelUtils {
 
@@ -23,11 +24,11 @@ public class ExcelUtils {
         return filePath.matches("^.+\\.(?i)(xlsx)$");
     }
 
-    public static List importData(File file) {
+    public static <T> List<T> importData(File file, Class<T> clazz) {
 
         Workbook wb = null;
 
-        List HeroList = new ArrayList();
+        List<T> list = new ArrayList<>();
         try {
             if (isExcel2007(file.getPath())) {
                 wb = new XSSFWorkbook(new FileInputStream(file));
@@ -40,17 +41,10 @@ public class ExcelUtils {
             return null;
         }
 
-        String shopName = null;
-        int formatId = 0;
-        int floorId = 0;
-        String shopNumber = null;
-        String phoneNumber = null;
-        String describe = null;
-        String logoPath = null;
-
         Sheet sheet = wb.getSheetAt(0);//获取第一张表
+        //第一列为标题项,第一行全部非空
         int start = 1;
-        for (int i = start; i < sheet.getLastRowNum(); i++) {
+        for (int i = start; i < sheet.getLastRowNum() + 1; i++) {
             Row row = sheet.getRow(i);//获取索引为i的行，以0开始
             Cell col0 = row.getCell(0);//获取第i行的索引为0的单元格数据
             Cell col1 = row.getCell(1);
@@ -60,17 +54,44 @@ public class ExcelUtils {
             Cell col5 = row.getCell(5);
             Cell col6 = row.getCell(6);
 
-            String value0 = null != col0 ? col0.getStringCellValue() : null;
+            String value0 = null != col0 ? col0.toString() : null;
             Double value1 = null != col1 ? col1.getNumericCellValue() : null;
             Double value2 = null != col2 ? col2.getNumericCellValue() : null;
-            String value3 = null != col3 ? col3.getStringCellValue() : null;
+            String value3 = null != col3 ? col3.toString() : null;
             String value4 = null != col4 ? col4.toString() : null;
-            String value5 = null != col5 ? col5.getStringCellValue() : null;
-            String value6 = null != col6 ? col6.getStringCellValue() : null;
+            String value5 = null != col5 ? col5.toString() : null;
+            String value6 = null != col6 ? col6.toString() : null;
+            /*try {
+                T t = clazz.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }*/
+            BizShop shop = new BizShop();
+            shop.setShopName(value0);
+            shop.setBizFormatId(value1 == null ? null : value1.intValue());
+            shop.setFloorId(value2 == null ? null : value2.intValue());
+            shop.setShopNumber(value3);
+            shop.setShopTel(value4);
+            shop.setShopDescript(value5);
+            shop.setShopLogoPath(value6);
+            shop.setShopId(UUID.randomUUID().toString().replace("-", ""));
 
-            System.out.println(value0 + "---" + value1 + "---" + value2 + "---" + value3 + "---" + value4 + "---" + value5 + "---" + value6);
+            try {
+                shop.setShopEnglishName(PinyinUtils.toPinyin(value0));
+            } catch (Exception e) {
+                System.out.println(value0);//"π茶"中"π"转拼音报错
+            }
 
-            if (null == value0 && null == value1) break;
+            // String shopName = null;
+            // int formatId = 0;
+            // int floorId = 0;
+            // String shopNumber = null;
+            // String phoneNumber = null;
+            // String describe = null;
+            // String logoPath = null;
+            list.add((T) shop);
+
+            if (null == value0) break;
 
             //set field value
         }
@@ -79,8 +100,9 @@ public class ExcelUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return HeroList;
+        return list;
     }
 }
+
 
 
