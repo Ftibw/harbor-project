@@ -1,7 +1,5 @@
 package com.whxm.harbor.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
