@@ -2,7 +2,7 @@ spring:
   application:
     name: harbor-web
   datasource:       #&useSSL=false  47.94.202.250 or 192.168.1.146
-    url: jdbc:mysql://${mysql.address:192.168.1.80}:3306/harbor?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://${mysql.address:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-    host: ${redis.address:192.168.1.80}     # 47.94.202.250 or 192.168.1.146
+    host: ${redis.address:47.94.202.250}     # 47.94.202.250 or 192.168.1.146
   #配置全局时间返回格式
   jackson:
     default-property-inclusion: non_null
@@ -59,7 +59,7 @@ wechat:
 
 # resources server url
 resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
-  path: http://${resource.address:192.168.1.103}:8080/
+  path: http://${resource.address:47.94.202.250}:8080/
 
 # log record
 log:

@@ -3,17 +3,23 @@ package com.whxm.harbor.wechat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.utils.JacksonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class WeChatTask {
+
+    private final Logger logger = LoggerFactory.getLogger(WeChatTask.class);
 
     @Autowired
     private WeChatConfig weChatConfig;
@@ -24,6 +30,7 @@ public class WeChatTask {
     public void accessToken() {
         RestTemplate client = new RestTemplate();
 
+        client.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         //-----------------------------------access_token---------------------------------------
 
         String accessTokenUrl = String.format(WeChatConstant.ACCESS_TOKEN_URL_FORMAT_2,
@@ -70,6 +77,7 @@ public class WeChatTask {
 
         String bugTemplateId = null;
 
+        //中文乱码会导致无法成功匹配title,所有获取配置的时候一定要设置编码
         for (WeChatTemplate template : weChatConfig.getTemplates()) {
             if ("后台异常反馈".equals(template.getTitle())) {
                 bugTemplateId = template.getTemplateId();
@@ -83,12 +91,14 @@ public class WeChatTask {
 
             pushBean.setToUser(openid)
                     .setUrl(pathConfig.getResourcePath() + pathConfig.getLogUri())
-                    .setValue(BugEnum.FIRST, "抛异常了，哗了🐶")
+                    .setValue(BugEnum.FIRST, "抛异常了，哗了狗")
                     .setValue(BugEnum.EXCEPTION_TYPE, e.getClass().getName())
                     .setValue(BugEnum.EXCEPTION_MESSAGE, e.getLocalizedMessage())
                     .setValue(BugEnum.REMARK, Arrays.toString(e.getStackTrace()));
 
-            client.postForObject(url, pushBean, String.class);
+            String ret = client.postForObject(url, pushBean, String.class);
+
+            logger.info("给用户[{}]推送的异常反馈,响应结果为[{}]", openid, ret);
         });
     }
 }
