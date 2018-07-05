@@ -46,7 +46,7 @@ fileDir:
 urlConfig:
   urlPrefix: ${resourceServer:http://47.94.202.250/}
 server:
-  port: 9000
+  port: 10000
 ftp:
   controlPort: 21
   host: 47.94.202.250
