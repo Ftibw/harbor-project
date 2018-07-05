@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -89,8 +90,21 @@ public class WeChatTask {
 
             String url = String.format(WeChatConstant.PUSH_URL_FORMAT_1, weChatConfig.getAccessToken());
 
+            String fileName = "bug.log";
+
+            String detailURL = pathConfig.getResourcePath() + "logs" + File.separator + fileName;
+
+            File logFile = new File("/var", fileName);
+
+            try {
+                e.printStackTrace(new PrintStream(new FileOutputStream(logFile, true)));
+
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
             pushBean.setToUser(openid)
-                    .setUrl(pathConfig.getResourcePath() + pathConfig.getLogUri())
+                    .setUrl(detailURL)
                     .setValue(BugEnum.FIRST, "抛异常了，哗了狗")
                     .setValue(BugEnum.EXCEPTION_TYPE, e.getClass().getName())
                     .setValue(BugEnum.EXCEPTION_MESSAGE, e.getLocalizedMessage())
