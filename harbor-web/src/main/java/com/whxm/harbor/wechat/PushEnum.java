@@ -1,20 +1,21 @@
-package com.whxm.harbor.enums;
+package com.whxm.harbor.wechat;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum BugEnum {
+public enum PushEnum {
 
     FIRST("first"),
-    EXCEPTION_TYPE("exceptionType"),
-    EXCEPTION_MESSAGE("exceptionMessage"),
+    KEYWORD1("key1"),
+    KEYWORD2("key2"),
+    KEYWORD3("key3"),
     REMARK("Remark");
 
     public String key;
 
     public Map<Object, Object> values = new HashMap<>();
 
-    BugEnum(String key) {
+    PushEnum(String key) {
         this.key = key;
     }
 }

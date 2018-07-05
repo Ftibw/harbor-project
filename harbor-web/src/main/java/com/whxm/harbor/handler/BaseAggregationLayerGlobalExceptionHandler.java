@@ -6,13 +6,17 @@ import javax.validation.ConstraintViolationException;
 
 import com.whxm.harbor.bean.ParameterInvalidItem;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.bean.PushBean;
+import com.whxm.harbor.wechat.PushBean;
 import com.whxm.harbor.enums.ExceptionEnum;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.utils.ConvertUtil;
+import com.whxm.harbor.wechat.WeChatConfig;
+import com.whxm.harbor.wechat.WeChatConstant;
+import com.whxm.harbor.wechat.WeChatTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,15 +93,35 @@ public class BaseAggregationLayerGlobalExceptionHandler {
                 .body(e.getResultEnum() == null ? Result.failure(ResultEnum.SYSTEM_INNER_ERROR) : Result.failure(e.getResultEnum(), e.getData()));
     }
 
+    @Autowired
+    private WeChatConfig weChatConfig;
+
     /**
      * 处理运行时系统异常（反500错误码）
      */
     protected Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         LOGGER.error("handleRuntimeException start, uri:{}, caused by:", request.getRequestURI(), e);
         //TODO 可通过邮件、微信公众号等方式发送信息至开发人员、记录存档等操作
+        RestTemplate client = new RestTemplate();
 
+        String bugTemplateId = null;
 
-        String ret = new RestTemplate().postForObject("", PushBean.getDefaultBean(), String.class);
+        for (WeChatTemplate template : weChatConfig.getTemplates()) {
+            if ("后台异常反馈".equals(template.getTitle())) {
+                bugTemplateId = template.getTemplateId();
+            }
+        }
+
+        PushBean pushBean = PushBean.getDefaultBean().setTemplateId(bugTemplateId);
+
+        weChatConfig.getOpenIds().forEach(openid -> {
+
+            String url = String.format(WeChatConstant.PUSH_URL_FORMAT_1, weChatConfig.getAccessToken());
+
+            pushBean.setToUser(openid);
+
+            client.postForObject(url, pushBean, String.class);
+        });
 
         return Result.failure(ResultEnum.SYSTEM_INNER_ERROR);
     }

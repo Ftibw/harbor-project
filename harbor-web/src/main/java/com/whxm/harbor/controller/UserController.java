@@ -10,7 +10,9 @@ import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.service.UserService;
 import com.whxm.harbor.utils.*;
+import com.whxm.harbor.wechat.WeChatConfig;
 import io.swagger.annotations.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -200,5 +202,19 @@ public class UserController {
             }
         }
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
+    }
+
+
+    @Autowired
+    private WeChatConfig weChatConfig;
+
+    @GetMapping("/wechat")
+    public Object wechat() {
+
+        WeChatConfig vo = new WeChatConfig();
+
+        BeanUtils.copyProperties(weChatConfig,vo);
+
+        return vo;
     }
 }

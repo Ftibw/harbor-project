@@ -52,3 +52,6 @@ logging:
     root: INFO
 account:
   login-limit: 1000
+wechat:
+  app-id: wx64a4ab9041d6344b
+  secret: 78ce2dae8e9b51ac1f26c6eda6bc079f

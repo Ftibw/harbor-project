@@ -1,8 +1,6 @@
-package com.whxm.harbor.bean;
+package com.whxm.harbor.wechat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.whxm.harbor.constant.WeChatConstant;
-import com.whxm.harbor.enums.BugEnum;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -79,10 +77,7 @@ public class PushBean {
     }
 
     public static PushBean getDefaultBean() {
-
         return new PushBean()
-                .setToUser(WeChatConstant.MY_OPEN_ID)
-                .setTemplateId(WeChatConstant.MY_BUG_TEMPLATE_ID)
                 .setColor(BugEnum.FIRST, WeChatConstant.DEFAULT_FONT_COLOR)
                 .setColor(BugEnum.EXCEPTION_TYPE, WeChatConstant.DEFAULT_FONT_COLOR)
                 .setColor(BugEnum.EXCEPTION_MESSAGE, WeChatConstant.DEFAULT_FONT_COLOR)
@@ -95,13 +90,15 @@ public class PushBean {
         String accessToken = "11_bSD4qSSa4fDnnw5zWfj4UzaRH4a7yihRMcUMHzcOfAE7BRj4I_dmKIROG5hwnN5Bqx_pEB7c6oLv3qgdh0so9XJ1UdJuVXSrxfsMQAciwQ-yLwtYxiPW_HXcSTMV_cREbxRoAtlHW1pLAV_iKBNeADAFWI";
 
         PushBean bean = PushBean.getDefaultBean()
+                .setToUser("oAGvi1K-d5mNpIMssitPAk5Zsw0E")
+                .setTemplateId("jYoWogKoXrkxmYWrc8Nv02nO3pVdO2hjoc4K8s5p1qo")
                 .setUrl("www.douyu.com")
                 .setValue(BugEnum.FIRST, "unknown")
                 .setValue(BugEnum.EXCEPTION_TYPE, "sqlException")
                 .setValue(BugEnum.EXCEPTION_MESSAGE, "com.xxx.bean.User")
                 .setValue(BugEnum.REMARK, "login(User user)");
 
-        String url = String.format(WeChatConstant.WE_CHAT_PUSH_URL_FORMAT, accessToken);
+        String url = String.format(WeChatConstant.PUSH_URL_FORMAT_1, accessToken);
 
         String ret = new RestTemplate().postForObject(url, bean, String.class);
 
