@@ -64,11 +64,11 @@ public class ExcelUtils {
             Double value1 = null != col1 ? col1.getNumericCellValue() : null;
             Double value2 = null != col2 ? col2.getNumericCellValue() : null;
             String value3 = null != col3 ? col3.getStringCellValue() : null;
-            String value4 = null != col4 ? col4.getStringCellValue() : null;//有数字
+            String value4 = null != col4 ? col4.toString() : null;
             String value5 = null != col5 ? col5.getStringCellValue() : null;
             String value6 = null != col6 ? col6.getStringCellValue() : null;
 
-            System.out.println(value0 + "---" + value1 + "---" + value2 + "---" + value3+ "---" + value4+ "---" + value5+ "---" + value6);
+            System.out.println(value0 + "---" + value1 + "---" + value2 + "---" + value3 + "---" + value4 + "---" + value5 + "---" + value6);
 
             if (null == value0 && null == value1) break;
 
