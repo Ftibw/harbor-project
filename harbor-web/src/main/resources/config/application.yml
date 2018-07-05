@@ -51,4 +51,4 @@ logging:
     file: /var/logs/harbor.log
     root: INFO
 account:
-  login-limit: 10
+  login-limit: 1000
