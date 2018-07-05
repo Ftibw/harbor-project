@@ -22,24 +22,24 @@ public class WeChatTask {
 
     @Scheduled(initialDelay = 1000, fixedRate = 7000000)
     public void accessToken() {
-        RestTemplate template = new RestTemplate();
+        RestTemplate client = new RestTemplate();
 
-        //----------------------------------------------------------------------------
+        //-----------------------------------access_token---------------------------------------
 
         String accessTokenUrl = String.format(WeChatConstant.ACCESS_TOKEN_URL_FORMAT_2,
                 weChatConfig.getAppId(), weChatConfig.getSecret());
 
-        Map ret = template.getForObject(accessTokenUrl, Map.class);
+        Map ret = client.getForObject(accessTokenUrl, Map.class);
 
         String accessToken = String.valueOf(ret.get("access_token"));
 
         weChatConfig.setAccessToken(accessToken);
 
-        //----------------------------------------------------------------------------
+        //----------------------------------------openid---------------------------------------
 
         String userListUrl = String.format(WeChatConstant.FANS_URL_FORMAT_2, accessToken, "");
 
-        String ret1 = template.getForObject(userListUrl, String.class);
+        String ret1 = client.getForObject(userListUrl, String.class);
 
         WeChatUser weChatUser = JacksonUtils.readGenericTypeValue(ret1, new TypeReference<WeChatUser<UserIdList>>() {
         });
@@ -49,11 +49,11 @@ public class WeChatTask {
             weChatConfig.setOpenIds(null == data ? null : data.getOpenIds());
         }
 
-        //----------------------------------------------------------------------------
+        //------------------------------------template_id-------------------------------------
 
         String templateListUrl = String.format(WeChatConstant.TEMPLATE_URL_FORMAT_1, accessToken);
 
-        String ret2 = template.getForObject(templateListUrl, String.class);
+        String ret2 = client.getForObject(templateListUrl, String.class);
 
         Map<String, List<WeChatTemplate>> stringListMap = JacksonUtils.readGenericTypeValue(ret2, new TypeReference<Map<String, List<WeChatTemplate>>>() {
         });
