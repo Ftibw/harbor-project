@@ -16,10 +16,10 @@ public class Constant {
     /**
      * windows中
      */
-    public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\resources";
-    //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/resources";
+    public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\uploadImg";
+    //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/uploadImg";
 
-    public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "picture";
+    public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "business";
     //终端keep alive时间间隔5分钟(300000毫秒)
     public static final long KEEP_ALIVE_INTERVAL = 300000;
     //状态状态存储key
