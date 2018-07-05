@@ -7,7 +7,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.callback.Callback;
-import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
@@ -32,7 +32,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     }
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     private PageVO<BizScreensaverMaterial> getListTemplate(final PageQO pageQO, final BizScreensaverMaterial condition, Callback<Object, List<BizScreensaverMaterial>> callback) {
 
@@ -46,7 +46,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setScreensaverMaterialImgPath(
-                urlConfig.getUrlPrefix()
+                pathConfig.getResourcePath()
                         + item.getScreensaverMaterialImgPath()
         ));
 
@@ -91,7 +91,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public Result updateBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
 
-        bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
 
         int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 

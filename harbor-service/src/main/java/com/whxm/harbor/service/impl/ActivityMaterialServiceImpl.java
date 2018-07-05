@@ -6,16 +6,11 @@ import com.whxm.harbor.bean.BizActivityMaterial;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizActivityMaterialMapper;
 import com.whxm.harbor.service.ActivityMaterialService;
-import com.whxm.harbor.utils.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +22,7 @@ import java.util.List;
 public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Resource
     private BizActivityMaterialMapper bizActivityMaterialMapper;
@@ -51,7 +46,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setActivityMaterialImgPath(
-                urlConfig.getUrlPrefix()
+                pathConfig.getResourcePath()
                         + item.getActivityMaterialImgPath()
         ));
 
@@ -76,7 +71,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public Result updateBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
 
-        bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
 
         int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 
@@ -114,7 +109,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(activityMaterial);
 
         list.forEach(item -> item.setActivityMaterialImgPath(
-                urlConfig.getUrlPrefix()
+                pathConfig.getResourcePath()
                         + item.getActivityMaterialImgPath()
         ));
 

@@ -6,8 +6,7 @@ import com.whxm.harbor.bean.BizMap;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizMapMapper;
@@ -31,7 +30,7 @@ public class MapServiceImpl implements MapService {
     private BizMapMapper bizMapMapper;
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Override
     public BizMap getBizMap(Integer floorId) {
@@ -46,7 +45,7 @@ public class MapServiceImpl implements MapService {
                 if (null == bizMap) logger.info("楼层ID为{}的地图不存在", floorId);
             }
             if (null != bizMap)
-                bizMap.setMapImgPath(urlConfig.getUrlPrefix() + bizMap.getMapImgPath());
+                bizMap.setMapImgPath(pathConfig.getResourcePath() + bizMap.getMapImgPath());
 
         } catch (Exception e) {
 
@@ -70,7 +69,7 @@ public class MapServiceImpl implements MapService {
         /*if (null == list || list.isEmpty())
             throw new DataNotFoundException();*/
 
-        list.forEach(item -> item.setMapImgPath(urlConfig.getUrlPrefix() + item.getMapImgPath()));
+        list.forEach(item -> item.setMapImgPath(pathConfig.getResourcePath() + item.getMapImgPath()));
 
         pageVO.setList(list);
 
@@ -104,7 +103,7 @@ public class MapServiceImpl implements MapService {
     public Result updateBizMap(BizMap bizMap) {
 
 
-        bizMap.setMapImgPath(bizMap.getMapImgPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizMap.setMapImgPath(bizMap.getMapImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
 
         int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 

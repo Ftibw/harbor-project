@@ -3,7 +3,7 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizShopMapper;
@@ -24,7 +24,7 @@ import java.util.*;
 public class ShopServiceImpl implements ShopService {
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Resource
     private BizShopMapper bizShopMapper;
@@ -39,7 +39,7 @@ public class ShopServiceImpl implements ShopService {
         if (null == po)
             return null;
 
-        po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+        po.setShopLogoPath(pathConfig.getResourcePath() + po.getShopLogoPath());
 
         BeanUtils.copyProperties(po, vo);
 
@@ -89,7 +89,7 @@ public class ShopServiceImpl implements ShopService {
     private void selectShopPictures(List<BizShopVo> ret, List<BizShop> list) {
         list.forEach(po -> {
 
-            po.setShopLogoPath(urlConfig.getUrlPrefix() + po.getShopLogoPath());
+            po.setShopLogoPath(pathConfig.getResourcePath() + po.getShopLogoPath());
 
             BizShopVo vo = new BizShopVo();
 
@@ -151,11 +151,11 @@ public class ShopServiceImpl implements ShopService {
 
         Assert.notNull(pictures, "商铺图片集合不能为空");
 
-        shopVo.setShopLogoPath(shopVo.getShopLogoPath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        shopVo.setShopLogoPath(shopVo.getShopLogoPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
 
         pictures.forEach(item -> {
             Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空");
-            item.setShopPicturePath(item.getShopPicturePath().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+            item.setShopPicturePath(item.getShopPicturePath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
         });
 
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
@@ -228,7 +228,7 @@ public class ShopServiceImpl implements ShopService {
 
         list.forEach(picture ->
                 picture.setShopPicturePath(
-                        urlConfig.getUrlPrefix() + picture.getShopPicturePath()
+                        pathConfig.getResourcePath() + picture.getShopPicturePath()
                 )
         );
 

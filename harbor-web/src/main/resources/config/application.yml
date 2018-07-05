@@ -35,23 +35,39 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-swagger2:
-  package: com.whxm.harbor.controller
-urlConfig:                          # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
-  urlPrefix: http://${resource.address:192.168.1.103}:8080/
 server:
   port: 9000
+
+# swagger2 restful archive
+swagger2:
+  package: com.whxm.harbor.controller
+
+# terminal
 terminal:
   on-off:  00:00-24:00
   delay:  10
   protect:  300
-logging:
-    level:
-        com.whxm: DEBUG
-    file: /var/logs/harbor.log
-    root: INFO
+
+# login
 account:
   login-limit: 1000
+
+# wei xin
 wechat:
   app-id: wx64a4ab9041d6344b
   secret: 78ce2dae8e9b51ac1f26c6eda6bc079f
+
+# resources server url
+resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
+  path: http://${resource.address:192.168.1.103}:8080/
+
+# log record
+log:
+  web-path: logs/harbor.log
+logging:
+    level:
+        com.whxm: DEBUG
+     #/var/logs/harbor.log
+    file: /Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/${log.web-path}
+    root: INFO
+

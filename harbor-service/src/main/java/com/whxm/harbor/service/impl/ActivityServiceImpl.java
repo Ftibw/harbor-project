@@ -9,7 +9,7 @@ import com.whxm.harbor.bean.BizActivity;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.mapper.BizActivityMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class ActivityServiceImpl implements ActivityService {
     private final Logger logger = LoggerFactory.getLogger(ActivityServiceImpl.class);
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Resource
     private BizActivityMapper bizActivityMapper;
@@ -66,7 +66,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setActivityLogo(
-                urlConfig.getUrlPrefix()
+                pathConfig.getResourcePath()
                         + item.getActivityLogo()
         ));
 
@@ -83,7 +83,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<BizActivity> list = bizActivityMapper.getBizActivityList(null);
 
         list.forEach(item -> item.setActivityLogo(
-                urlConfig.getUrlPrefix()
+                pathConfig.getResourcePath()
                         + item.getActivityLogo()
         ));
 
@@ -109,7 +109,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Result updateBizActivity(BizActivity bizActivity) {
 
-        bizActivity.setActivityLogo(bizActivity.getActivityLogo().replaceAll("^" + urlConfig.getUrlPrefix() + "(.*)$", "$1"));
+        bizActivity.setActivityLogo(bizActivity.getActivityLogo().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
 
         int affectRow = bizActivityMapper.updateByPrimaryKeySelective(bizActivity);
 

@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.conf.TerminalConfig;
-import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
@@ -33,7 +33,7 @@ public class TerminalServiceImpl implements TerminalService {
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
 
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Resource
     private BizTerminalMapper bizTerminalMapper;
@@ -199,7 +199,7 @@ public class TerminalServiceImpl implements TerminalService {
                         .forEach(item -> list.add(
                                 new ResultMap<String, Object>(2)
                                         .build("name", item.getScreensaverMaterialImgName())
-                                        .build("url", urlConfig.getUrlPrefix() + item.getScreensaverMaterialImgPath())
+                                        .build("url", pathConfig.getResourcePath() + item.getScreensaverMaterialImgPath())
                         ));
 
                 ret = list.isEmpty() ? ret.build("code", 0) : ret.build("code", 1);
@@ -255,7 +255,7 @@ public class TerminalServiceImpl implements TerminalService {
     public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
         List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
         if (null != list && !list.isEmpty()) {
-            list.forEach(item -> item.setScreensaverMaterialImgPath(urlConfig.getUrlPrefix() + item.getScreensaverMaterialImgPath()));
+            list.forEach(item -> item.setScreensaverMaterialImgPath(pathConfig.getResourcePath() + item.getScreensaverMaterialImgPath()));
             return ret.build("success", true)
                     .build("data", list);
         } else return ret;
