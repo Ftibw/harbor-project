@@ -90,9 +90,9 @@ public class WeChatTask {
 
             String url = String.format(WeChatConstant.PUSH_URL_FORMAT_1, weChatConfig.getAccessToken());
 
-            String fileName = "bug.log";
+            String fileName = "logs/bug.log";
 
-            String detailURL = pathConfig.getResourcePath() + "logs" + File.separator + fileName;
+            String detailURL = pathConfig.getResourcePath() + fileName;
 
             File logFile = new File("/var", fileName);
 

@@ -215,6 +215,6 @@ public class UserController {
 
         BeanUtils.copyProperties(weChatConfig,vo);
 
-        return vo;
+        return weChatConfig;
     }
 }
