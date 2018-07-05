@@ -67,7 +67,7 @@ log:
 logging:
     level:
         com.whxm: DEBUG
-     #/var/logs/harbor.log
+     #/var/
     file: /Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/${log.web-path}
     root: INFO
 

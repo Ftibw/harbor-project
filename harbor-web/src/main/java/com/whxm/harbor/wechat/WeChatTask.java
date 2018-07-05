@@ -77,7 +77,7 @@ public class WeChatTask {
 
         String bugTemplateId = null;
 
-        //中文乱码会导致无法成功匹配title,所有获取配置的时候一定要设置编码
+        //中文乱码会导致无法成功匹配title,所以获取配置的时候一定要设置编码
         for (WeChatTemplate template : weChatConfig.getTemplates()) {
             if ("后台异常反馈".equals(template.getTitle())) {
                 bugTemplateId = template.getTemplateId();
