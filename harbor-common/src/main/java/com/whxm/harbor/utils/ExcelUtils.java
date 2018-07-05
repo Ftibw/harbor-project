@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ExcelUtils {
 
@@ -42,20 +43,36 @@ public class ExcelUtils {
 
         String shopName = null;
         int formatId = 0;
+        int floorId = 0;
+        String shopNumber = null;
+        String phoneNumber = null;
+        String describe = null;
+        String logoPath = null;
 
         Sheet sheet = wb.getSheetAt(0);//获取第一张表
         int start = 1;
         for (int i = start; i < sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);//获取索引为i的行，以0开始
-            String shopName_ = row.getCell(0).getStringCellValue();//获取第i行的索引为0的单元格数据
+            Cell col0 = row.getCell(0);//获取第i行的索引为0的单元格数据
+            Cell col1 = row.getCell(1);
+            Cell col2 = row.getCell(2);
+            Cell col3 = row.getCell(3);
+            Cell col4 = row.getCell(4);
+            Cell col5 = row.getCell(5);
+            Cell col6 = row.getCell(6);
 
-            Cell column1 = row.getCell(1);
-            double formatId_ = column1.getNumericCellValue();
-            System.out.println(shopName_ + "---" + formatId_);
-            if (null == shopName_
-                    && 0 == formatId_) {
-                break;
-            }
+            String value0 = null != col0 ? col0.getStringCellValue() : null;
+            Double value1 = null != col1 ? col1.getNumericCellValue() : null;
+            Double value2 = null != col2 ? col2.getNumericCellValue() : null;
+            String value3 = null != col3 ? col3.getStringCellValue() : null;
+            String value4 = null != col4 ? col4.getStringCellValue() : null;//有数字
+            String value5 = null != col5 ? col5.getStringCellValue() : null;
+            String value6 = null != col6 ? col6.getStringCellValue() : null;
+
+            System.out.println(value0 + "---" + value1 + "---" + value2 + "---" + value3+ "---" + value4+ "---" + value5+ "---" + value6);
+
+            if (null == value0 && null == value1) break;
+
             //set field value
         }
         try {
@@ -66,3 +83,5 @@ public class ExcelUtils {
         return HeroList;
     }
 }
+
+
