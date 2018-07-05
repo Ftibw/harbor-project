@@ -61,13 +61,13 @@ wechat:
 resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
   path: http://${resource.address:47.94.202.250}:8080/
 
-# log record
+# log record  ---resource.path+log.web-path完美的构成了日志访问URL,用于给微信推送访问bug详情
 log:
   web-path: logs/harbor.log
 logging:
     level:
         com.whxm: DEBUG
-     #/var/
-    file: /Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/${log.web-path}
+     #/var/logs/harbor.log 容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
+    file: /var/${log.web-path}
     root: INFO
 
