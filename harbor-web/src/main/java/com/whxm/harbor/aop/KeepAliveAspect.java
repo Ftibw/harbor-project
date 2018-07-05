@@ -51,7 +51,7 @@ public class KeepAliveAspect {
         final BoundHashOperations<Object, Object, Object> hashOps = redisTemplate.boundHashOps(Constant.TERMINAL_STATUS_KEY);
 
         PageVO<BizTerminal> pageVO = terminalService.getBizTerminalList(new PageQO(), null);
-
+        //终端编号不能为null
         pageVO.getList().forEach(item -> hashOps.putIfAbsent(item.getTerminalNumber(), System.currentTimeMillis()));
     }
 
