@@ -72,7 +72,7 @@ public class WeChatTask {
         }
     }
 
-    public void pushException(Exception e) {
+    public void pushException(Exception e, String data) {
 
         RestTemplate client = new RestTemplate();
 
@@ -105,7 +105,7 @@ public class WeChatTask {
 
             pushBean.setToUser(openid)
                     .setUrl(detailURL)
-                    .setValue(BugEnum.FIRST, "抛异常了，哗了狗")
+                    .setValue(BugEnum.FIRST, data)
                     .setValue(BugEnum.EXCEPTION_TYPE, e.getClass().getName())
                     .setValue(BugEnum.EXCEPTION_MESSAGE, e.getLocalizedMessage())
                     .setValue(BugEnum.REMARK, Arrays.toString(e.getStackTrace()));

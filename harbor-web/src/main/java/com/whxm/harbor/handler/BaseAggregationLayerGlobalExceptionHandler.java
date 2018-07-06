@@ -99,9 +99,10 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理运行时系统异常（反500错误码）
      */
     protected Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
-        LOGGER.error("handleRuntimeException start, uri:{}, caused by:", request.getRequestURI(), e);
+        String requestURI = request.getRequestURI();
+        LOGGER.error("handleRuntimeException start, uri:{}, caused by:", requestURI, e);
         //TODO 可通过邮件、微信公众号等方式发送信息至开发人员、记录存档等操作
-        task.pushException(e);
+        task.pushException(e, requestURI);
 
         return Result.failure(ResultEnum.SYSTEM_INNER_ERROR);
     }
@@ -115,20 +116,22 @@ public class BaseAggregationLayerGlobalExceptionHandler {
 
         String msgWrapper = dataIntegrityMessageFormat(message);
 
+        String requestURI = request.getRequestURI();
+
         String desc = "handleConstraintViolationException start, uri:{}, caused by: ";
 
         if (String.valueOf(message).equals(String.valueOf(msgWrapper))) {
 
-            LOGGER.info(desc, request.getRequestURI(), e);
+            LOGGER.info(desc, requestURI, e);
 
-            task.pushException(e);
+            task.pushException(e, requestURI);
 
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Result.failure(ResultEnum.SYSTEM_INNER_ERROR));
         } else {
 
-            LOGGER.info(desc + "{}", request.getRequestURI(), msgWrapper);
+            LOGGER.info(desc + "{}", requestURI, msgWrapper);
 
             return ResponseEntity
                     .status(HttpStatus.OK)
