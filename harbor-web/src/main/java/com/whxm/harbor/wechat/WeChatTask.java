@@ -3,6 +3,7 @@ package com.whxm.harbor.wechat;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.utils.JacksonUtils;
+import com.whxm.harbor.utils.MD5Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class WeChatTask {

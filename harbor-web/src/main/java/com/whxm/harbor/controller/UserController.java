@@ -203,18 +203,4 @@ public class UserController {
         }
         return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
-
-
-    @Autowired
-    private WeChatConfig weChatConfig;
-
-    @GetMapping("/wechat")
-    public Object wechat() {
-
-        WeChatConfig vo = new WeChatConfig();
-
-        BeanUtils.copyProperties(weChatConfig,vo);
-
-        return vo;
-    }
 }

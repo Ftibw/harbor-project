@@ -144,11 +144,11 @@
         select
         <include refid="Base_Column_List"/>
         from sys_user
-        <where>
-            user_loginname=#{userLoginname}
-            <if test="userEmail!=null">or user_email=#{userEmail}</if>
-            <if test="userWechat!=null">or user_wechat=#{userWechat}</if>
-        </where>
+        WHERE is_deleted=0
+        AND user_loginname=#{userLoginname}
+        <if test="userEmail!=null">or user_email=#{userEmail}</if>
+        <if test="userWechat!=null">or user_wechat=#{userWechat}</if>
+
     </select>
 
     <select id="getUserList" resultMap="BaseResultMap">
