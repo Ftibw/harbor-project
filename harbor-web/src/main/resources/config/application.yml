@@ -70,6 +70,6 @@ logging:
     level:
         com.whxm: DEBUG
     #容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
-    file: ${log.windows-parent-path}${log.web-path}
+    file: ${log.linux-parent-path}${log.web-path}
     root: INFO
 
