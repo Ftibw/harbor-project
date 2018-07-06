@@ -59,7 +59,7 @@ wechat:
 
 # resources server url
 resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
-  path: http://${resource.address:192.168.1.103}:8080/
+  path: http://${resource.address:192.168.1.103}:8080/${dir-for-test}
 
 # log record  ---resource.path+log.web-path完美的构成了日志访问URL,用于给微信推送访问bug详情
 log:

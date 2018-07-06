@@ -20,7 +20,7 @@ public class Constant {
     public static final String PLATFORM = "linux";
 
     public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/";
-
+    //"resources" + File.separator + "picture";
     public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "uploadImg" + File.separator + "business";
     //终端keep alive时间间隔5分钟(300000毫秒)
     public static final long KEEP_ALIVE_INTERVAL = 300000;
