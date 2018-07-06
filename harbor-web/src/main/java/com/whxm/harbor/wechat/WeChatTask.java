@@ -94,7 +94,7 @@ public class WeChatTask {
 
             String detailURL = pathConfig.getResourcePath() + fileName;
 
-            File logFile = new File("/var", fileName);
+            File logFile = new File(pathConfig.getLogParentPath(), fileName);
 
             try {
                 e.printStackTrace(new PrintStream(new FileOutputStream(logFile, true)));

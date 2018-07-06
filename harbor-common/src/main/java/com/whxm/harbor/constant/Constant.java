@@ -15,10 +15,10 @@ public class Constant {
     //表单提交防重时长15秒(15000毫秒)
     public static final int DEFAULT_SUBMIT_EXPIRE_TIME = 15000;
 
-    /**
-     * windows中
-     */
     //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\";
+    //windows
+    public static final String PLATFORM = "linux";
+
     public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/";
 
     public static final String PICTURE_UPLOAD_ROOT_DIRECTORY = "uploadImg" + File.separator + "business";

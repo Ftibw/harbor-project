@@ -2,7 +2,7 @@ spring:
   application:
     name: harbor-web
   datasource:       #&useSSL=false  47.94.202.250 or 192.168.1.146
-    url: jdbc:mysql://${mysql.address:47.94.202.250}:3306/harbor?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://${mysql.address:192.168.1.80}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -21,7 +21,7 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
   redis:
-    host: ${redis.address:47.94.202.250}     # 47.94.202.250 or 192.168.1.146
+    host: ${redis.address:192.168.1.80}     # 47.94.202.250 or 192.168.1.146
   #配置全局时间返回格式
   jackson:
     default-property-inclusion: non_null
@@ -59,15 +59,17 @@ wechat:
 
 # resources server url
 resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
-  path: http://${resource.address:47.94.202.250}:8080/
+  path: http://${resource.address:192.168.1.103}:8080/
 
 # log record  ---resource.path+log.web-path完美的构成了日志访问URL,用于给微信推送访问bug详情
 log:
   web-path: logs/harbor.log
+  linux-parent-path:  /var/
+  windows-parent-path: /Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/
 logging:
     level:
         com.whxm: DEBUG
-     #/var/logs/harbor.log 容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
-    file: /var/${log.web-path}
+    #容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
+    file: ${log.windows-parent-path}${log.web-path}
     root: INFO
 
