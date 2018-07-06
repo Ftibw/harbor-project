@@ -78,10 +78,10 @@ public class PushBean {
 
     public static PushBean getDefaultBean() {
         return new PushBean()
-                .setColor(BugEnum.FIRST, WeChatConstant.DEFAULT_FONT_COLOR)
-                .setColor(BugEnum.EXCEPTION_TYPE, WeChatConstant.DEFAULT_FONT_COLOR)
-                .setColor(BugEnum.EXCEPTION_MESSAGE, WeChatConstant.DEFAULT_FONT_COLOR)
-                .setColor(BugEnum.REMARK, WeChatConstant.DEFAULT_FONT_COLOR);
+                .setColor(BugEnum.FIRST, "#6495ed")
+                .setColor(BugEnum.EXCEPTION_TYPE, "#ff4500")
+                .setColor(BugEnum.EXCEPTION_MESSAGE, "#00bfff")
+                .setColor(BugEnum.REMARK, "#ee82ee");
     }
 
 
