@@ -16,8 +16,6 @@ public class Constant {
     public static final int DEFAULT_SUBMIT_EXPIRE_TIME = 15000;
 
     //public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "C:\\Users\\ftibw\\Desktop\\dev\\install\\tomcat\\apache-tomcat-8.0.45\\apache-tomcat-8.0.45\\webapps\\";
-    //windows
-    public static final String PLATFORM = "linux";
 
     public static final String RESOURCE_ABSOLUTE_DIRECTORY_PATH = "/usr/local/tomcat/webapps/";
     //"resources" + File.separator + "picture";
