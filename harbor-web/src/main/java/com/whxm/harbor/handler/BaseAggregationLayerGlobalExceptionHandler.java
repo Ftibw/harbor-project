@@ -6,7 +6,6 @@ import javax.validation.ConstraintViolationException;
 
 import com.whxm.harbor.bean.ParameterInvalidItem;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.utils.IPv4Utils;
 import com.whxm.harbor.wechat.*;
 import com.whxm.harbor.enums.ExceptionEnum;
 import com.whxm.harbor.enums.ResultEnum;
@@ -21,9 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
