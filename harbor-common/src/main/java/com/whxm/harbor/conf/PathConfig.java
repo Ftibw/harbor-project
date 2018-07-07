@@ -1,6 +1,6 @@
 package com.whxm.harbor.conf;
 
-import com.whxm.harbor.utils.FileUtils;
+import com.whxm.harbor.constant.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +15,7 @@ public class PathConfig {
     private String bugPath;
 
     public String getResourceURLWithPost() {
-        return resourcePath + FileUtils.DEFAULT_FILE_SEPARATOR;
+        return resourcePath + Constant.DEFAULT_FILE_SEPARATOR;
     }
 
     public String getAbsoluteBugFilePath() {
