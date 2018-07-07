@@ -39,7 +39,7 @@ public class ShopServiceImpl implements ShopService {
         if (null == po)
             return null;
 
-        po.setShopLogoPath(pathConfig.getResourcePath() + po.getShopLogoPath());
+        po.setShopLogoPath(pathConfig.getResourceURLWithPost() + po.getShopLogoPath());
 
         BeanUtils.copyProperties(po, vo);
 
@@ -89,7 +89,7 @@ public class ShopServiceImpl implements ShopService {
     private void selectShopPictures(List<BizShopVo> ret, List<BizShop> list) {
         list.forEach(po -> {
 
-            po.setShopLogoPath(pathConfig.getResourcePath() + po.getShopLogoPath());
+            po.setShopLogoPath(pathConfig.getResourceURLWithPost() + po.getShopLogoPath());
 
             BizShopVo vo = new BizShopVo();
 
@@ -151,11 +151,11 @@ public class ShopServiceImpl implements ShopService {
 
         Assert.notNull(pictures, "商铺图片集合不能为空");
 
-        shopVo.setShopLogoPath(shopVo.getShopLogoPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+        shopVo.setShopLogoPath(shopVo.getShopLogoPath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
         pictures.forEach(item -> {
             Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空");
-            item.setShopPicturePath(item.getShopPicturePath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+            item.setShopPicturePath(item.getShopPicturePath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
         });
 
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
@@ -228,7 +228,7 @@ public class ShopServiceImpl implements ShopService {
 
         list.forEach(picture ->
                 picture.setShopPicturePath(
-                        pathConfig.getResourcePath() + picture.getShopPicturePath()
+                        pathConfig.getResourceURLWithPost() + picture.getShopPicturePath()
                 )
         );
 

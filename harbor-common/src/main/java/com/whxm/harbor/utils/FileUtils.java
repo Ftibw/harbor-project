@@ -29,7 +29,7 @@ public class FileUtils {
 
     private static final Logger logger = Logger.getLogger(FileUtils.class);
 
-    private static final String DEFAULT_FILE_SEPARATOR = "/";
+    public static final String DEFAULT_FILE_SEPARATOR = "/";
 
     private static String absoluteResourceDirectory;
     private static String relativePictureUploadDirectory;

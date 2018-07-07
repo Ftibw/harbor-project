@@ -66,7 +66,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setActivityLogo(
-                pathConfig.getResourcePath()
+                pathConfig.getResourceURLWithPost()
                         + item.getActivityLogo()
         ));
 
@@ -83,7 +83,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<BizActivity> list = bizActivityMapper.getBizActivityList(null);
 
         list.forEach(item -> item.setActivityLogo(
-                pathConfig.getResourcePath()
+                pathConfig.getResourceURLWithPost()
                         + item.getActivityLogo()
         ));
 
@@ -109,7 +109,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Result updateBizActivity(BizActivity bizActivity) {
 
-        bizActivity.setActivityLogo(bizActivity.getActivityLogo().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+        bizActivity.setActivityLogo(bizActivity.getActivityLogo().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
         int affectRow = bizActivityMapper.updateByPrimaryKeySelective(bizActivity);
 

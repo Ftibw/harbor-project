@@ -46,7 +46,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setActivityMaterialImgPath(
-                pathConfig.getResourcePath()
+                pathConfig.getResourceURLWithPost()
                         + item.getActivityMaterialImgPath()
         ));
 
@@ -71,7 +71,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public Result updateBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
 
-        bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+        bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
         int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 
@@ -109,7 +109,7 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
         List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(activityMaterial);
 
         list.forEach(item -> item.setActivityMaterialImgPath(
-                pathConfig.getResourcePath()
+                pathConfig.getResourceURLWithPost()
                         + item.getActivityMaterialImgPath()
         ));
 

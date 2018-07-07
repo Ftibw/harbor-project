@@ -199,7 +199,7 @@ public class TerminalServiceImpl implements TerminalService {
                         .forEach(item -> list.add(
                                 new ResultMap<String, Object>(2)
                                         .build("name", item.getScreensaverMaterialImgName())
-                                        .build("url", pathConfig.getResourcePath() + item.getScreensaverMaterialImgPath())
+                                        .build("url", pathConfig.getResourceURLWithPost() + item.getScreensaverMaterialImgPath())
                         ));
 
                 ret = list.isEmpty() ? ret.build("code", 0) : ret.build("code", 1);
@@ -255,7 +255,7 @@ public class TerminalServiceImpl implements TerminalService {
     public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
         List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
         if (null != list && !list.isEmpty()) {
-            list.forEach(item -> item.setScreensaverMaterialImgPath(pathConfig.getResourcePath() + item.getScreensaverMaterialImgPath()));
+            list.forEach(item -> item.setScreensaverMaterialImgPath(pathConfig.getResourceURLWithPost() + item.getScreensaverMaterialImgPath()));
             return ret.build("success", true)
                     .build("data", list);
         } else return ret;

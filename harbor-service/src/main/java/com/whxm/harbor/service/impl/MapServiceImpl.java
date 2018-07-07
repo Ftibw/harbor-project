@@ -45,7 +45,7 @@ public class MapServiceImpl implements MapService {
                 if (null == bizMap) logger.info("楼层ID为{}的地图不存在", floorId);
             }
             if (null != bizMap)
-                bizMap.setMapImgPath(pathConfig.getResourcePath() + bizMap.getMapImgPath());
+                bizMap.setMapImgPath(pathConfig.getResourceURLWithPost() + bizMap.getMapImgPath());
 
         } catch (Exception e) {
 
@@ -69,7 +69,7 @@ public class MapServiceImpl implements MapService {
         /*if (null == list || list.isEmpty())
             throw new DataNotFoundException();*/
 
-        list.forEach(item -> item.setMapImgPath(pathConfig.getResourcePath() + item.getMapImgPath()));
+        list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
 
         pageVO.setList(list);
 
@@ -103,7 +103,7 @@ public class MapServiceImpl implements MapService {
     public Result updateBizMap(BizMap bizMap) {
 
 
-        bizMap.setMapImgPath(bizMap.getMapImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+        bizMap.setMapImgPath(bizMap.getMapImgPath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
         int affectRow = bizMapMapper.updateByPrimaryKeySelective(bizMap);
 

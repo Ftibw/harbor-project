@@ -1,5 +1,6 @@
 package com.whxm.harbor.conf;
 
+import com.whxm.harbor.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +14,8 @@ public class PathConfig {
     @Value("${log.bug-path}")
     private String bugPath;
 
-    public String getResourcePath() {
-        return resourcePath;
+    public String getResourceURLWithPost() {
+        return resourcePath + FileUtils.DEFAULT_FILE_SEPARATOR;
     }
 
     public String getAbsoluteBugFilePath() {

@@ -46,7 +46,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
             throw new DataNotFoundException();*/
 
         list.forEach(item -> item.setScreensaverMaterialImgPath(
-                pathConfig.getResourcePath()
+                pathConfig.getResourceURLWithPost()
                         + item.getScreensaverMaterialImgPath()
         ));
 
@@ -91,7 +91,7 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     @Override
     public Result updateBizScreensaverMaterial(BizScreensaverMaterial bizScreensaverMaterial) {
 
-        bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + pathConfig.getResourcePath() + "(.*)$", "$1"));
+        bizScreensaverMaterial.setScreensaverMaterialImgPath(bizScreensaverMaterial.getScreensaverMaterialImgPath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
         int affectRow = bizScreensaverMaterialMapper.updateByPrimaryKeySelective(bizScreensaverMaterial);
 
