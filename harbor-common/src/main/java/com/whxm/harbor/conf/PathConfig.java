@@ -11,17 +11,17 @@ public class PathConfig {
     @Value("${log.parent-path}")
     private String logParentPath;
     @Value("${log.bug-path}")
-    private String buPath;
+    private String bugPath;
 
     public String getResourcePath() {
         return resourcePath;
     }
 
     public String getAbsoluteBugFilePath() {
-        return logParentPath + buPath;
+        return logParentPath + bugPath;
     }
 
     public String getBugDetailURL() {
-        return resourcePath + buPath;
+        return resourcePath + bugPath;
     }
 }

@@ -29,16 +29,17 @@ logging:
     level:
         com.whxm: INFO
     file: ${log.parent-path}${log.web-path}
-
+server:
+  port: 9000
 ###################以下为自定义配置###################
 # swagger2 restful archive
 swagger2:
   package: com.whxm.harbor.controller
 # terminal
 terminal:
-  on-off:  00:00-24:00
-  delay:  10
-  protect:  300
+  on-off: 00:00-24:00
+  delay: 10
+  protect: 300
 # login
 account:
   login-limit: 1000
@@ -48,20 +49,23 @@ wechat:
   secret: 78ce2dae8e9b51ac1f26c6eda6bc079f
 # resources application url
 resource:
-  path: http://${resource.address}:8080/resources/
+  path: http://${resource.address}:8080/resources
 # file config
 file:
   absolute-resource-dir: ${my-web-dir}/resources
-  relative-picture-upload-dir:  uploadImg/business
-  horizontal-screen-picture:  1
-  vertical-screen-picture:  2
+  relative-picture-upload-dir: uploadImg/business
+  horizontal-screen-picture: 1
+  vertical-screen-picture: 2
   file-origin-name: fileOriginName
-  file-new-name:  fileNewName
-  file-size:  fileSize
-  file-path:  filePath
-  image-orientation:  imageOrientation
+  file-new-name: fileNewName
+  file-size: fileSize
+  file-path: filePath
+  image-orientation: imageOrientation
 # log record  ---resource.path+log.bug-path构成了bug详情访问URL,用于给微信推送访问bug详情
+#linux部署时,对于spring-boot的jar启动项目来说
+#容器中的/usr/local/tomcat/webapps目录被挂载到了/var/lib/docker/volumes/webapps/_data,用于文件上传后自动同步到资源服务器
 log:
+  parent-path: ${my-web-dir}
   web-path: /logs/harbor.log  #记录日志
   bug-path: /logs/bug.log     #记录bug
 
