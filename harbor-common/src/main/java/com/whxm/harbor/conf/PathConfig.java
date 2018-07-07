@@ -8,7 +8,7 @@ public class PathConfig {
 
     @Value("${resource.path}")
     private String resourcePath;
-    @Value("${log.linux-parent-path}")
+    @Value("${log.parent-path}")
     private String logParentPath;
     @Value("${log.web-path}")
     private String logUri;

@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.lock.RedisDistributedLock;
@@ -127,10 +128,15 @@ public class UserController {
 
             String key = "USER_LIMIT_" + userId;
 
+            long expire = TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS);
+
             String isOK = lock.StringLuaTemplate(""
                     + "local is_exist = redis.call('get', '" + key + "')"
                     + "local count = is_exist and tonumber(is_exist) or 0 "
-                    + "if count < " + limit + " then return redis.call('set', '" + key + "',count + 1)"
+                    + "if count < " + limit + " then "
+                    + "redis.call('set', '" + key + "',count + 1) "
+                    + "redis.call('expire','" + key + "', '" + expire + "') "
+                    + "return 'OK' "
                     + "else return 'NO' end"
             );
 

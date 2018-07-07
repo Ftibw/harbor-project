@@ -57,19 +57,31 @@ wechat:
   app-id: wx64a4ab9041d6344b
   secret: 78ce2dae8e9b51ac1f26c6eda6bc079f
 
-# resources server url
-resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146   ${dir-for-test}
-  path: http://${resource.address:192.168.1.103}:8080/
+# resources application url
+resource:    # 47.94.202.250 or 192.168.1.80 or 192.168.1.146
+  path: http://${resource.address:192.168.1.103}:8080/resources/
+# file config
+file:                     #/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/resources
+  absolute-resource-dir:  /usr/local/tomcat/webapps/resources
+  relative-picture-upload-dir:  /uploadImg/business
+  horizontal-screen-picture:  1
+  vertical-screen-picture:  2
+  file-origin-name: fileOriginName
+  file-new-name:  fileNewName
+  file-size:  fileSize
+  file-path:  filePath
+  image-orientation:  imageOrientation
 
 # log record  ---resource.path+log.web-path完美的构成了日志访问URL,用于给微信推送访问bug详情
 log:
   web-path: logs/harbor.log
-  linux-parent-path:  /var/
-  windows-parent-path: /Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/
+  parent-path:  /var/
+              #/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/
 logging:
     level:
         com.whxm: DEBUG
     #容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
     file: ${log.linux-parent-path}${log.web-path}
     root: INFO
+
 

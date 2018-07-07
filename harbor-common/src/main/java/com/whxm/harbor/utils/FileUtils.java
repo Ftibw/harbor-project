@@ -1,11 +1,11 @@
 package com.whxm.harbor.utils;
 
-import com.whxm.harbor.bean.ResultMap;
 import com.whxm.harbor.callback.Callback;
-import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.exception.InternalServerException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -23,10 +24,69 @@ import java.util.Map;
  * @Email ftibw@live.com
  * @CreateTime 2018/6/13 21:58
  */
-
+@Component
 public class FileUtils {
 
     private static final Logger logger = Logger.getLogger(FileUtils.class);
+
+    private static final String FILE_SEPARATOR = "/";
+
+    private static String absoluteResourceDirectory;
+    private static String relativePictureUploadDirectory;
+    private static String horizontalScreenPicture;
+    private static String verticalScreenPicture;
+    private static String fileOriginName;
+    private static String fileNewName;
+    private static String fileSize;
+    private static String filePath;
+    private static String imageOrient;
+
+    @Value("${file.absolute-resource-dir}")
+    public void setAbsoluteResourceDirectory(String path) {
+
+        absoluteResourceDirectory = path;
+    }
+
+    @Value("${file.relative-picture-upload-dir}")
+    public void setRelativePictureUploadDirectory(String path) {
+
+        relativePictureUploadDirectory = path;
+    }
+
+    @Value("${file.horizontal-screen-picture}")
+    public static void setHorizontalScreenPicture(String horizontalScreenPicture) {
+        FileUtils.horizontalScreenPicture = horizontalScreenPicture;
+    }
+
+    @Value("${file.vertical-screen-picture}")
+    public static void setVerticalScreenPicture(String verticalScreenPicture) {
+        FileUtils.verticalScreenPicture = verticalScreenPicture;
+    }
+
+    @Value("${file.file-origin-name}")
+    public void setFileOriginName(String originName) {
+        fileOriginName = originName;
+    }
+
+    @Value("${file.file-new-name}")
+    public void setFileNewName(String newName) {
+        fileNewName = newName;
+    }
+
+    @Value("${file.file-size}")
+    public void setFileSize(String size) {
+        fileSize = size;
+    }
+
+    @Value("${file.file-path}")
+    public void setFilePath(String path) {
+        filePath = path;
+    }
+
+    @Value("${file.image-orientation}")
+    public void setImageOrient(String imageOrientation) {
+        imageOrient = imageOrientation;
+    }
 
     public static <R> R upload(
             MultipartFile file,
@@ -54,9 +114,9 @@ public class FileUtils {
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的绝对目录 = 资源服务器项目路径+项目中文件保存根目录
-            String uploadRootDirectory = Constant.RESOURCE_ABSOLUTE_DIRECTORY_PATH + File.separator + Constant.PICTURE_UPLOAD_ROOT_DIRECTORY;
+            String uploadRootDirectory = absoluteResourceDirectory + relativePictureUploadDirectory;
             //分文件夹管理时的文件夹名
-            String dateDirectoryName = StringUtils.createDirName();
+            String dateDirectoryName = StringUtils.createDirName().replace("-", "");
             //文件夹
             File dirFile = new File(uploadRootDirectory, dateDirectoryName);
 
@@ -65,21 +125,24 @@ public class FileUtils {
                 dirFile.mkdirs();
             }
 
-            href = Constant.PICTURE_UPLOAD_ROOT_DIRECTORY + File.separator + dateDirectoryName + File.separator + newName;
+            href = relativePictureUploadDirectory + FILE_SEPARATOR + dateDirectoryName + FILE_SEPARATOR + newName;
 
-            File uploadedFile = new File(uploadRootDirectory + File.separator + dateDirectoryName, newName);
+            File uploadedFile = new File(uploadRootDirectory + FILE_SEPARATOR + dateDirectoryName, newName);
             //拷贝文件
             file.transferTo(uploadedFile);
 
             String imageOrientation = getImageOrientation(uploadedFile);
 
-            return callback.call(new ResultMap<String, Object>(5)
-                    .build("fileOriginName", originName)
-                    .build("fileNewName", newName)
-                    .build("fileSize", size)
-                    .build("filePath", href)
-                    .build("imageOrientation", imageOrientation)
-            );
+            Map<String, Object> map = new HashMap<>();
+
+            map.put(fileOriginName, originName);
+            map.put(fileNewName, newName);
+            map.put(fileSize, size);
+            map.put(filePath, href);
+            map.put(imageOrient, imageOrientation);
+
+            return callback.call(map);
+
         } catch (IOException e) {
 
             logger.error("文件拷贝异常", e);
@@ -109,11 +172,15 @@ public class FileUtils {
 
             bufferedImg = ImageIO.read(is);
 
+            if (bufferedImg == null) {
+                return "此文件不是图片文件";
+            }
+
             int imgWidth = bufferedImg.getWidth();
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? Constant.HORIZONTAL_SCREEN_PICTURE : Constant.VERTICAL_SCREEN_PICTURE;
+            return imgWidth > imgHeight ? horizontalScreenPicture : verticalScreenPicture;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
@@ -130,11 +197,15 @@ public class FileUtils {
         try {
             BufferedImage bufferedImg = ImageIO.read(file);
 
+            if (bufferedImg == null) {
+                return "此文件不是图片文件";
+            }
+
             int imgWidth = bufferedImg.getWidth();
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? Constant.HORIZONTAL_SCREEN_PICTURE : Constant.VERTICAL_SCREEN_PICTURE;
+            return imgWidth > imgHeight ? horizontalScreenPicture : verticalScreenPicture;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
