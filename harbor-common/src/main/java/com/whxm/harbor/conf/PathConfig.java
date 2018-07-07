@@ -10,18 +10,18 @@ public class PathConfig {
     private String resourcePath;
     @Value("${log.parent-path}")
     private String logParentPath;
-    @Value("${log.web-path}")
-    private String logUri;
+    @Value("${log.bug-path}")
+    private String buPath;
 
     public String getResourcePath() {
         return resourcePath;
     }
 
-    public String getLogParentPath() {
-        return logParentPath;
+    public String getAbsoluteBugFilePath() {
+        return logParentPath + buPath;
     }
 
-    public String getLogUri() {
-        return logUri;
+    public String getBugDetailURL() {
+        return resourcePath + buPath;
     }
 }

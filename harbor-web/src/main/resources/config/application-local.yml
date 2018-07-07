@@ -1,0 +1,10 @@
+server:
+  port: 9000
+
+mysql.address:  47.94.202.250
+redis.address:  47.94.202.250
+resource.address: 47.94.202.250
+my-web-dir: C:/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps
+
+log:
+  parent-path:  ${my-web-dir}

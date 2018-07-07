@@ -1,0 +1,13 @@
+server:
+  port: 9000
+
+mysql.address:  192.168.1.146
+redis.address:  192.168.1.146
+resource.address: 192.168.1.146
+my-web-dir: /usr/local/tomcat/webapps
+
+#对于spring-boot的jar启动项目来说
+#容器中的/var/logs目录被挂在到了主机的/var/lib/docker/volumes/webapps/_data/logs
+#容器中的/usr/local/tomcat/webapps目录被挂载到了/var/lib/docker/volumes/webapps/_data,用于文件上传后自动同步到资源服务器
+log:
+  parent-path:  /var

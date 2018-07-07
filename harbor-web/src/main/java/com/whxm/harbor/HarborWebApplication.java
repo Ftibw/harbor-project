@@ -24,6 +24,7 @@ public class HarborWebApplication {
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
+        //factory.setLocation("");//设置文件上传临时目录的父目录,默认项目路径为父目录
         factory.setMaxFileSize("10240000KB");
         factory.setMaxRequestSize("10240000KB");
         return factory.createMultipartConfig();

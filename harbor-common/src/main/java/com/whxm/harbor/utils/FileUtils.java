@@ -29,7 +29,7 @@ public class FileUtils {
 
     private static final Logger logger = Logger.getLogger(FileUtils.class);
 
-    private static final String FILE_SEPARATOR = "/";
+    private static final String DEFAULT_FILE_SEPARATOR = "/";
 
     private static String absoluteResourceDirectory;
     private static String relativePictureUploadDirectory;
@@ -114,7 +114,7 @@ public class FileUtils {
             //uuid生成新名称
             newName = StringUtils.createStrUseUUID(originName);
             //文件保存的绝对目录 = 资源服务器项目路径+项目中文件保存根目录
-            String uploadRootDirectory = absoluteResourceDirectory + relativePictureUploadDirectory;
+            String uploadRootDirectory = absoluteResourceDirectory + DEFAULT_FILE_SEPARATOR + relativePictureUploadDirectory;
             //分文件夹管理时的文件夹名
             String dateDirectoryName = StringUtils.createDirName().replace("-", "");
             //文件夹
@@ -125,9 +125,9 @@ public class FileUtils {
                 dirFile.mkdirs();
             }
 
-            href = relativePictureUploadDirectory + FILE_SEPARATOR + dateDirectoryName + FILE_SEPARATOR + newName;
-
-            File uploadedFile = new File(uploadRootDirectory + FILE_SEPARATOR + dateDirectoryName, newName);
+            href = relativePictureUploadDirectory + DEFAULT_FILE_SEPARATOR + dateDirectoryName + DEFAULT_FILE_SEPARATOR + newName;
+            
+            File uploadedFile = new File(uploadRootDirectory + DEFAULT_FILE_SEPARATOR + dateDirectoryName, newName);
             //拷贝文件
             file.transferTo(uploadedFile);
 
