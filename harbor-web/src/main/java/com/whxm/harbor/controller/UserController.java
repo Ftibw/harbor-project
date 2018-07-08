@@ -128,7 +128,7 @@ public class UserController {
 
             String key = "USER_LIMIT_" + userId;
 
-            long expire = TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS);
+            long expire = TimeUnit.SECONDS.convert(2, TimeUnit.HOURS);
 
             String isOK = lock.StringLuaTemplate(""
                     + "local is_exist = redis.call('get', '" + key + "')"
