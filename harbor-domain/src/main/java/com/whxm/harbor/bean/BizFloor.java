@@ -9,6 +9,8 @@ public class BizFloor {
 
     private String floorName;
 
+    private Integer sortNumber;
+
     public Integer getFloorId() {
         return floorId;
     }
@@ -31,5 +33,13 @@ public class BizFloor {
 
     public void setFloorName(String floorName) {
         this.floorName = floorName == null ? null : floorName.trim();
+    }
+
+    public Integer getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(Integer sortNumber) {
+        this.sortNumber = sortNumber;
     }
 }

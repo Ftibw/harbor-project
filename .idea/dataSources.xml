@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="harbor@192.168.1.80" uuid="a8464317-3a38-4317-8835-7acb1149dbb9">
+    <data-source source="LOCAL" name="harbor@192.168.1.146" uuid="78dd8012-211b-41a4-aad5-f68b204e73f1">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.1.80:3306/harbor</jdbc-url>
+      <jdbc-url>jdbc:mysql://192.168.1.146:3306/harbor</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
