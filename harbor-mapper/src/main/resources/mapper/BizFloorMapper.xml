@@ -94,6 +94,6 @@
         select
         <include refid="Base_Column_List"/>
         from biz_floor
-        ORDER BY sort_number DESC
+        ORDER BY sort_number ASC
     </select>
 </mapper>
