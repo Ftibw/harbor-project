@@ -40,7 +40,7 @@ terminal:
   on-off: 00:00-24:00
   delay: 10
   protect: 300
-# login
+# 一个账号不限登录总人数,但是限制2小时/1000人新登录
 account:
   login-limit: 1000
 # wei xin
