@@ -6,6 +6,7 @@ import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
 import com.whxm.harbor.utils.Assert;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Api(description = "终端服务")
 @RestController
@@ -236,6 +239,24 @@ public class TerminalController {
         return terminalService.addBizTerminal(bizTerminal);
     }
 
+    private boolean checkTerminalTimeFormat(String timeStr) {
+        boolean isRightFormat = false;
+        Pattern pattern = Pattern.compile("(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})"
+        );
+        Matcher matcher = pattern.matcher(timeStr);
+        if (matcher.find()) {
+            int h1 = Integer.parseInt(matcher.group(1));
+            int h2 = Integer.parseInt(matcher.group(3));
+            int m1 = Integer.parseInt(matcher.group(2));
+            int m2 = Integer.parseInt(matcher.group(4));
+            if (h1 <= h2 && ((h2 <= 23) || (h2 == 24 && m2 == 0))
+                    && m1 <= 60 && m2 <= 60) {
+                isRightFormat = true;
+            }
+        }
+        return isRightFormat;
+    }
+
     @PostMapping("/config")
     public Result updateTerminalConfig(@RequestBody TerminalConfig config) {
 
@@ -243,6 +264,10 @@ public class TerminalController {
         Assert.notNull(config.getOnOff(), "终端开关机时间不能为空[params:{}]", config);
         Assert.notNull(config.getDelay(), "终端延时不能为空[params:{}]", config);
         Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
+
+        if (!checkTerminalTimeFormat(config.getOnOff())) {
+            return Result.failure(ResultEnum.PARAM_IS_INVALID, "终端开关机时间格式错误,请按照示例[00:00-24:00]得格式填写");
+        }
 
         return terminalService.updateTerminalConfig(config);
     }
