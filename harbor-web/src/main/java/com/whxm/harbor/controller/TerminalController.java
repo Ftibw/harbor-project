@@ -249,7 +249,9 @@ public class TerminalController {
             int h2 = Integer.parseInt(matcher.group(3));
             int m1 = Integer.parseInt(matcher.group(2));
             int m2 = Integer.parseInt(matcher.group(4));
-            if (h1 <= h2 && ((h2 <= 23) || (h2 == 24 && m2 == 0))
+            if (h1 >= 0 && h2 >= 0 && m1 >= 0 && m2 >= 0
+                    && h1 <= h2
+                    && ((h2 <= 23) || (h2 == 24 && m2 == 0))
                     && m1 <= 60 && m2 <= 60) {
                 isRightFormat = true;
             }
