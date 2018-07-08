@@ -244,7 +244,7 @@ public class TerminalController {
         Pattern pattern = Pattern.compile("(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})"
         );
         Matcher matcher = pattern.matcher(timeStr);
-        if (matcher.find()) {
+        while (matcher.find()) {
             int h1 = Integer.parseInt(matcher.group(1));
             int h2 = Integer.parseInt(matcher.group(3));
             int m1 = Integer.parseInt(matcher.group(2));
