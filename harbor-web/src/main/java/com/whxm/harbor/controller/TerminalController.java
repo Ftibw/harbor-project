@@ -241,7 +241,7 @@ public class TerminalController {
 
     private boolean checkTerminalTimeFormat(String timeStr) {
         boolean isRightFormat = false;
-        Pattern pattern = Pattern.compile("(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})"
+        Pattern pattern = Pattern.compile("^(\\d{2}):(\\d{2})-(\\d{2}):(\\d{2})$"
         );
         Matcher matcher = pattern.matcher(timeStr);
         while (matcher.find()) {
