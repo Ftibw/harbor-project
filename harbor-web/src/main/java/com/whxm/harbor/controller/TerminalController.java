@@ -268,7 +268,7 @@ public class TerminalController {
         Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
 
         if (!checkTerminalTimeFormat(config.getOnOff())) {
-            return Result.failure(ResultEnum.PARAM_IS_INVALID, "终端开关机时间格式错误,请按照示例[00:00-24:00]得格式填写");
+            return Result.failure(ResultEnum.PARAM_IS_INVALID, "终端开关机时间格式错误,请按照示例[00:00-24:00]的格式填写");
         }
 
         return terminalService.updateTerminalConfig(config);
