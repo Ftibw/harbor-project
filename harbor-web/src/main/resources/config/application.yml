@@ -54,8 +54,6 @@ resource:
 file:
   absolute-resource-dir: ${my-web-dir}/resources
   relative-picture-upload-dir: uploadImg/business
-  horizontal-screen-picture: 1
-  vertical-screen-picture: 2
   file-origin-name: fileOriginName
   file-new-name: fileNewName
   file-size: fileSize

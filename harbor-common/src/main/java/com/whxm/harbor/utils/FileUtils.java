@@ -30,10 +30,10 @@ public class FileUtils {
 
     private static final Logger logger = Logger.getLogger(FileUtils.class);
 
+    private static final String HORIZONTAL_SCREEN_PICTURE = "2";
+    private static final String VERTICAL_SCREEN_PICTURE = "1";
     private static String absoluteResourceDirectory;
     private static String relativePictureUploadDirectory;
-    private static String horizontalScreenPicture;
-    private static String verticalScreenPicture;
     private static String fileOriginName;
     private static String fileNewName;
     private static String fileSize;
@@ -50,16 +50,6 @@ public class FileUtils {
     public void setRelativePictureUploadDirectory(String path) {
 
         relativePictureUploadDirectory = path;
-    }
-
-    @Value("${file.horizontal-screen-picture}")
-    public static void setHorizontalScreenPicture(String horizontalScreenPicture) {
-        FileUtils.horizontalScreenPicture = horizontalScreenPicture;
-    }
-
-    @Value("${file.vertical-screen-picture}")
-    public static void setVerticalScreenPicture(String verticalScreenPicture) {
-        FileUtils.verticalScreenPicture = verticalScreenPicture;
     }
 
     @Value("${file.file-origin-name}")
@@ -125,7 +115,7 @@ public class FileUtils {
             }
 
             href = relativePictureUploadDirectory + Constant.DEFAULT_FILE_SEPARATOR + dateDirectoryName + Constant.DEFAULT_FILE_SEPARATOR + newName;
-            
+
             File uploadedFile = new File(uploadRootDirectory + Constant.DEFAULT_FILE_SEPARATOR + dateDirectoryName, newName);
             //拷贝文件
             file.transferTo(uploadedFile);
@@ -179,7 +169,7 @@ public class FileUtils {
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? horizontalScreenPicture : verticalScreenPicture;
+            return imgWidth > imgHeight ? HORIZONTAL_SCREEN_PICTURE : VERTICAL_SCREEN_PICTURE;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
@@ -204,7 +194,7 @@ public class FileUtils {
 
             int imgHeight = bufferedImg.getHeight();
 
-            return imgWidth > imgHeight ? horizontalScreenPicture : verticalScreenPicture;
+            return imgWidth > imgHeight ? HORIZONTAL_SCREEN_PICTURE : VERTICAL_SCREEN_PICTURE;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
