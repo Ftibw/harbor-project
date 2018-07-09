@@ -23,6 +23,6 @@ public class PathConfig {
     }
 
     public String getBugDetailURL() {
-        return resourcePath + bugPath;
+        return resourcePath.replaceAll("(^.*)/resources","$1") + bugPath;
     }
 }
