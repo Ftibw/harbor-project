@@ -113,4 +113,9 @@ public class MD5Utils {
         return Objects.requireNonNull(getMD5Str(sourceStr)).substring(8, 24);
     }
 
+
+    /*public static void main(String[] args) {
+        String ss = MD5("e10adc3949ba59abbe56e057f20f883e");
+        System.out.println();
+    }*/
 }

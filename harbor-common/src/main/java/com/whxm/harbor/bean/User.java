@@ -47,7 +47,7 @@ public class User {
     public void setUserLoginname(String userLoginname) {
         this.userLoginname = userLoginname == null ? null : userLoginname.trim();
     }
-
+    @JsonIgnore
     public String getUserPassword() {
         return userPassword;
     }
