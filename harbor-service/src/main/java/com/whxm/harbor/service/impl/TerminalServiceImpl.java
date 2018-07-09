@@ -90,6 +90,8 @@ public class TerminalServiceImpl implements TerminalService {
 
         bizTerminal.setTerminalName(null);
 
+        bizTerminal.setFloorId(null);
+
         int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
         return 0 == affectRow ?
