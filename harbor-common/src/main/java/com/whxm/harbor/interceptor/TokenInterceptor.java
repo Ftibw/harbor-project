@@ -1,14 +1,11 @@
 package com.whxm.harbor.interceptor;
 
-import com.whxm.harbor.bean.User;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.lock.RedisDistributedLock;
-import com.whxm.harbor.utils.JacksonUtils;
 import com.whxm.harbor.utils.MD5Utils;
 import com.whxm.harbor.utils.RequestJsonUtils;
 import com.whxm.harbor.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,9 +13,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
@@ -75,7 +70,6 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                     }
 
                 }
-
                 return true;
             }
         }
