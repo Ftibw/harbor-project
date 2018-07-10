@@ -193,14 +193,18 @@ public class UserController {
                 redisTemplate.delete(salt);
 
                 String key = "USER_LIMIT_" + userId;
-
-                lock.StringLuaTemplate(""
-                        + "local is_exist = redis.call('get', '" + key + "') "
-                        + "local count = is_exist and tonumber(is_exist) or 0 "
-                        + "if count > 1 then return redis.call('set', '" + key + "',count - 1) "
-                        + "else return ''..redis.call('del','" + key + "') end "
-                );
-
+                String script = "" +
+                        "local is_exist = redis.call('get', '" + key + "') " +
+                        "local expire_time = math.modf(redis.call('pttl','" + key + "')/1000) " +
+                        "local count = is_exist and tonumber(is_exist) or 0 " +
+                        "if count > 1 " +
+                        "then " +
+                        "   redis.call('set', '" + key + "',count - 1) " +
+                        "   redis.call('expire', '" + key + "',expire_time) " +
+                        "   return 'OK' " +
+                        "else " +
+                        "    return ''..redis.call('del','" + key + "') end ";
+                lock.StringLuaTemplate(script);
                 return Result.success("登出成功");
             }
         }
