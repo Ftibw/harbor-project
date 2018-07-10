@@ -12,6 +12,16 @@ public class BizFormat{
 
     private Integer bizFormatPid;
 
+    private Integer sortNumber;
+
+    public Integer getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(Integer sortNumber) {
+        this.sortNumber = sortNumber;
+    }
+
     public Integer getBizFormatPid() {
         return bizFormatPid;
     }

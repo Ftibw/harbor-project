@@ -7,9 +7,10 @@
         <result column="biz_format_type" property="bizFormatType" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
         <result column="biz_format_pid" property="bizFormatPid" jdbcType="INTEGER"/>
+        <result column="sort_number" property="sortNumber" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        biz_format_id, biz_format_number, biz_format_type, is_deleted, biz_format_pid
+        biz_format_id, biz_format_number, biz_format_type, is_deleted, biz_format_pid, sort_number
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,9 +25,9 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="bizFormatId"
             parameterType="com.whxm.harbor.bean.BizFormat">
         INSERT INTO biz_format (biz_format_id, biz_format_number, biz_format_type,
-                                is_deleted, biz_format_pid)
+                                is_deleted, biz_format_pid, sort_number)
         VALUES (#{bizFormatId,jdbcType=INTEGER}, #{bizFormatNumber,jdbcType=VARCHAR}, #{bizFormatType,jdbcType=VARCHAR},
-                #{isDeleted,jdbcType=INTEGER}, #{bizFormatPid,jdbcType=INTEGER})
+                #{isDeleted,jdbcType=INTEGER}, #{bizFormatPid,jdbcType=INTEGER}, #{sortNumber,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizFormat">
         insert into biz_format
@@ -46,6 +47,9 @@
             <if test="bizFormatPid != null">
                 biz_format_pid,
             </if>
+            <if test="sortNumber != null">
+                sort_number,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bizFormatId != null">
@@ -62,6 +66,9 @@
             </if>
             <if test="bizFormatPid != null">
                 #{bizFormatPid,jdbcType=INTEGER},
+            </if>
+            <if test="sortNumber != null">
+                #{sortNumber,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -80,6 +87,9 @@
             <if test="bizFormatPid != null">
                 biz_format_pid = #{bizFormatPid,jdbcType=INTEGER},
             </if>
+            <if test="sortNumber != null">
+                sort_number = #{sortNumber,jdbcType=INTEGER},
+            </if>
         </set>
         where biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </update>
@@ -88,7 +98,8 @@
         SET biz_format_number = #{bizFormatNumber,jdbcType=VARCHAR},
             biz_format_type   = #{bizFormatType,jdbcType=VARCHAR},
             is_deleted        = #{isDeleted,jdbcType=INTEGER},
-            biz_format_pid    = #{bizFormatPid,jdbcType=INTEGER}
+            biz_format_pid    = #{bizFormatPid,jdbcType=INTEGER},
+            sort_number       = #{sortNumber,jdbcType=INTEGER}
         WHERE biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </update>
 
@@ -119,14 +130,14 @@
             ,biz_format_type = #{bizFormatType}
         </if>
         WHERE NOT exists(
-                SELECT biz_format_id
-                FROM biz_shop
-                WHERE biz_shop.biz_format_id = biz_format.biz_format_id)
-              AND
-              NOT exists(
-                      SELECT type
-                      FROM biz_building
-                      WHERE biz_building.type = biz_format.biz_format_id)
-              AND biz_format_id = #{bizFormatId,jdbcType=INTEGER}
+        SELECT biz_format_id
+        FROM biz_shop
+        WHERE biz_shop.biz_format_id = biz_format.biz_format_id)
+        AND
+        NOT exists(
+        SELECT type
+        FROM biz_building
+        WHERE biz_building.type = biz_format.biz_format_id)
+        AND biz_format_id = #{bizFormatId,jdbcType=INTEGER}
     </update>
 </mapper>

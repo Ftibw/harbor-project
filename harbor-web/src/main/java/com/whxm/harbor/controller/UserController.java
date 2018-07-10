@@ -170,7 +170,7 @@ public class UserController {
 
                 String newSalt = UUID.randomUUID().toString().replace("-", "");
 
-                redisTemplate.boundValueOps(newSalt + userId).set(userId, 2, TimeUnit.HOURS);
+                redisTemplate.boundValueOps(newSalt).set(userId, 2, TimeUnit.HOURS);
 
                 return Result.success(chaos(userId, newSalt));
             }
