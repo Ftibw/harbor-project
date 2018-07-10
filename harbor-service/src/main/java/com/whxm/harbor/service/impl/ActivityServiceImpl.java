@@ -99,6 +99,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         activity.setIsDeleted(Constant.YES);
 
+        activity.setActivityType(null);
+
         int affectRow = bizActivityMapper.setIsDeleted(activity);
 
         return 0 == affectRow ?

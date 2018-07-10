@@ -114,7 +114,7 @@
     <!--如果符合条件则置为删除状态-->
     <update id="setIsDeleted" parameterType="com.whxm.harbor.bean.BizActivity">
         UPDATE biz_activity
-        SET is_deleted = #{isDeleted,jdbcType=INTEGER}
+        SET is_deleted = #{isDeleted,jdbcType=INTEGER},activity_type=#{activityType}
         WHERE NOT exists(SELECT activity_id
                          FROM biz_activity_material
                          WHERE biz_activity.activity_id = biz_activity_material.activity_id)
