@@ -193,6 +193,7 @@ public class UserController {
                 redisTemplate.delete(salt);
 
                 String key = "USER_LIMIT_" + userId;
+
                 String script = "" +
                         "local is_exist = redis.call('get', '" + key + "') " +
                         "local expire_time = math.modf(redis.call('pttl','" + key + "')/1000) " +
@@ -205,6 +206,7 @@ public class UserController {
                         "else " +
                         "    return ''..redis.call('del','" + key + "') end ";
                 lock.StringLuaTemplate(script);
+
                 return Result.success("登出成功");
             }
         }
