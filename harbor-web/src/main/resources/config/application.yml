@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local  #启用本地配置参数
+    active: local
   application:
     name: harbor-web
   datasource:
