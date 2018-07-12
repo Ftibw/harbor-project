@@ -23,6 +23,7 @@ public class PinyinUtils {
             if (aNewChar > 128) {
                 try {
                     pinyinStr.append(PinyinHelper.toHanyuPinyinStringArray(aNewChar, defaultFormat)[0]);
+                //BadHanyuPinyinOutputFormatCombination
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
