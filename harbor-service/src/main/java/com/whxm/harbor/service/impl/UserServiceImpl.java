@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的用户登录名%s重复", user.getUserId(), user.getUserLoginname()));
 
         return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "建筑无法添加")
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "用户无法添加")
                 : Result.success(user);
     }
 
