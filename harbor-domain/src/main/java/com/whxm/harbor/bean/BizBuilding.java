@@ -7,19 +7,15 @@ public class BizBuilding {
 
     private String name;
 
-    private String color;
-
     private Integer layer;
 
     private Integer type;
 
-    private String width;
+    private String area;
 
-    private String height;
+    private String dx;
 
-    private String pageX;
-
-    private String pageY;
+    private String dy;
 
     public Integer getId() {
         return id;
@@ -45,14 +41,6 @@ public class BizBuilding {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color == null ? null : color.trim();
-    }
-
     public Integer getLayer() {
         return layer;
     }
@@ -69,35 +57,27 @@ public class BizBuilding {
         this.type = type;
     }
 
-    public String getWidth() {
-        return width;
+    public String getArea() {
+        return area;
     }
 
-    public void setWidth(String width) {
-        this.width = width == null ? null : width.trim();
+    public void setArea(String area) {
+        this.area = area == null ? null : area.trim();
     }
 
-    public String getHeight() {
-        return height;
+    public String getDx() {
+        return dx;
     }
 
-    public void setHeight(String height) {
-        this.height = height == null ? null : height.trim();
+    public void setDx(String dx) {
+        this.dx = dx == null ? null : dx.trim();
     }
 
-    public String getPageX() {
-        return pageX;
+    public String getDy() {
+        return dy;
     }
 
-    public void setPageX(String pageX) {
-        this.pageX = pageX == null ? null : pageX.trim();
-    }
-
-    public String getPageY() {
-        return pageY;
-    }
-
-    public void setPageY(String pageY) {
-        this.pageY = pageY == null ? null : pageY.trim();
+    public void setDy(String dy) {
+        this.dy = dy == null ? null : dy.trim();
     }
 }

@@ -12,10 +12,10 @@ public interface BuildingService {
     /**
      * 根据建筑ID获取建筑数据
      *
-     * @param bizBuildingId 建筑ID
+     * @param id 建筑ID
      * @return 建筑数据
      */
-    BizBuilding getBizBuilding(Integer bizBuildingId);
+    BizBuilding getBizBuilding(Integer id);
 
     /**
      * 获取全部建筑数据
@@ -26,28 +26,12 @@ public interface BuildingService {
     List<BizBuilding> getBizBuildingList(Integer floor);
 
     /**
-     * 根据编号删除建筑
+     * 根据ID删除建筑
      *
-     * @param number 建筑编号
+     * @param id 建筑ID
      * @return ret
      */
-    Result deleteBizBuilding(String number);
-
-    /**
-     * 修改建筑数据
-     *
-     * @param bizBuilding 建筑数据新值
-     * @return ret
-     */
-    Result updateBizBuilding(BizBuilding bizBuilding);
-
-    /**
-     * 新增建筑数据
-     *
-     * @param bizBuilding 新建筑数据
-     * @return 添加操作结果
-     */
-    Result addBizBuilding(BizBuilding bizBuilding);
+    Result deleteBizBuilding(Integer id);
 
     /**
      * 批量新增建筑数据
@@ -55,13 +39,5 @@ public interface BuildingService {
      * @param list 新建筑数据
      * @return 添加操作结果
      */
-    Result addBizBuildings(List<BizBuilding> list);
-
-    /**
-     * 批量修改建筑数据
-     *
-     * @param list 新建筑数据
-     * @return 添加操作结果
-     */
-    Result updateBizBuildings(List<BizBuilding> list);
+    Result saveBizBuildings(List<BizBuilding> list);
 }

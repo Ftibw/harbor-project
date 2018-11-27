@@ -2,6 +2,7 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.MapService;
@@ -28,6 +29,43 @@ public class MapController {
 
     @Autowired
     private MapService mapService;
+
+    @ApiOperation("保存地图边关系")
+    @PostMapping(value = "/edges")
+    public Result saveMapEdges(@RequestBody List<MapEdge> edges) {
+
+        Assert.notNull(edges, "边数据不能为空");
+        return mapService.saveEdges(edges);
+    }
+
+    @ApiOperation("删除地图边关系")
+    @DeleteMapping(value = "/edges")
+    public Result delEdges(MapEdgeKey key) {
+        Result ret;
+        Integer tail = key.getTail();
+        Integer head = key.getHead();
+        if (null != tail && null != head) {
+            if (tail.equals(head)) {
+                ret = mapService.delEdgesByPartKey(key);
+            } else {
+                ret = mapService.delEdgeByPK(key);
+            }
+        } else
+            ret = Result.failure(ResultEnum.PARAM_IS_BLANK, "ID不能为空");
+        return ret;
+    }
+
+    @ApiOperation("获取全部边关系")
+    @GetMapping(value = "/edges")
+    public Result getAllEdges(Integer fid) {
+        return Result.success(mapService.getAllEdges(fid));
+    }
+
+    @ApiOperation("给指定地图设置寻路路点")
+    @GetMapping("/path")
+    public Result setPathPoints(BizMap map) {
+        return null;
+    }
 
     @ApiOperation("终端获取全部地图数据")
     @GetMapping("/maps")

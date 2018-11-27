@@ -1,9 +1,6 @@
 package com.whxm.harbor.service;
 
-import com.whxm.harbor.bean.BizMap;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.*;
 
 import java.util.List;
 
@@ -66,4 +63,14 @@ public interface MapService {
      * @return 添加操作结果
      */
     Result addBizMaps(List<BizMap> list);
+
+    //====================================================================
+
+    Result saveEdges(List<MapEdge> edges);//添加导航图中边关系
+
+    Result delEdgeByPK(MapEdgeKey key);//根据2点ID删除一条边
+
+    Result delEdgesByPartKey(MapEdgeKey key);//根据1点ID删除有关边
+
+    List<MapEdge> getAllEdges(Integer mapId);//获取所有边数据
 }

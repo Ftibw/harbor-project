@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whxm.harbor.mapper.MapEdgeMapper">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.MapEdge">
+        <id column="tail" jdbcType="INTEGER" property="tail"/>
+        <id column="head" jdbcType="INTEGER" property="head"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+        <result column="time" jdbcType="DOUBLE" property="time"/>
+        <result column="is_directed" jdbcType="INTEGER" property="isDirected"/>
+        <result column="floor_id" jdbcType="INTEGER" property="floorId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        tail, head, distance, time, is_directed, floor_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="com.whxm.harbor.bean.MapEdgeKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from map_edge
+        where tail = #{tail,jdbcType=INTEGER}
+        and head = #{head,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.whxm.harbor.bean.MapEdgeKey">
+        delete
+        from map_edge
+        where tail = #{tail,jdbcType=INTEGER}
+          and head = #{head,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.whxm.harbor.bean.MapEdge">
+        insert into map_edge (tail, head, distance, time, is_directed, floor_id)
+        values (#{tail,jdbcType=INTEGER},
+                #{head,jdbcType=INTEGER},
+                #{distance,jdbcType=DOUBLE},
+                #{time,jdbcType=DOUBLE},
+                #{isDirected,jdbcType=INTEGER},
+                #{floorId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.MapEdge">
+        insert into map_edge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tail != null">
+                tail,
+            </if>
+            <if test="head != null">
+                head,
+            </if>
+            <if test="distance != null">
+                distance,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="isDirected != null">
+                is_directed,
+            </if>
+            <if test="floorId != null">
+                floor_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tail != null">
+                #{tail,jdbcType=INTEGER},
+            </if>
+            <if test="head != null">
+                #{head,jdbcType=INTEGER},
+            </if>
+            <if test="distance != null">
+                #{distance,jdbcType=DOUBLE},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=DOUBLE},
+            </if>
+            <if test="isDirected != null">
+                #{isDirected,jdbcType=INTEGER},
+            </if>
+            <if test="floorId != null">
+                #{floorId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.MapEdge">
+        update map_edge
+        <set>
+            <if test="distance != null">
+                distance = #{distance,jdbcType=DOUBLE},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=DOUBLE},
+            </if>
+            <if test="isDirected != null">
+                is_directed = #{isDirected,jdbcType=INTEGER},
+            </if>
+            <if test="floorId != null">
+                floor_id = #{floorId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where tail = #{tail,jdbcType=INTEGER}
+        and head = #{head,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.MapEdge">
+        update map_edge
+        set distance    = #{distance,jdbcType=DOUBLE},
+            time        = #{time,jdbcType=DOUBLE},
+            is_directed = #{isDirected,jdbcType=INTEGER},
+            floor_id      = #{floorId,jdbcType=INTEGER}
+        where tail = #{tail,jdbcType=INTEGER}
+          and head = #{head,jdbcType=INTEGER}
+    </update>
+    <!--以下为自定义部分-->
+    <delete id="deleteByPartKey" parameterType="com.whxm.harbor.bean.MapEdgeKey">
+        delete
+        from map_edge
+        where tail = #{tail,jdbcType=INTEGER}
+           or head = #{head,jdbcType=INTEGER}
+    </delete>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from map_edge
+        <if test="floorId != null">
+            where floor_id=#{floorId}
+        </if>
+    </select>
+
+    <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">
+        REPLACE INTO map_edge
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{tail,jdbcType=INTEGER},
+            #{head,jdbcType=INTEGER},
+            #{distance,jdbcType=DOUBLE},
+            #{time,jdbcType=DOUBLE},
+            #{isDirected,jdbcType=INTEGER},
+            #{floorId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>

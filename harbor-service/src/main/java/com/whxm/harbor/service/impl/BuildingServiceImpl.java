@@ -1,11 +1,15 @@
 package com.whxm.harbor.service.impl;
 
 import com.whxm.harbor.bean.BizBuilding;
+import com.whxm.harbor.bean.MapEdgeKey;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
+import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.BuildingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +22,19 @@ import java.util.Objects;
 @Transactional
 public class BuildingServiceImpl implements BuildingService {
 
+    private final Logger logger = LoggerFactory.getLogger(BuildingServiceImpl.class);
+
     @Resource
     private BizBuildingMapper bizBuildingMapper;
 
-    @Override
-    public BizBuilding getBizBuilding(Integer bizBuildingId) {
+    @Resource
+    private MapEdgeMapper mapEdgeMapper;
 
-        return bizBuildingMapper.selectByPrimaryKey(bizBuildingId);
+
+    @Override
+    public BizBuilding getBizBuilding(Integer id) {
+
+        return bizBuildingMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -34,53 +44,23 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public Result deleteBizBuilding(String number) {
-
-        int affectRow = bizBuildingMapper.deleteByNumber(number);
+    public Result deleteBizBuilding(Integer id) {
+        MapEdgeKey key = new MapEdgeKey();
+        key.setTail(id);
+        key.setHead(id);
+        int i = mapEdgeMapper.deleteByPartKey(key);
+        if (0 == i) {
+            logger.info("ID为{}的点依附的边删除失败", id);
+        }
+        int affectRow = bizBuildingMapper.deleteByPrimaryKey(id);
 
         return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("编号为%s的建筑,无法删除", number))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法删除", id))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
-
     }
 
     @Override
-    public Result updateBizBuilding(BizBuilding bizBuilding) {
-
-        int affectRow = bizBuildingMapper.updateByPrimaryKeySelective(bizBuilding);
-
-        return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法修改", bizBuilding.getId()))
-                : Result.success(bizBuilding);
-    }
-
-    @Override
-    public Result addBizBuilding(BizBuilding bizBuilding) {
-
-        Object exist = null;
-
-        int affectRow = 0;
-
-        synchronized (this) {
-            exist = bizBuildingMapper.selectByNumber(bizBuilding.getNumber());
-
-            if (Objects.isNull(exist)) {
-                //仅为了避免重复索引抛异常,就多查一次,贼浪费
-                affectRow = bizBuildingMapper.insert(bizBuilding);
-            }
-        }
-
-        if (Objects.nonNull(exist)) {
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑编号重复", bizBuilding.getId()));
-        }
-
-        return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的建筑,无法添加", bizBuilding.getId()))
-                : Result.success(bizBuilding);
-    }
-
-    @Override
-    public Result addBizBuildings(List<BizBuilding> list) {
+    public Result saveBizBuildings(List<BizBuilding> list) {
 
         int affectRow = bizBuildingMapper.batchReplace(list);
 
@@ -88,22 +68,13 @@ public class BuildingServiceImpl implements BuildingService {
         /*synchronized (this) {
             exist = bizBuildingMapper.isExistsDuplicateNumber(list);
             if (null == exist || exist.isEmpty()) {
-                affectRow = bizBuildingMapper.batchInsert(list);
+                affectRow = bizBuildingMapper.addShopWithPoint(list);
             }
         }*/
         /*if (null != exist && !exist.isEmpty())
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("业态列表中编号为{%s}的数据重复", exist));
         */
         return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "业态列表无法添加")
-                : Result.success(list);
-    }
-
-    @Override
-    public Result updateBizBuildings(List<BizBuilding> list) {
-
-        int affectRow = bizBuildingMapper.batchReplace(list);
-
-        return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "业态列表无法修改")
                 : Result.success(list);
     }
 }

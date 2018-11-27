@@ -6,7 +6,9 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizShopMapper;
+import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.PinyinUtils;
@@ -25,9 +27,12 @@ public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private PathConfig pathConfig;
-
+    @Resource
+    private MapEdgeMapper mapEdgeMapper;
     @Resource
     private BizShopMapper bizShopMapper;
+    @Resource
+    private BizBuildingMapper bizBuildingMapper;
 
     @Override
     public BizShopVo getBizShop(String bizShopId) {
@@ -237,13 +242,46 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Result deleteBizShop(String bizShopId) {
-
+        //删图片
         bizShopMapper.deleteShopPictures(bizShopId);
-
+        BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
+        //删商铺
+        String number = bizShop.getShopNumber();
         int affectRow = bizShopMapper.deleteByPrimaryKey(bizShopId);
+        //删building
+        BizBuilding building = bizBuildingMapper.selectByNumber(number);
+        bizBuildingMapper.deleteByNumber(number);
+        //删edges
+        MapEdgeKey pointKey = new MapEdgeKey();
+        Integer id = building.getId();
+        pointKey.setHead(id);
+        pointKey.setTail(id);
+        mapEdgeMapper.deleteByPartKey(pointKey);
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
+    }
+
+    @Override
+    public Result addShopWithPoint(BizShopVo vo) {
+        int i = 0;
+        BizBuilding building = null;
+        Result result = addBizShop(vo);
+        if (ResultEnum.SUCCESS.getCode().equals(result.getCode())) {
+            building = new BizBuilding();
+            building.setId(null);
+            building.setNumber(vo.getShopNumber());
+            building.setName(vo.getShopName());
+            building.setLayer(vo.getFloorId());
+            building.setType(vo.getBizFormatId());
+            building.setArea(vo.getArea());
+            building.setDx(vo.getDx());
+            building.setDy(vo.getDy());
+            i = bizBuildingMapper.insert(building);
+        }
+        return 0 == i ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("商铺[%s],无法添加", vo.getShopName()))
+                : Result.success(building);
     }
 }

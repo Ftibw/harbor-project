@@ -1,6 +1,5 @@
 package com.whxm.harbor.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
@@ -11,7 +10,6 @@ import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.service.ShopVisitService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
-import com.whxm.harbor.utils.JacksonUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +39,19 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
+    @ApiOperation(value = "添加商铺以及坐标信息")
+    @PostMapping(value = "/shopInfo")
+    public Result addShop(@RequestBody BizShopVo vo) {
+        Assert.notNull(vo, "添加的商铺数据不能为空");
+        String number = vo.getShopNumber();
+        List<ShopPicture> pictures = vo.getPictures();
+        Assert.notEmpty(pictures, "编号为{}的商铺图片集合不能为空", number);
+
+        Assert.notRepeat(pictures, "编号为" + number + "的商铺图片不能重复");
+
+        pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "编号为{}的商铺图片不能为空[params:{}]", number, item));
+        return shopService.addShopWithPoint(vo);
+    }
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
     @PostMapping(value = "/shops")
@@ -217,14 +228,7 @@ public class ShopController {
 
         BeanUtils.copyProperties(param.bizShop, shopVo);
 
-        List<Map<String, Object>> pictureList = param.pictureList;
-
-        String json = JacksonUtils.toJson(pictureList);
-
-        List<ShopPicture> pictures = JacksonUtils.readGenericTypeValue(json, new TypeReference<List<ShopPicture>>() {
-        });
-
-        //--------------------------------
+        List<ShopPicture> pictures = param.pictureList;
 
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
 
@@ -233,6 +237,7 @@ public class ShopController {
         pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空[params:{}]", item));
 
         shopVo.setPictures(pictures);
+        //--------------------------------
 
         return shopService.addBizShop(shopVo);
     }
@@ -254,5 +259,5 @@ class ShopParam {
 
     public BizShop bizShop;
 
-    public List<Map<String, Object>> pictureList;
+    public List<ShopPicture> pictureList;
 }

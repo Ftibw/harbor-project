@@ -2,14 +2,12 @@ package com.whxm.harbor.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.whxm.harbor.bean.BizMap;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizMapMapper;
+import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,8 @@ public class MapServiceImpl implements MapService {
 
     @Resource
     private BizMapMapper bizMapMapper;
+    @Resource
+    private MapEdgeMapper mapEdgeMapper;
 
     @Autowired
     private PathConfig pathConfig;
@@ -134,5 +134,35 @@ public class MapServiceImpl implements MapService {
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "地图数据列表,无法添加")
                 : Result.success(list);
+    }
+
+    //导航图边CRUD
+
+    @Override
+    public Result saveEdges(List<MapEdge> edges) {
+        int i = mapEdgeMapper.batchReplace(edges);
+        return 0 == i ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "边集合保存失败")
+                : Result.success(edges);
+    }
+
+    @Override
+    public Result delEdgeByPK(MapEdgeKey key) {
+        int i = mapEdgeMapper.deleteByPrimaryKey(key);
+        return 0 == i ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("起止点ID为%s的边,无法删除", key.getTail() + "," + key.getHead()))
+                : Result.success(ResultEnum.SUCCESS_DELETED);
+    }
+
+    @Override
+    public Result delEdgesByPartKey(MapEdgeKey key) {
+        int i = mapEdgeMapper.deleteByPartKey(key);
+        return 0 == i ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("点ID为%s吸附的边,无法删除", key))
+                : Result.success(ResultEnum.SUCCESS_DELETED);
+    }
+
+    @Override
+    public List<MapEdge> getAllEdges(Integer fid) {
+        return mapEdgeMapper.selectAll(fid);
     }
 }

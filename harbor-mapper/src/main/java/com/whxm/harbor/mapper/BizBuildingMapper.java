@@ -38,11 +38,7 @@ public interface BizBuildingMapper {
     @Select("select * from biz_building where number=#{number}")
     BizBuilding selectByNumber(@Param("number") String number);
 
-    int batchInsert(List<BizBuilding> list);
-
     int batchReplace(List<BizBuilding> list);
-
-    List<String> isExistsDuplicateNumber(List<BizBuilding> list);
 
     @Delete("delete from biz_building where number=#{number}")
     int deleteByNumber(String number);
