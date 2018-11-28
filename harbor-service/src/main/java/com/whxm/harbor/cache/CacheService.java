@@ -1,11 +1,12 @@
 package com.whxm.harbor.cache;
 
-import com.whxm.harbor.bean.BizFloor;
-import com.whxm.harbor.bean.BizFormat;
+import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.flag.MementoIF;
+import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizFloorMapper;
 import com.whxm.harbor.mapper.BizFormatMapper;
+import com.whxm.harbor.mapper.MapEdgeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -89,5 +90,20 @@ public class CacheService {
     public List<BizFloor> getFloorList() {
 
         return bizFloorMapper.getBizFloorList(null);
+    }
+
+    @Resource
+    private BizBuildingMapper bizBuildingMapper;
+    @Resource
+    private MapEdgeMapper mapEdgeMapper;
+
+    @Cacheable(cacheNames = "BizBuilding", keyGenerator = "cacheKeyGenerator")
+    public List<BizBuilding> getBuildingList(Integer fid) {
+        return bizBuildingMapper.getBuildingList(fid);
+    }
+
+    @Cacheable(cacheNames = "BizEdge", keyGenerator = "cacheKeyGenerator")
+    public List<MapEdge> getEdgesByFid(Integer fid) {
+        return mapEdgeMapper.selectAll(fid);
     }
 }

@@ -12,6 +12,7 @@ import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,8 +137,8 @@ public class MapServiceImpl implements MapService {
                 : Result.success(list);
     }
 
-    //导航图边CRUD
-
+    //导航图边集CRUD
+    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
     @Override
     public Result saveEdges(List<MapEdge> edges) {
         int i = mapEdgeMapper.batchReplace(edges);
@@ -145,6 +146,7 @@ public class MapServiceImpl implements MapService {
                 : Result.success(edges);
     }
 
+    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
     @Override
     public Result delEdgeByPK(MapEdgeKey key) {
         int i = mapEdgeMapper.deleteByPrimaryKey(key);
@@ -153,6 +155,7 @@ public class MapServiceImpl implements MapService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
+    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
     @Override
     public Result delEdgesByPartKey(MapEdgeKey key) {
         int i = mapEdgeMapper.deleteByPartKey(key);
@@ -162,7 +165,7 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    public List<MapEdge> getAllEdges(Integer fid) {
+    public List<MapEdge> getEdgesByFid(Integer fid) {
         return mapEdgeMapper.selectAll(fid);
     }
 }

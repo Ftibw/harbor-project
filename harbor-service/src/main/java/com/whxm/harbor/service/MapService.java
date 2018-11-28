@@ -72,5 +72,5 @@ public interface MapService {
 
     Result delEdgesByPartKey(MapEdgeKey key);//根据1点ID删除有关边
 
-    List<MapEdge> getAllEdges(Integer mapId);//获取所有边数据
+    List<MapEdge> getEdgesByFid(Integer mapId);//获取所有边数据
 }

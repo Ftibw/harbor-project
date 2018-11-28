@@ -10,6 +10,7 @@ import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.BuildingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,7 @@ public class BuildingServiceImpl implements BuildingService {
         return bizBuildingMapper.getBuildingList(floor);
     }
 
+    @CacheEvict(cacheNames = "BizBuilding", allEntries = true)
     @Override
     public Result deleteBizBuilding(Integer id) {
         MapEdgeKey key = new MapEdgeKey();
@@ -59,6 +61,7 @@ public class BuildingServiceImpl implements BuildingService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
+    @CacheEvict(cacheNames = "BizBuilding", allEntries = true)
     @Override
     public Result saveBizBuildings(List<BizBuilding> list) {
 

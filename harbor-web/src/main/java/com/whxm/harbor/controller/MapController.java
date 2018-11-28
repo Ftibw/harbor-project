@@ -2,6 +2,7 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
@@ -29,6 +30,29 @@ public class MapController {
 
     @Autowired
     private MapService mapService;
+    @Autowired
+    private CacheService cacheService;
+
+    /**
+     * 根据起点和终点寻找地图最短路径,
+     * 目前起点和终点只包含终端和非路径点的建筑
+     *
+     * @param startId 起点ID
+     * @param endId   终点ID
+     * @return 最短路径点集合
+     */
+    @ApiOperation("根据起止点ID寻找最短路线")
+    @GetMapping(value = "/path")
+    public Result findPath(Integer startId, Integer endId, Integer floorId) {
+        //从缓存,获取指定楼层的所有building
+        List<BizBuilding> buildings = cacheService.getBuildingList(floorId);
+        //从缓存,根据指定楼层ID获取边集
+        List<MapEdge> edges = cacheService.getEdgesByFid(floorId);
+        //根据边集和顶点寻找最短路径
+
+        //将路径点按起点--->终点的次序以数组返回前端
+        return Result.success();
+    }
 
     @ApiOperation("保存地图边关系")
     @PostMapping(value = "/edges")
@@ -58,7 +82,7 @@ public class MapController {
     @ApiOperation("获取全部边关系")
     @GetMapping(value = "/edges")
     public Result getAllEdges(Integer fid) {
-        return Result.success(mapService.getAllEdges(fid));
+        return Result.success(mapService.getEdgesByFid(fid));
     }
 
     @ApiOperation("给指定地图设置寻路路点")
