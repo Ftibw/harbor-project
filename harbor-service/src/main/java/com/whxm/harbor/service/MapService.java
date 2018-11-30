@@ -56,14 +56,6 @@ public interface MapService {
      */
     Result addBizMap(BizMap bizMap);
 
-    /**
-     * 批量新增地图数据
-     *
-     * @param list 新地图数据列表
-     * @return 添加操作结果
-     */
-    Result addBizMaps(List<BizMap> list);
-
     //====================================================================
 
     Result saveEdges(List<MapEdge> edges);//添加导航图中边关系

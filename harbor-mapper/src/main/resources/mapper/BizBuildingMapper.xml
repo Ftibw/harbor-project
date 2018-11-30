@@ -138,6 +138,9 @@
             <if test="floor!=null">
                 and layer=#{floor}
             </if>
+            <if test="type!=null">
+                and type=#{type}
+            </if>
         </where>
     </select>
 

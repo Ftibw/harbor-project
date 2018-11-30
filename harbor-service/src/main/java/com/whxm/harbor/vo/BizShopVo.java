@@ -14,6 +14,8 @@ public class BizShopVo extends BizShop {
 
     private String dy;
 
+    private Integer buildingType;
+
     private List<ShopPicture> pictures;
 
     public List<ShopPicture> getPictures() {
@@ -46,6 +48,14 @@ public class BizShopVo extends BizShop {
 
     public void setDy(String dy) {
         this.dy = dy;
+    }
+
+    public Integer getBuildingType() {
+        return buildingType;
+    }
+
+    public void setBuildingType(Integer buildingType) {
+        this.buildingType = buildingType;
     }
 }
 

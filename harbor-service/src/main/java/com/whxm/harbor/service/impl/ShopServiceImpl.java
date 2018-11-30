@@ -274,7 +274,7 @@ public class ShopServiceImpl implements ShopService {
             building.setNumber(vo.getShopNumber());
             building.setName(vo.getShopName());
             building.setLayer(vo.getFloorId());
-            building.setType(vo.getBizFormatId());
+            building.setType(vo.getBuildingType());
             building.setArea(vo.getArea());
             building.setDx(vo.getDx());
             building.setDy(vo.getDy());

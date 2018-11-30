@@ -6,6 +6,9 @@ import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
+import com.whxm.harbor.graph.PathFinder;
+import com.whxm.harbor.graph.Weight;
+import com.whxm.harbor.graph.WeightImpl;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
@@ -18,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(description = "地图服务")
 @RestController
@@ -30,6 +36,8 @@ public class MapController {
 
     @Autowired
     private MapService mapService;
+
+    //###########################################  地图导航  ############################################
     @Autowired
     private CacheService cacheService;
 
@@ -43,22 +51,65 @@ public class MapController {
      */
     @ApiOperation("根据起止点ID寻找最短路线")
     @GetMapping(value = "/path")
-    public Result findPath(Integer startId, Integer endId, Integer floorId) {
+    public Result findPath(Integer startId, Integer endId) {
         //从缓存,获取指定楼层的所有building
-        List<BizBuilding> buildings = cacheService.getBuildingList(floorId);
+        List<BizBuilding> buildings = cacheService.getBuildingList();
         //从缓存,根据指定楼层ID获取边集
-        List<MapEdge> edges = cacheService.getEdgesByFid(floorId);
-        //根据边集和顶点寻找最短路径
-
+        List<MapEdge> edges = cacheService.getEdgesByFid();
+        //根据顶点集合和邻接出边表寻找最短路径
+        Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
+        Map<Integer, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表
+        for (BizBuilding b : buildings) {
+            vertices.put(b.getId(), b);
+        }
+        for (MapEdge edge : edges) {
+            buildAdjacencyTable(adjacencyTable, edge);
+        }
+        //TODO find path using vertices and adjacencyTable by PathFinder
+        PathFinder<Integer, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
+                vertices, adjacencyTable, startId, endId, WeightImpl.newInstance(0.0, 0.0),
+                (point, end) -> {
+                    Double h = Math.abs(Double.parseDouble(end.getDx()) - Double.parseDouble(point.getDx()))
+                            + Math.abs(Double.parseDouble(end.getDy()) - Double.parseDouble(point.getDy()));
+                    return WeightImpl.newInstance(h, 0.0);
+                }
+        );
+        Map<String, Object> pathInfo = pathFinder.findPath(MapEdgeKey::getHead,
+                (edge) -> WeightImpl.newInstance(edge.getDistance(), edge.getTime()));
         //将路径点按起点--->终点的次序以数组返回前端
-        return Result.success();
+        return null == pathInfo ? Result.failure(ResultEnum.RESULT_DATA_NONE, "路径不存在") : Result.success(pathInfo);
     }
+
+    /**
+     * 根据图顶点集合与边集合构造图的邻接出边表
+     *
+     * @param adjacencyTable 邻接出边表
+     * @param edge           边
+     */
+    private void buildAdjacencyTable(Map<Integer, List<MapEdge>> adjacencyTable, MapEdge edge) {
+        Integer tailId = edge.getTail();
+        List<MapEdge> adjacencyList = adjacencyTable.get(tailId);
+        if (null != adjacencyList) {
+            adjacencyList.add(edge);
+        } else {
+            //顶点的出度默认值设为4(上下左右)
+            List<MapEdge> newAdjacencyList = new ArrayList<>(4);
+            adjacencyTable.put(tailId, newAdjacencyList);
+            newAdjacencyList.add(edge);
+        }
+    }
+
+    //#################################################################################################
 
     @ApiOperation("保存地图边关系")
     @PostMapping(value = "/edges")
     public Result saveMapEdges(@RequestBody List<MapEdge> edges) {
 
         Assert.notNull(edges, "边数据不能为空");
+        for (MapEdge e : edges) {
+            Assert.notNull(e.getTail(), "边起点ID不能为空");
+            Assert.notNull(e.getHead(), "边终点ID不能为空");
+        }
         return mapService.saveEdges(edges);
     }
 
@@ -85,11 +136,7 @@ public class MapController {
         return Result.success(mapService.getEdgesByFid(fid));
     }
 
-    @ApiOperation("给指定地图设置寻路路点")
-    @GetMapping("/path")
-    public Result setPathPoints(BizMap map) {
-        return null;
-    }
+    //#################################################################################################
 
     @ApiOperation("终端获取全部地图数据")
     @GetMapping("/maps")

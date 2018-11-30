@@ -16,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /**
  * swagger2的配置类
  */
-@Profile("test")
+@Profile(value = {"test", "local"})
 @Configuration
 @EnableSwagger2
 public class Swagger2 {

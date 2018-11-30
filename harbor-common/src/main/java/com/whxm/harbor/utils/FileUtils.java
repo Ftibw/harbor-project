@@ -191,10 +191,11 @@ public class FileUtils {
             }
 
             int imgWidth = bufferedImg.getWidth();
-
             int imgHeight = bufferedImg.getHeight();
-
-            return imgWidth > imgHeight ? HORIZONTAL_SCREEN_PICTURE : VERTICAL_SCREEN_PICTURE;
+            Map<String, Integer> resolution = new HashMap<>();
+            resolution.put("width", imgWidth);
+            resolution.put("height", imgHeight);
+            return JacksonUtils.toJson(resolution);
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);

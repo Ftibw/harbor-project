@@ -101,7 +101,7 @@
         set distance    = #{distance,jdbcType=DOUBLE},
             time        = #{time,jdbcType=DOUBLE},
             is_directed = #{isDirected,jdbcType=INTEGER},
-            floor_id      = #{floorId,jdbcType=INTEGER}
+            floor_id    = #{floorId,jdbcType=INTEGER}
         where tail = #{tail,jdbcType=INTEGER}
           and head = #{head,jdbcType=INTEGER}
     </update>
@@ -126,12 +126,12 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{tail,jdbcType=INTEGER},
-            #{head,jdbcType=INTEGER},
-            #{distance,jdbcType=DOUBLE},
-            #{time,jdbcType=DOUBLE},
-            #{isDirected,jdbcType=INTEGER},
-            #{floorId,jdbcType=INTEGER})
+            (#{item.tail,jdbcType=INTEGER},
+            #{item.head,jdbcType=INTEGER},
+            #{item.distance,jdbcType=DOUBLE},
+            #{item.time,jdbcType=DOUBLE},
+            #{item.isDirected,jdbcType=INTEGER},
+            #{item.floorId,jdbcType=INTEGER})
         </foreach>
     </insert>
 </mapper>

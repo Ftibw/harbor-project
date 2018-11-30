@@ -97,13 +97,13 @@ public class CacheService {
     @Resource
     private MapEdgeMapper mapEdgeMapper;
 
-    @Cacheable(cacheNames = "BizBuilding", keyGenerator = "cacheKeyGenerator")
-    public List<BizBuilding> getBuildingList(Integer fid) {
-        return bizBuildingMapper.getBuildingList(fid);
+    @Cacheable(cacheNames = "bizBuilding", keyGenerator = "cacheKeyGenerator")
+    public List<BizBuilding> getBuildingList() {
+        return bizBuildingMapper.getBuildingList(null, null);
     }
 
-    @Cacheable(cacheNames = "BizEdge", keyGenerator = "cacheKeyGenerator")
-    public List<MapEdge> getEdgesByFid(Integer fid) {
-        return mapEdgeMapper.selectAll(fid);
+    @Cacheable(cacheNames = "bizEdge", keyGenerator = "cacheKeyGenerator")
+    public List<MapEdge> getEdgesByFid() {
+        return mapEdgeMapper.selectAll(null);
     }
 }

@@ -6,58 +6,39 @@
         <result column="map_name" property="mapName" jdbcType="VARCHAR"/>
         <result column="map_img_path" property="mapImgPath" jdbcType="VARCHAR"/>
         <result column="floor_id" property="floorId" jdbcType="INTEGER"/>
+
+        <result column="height" property="height" jdbcType="INTEGER"/>
+        <result column="width" property="width" jdbcType="INTEGER"/>
+        <result column="origin_x" property="originX" jdbcType="DOUBLE"/>
+        <result column="origin_y" property="originY" jdbcType="DOUBLE"/>
+        <result column="scale" property="scale" jdbcType="DOUBLE"/>
+        <result column="rotate" property="rotate" jdbcType="DOUBLE"/>
     </resultMap>
     <sql id="Base_Column_List">
         map_id, map_name, map_img_path, floor_id
+        , height, width, origin_x, origin_y, scale, rotate
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from biz_map
-        where map_id = #{mapId,jdbcType=INTEGER}
-    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        DELETE FROM biz_map
+        DELETE
+        FROM biz_map
         WHERE map_id = #{mapId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" useGeneratedKeys="true" keyProperty="mapId"
             parameterType="com.whxm.harbor.bean.BizMap">
-        INSERT INTO biz_map (map_id, map_name, map_img_path,
-                             floor_id)
-        VALUES (#{mapId,jdbcType=INTEGER}, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},
-                #{floorId,jdbcType=INTEGER})
+        INSERT INTO biz_map (<include refid="Base_Column_List"/>)
+        VALUES (#{mapId,jdbcType=INTEGER},
+        #{mapName,jdbcType=VARCHAR},
+        #{mapImgPath,jdbcType=VARCHAR},
+        #{floorId,jdbcType=INTEGER},
+        #{height,jdbcType=INTEGER},
+        #{width,jdbcType=INTEGER},
+        #{originX,jdbcType=DOUBLE},
+        #{originY,jdbcType=DOUBLE},
+        #{scale,jdbcType=DOUBLE},
+        #{rotate,jdbcType=DOUBLE})
     </insert>
-    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizMap">
-        insert into biz_map
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="mapId != null">
-                map_id,
-            </if>
-            <if test="mapName != null">
-                map_name,
-            </if>
-            <if test="mapImgPath != null">
-                map_img_path,
-            </if>
-            <if test="floorId != null">
-                floor_id,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="mapId != null">
-                #{mapId,jdbcType=INTEGER},
-            </if>
-            <if test="mapName != null">
-                #{mapName,jdbcType=VARCHAR},
-            </if>
-            <if test="mapImgPath != null">
-                #{mapImgPath,jdbcType=VARCHAR},
-            </if>
-            <if test="floorId != null">
-                #{floorId,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizMap">
         update biz_map
         <set>
@@ -67,18 +48,16 @@
             <if test="mapImgPath != null">
                 map_img_path = #{mapImgPath,jdbcType=VARCHAR},
             </if>
-            <if test="floorId != null">
-                floor_id = #{floorId,jdbcType=INTEGER},
-            </if>
+            <if test="floorId != null">floor_id = #{floorId,jdbcType=INTEGER},</if>
+
+            <if test="height != null">height = #{height,jdbcType=INTEGER},</if>
+            <if test="width != null">width = #{width,jdbcType=INTEGER},</if>
+            <if test="originX != null">origin_x = #{originX,jdbcType=DOUBLE},</if>
+            <if test="originY != null">origin_y = #{originY,jdbcType=DOUBLE},</if>
+            <if test="scale != null">scale = #{scale,jdbcType=DOUBLE},</if>
+            <if test="rotate != null">rotate = #{rotate,jdbcType=DOUBLE},</if>
         </set>
         where map_id = #{mapId,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizMap">
-        UPDATE biz_map
-        SET map_name     = #{mapName,jdbcType=VARCHAR},
-            map_img_path = #{mapImgPath,jdbcType=VARCHAR},
-            floor_id     = #{floorId,jdbcType=INTEGER}
-        WHERE map_id = #{mapId,jdbcType=INTEGER}
     </update>
 
     <!--以下是自定义部分-->
@@ -93,15 +72,6 @@
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizMap" extends="BaseResultMap">
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
     </resultMap>
-
-    <insert id="batchInsert">
-        insert into biz_map (<include refid="Base_Column_List"/>)
-        values
-        <foreach collection="list" item="item" separator=",">
-            (null, #{mapName,jdbcType=VARCHAR}, #{mapImgPath,jdbcType=VARCHAR},
-            #{floorId,jdbcType=INTEGER})
-        </foreach>
-    </insert>
 
     <select id="selectMapByFloorId" resultMap="ExtensionResultMap">
         select

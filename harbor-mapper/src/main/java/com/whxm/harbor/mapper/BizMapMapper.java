@@ -10,17 +10,9 @@ public interface BizMapMapper {
 
     int insert(BizMap record);
 
-    int insertSelective(BizMap record);
-
-    BizMap selectByPrimaryKey(Integer mapId);
-
     int updateByPrimaryKeySelective(BizMap record);
 
-    int updateByPrimaryKey(BizMap record);
-
     List<BizMap> getBizMapList(BizMap condition);
-
-    int batchInsert(List<BizMap> list);
 
     BizMap selectMapByFloorId(Integer floorId);
 }

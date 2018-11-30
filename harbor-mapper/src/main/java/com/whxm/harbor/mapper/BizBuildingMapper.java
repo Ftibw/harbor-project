@@ -32,7 +32,7 @@ public interface BizBuildingMapper {
     })
     @Select("select * from biz_building")
     * */
-    List<BizBuilding> getBuildingList(@Param("floor") Integer floor);
+    List<BizBuilding> getBuildingList(@Param("floor") Integer floor, @Param("type") Integer type);
 
     @ResultMap("BaseResultMap")
     @Select("select * from biz_building where number=#{number}")

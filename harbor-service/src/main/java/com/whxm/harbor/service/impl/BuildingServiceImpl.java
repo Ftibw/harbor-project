@@ -39,12 +39,12 @@ public class BuildingServiceImpl implements BuildingService {
     }
 
     @Override
-    public List<BizBuilding> getBizBuildingList(Integer floor) {
+    public List<BizBuilding> getBizBuildingList(Integer floor, Integer type) {
 
-        return bizBuildingMapper.getBuildingList(floor);
+        return bizBuildingMapper.getBuildingList(floor,type);
     }
 
-    @CacheEvict(cacheNames = "BizBuilding", allEntries = true)
+    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
     @Override
     public Result deleteBizBuilding(Integer id) {
         MapEdgeKey key = new MapEdgeKey();
@@ -61,7 +61,7 @@ public class BuildingServiceImpl implements BuildingService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
-    @CacheEvict(cacheNames = "BizBuilding", allEntries = true)
+    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
     @Override
     public Result saveBizBuildings(List<BizBuilding> list) {
 

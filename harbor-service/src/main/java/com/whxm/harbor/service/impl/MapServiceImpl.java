@@ -125,20 +125,8 @@ public class MapServiceImpl implements MapService {
                 : Result.success(bizMap);
     }
 
-    @Override
-    public Result addBizMaps(List<BizMap> list) {
-
-        int affectRow = bizMapMapper.batchInsert(list);
-
-        //楼层ID唯一判断
-
-        return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "地图数据列表,无法添加")
-                : Result.success(list);
-    }
-
     //导航图边集CRUD
-    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
+    @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
     public Result saveEdges(List<MapEdge> edges) {
         int i = mapEdgeMapper.batchReplace(edges);
@@ -146,7 +134,7 @@ public class MapServiceImpl implements MapService {
                 : Result.success(edges);
     }
 
-    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
+    @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
     public Result delEdgeByPK(MapEdgeKey key) {
         int i = mapEdgeMapper.deleteByPrimaryKey(key);
@@ -155,7 +143,7 @@ public class MapServiceImpl implements MapService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
-    @CacheEvict(cacheNames = "BizEdge", allEntries = true)
+    @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
     public Result delEdgesByPartKey(MapEdgeKey key) {
         int i = mapEdgeMapper.deleteByPartKey(key);

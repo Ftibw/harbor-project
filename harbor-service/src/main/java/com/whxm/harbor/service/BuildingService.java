@@ -22,8 +22,9 @@ public interface BuildingService {
      *
      * @param floor 楼层ID
      * @return 全部建筑数据
+     * @Param type 建筑类型
      */
-    List<BizBuilding> getBizBuildingList(Integer floor);
+    List<BizBuilding> getBizBuildingList(Integer floor, Integer type);
 
     /**
      * 根据ID删除建筑
