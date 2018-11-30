@@ -6,7 +6,6 @@ import com.whxm.harbor.annotation.VisitLogger;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.service.TerminalVisitService;
 import com.whxm.harbor.utils.Assert;

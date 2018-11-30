@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
-import com.whxm.harbor.bean.User;
-import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.handler.GlobalExceptionHandler;
 import com.whxm.harbor.utils.IPv4Utils;
 import com.whxm.harbor.utils.JacksonUtils;

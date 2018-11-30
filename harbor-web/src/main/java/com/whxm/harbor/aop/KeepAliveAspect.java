@@ -10,11 +10,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,23 +23,11 @@ public class KeepAliveAspect {
 
     private final Logger logger = LoggerFactory.getLogger(KeepAliveAspect.class);
 
-    private final RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
-    private final TerminalService terminalService;
+    private TerminalService terminalService;
 
-    @Autowired
-    public KeepAliveAspect(TerminalService terminalService, RedisTemplate<Object, Object> redisTemplate) {
-
-        //构造函数中配置全局redisTemplate序列化方式
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
-        //反序列化的Map将全都是LinkedHashMap<Object,Object>
-        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<Object>(Object.class));
-
-        //------------------------------------------------------------------------------------
+    public void initTerminalStatus(TerminalService terminalService, RedisTemplate<Object, Object> redisTemplate) {
 
         this.terminalService = terminalService;
 
