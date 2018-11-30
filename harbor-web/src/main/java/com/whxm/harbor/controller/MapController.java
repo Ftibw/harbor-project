@@ -56,7 +56,7 @@ public class MapController {
     public Result findPath(Integer startId, Integer endId) {
         long start = System.currentTimeMillis();
         Assert.notNull(startId, "起点ID不能为空");
-        Assert.notNull(startId, "终点ID不能为空");
+        Assert.notNull(endId, "终点ID不能为空");
         if (startId.equals(endId)) {
             return Result.failure(ResultEnum.DATA_IS_WRONG, "起点与终点不能相同");
         }
