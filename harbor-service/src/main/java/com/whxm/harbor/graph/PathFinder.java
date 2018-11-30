@@ -100,9 +100,6 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
                       ID endId,
                       W zeroWeight,
                       BiFunction<V, V, W> hGetter) {
-        if (startId.equals(endId)) {
-            throw new DataConflictException("起点与终点不能相同");
-        }
         this.vertices = vertices;
         this.adjacencyTable = adjacencyTable;
         this.endId = endId;

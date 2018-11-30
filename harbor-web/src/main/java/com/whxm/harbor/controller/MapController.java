@@ -5,6 +5,7 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataConflictException;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.graph.PathFinder;
@@ -53,6 +54,12 @@ public class MapController {
     @ApiOperation("根据起止点ID寻找最短路线")
     @GetMapping(value = "/path")
     public Result findPath(Integer startId, Integer endId) {
+        long start = System.currentTimeMillis();
+        Assert.notNull(startId, "起点ID不能为空");
+        Assert.notNull(startId, "终点ID不能为空");
+        if (startId.equals(endId)) {
+            return Result.failure(ResultEnum.DATA_IS_WRONG, "起点与终点不能相同");
+        }
         //从缓存,获取指定楼层的所有building
         List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(cacheService.listBuildings(), new TypeReference<List<BizBuilding>>() {
         });
@@ -80,10 +87,13 @@ public class MapController {
                     return WeightImpl.newInstance(h, 0.0);
                 }
         );
-        Map<String, Object> pathInfo = pathFinder.findPath(MapEdgeKey::getHead,
+        Map<String, Object> info = pathFinder.findPath(MapEdgeKey::getHead,
                 (edge) -> WeightImpl.newInstance(edge.getDistance(), edge.getTime()));
+        if (null == info)
+            return Result.failure(ResultEnum.RESULT_DATA_NONE, "路径不存在");
         //将路径点按起点--->终点的次序以数组返回前端
-        return null == pathInfo ? Result.failure(ResultEnum.RESULT_DATA_NONE, "路径不存在") : Result.success(pathInfo);
+        info.put("latency(ms)", System.currentTimeMillis() - start);
+        return Result.success(info);
     }
 
     /**
