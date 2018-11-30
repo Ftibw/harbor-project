@@ -41,15 +41,11 @@ public class BuildingController {
         return Result.success(list);
     }
 
-    @ApiOperation("批量保存建筑")
+    @ApiOperation("保存一个建筑")
     @PostMapping("/oneBuilding")
     public Result addOneBizBuilding(@RequestBody BizBuilding building) {
         Assert.notNull(building, "建筑数据不能为空");
         Assert.isNull(building.getId(), "建筑ID必须为空");
-        String number = building.getNumber();
-        if (null == number || "".equals(number)) {
-            building.setNumber(building.getDx() + "_" + building.getDy());
-        }
         return buildingService.saveBizBuildings(Collections.singletonList(building));
     }
 
@@ -61,13 +57,7 @@ public class BuildingController {
 
         Assert.notRepeat(list, "建筑数据不能重复");
 
-        list.forEach(item -> {
-            Assert.isNull(item.getId(), "建筑ID必须为空");
-            String number = item.getNumber();
-            if (null == number || "".equals(number)) {
-                item.setNumber(item.getDx() + "_" + item.getDy());
-            }
-        });
+        list.forEach(item -> Assert.isNull(item.getId(), "建筑ID必须为空"));
 
         return buildingService.saveBizBuildings(list);
     }

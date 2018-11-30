@@ -1,5 +1,6 @@
 package com.whxm.harbor.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.cache.CacheService;
@@ -7,11 +8,11 @@ import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.graph.PathFinder;
-import com.whxm.harbor.graph.Weight;
 import com.whxm.harbor.graph.WeightImpl;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
+import com.whxm.harbor.utils.JacksonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,9 +54,14 @@ public class MapController {
     @GetMapping(value = "/path")
     public Result findPath(Integer startId, Integer endId) {
         //从缓存,获取指定楼层的所有building
-        List<BizBuilding> buildings = cacheService.getBuildingList();
+        List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(cacheService.listBuildings(), new TypeReference<List<BizBuilding>>() {
+        });
         //从缓存,根据指定楼层ID获取边集
-        List<MapEdge> edges = cacheService.getEdgesByFid();
+        List<MapEdge> edges = JacksonUtils.readGenericTypeValue(cacheService.listEdges(), new TypeReference<List<MapEdge>>() {
+        });
+        if (null == buildings || null == edges) {
+            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR.setMessage("从缓存数据读取失败"));
+        }
         //根据顶点集合和邻接出边表寻找最短路径
         Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
         Map<Integer, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表

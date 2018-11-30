@@ -7,7 +7,7 @@ package com.whxm.harbor.graph;
  */
 public class WeightImpl implements Weight<WeightImpl>, Cloneable {
 
-    private static WeightImpl prototype = new WeightImpl();
+    private static final WeightImpl prototype = new WeightImpl();
 
     //private Double ratio;//used for COMPARE_BY_DISTANCE_AND_TIME,调控时间/距离的计算占比
 

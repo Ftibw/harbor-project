@@ -1,5 +1,7 @@
 package com.whxm.harbor.graph;
 
+import com.whxm.harbor.exception.DataConflictException;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -8,6 +10,7 @@ import java.util.function.Function;
  * @param <ID> 顶点ID
  * @param <V>  顶点对象:vertex
  * @param <E>  边对象:edge
+ * @param <W>  边权单位
  * @author : Ftibw
  * @date : 2018/11/29 13:44
  */
@@ -25,7 +28,7 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
 
 //  private ID startId;
     /**
-     * 终点
+     * 终点ID
      */
     private ID endId;
     /**
@@ -93,17 +96,19 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
      */
     public PathFinder(Map<ID, V> vertices,
                       Map<ID, List<E>> adjacencyTable,
-                      ID startId, ID endId, W zeroWeight,
+                      ID startId,
+                      ID endId,
+                      W zeroWeight,
                       BiFunction<V, V, W> hGetter) {
         if (startId.equals(endId)) {
-            throw new RuntimeException("起点与终点不能相同");
+            throw new DataConflictException("起点与终点不能相同");
         }
         this.vertices = vertices;
         this.adjacencyTable = adjacencyTable;
         this.endId = endId;
         this.getterOfH = hGetter;
         Wrapper wrappedStart = wrapPoint(startId, zeroWeight);
-        wrappedStart.previous = prototype;
+        wrappedStart.previous = prototype;//prototype仅做占位用
         this.openList.offer(wrappedStart);
     }
 
@@ -133,13 +138,14 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
                                         Function<E, W> edgeWeightGetter) {
         Map<ID, Wrapper> wrapperTable = this.wrapperTable;
         PriorityQueue<Wrapper> openList = this.openList;
+        ID endId = this.endId;
         do {
             //取出f最小的点并出列
             Wrapper current = openList.poll();
             if (null == current)
                 break;
             current.closed = Boolean.TRUE;
-            if (current.pointId.equals(this.endId))
+            if (current.pointId.equals(endId))
                 break;
             List<E> adjacencyEdges = this.adjacencyTable.get(current.pointId);
             if (null == adjacencyEdges)
@@ -159,7 +165,7 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
                 }
             }
         } while (openList.size() > 0);
-        Wrapper wrappedEnd = wrapperTable.get(this.endId);
+        Wrapper wrappedEnd = wrapperTable.get(endId);
         if (null == wrappedEnd) return null;
         Map<String, Object> ret = new HashMap<>();
         ret.put(BEELINE_WEIGHT, wrappedEnd.f);

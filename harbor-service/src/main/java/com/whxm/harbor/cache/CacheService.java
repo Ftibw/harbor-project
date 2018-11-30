@@ -7,6 +7,7 @@ import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizFloorMapper;
 import com.whxm.harbor.mapper.BizFormatMapper;
 import com.whxm.harbor.mapper.MapEdgeMapper;
+import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -98,12 +99,12 @@ public class CacheService {
     private MapEdgeMapper mapEdgeMapper;
 
     @Cacheable(cacheNames = "bizBuilding", keyGenerator = "cacheKeyGenerator")
-    public List<BizBuilding> getBuildingList() {
-        return bizBuildingMapper.getBuildingList(null, null);
+    public String listBuildings() {
+        return JacksonUtils.toJson(bizBuildingMapper.getBuildingList(null, null));
     }
 
     @Cacheable(cacheNames = "bizEdge", keyGenerator = "cacheKeyGenerator")
-    public List<MapEdge> getEdgesByFid() {
-        return mapEdgeMapper.selectAll(null);
+    public String listEdges() {
+        return JacksonUtils.toJson(mapEdgeMapper.selectAll(null));
     }
 }

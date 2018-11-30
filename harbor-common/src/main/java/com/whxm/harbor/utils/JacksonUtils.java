@@ -1,5 +1,6 @@
 package com.whxm.harbor.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,7 +13,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class JacksonUtils {
 
-    public static ObjectMapper objectMapper;
+    private static ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+
+    private JacksonUtils() {
+    }
 
     /**
      * 使用泛型方法，把json字符串转换为相应的JavaBean对象。
@@ -25,9 +34,6 @@ public final class JacksonUtils {
      * @return
      */
     public static <T> T readValue(String jsonStr, Class<T> valueType) {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-        }
 
         try {
             return objectMapper.readValue(jsonStr, valueType);
@@ -46,10 +52,6 @@ public final class JacksonUtils {
      * @return value
      */
     public static <T> T readGenericTypeValue(String jsonStr, TypeReference<T> valueTypeRef) {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-        }
-
         try {
             return objectMapper.readValue(jsonStr, valueTypeRef);
         } catch (Exception e) {
@@ -66,10 +68,6 @@ public final class JacksonUtils {
      * @return
      */
     public static String toJson(Object object) {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-        }
-
         try {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e) {
@@ -77,5 +75,14 @@ public final class JacksonUtils {
         }
 
         return null;
+    }
+
+    public static void excludeNull(boolean toggle) {
+        if (null != objectMapper) {
+            if (toggle)
+                objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            else
+                objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+        }
     }
 }
