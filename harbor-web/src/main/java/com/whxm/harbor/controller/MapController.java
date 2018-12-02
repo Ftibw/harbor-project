@@ -124,6 +124,10 @@ public class MapController {
         for (MapEdge e : edges) {
             Assert.notNull(e.getTail(), "边起点ID不能为空");
             Assert.notNull(e.getHead(), "边终点ID不能为空");
+            if (null == e.getDistance())
+                e.setDistance(Double.MAX_VALUE);
+            if (null == e.getTime())
+                e.setDistance(Double.MAX_VALUE);
         }
         return mapService.saveEdges(edges);
     }
