@@ -1,6 +1,5 @@
 package com.whxm.harbor.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.ShopPicture;
 
