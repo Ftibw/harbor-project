@@ -133,8 +133,9 @@ public class MapController {
     }
 
     @ApiOperation("删除地图边关系")
-    @DeleteMapping(value = "/edges")
-    public Result delEdges(List<MapEdgeKey> keys) {
+    @PostMapping(value = "/delEdges")
+    public Result delEdges(@RequestBody List<MapEdgeKey> keys) {
+        Assert.notEmpty(keys, "边不能为空");
         for (MapEdgeKey key : keys) {
             Integer tail = key.getTail();
             Integer head = key.getHead();
