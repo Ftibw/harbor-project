@@ -134,19 +134,19 @@ public class MapController {
 
     @ApiOperation("删除地图边关系")
     @DeleteMapping(value = "/edges")
-    public Result delEdges(MapEdgeKey key) {
-        Result ret;
-        Integer tail = key.getTail();
-        Integer head = key.getHead();
-        if (null != tail && null != head) {
-            if (tail.equals(head)) {
-                ret = mapService.delEdgesByPartKey(key);
-            } else {
-                ret = mapService.delEdgeByPK(key);
+    public Result delEdges(List<MapEdgeKey> keys) {
+        for (MapEdgeKey key : keys) {
+            Integer tail = key.getTail();
+            Integer head = key.getHead();
+            if (null != tail && null != head) {
+                if (tail.equals(head)) {
+                    mapService.delEdgesByPartKey(key);
+                } else {
+                    mapService.delEdgeByPK(key);
+                }
             }
-        } else
-            ret = Result.failure(ResultEnum.PARAM_IS_BLANK, "ID不能为空");
-        return ret;
+        }
+        return Result.success();
     }
 
     @ApiOperation("获取全部边关系")
