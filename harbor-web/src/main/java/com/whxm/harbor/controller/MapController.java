@@ -81,8 +81,8 @@ public class MapController {
         PathFinder<Integer, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
                 vertices, adjacencyTable, startId, endId, WeightImpl.newInstance(0.0, 0.0),
                 (point, end) -> {
-                    Double h = Math.abs(Double.parseDouble(end.getDx()) - Double.parseDouble(point.getDx()))
-                            + Math.abs(Double.parseDouble(end.getDy()) - Double.parseDouble(point.getDy()));
+                    Double h = Math.abs(end.getDx() - point.getDx())
+                            + Math.abs(end.getDy() - point.getDy());
                     return WeightImpl.newInstance(h, 0.0);
                 }
         );

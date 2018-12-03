@@ -1,6 +1,7 @@
 package com.whxm.harbor.bean;
 
 public class BizBuilding {
+
     private Integer id;
 
     private String number;
@@ -13,9 +14,9 @@ public class BizBuilding {
 
     private String area;
 
-    private String dx;
+    private Double dx;
 
-    private String dy;
+    private Double dy;
 
     public Integer getId() {
         return id;
@@ -65,19 +66,19 @@ public class BizBuilding {
         this.area = area == null ? null : area.trim();
     }
 
-    public String getDx() {
+    public Double getDx() {
         return dx;
     }
 
-    public void setDx(String dx) {
-        this.dx = dx == null ? null : dx.trim();
+    public void setDx(Double dx) {
+        this.dx = dx;
     }
 
-    public String getDy() {
+    public Double getDy() {
         return dy;
     }
 
-    public void setDy(String dy) {
-        this.dy = dy == null ? null : dy.trim();
+    public void setDy(Double dy) {
+        this.dy = dy;
     }
 }

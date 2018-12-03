@@ -10,9 +10,9 @@ public class BizShopVo extends BizShop {
 
     private String area;
 
-    private String dx;
+    private Double dx;
 
-    private String dy;
+    private Double dy;
 
     private Integer buildingType;
 
@@ -34,19 +34,19 @@ public class BizShopVo extends BizShop {
         this.area = JacksonUtils.toJson(area);
     }
 
-    public String getDx() {
+    public Double getDx() {
         return dx;
     }
 
-    public void setDx(String dx) {
+    public void setDx(Double dx) {
         this.dx = dx;
     }
 
-    public String getDy() {
+    public Double getDy() {
         return dy;
     }
 
-    public void setDy(String dy) {
+    public void setDy(Double dy) {
         this.dy = dy;
     }
 

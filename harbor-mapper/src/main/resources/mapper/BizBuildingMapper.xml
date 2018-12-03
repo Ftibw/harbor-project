@@ -8,8 +8,8 @@
         <result column="layer" property="layer" jdbcType="INTEGER"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="area" property="area" jdbcType="CHAR"/>
-        <result column="dx" property="dx" jdbcType="VARCHAR"/>
-        <result column="dy" property="dy" jdbcType="VARCHAR"/>
+        <result column="dx" property="dx" jdbcType="DOUBLE"/>
+        <result column="dy" property="dy" jdbcType="DOUBLE"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, number, name, layer, type, area, dx, dy
@@ -33,8 +33,8 @@
                 #{layer,jdbcType=INTEGER},
                 #{type,jdbcType=INTEGER},
                 #{area,jdbcType=CHAR},
-                #{dx,jdbcType=VARCHAR},
-                #{dy,jdbcType=VARCHAR})
+                #{dx,jdbcType=DOUBLE},
+                #{dy,jdbcType=DOUBLE})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizBuilding">
         insert into biz_building
@@ -84,10 +84,10 @@
                 #{area,jdbcType=CHAR},
             </if>
             <if test="dx != null">
-                #{dx,jdbcType=VARCHAR},
+                #{dx,jdbcType=DOUBLE},
             </if>
             <if test="dy != null">
-                #{dy,jdbcType=VARCHAR},
+                #{dy,jdbcType=DOUBLE},
             </if>
         </trim>
     </insert>
@@ -110,10 +110,10 @@
                 area = #{area,jdbcType=CHAR},
             </if>
             <if test="dx != null">
-                dx = #{dx,jdbcType=VARCHAR},
+                dx = #{dx,jdbcType=DOUBLE},
             </if>
             <if test="dy != null">
-                dy = #{dy,jdbcType=VARCHAR},
+                dy = #{dy,jdbcType=DOUBLE},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -125,8 +125,8 @@
             layer  = #{layer,jdbcType=INTEGER},
             type   = #{type,jdbcType=INTEGER},
             area   = #{area,jdbcType=CHAR},
-            dx     = #{dx,jdbcType=VARCHAR},
-            dy     = #{dy,jdbcType=VARCHAR}
+            dx     = #{dx,jdbcType=DOUBLE},
+            dy     = #{dy,jdbcType=DOUBLE}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <!--以下时自定义部分-->
@@ -151,8 +151,8 @@
         <foreach collection="list" item="item" separator=",">
             (NULL , #{item.number,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
             #{item.layer,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER},
-            #{item.area,jdbcType=CHAR}, #{item.dx,jdbcType=VARCHAR},
-            #{item.dy,jdbcType=VARCHAR})
+            #{item.area,jdbcType=CHAR}, #{item.dx,jdbcType=DOUBLE},
+            #{item.dy,jdbcType=DOUBLE})
         </foreach>
     </insert>
 </mapper>
