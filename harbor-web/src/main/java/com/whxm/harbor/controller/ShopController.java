@@ -223,7 +223,6 @@ public class ShopController {
 
         Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空[params:{}]", param);
 
-        Assert.notNull(param.bizShop.getShopDescript(), "商铺描述不能为空");
         //-----------做适配---------------
         BizShopVo shopVo = new BizShopVo();
 
