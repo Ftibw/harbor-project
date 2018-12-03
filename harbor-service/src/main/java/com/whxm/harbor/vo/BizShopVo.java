@@ -2,13 +2,12 @@ package com.whxm.harbor.vo;
 
 import com.whxm.harbor.bean.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
-import com.whxm.harbor.utils.JacksonUtils;
 
 import java.util.List;
 
 public class BizShopVo extends BizShop {
 
-    private String area;
+    private List area;
 
     private Double dx;
 
@@ -26,12 +25,12 @@ public class BizShopVo extends BizShop {
         this.pictures = pictures;
     }
 
-    public String getArea() {
+    public List getArea() {
         return area;
     }
 
     public void setArea(List area) {
-        this.area = JacksonUtils.toJson(area);
+        this.area = area;
     }
 
     public Double getDx() {

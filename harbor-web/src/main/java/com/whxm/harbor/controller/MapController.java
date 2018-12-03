@@ -10,9 +10,12 @@ import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.graph.PathFinder;
 import com.whxm.harbor.graph.WeightImpl;
 import com.whxm.harbor.service.MapService;
+import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.utils.JacksonUtils;
+import com.whxm.harbor.vo.BizShopVo;
+import com.whxm.harbor.vo.BuildingVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,10 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Api(description = "地图服务")
 @RestController
@@ -156,6 +156,36 @@ public class MapController {
         return Result.success(mapService.getEdgesByFid(fid));
     }
 
+    @Autowired
+    private ShopService shopService;
+
+    @ApiOperation("获取全部建筑信息以及关联商铺信息")
+    @GetMapping(value = "/buildingsInfo")
+    public Result getMapInfoWithShops(Integer floorId) {
+        List<BizShopVo> shopVos = shopService.getBizShopListOptional(new ResultMap<String, Object>(1).build("floorId", floorId));
+        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(cacheService.listBuildings(), new TypeReference<List<BuildingVo>>() {
+        });
+        if (null == buildings) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据失败");
+
+        Map<String, BizShopVo> shopMap = new HashMap<>();
+        for (BizShopVo s : shopVos) {
+            shopMap.put(s.getShopNumber(), s);
+        }
+        for (BuildingVo b : buildings) {
+            String areaJson = b.getArea();
+            if (null != areaJson){
+                b.setPath(JacksonUtils.readValue(areaJson, List.class));
+                b.setArea(null);
+            }
+            String number = b.getNumber();
+            if (null != number) {
+                BizShopVo svo = shopMap.get(number);
+                b.setShopImg(svo.getPictures());
+                b.setShopMessage(svo.getShopDescript());
+            }
+        }
+        return Result.success(buildings);
+    }
     //#################################################################################################
 
     @ApiOperation("终端获取全部地图数据")

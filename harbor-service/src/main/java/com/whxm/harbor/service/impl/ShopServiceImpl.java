@@ -11,6 +11,7 @@ import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
+import com.whxm.harbor.utils.JacksonUtils;
 import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import org.springframework.beans.BeanUtils;
@@ -275,7 +276,7 @@ public class ShopServiceImpl implements ShopService {
             building.setName(vo.getShopName());
             building.setLayer(vo.getFloorId());
             building.setType(vo.getBuildingType());
-            building.setArea(vo.getArea());
+            building.setArea(JacksonUtils.toJson(vo.getArea()));
             building.setDx(vo.getDx());
             building.setDy(vo.getDy());
             i = bizBuildingMapper.insert(building);
