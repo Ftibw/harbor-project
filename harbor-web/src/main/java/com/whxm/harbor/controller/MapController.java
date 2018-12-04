@@ -179,12 +179,13 @@ public class MapController {
                 b.setArea(null);
             }
             String number = b.getNumber();
-            if (null != number) {
-                BizShopVo svo = shopMap.get(number);
-                if (null == svo) continue;
-                b.setShopImg(svo.getPictures());
-                b.setShopMessage(svo.getShopDescript());
-            }
+            if (null == number) continue;
+
+            BizShopVo svo = shopMap.get(number);
+            if (null == svo) continue;
+
+            b.setShopImg(svo.getPictures());
+            b.setShopMessage(svo.getShopDescript());
         }
         return Result.success(buildings);
     }
