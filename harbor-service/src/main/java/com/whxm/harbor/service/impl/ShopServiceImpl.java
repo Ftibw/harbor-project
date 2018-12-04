@@ -16,6 +16,7 @@ import com.whxm.harbor.utils.PinyinUtils;
 import com.whxm.harbor.vo.BizShopVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -264,6 +265,7 @@ public class ShopServiceImpl implements ShopService {
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
+    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
     @Override
     public Result addShopWithPoint(BizShopVo vo) {
         int i = 0;
