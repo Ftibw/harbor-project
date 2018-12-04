@@ -41,7 +41,7 @@ public class ShopController {
 
     @ApiOperation(value = "添加商铺以及坐标信息")
     @PostMapping(value = "/shopInfo")
-    public Result addShop(@RequestBody BizShopVo vo) {
+    public Result addShop(@ApiParam("商铺建筑完整信息") @RequestBody BizShopVo vo) {
         Assert.notNull(vo, "添加的商铺数据不能为空");
         String number = vo.getShopNumber();
         List<ShopPicture> pictures = vo.getPictures();

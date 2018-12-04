@@ -1,41 +1,43 @@
 package com.whxm.harbor.bean;
 
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class BizShop {
-
+    @ApiModelProperty(hidden = true)
     private String shopId;
-
+    @ApiModelProperty(value = "商铺编号", required = true)
     private String shopNumber;
-
+    @ApiModelProperty(value = "商铺名称", required = true)
     private String shopName;
-
+    @ApiModelProperty(hidden = true)
     private String shopEnglishName;
-
+    @ApiModelProperty(value = "商铺所在楼层ID", required = true)
     private Integer floorId;
-
+    @ApiModelProperty(value = "商铺的业态ID", required = true)
     private Integer bizFormatId;
-
+    @ApiModelProperty(hidden = true)
     private String shopHouseNumber;
-
+    @ApiModelProperty(hidden = true)
     private Integer isShopEnabled;
-
+    @ApiModelProperty(value = "商铺logo图片相对路径", required = true)
     private String shopLogoPath;
-
+    @ApiModelProperty("商铺联系电话")
     private String shopTel;
-
+    @ApiModelProperty(hidden = true)
     private Date addShopTime;
-
+    @ApiModelProperty("商铺入住时间")
     private Date shopCheckinTime;
-
+    @ApiModelProperty(value = "商铺权重(用于排序)", required = true)
     private Integer shopWeight;
-
+    @ApiModelProperty("商铺描述")
     private String shopDescript;
-
+    @ApiModelProperty(hidden = true)
     //join biz_floor
     private String floorName;
-
+    @ApiModelProperty(hidden = true)
     //join biz_format
     private String bizFormatType;
 
