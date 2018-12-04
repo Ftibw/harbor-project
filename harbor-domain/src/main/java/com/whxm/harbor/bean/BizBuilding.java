@@ -17,9 +17,9 @@ public class BizBuilding {
     private Integer type;
     @ApiModelProperty("建筑的区域点集合")
     private String area;
-    @ApiModelProperty("建筑的x值")
+    @ApiModelProperty(value = "建筑的x值", required = true)
     private Double dx;
-    @ApiModelProperty("建筑的y值")
+    @ApiModelProperty(value = "建筑的y值", required = true)
     private Double dy;
 
     public Integer getId() {
