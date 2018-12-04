@@ -183,7 +183,7 @@ public class MapController {
 
     @ApiOperation("终端获取全部地图数据")
     @GetMapping("/maps")
-    public ResultMap<String, Object> getBizFormats() {
+    public ResultMap<String, Object> getBizMaps() {
 
         ResultMap<String, Object> ret = new ResultMap<>(2);
 

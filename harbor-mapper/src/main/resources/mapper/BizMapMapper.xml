@@ -63,10 +63,10 @@
     <!--以下是自定义部分-->
     <select id="getBizMapList" resultMap="ExtensionResultMap">
         select
-        <include refid="Base_Column_List"/>,floor_name
+        <include refid="Base_Column_List"/>,floor_name,sort_number
         from biz_map
         LEFT JOIN biz_floor USING (floor_id)
-        order by map_id DESC
+        order by sort_number ASC
     </select>
 
     <resultMap id="ExtensionResultMap" type="com.whxm.harbor.bean.BizMap" extends="BaseResultMap">
