@@ -204,7 +204,8 @@ public class ShopServiceImpl implements ShopService {
         shopVo.setShopId(shopId);
         shopVo.setIsShopEnabled(Constant.YES);
         shopVo.setAddShopTime(new Date());
-        shopVo.setShopDescript("");
+        String desc = shopVo.getShopDescript();
+        shopVo.setShopDescript(null == desc ? "" : desc);
         //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
         synchronized (this) {
 
