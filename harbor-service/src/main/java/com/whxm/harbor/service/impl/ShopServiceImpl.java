@@ -242,6 +242,7 @@ public class ShopServiceImpl implements ShopService {
         return list;
     }
 
+    @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)
     @Override
     public Result deleteBizShop(String bizShopId) {
         //删图片
