@@ -87,6 +87,8 @@ public class MapServiceImpl implements MapService {
         if (null == list || list.isEmpty())
             throw new DataNotFoundException();
 
+        list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
+
         return list;
     }
 

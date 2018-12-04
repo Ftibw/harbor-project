@@ -121,14 +121,18 @@ public class FileUtils {
             file.transferTo(uploadedFile);
 
             String imageOrientation = getImageOrientation(uploadedFile);
-
+            String[] arr = imageOrientation.split(",");
             Map<String, Object> map = new HashMap<>();
 
             map.put(fileOriginName, originName);
             map.put(fileNewName, newName);
             map.put(fileSize, size);
             map.put(filePath, href);
-            map.put(imageOrient, imageOrientation);
+            int width = Integer.parseInt(arr[0]);
+            int height = Integer.parseInt(arr[1]);
+            map.put("width", width);
+            map.put("height", height);
+            map.put(imageOrient, width > height ? HORIZONTAL_SCREEN_PICTURE : VERTICAL_SCREEN_PICTURE);
 
             return callback.call(map);
 
@@ -192,11 +196,7 @@ public class FileUtils {
 
             int imgWidth = bufferedImg.getWidth();
             int imgHeight = bufferedImg.getHeight();
-            /*Map<String, Integer> resolution = new HashMap<>();
-            resolution.put("width", imgWidth);
-            resolution.put("height", imgHeight);
-            return JacksonUtils.toJson(resolution);*/
-            return imgWidth > imgHeight ? HORIZONTAL_SCREEN_PICTURE : VERTICAL_SCREEN_PICTURE;
+            return imgWidth + "," + imgHeight;
         } catch (IOException e) {
 
             logger.error("图片资源读取异常", e);
