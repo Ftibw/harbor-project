@@ -161,13 +161,13 @@ public class MapController {
 
     @ApiOperation("获取全部建筑信息以及关联商铺信息")
     @GetMapping(value = "/buildingsInfo")
-    public Result getMapInfoWithShops(Integer floorId) {
-        List<BizShopVo> shopVos = shopService.getBizShopListOptional(new ResultMap<String, Object>(1).build("floorId", floorId));
+    public Result getMapInfoWithShops() {
+        List<BizShopVo> shopVos = shopService.getBizShopListOptional(null);
         String buildingJson = cacheService.listBuildings();
         if (null == buildingJson) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据失败");
         List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BuildingVo>>() {
         });
-
+        if (null == buildings) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据解析失败");
         Map<String, BizShopVo> shopMap = new HashMap<>();
         for (BizShopVo s : shopVos) {
             shopMap.put(s.getShopNumber(), s);
@@ -181,6 +181,7 @@ public class MapController {
             String number = b.getNumber();
             if (null != number) {
                 BizShopVo svo = shopMap.get(number);
+                if (null == svo) continue;
                 b.setShopImg(svo.getPictures());
                 b.setShopMessage(svo.getShopDescript());
             }
