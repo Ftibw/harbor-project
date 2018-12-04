@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -54,7 +55,7 @@ public class ShopController {
     }
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
-    @PostMapping(value = "/shops")
+    @PostMapping(value = "/shops")//, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     public Map<String, Object> getBizShops(
             @ApiParam("楼层ID") Integer floor,
             @ApiParam("业态ID") Integer type,
