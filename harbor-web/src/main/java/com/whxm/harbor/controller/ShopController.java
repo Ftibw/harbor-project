@@ -11,9 +11,7 @@ import com.whxm.harbor.service.ShopVisitService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.vo.BizShopVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -54,12 +52,13 @@ public class ShopController {
     }
 
     @ApiOperation(value = "根据业态/楼层/商铺名称信息获取店铺列表")
-    @PostMapping(value = "/shops")//, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    public Map<String, Object> getBizShops(
-            @ApiParam("楼层ID") Integer floor,
-            @ApiParam("业态ID") Integer type,
-            @ApiParam("商铺名称大写首字母") String initial
-    ) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "floor", value = "楼层ID", paramType = "form"),
+            @ApiImplicitParam(name = "type", value = "业态ID", paramType = "form"),
+            @ApiImplicitParam(name = "initial", value = "商铺名称大写首字母", paramType = "form")
+    })
+    @PostMapping(value = "/shops")
+    public Map<String, Object> getBizShops(Integer floor, Integer type, String initial) {
         ResultMap<String, Object> ret = new ResultMap<>(2);
 
         try {
