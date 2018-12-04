@@ -59,14 +59,18 @@ public class MapController {
         if (startId.equals(endId)) {
             return Result.failure(ResultEnum.DATA_IS_WRONG, "起点与终点不能相同");
         }
+        String buildingJson = cacheService.listBuildings();
+        String edgeJson = cacheService.listEdges();
+        if (null == buildingJson || null == edgeJson)
+            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR.setMessage("缓存数据读取为空"));
         //从缓存,获取指定楼层的所有building
-        List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(cacheService.listBuildings(), new TypeReference<List<BizBuilding>>() {
+        List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BizBuilding>>() {
         });
         //从缓存,根据指定楼层ID获取边集
-        List<MapEdge> edges = JacksonUtils.readGenericTypeValue(cacheService.listEdges(), new TypeReference<List<MapEdge>>() {
+        List<MapEdge> edges = JacksonUtils.readGenericTypeValue(edgeJson, new TypeReference<List<MapEdge>>() {
         });
         if (null == buildings || null == edges) {
-            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR.setMessage("从缓存数据读取失败"));
+            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR.setMessage("缓存数据解析失败"));
         }
         //根据顶点集合和邻接出边表寻找最短路径
         Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
