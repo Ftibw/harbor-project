@@ -17,6 +17,8 @@ public class BuildingVo extends BizBuilding {
 
     private List<ShopPicture> shopImg;
 
+    private Integer bizType;
+
     public List getPath() {
         return path;
     }
@@ -39,5 +41,13 @@ public class BuildingVo extends BizBuilding {
 
     public void setShopImg(List<ShopPicture> shopImg) {
         this.shopImg = shopImg;
+    }
+
+    public Integer getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(Integer bizType) {
+        this.bizType = bizType;
     }
 }

@@ -60,9 +60,9 @@ public interface MapService {
 
     Result saveEdges(List<MapEdge> edges);//添加导航图中边关系
 
-    Result delEdgeByPK(MapEdgeKey key);//根据2点ID删除一条边
+    Result delEdgeByIdList(List<Integer> list);//根据ID删除一条边
 
-    Result delEdgesByPartKey(MapEdgeKey key);//根据1点ID删除有关边
+    Result delEdgesByPartKey(MapEdge key);//根据1点ID删除有关边
 
     List<MapEdge> getEdgesByFid(Integer mapId);//获取所有边数据
 }

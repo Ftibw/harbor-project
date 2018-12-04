@@ -136,16 +136,16 @@ public class MapServiceImpl implements MapService {
 
     @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
-    public Result delEdgeByPK(MapEdgeKey key) {
-        int i = mapEdgeMapper.deleteByPrimaryKey(key);
+    public Result delEdgeByIdList(List<Integer> list) {
+        int i = mapEdgeMapper.batchDelete(list);
         return 0 == i ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("起止点ID为%s的边,无法删除", key.getTail() + "," + key.getHead()))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("边集%s,无法全部删除", list))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
-    public Result delEdgesByPartKey(MapEdgeKey key) {
+    public Result delEdgesByPartKey(MapEdge key) {
         int i = mapEdgeMapper.deleteByPartKey(key);
         return 0 == i ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("点ID为%s吸附的边,无法删除", key))

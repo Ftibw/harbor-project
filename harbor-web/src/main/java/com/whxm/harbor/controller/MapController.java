@@ -86,7 +86,7 @@ public class MapController {
                     return WeightImpl.newInstance(h, 0.0);
                 }
         );
-        Map<String, Object> info = pathFinder.findPath(MapEdgeKey::getHead,
+        Map<String, Object> info = pathFinder.findPath(MapEdge::getHead,
                 (edge) -> WeightImpl.newInstance(edge.getDistance(), edge.getTime()));
         if (null == info)
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "路径不存在");
@@ -134,20 +134,9 @@ public class MapController {
 
     @ApiOperation("删除地图边关系")
     @PostMapping(value = "/delEdges")
-    public Result delEdges(@RequestBody List<MapEdgeKey> keys) {
-        Assert.notEmpty(keys, "边不能为空");
-        for (MapEdgeKey key : keys) {
-            Integer tail = key.getTail();
-            Integer head = key.getHead();
-            if (null != tail && null != head) {
-                if (tail.equals(head)) {
-                    mapService.delEdgesByPartKey(key);
-                } else {
-                    mapService.delEdgeByPK(key);
-                }
-            }
-        }
-        return Result.success();
+    public Result delEdges(@RequestBody List<Integer> list) {
+        Assert.notEmpty(list, "边不能为空");
+        return mapService.delEdgeByIdList(list);
     }
 
     @ApiOperation("获取全部边关系")
@@ -191,6 +180,7 @@ public class MapController {
 
             b.setShopImg(svo.getPictures());
             b.setShopMessage(svo.getShopDescript());
+            b.setBizType(svo.getBizFormatId());
         }
         return Result.success(buildings);
     }

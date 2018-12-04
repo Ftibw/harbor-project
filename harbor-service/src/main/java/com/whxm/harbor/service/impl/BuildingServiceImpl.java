@@ -1,22 +1,21 @@
 package com.whxm.harbor.service.impl;
 
 import com.whxm.harbor.bean.BizBuilding;
-import com.whxm.harbor.bean.MapEdgeKey;
+import com.whxm.harbor.bean.MapEdge;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
-import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.BuildingService;
+import com.whxm.harbor.service.MapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -28,8 +27,8 @@ public class BuildingServiceImpl implements BuildingService {
     @Resource
     private BizBuildingMapper bizBuildingMapper;
 
-    @Resource
-    private MapEdgeMapper mapEdgeMapper;
+    @Autowired
+    private MapService mapService;
 
 
     @Override
@@ -41,17 +40,17 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public List<BizBuilding> getBizBuildingList(Integer floor, Integer type) {
 
-        return bizBuildingMapper.getBuildingList(floor,type);
+        return bizBuildingMapper.getBuildingList(floor, type);
     }
 
     @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
     @Override
     public Result deleteBizBuilding(Integer id) {
-        MapEdgeKey key = new MapEdgeKey();
+        MapEdge key = new MapEdge();
         key.setTail(id);
         key.setHead(id);
-        int i = mapEdgeMapper.deleteByPartKey(key);
-        if (0 == i) {
+        Result result = mapService.delEdgesByPartKey(key);
+        if (0 == result.getCode()) {
             logger.info("ID为{}的点依附的边删除失败", id);
         }
         int affectRow = bizBuildingMapper.deleteByPrimaryKey(id);

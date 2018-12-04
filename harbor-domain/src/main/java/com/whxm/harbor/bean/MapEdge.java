@@ -1,6 +1,11 @@
 package com.whxm.harbor.bean;
 
-public class MapEdge extends MapEdgeKey {
+public class MapEdge {
+    private Integer id;
+
+    private Integer tail;
+
+    private Integer head;
 
     private Double distance;
 
@@ -8,7 +13,29 @@ public class MapEdge extends MapEdgeKey {
 
     private Integer isDirected;
 
-    private Integer floorId;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getTail() {
+        return tail;
+    }
+
+    public void setTail(Integer tail) {
+        this.tail = tail;
+    }
+
+    public Integer getHead() {
+        return head;
+    }
+
+    public void setHead(Integer head) {
+        this.head = head;
+    }
 
     public Double getDistance() {
         return distance;
@@ -32,13 +59,5 @@ public class MapEdge extends MapEdgeKey {
 
     public void setIsDirected(Integer isDirected) {
         this.isDirected = isDirected;
-    }
-
-    public Integer getFloorId() {
-        return floorId;
-    }
-
-    public void setFloorId(Integer floorId) {
-        this.floorId = floorId;
     }
 }

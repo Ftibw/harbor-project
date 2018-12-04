@@ -8,7 +8,7 @@ import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizShopMapper;
-import com.whxm.harbor.mapper.MapEdgeMapper;
+import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.JacksonUtils;
@@ -29,8 +29,8 @@ public class ShopServiceImpl implements ShopService {
 
     @Autowired
     private PathConfig pathConfig;
-    @Resource
-    private MapEdgeMapper mapEdgeMapper;
+    @Autowired
+    private MapService mapService;
     @Resource
     private BizShopMapper bizShopMapper;
     @Resource
@@ -254,11 +254,11 @@ public class ShopServiceImpl implements ShopService {
         BizBuilding building = bizBuildingMapper.selectByNumber(number);
         bizBuildingMapper.deleteByNumber(number);
         //删edges
-        MapEdgeKey pointKey = new MapEdgeKey();
+        MapEdge pointKey = new MapEdge();
         Integer id = building.getId();
         pointKey.setHead(id);
         pointKey.setTail(id);
-        mapEdgeMapper.deleteByPartKey(pointKey);
+        mapService.delEdgesByPartKey(pointKey);
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId))
