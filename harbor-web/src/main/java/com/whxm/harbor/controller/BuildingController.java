@@ -26,10 +26,10 @@ public class BuildingController {
     @ApiOperation("获取建筑列表")
     @GetMapping
     public Result getBizBuildings(
-            @ApiParam(name = "floor", value = "楼层ID")
+            @ApiParam("楼层ID")
             @RequestParam(value = "floor", required = false)
                     Integer floor,
-            @ApiParam(name = "type", value = "建筑类型")
+            @ApiParam("建筑类型")
             @RequestParam(value = "type", required = false)
                     Integer type) {
 
