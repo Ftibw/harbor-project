@@ -163,9 +163,10 @@ public class MapController {
     @GetMapping(value = "/buildingsInfo")
     public Result getMapInfoWithShops(Integer floorId) {
         List<BizShopVo> shopVos = shopService.getBizShopListOptional(new ResultMap<String, Object>(1).build("floorId", floorId));
-        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(cacheService.listBuildings(), new TypeReference<List<BuildingVo>>() {
+        String buildingJson = cacheService.listBuildings();
+        if (null == buildingJson) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据失败");
+        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BuildingVo>>() {
         });
-        if (null == buildings) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据失败");
 
         Map<String, BizShopVo> shopMap = new HashMap<>();
         for (BizShopVo s : shopVos) {
@@ -173,7 +174,7 @@ public class MapController {
         }
         for (BuildingVo b : buildings) {
             String areaJson = b.getArea();
-            if (null != areaJson){
+            if (null != areaJson) {
                 b.setPath(JacksonUtils.readValue(areaJson, List.class));
                 b.setArea(null);
             }
