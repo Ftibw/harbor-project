@@ -116,6 +116,7 @@
         select
         <include refid="Base_Column_List"/>
         from map_edge
+        where tail={#tailFloorId} or head={#headFloorId}
     </select>
 
     <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">

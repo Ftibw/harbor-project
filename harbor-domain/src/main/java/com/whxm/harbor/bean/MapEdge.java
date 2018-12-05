@@ -17,7 +17,10 @@ public class MapEdge {
     private Double time;
     @ApiModelProperty(value = "边是单向还是双向(0表示双向,1表示单向)", required = true)
     private Integer isDirected;
-
+    @ApiModelProperty(value = "起点点所在楼层ID", required = true)
+    private Integer tailFloorId;
+    @ApiModelProperty(value = "终点所在楼层ID", required = true)
+    private Integer headFloorId;
     public Integer getId() {
         return id;
     }
@@ -64,5 +67,21 @@ public class MapEdge {
 
     public void setIsDirected(Integer isDirected) {
         this.isDirected = isDirected;
+    }
+
+    public Integer getTailFloorId() {
+        return tailFloorId;
+    }
+
+    public void setTailFloorId(Integer tailFloorId) {
+        this.tailFloorId = tailFloorId;
+    }
+
+    public Integer getHeadFloorId() {
+        return headFloorId;
+    }
+
+    public void setHeadFloorId(Integer headFloorId) {
+        this.headFloorId = headFloorId;
     }
 }
