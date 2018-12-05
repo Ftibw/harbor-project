@@ -19,8 +19,14 @@ public class WeightImpl implements Weight<WeightImpl>, Cloneable {
 
     @Override
     public WeightImpl add(WeightImpl otherOne) {
-        return WeightImpl.newInstance(this.distance + otherOne.distance,
-                this.time + otherOne.time);
+        Double distance = otherOne.distance;
+        if (null == distance)
+            distance = Double.MAX_VALUE;
+        Double time = otherOne.time;
+        if (null == time)
+            time = Double.MAX_VALUE;
+        return WeightImpl.newInstance(this.distance + distance,
+                this.time + time);
     }
 
     @Override
