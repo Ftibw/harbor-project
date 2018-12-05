@@ -164,7 +164,32 @@ public class MapController {
     @GetMapping(value = "/edges")
     public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
-        return Result.success(mapService.getEdgesByFid(fid));
+        List<MapEdge> edges = mapService.getEdgesByFid(fid);
+        List<Map<String, Object>> edgeList = JacksonUtils.readGenericTypeValue(JacksonUtils.toJson(edges),
+                new TypeReference<List<Map<String, Object>>>() {
+                });
+        if (null == edgeList)
+            return Result.failure(ResultEnum.RESULT_DATA_NONE);
+        String buildingJson = cacheService.listBuildings();
+        if (null == buildingJson)
+            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR, "缓存数据读取失败");
+        List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BizBuilding>>() {
+        });
+        if (null == buildings)
+            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR, "缓存数据反序列化失败");
+        Map<Object, BizBuilding> buildingMap = new HashMap<>();
+        for (BizBuilding b : buildings) {
+            buildingMap.put(b.getId(), b);
+        }
+        for (Map<String, Object> edge : edgeList) {
+            BizBuilding tailPoint = buildingMap.get(edge.get("tail"));
+            BizBuilding headPoint = buildingMap.get(edge.get("head"));
+            if (null != tailPoint)
+                edge.put("tail", tailPoint);
+            if (null != headPoint)
+                edge.put("head", headPoint);
+        }
+        return Result.success(edgeList);
     }
 
     @Autowired
