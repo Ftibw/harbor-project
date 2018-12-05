@@ -30,7 +30,7 @@ public class BuildingServiceImpl implements BuildingService {
         return bizBuildingMapper.getBuildingList(floor, type);
     }
 
-    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
+    @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)
     @Override
     public Result saveBizBuildings(List<BizBuilding> list) {
         int affectRow = bizBuildingMapper.batchReplace(list);
@@ -38,7 +38,7 @@ public class BuildingServiceImpl implements BuildingService {
                 : Result.success(list);
     }
 
-    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
+    @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)
     @Override
     public Result batchDelete(List<Integer> idList) {
         int affectRow = bizBuildingMapper.batchDelete(idList);
