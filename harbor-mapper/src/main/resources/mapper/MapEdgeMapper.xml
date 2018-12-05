@@ -141,7 +141,7 @@
         <include refid="Base_Column_List"/>
         from map_edge
         <if test="floorId!=null">
-            where tail_floor_id={#floorId} or head_floor_id={#floorId}
+            where tail_floor_id=#{floorId} or head_floor_id=#{floorId}
         </if>
     </select>
 
