@@ -1,5 +1,7 @@
 package com.whxm.harbor.graph;
 
+import com.whxm.harbor.exception.DataNotFoundException;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -102,6 +104,10 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
         this.adjacencyTable = adjacencyTable;
         this.endId = endId;
         this.getterOfH = hGetter;
+        if (null == vertices.get(startId))
+            throw new DataNotFoundException("起点数据错误,请重新输入");
+        if (null == vertices.get(endId))
+            throw new DataNotFoundException("终点数据错误,请重新输入");
         Wrapper wrappedStart = wrapPoint(startId, zeroWeight);
         wrappedStart.previous = prototype;//prototype仅做占位用
         this.openList.offer(wrappedStart);
