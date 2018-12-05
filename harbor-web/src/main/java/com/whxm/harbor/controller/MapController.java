@@ -148,7 +148,7 @@ public class MapController {
 
     @ApiOperation("获取全部边关系")
     @GetMapping(value = "/edges")
-    public Result getAllEdges(@ApiParam(value = "楼层ID(传参时获取指定楼层的边,空参时获取所有楼层的边)")
+    public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
         return Result.success(mapService.getEdgesByFid(fid));
     }

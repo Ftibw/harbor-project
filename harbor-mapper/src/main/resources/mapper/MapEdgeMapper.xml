@@ -140,7 +140,9 @@
         select
         <include refid="Base_Column_List"/>
         from map_edge
-        where tail_floor_id={#floorId} or head_floor_id={#floorId}
+        <if test="floorId!=null">
+            where tail_floor_id={#floorId} or head_floor_id={#floorId}
+        </if>
     </select>
 
     <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">
