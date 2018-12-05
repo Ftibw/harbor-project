@@ -8,9 +8,11 @@
         <result column="distance" property="distance" jdbcType="DOUBLE"/>
         <result column="time" property="time" jdbcType="DOUBLE"/>
         <result column="is_directed" property="isDirected" jdbcType="INTEGER"/>
+        <result column="tail_floor_id" property="tailFloorId" jdbcType="INTEGER"/>
+        <result column="head_floor_id" property="headFloorId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, tail, head, distance, time, is_directed
+        id, tail, head, distance, time, is_directed, tail_floor_id, head_floor_id
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,13 +26,15 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.MapEdge">
-        insert into map_edge (id, tail, head, distance, time, is_directed)
+        insert into map_edge (id, tail, head, distance, time, is_directed, tail_floor_id, head_floor_id)
         values (#{id,jdbcType=INTEGER},
                 #{tail,jdbcType=INTEGER},
                 #{head,jdbcType=INTEGER},
                 #{distance,jdbcType=DOUBLE},
                 #{time,jdbcType=DOUBLE},
-                #{isDirected,jdbcType=INTEGER})
+                #{isDirected,jdbcType=INTEGER},
+                #{tailFloorId,jdbcType=INTEGER},
+                #{headFloorId,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.MapEdge">
         insert into map_edge
@@ -53,6 +57,12 @@
             <if test="isDirected != null">
                 is_directed,
             </if>
+            <if test="tailFloorId != null">
+                tail_floor_id,
+            </if>
+            <if test="headFloorId != null">
+                head_floor_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -72,6 +82,12 @@
             </if>
             <if test="isDirected != null">
                 #{isDirected,jdbcType=INTEGER},
+            </if>
+            <if test="tailFloorId != null">
+                #{tailFloorId,jdbcType=INTEGER},
+            </if>
+            <if test="headFloorId != null">
+                #{headFloorId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -93,16 +109,24 @@
             <if test="isDirected != null">
                 is_directed = #{isDirected,jdbcType=INTEGER},
             </if>
+            <if test="tailFloorId != null">
+                tail_floor_id = #{tailFloorId,jdbcType=INTEGER},
+            </if>
+            <if test="headFloorId != null">
+                head_floor_id = #{headFloorId,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.MapEdge">
         update map_edge
-        set tail        = #{tail,jdbcType=INTEGER},
-            head        = #{head,jdbcType=INTEGER},
-            distance    = #{distance,jdbcType=DOUBLE},
-            time        = #{time,jdbcType=DOUBLE},
-            is_directed = #{isDirected,jdbcType=INTEGER}
+        set tail          = #{tail,jdbcType=INTEGER},
+            head          = #{head,jdbcType=INTEGER},
+            distance      = #{distance,jdbcType=DOUBLE},
+            time          = #{time,jdbcType=DOUBLE},
+            is_directed   = #{isDirected,jdbcType=INTEGER},
+            tail_floor_id = #{tailFloorId,jdbcType=INTEGER},
+            head_floor_id = #{headFloorId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <!--以下为自定义部分-->
@@ -116,7 +140,7 @@
         select
         <include refid="Base_Column_List"/>
         from map_edge
-        where tail={#tailFloorId} or head={#headFloorId}
+        where tail_floor_id={#tailFloorId} or head_floor_id={#headFloorId}
     </select>
 
     <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">
@@ -129,7 +153,9 @@
             #{item.head,jdbcType=INTEGER},
             #{item.distance,jdbcType=DOUBLE},
             #{item.time,jdbcType=DOUBLE},
-            #{item.isDirected,jdbcType=INTEGER})
+            #{item.isDirected,jdbcType=INTEGER},
+            #{item.tailFloorId,jdbcType=INTEGER},
+            #{item.headFloorId,jdbcType=INTEGER})
         </foreach>
     </insert>
     <delete id="batchDelete">

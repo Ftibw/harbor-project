@@ -46,6 +46,10 @@ public class BuildingController {
     public Result addOneBizBuilding(@RequestBody BizBuilding building) {
         Assert.notNull(building, "建筑数据不能为空");
         Assert.isNull(building.getId(), "建筑ID必须为空");
+        if (null == building.getNumber())
+            building.setNumber(building.getDx() + "_" + building.getDy());
+        if (null == building.getArea())
+            building.setArea("");
         return buildingService.saveBizBuildings(Collections.singletonList(building));
     }
 
