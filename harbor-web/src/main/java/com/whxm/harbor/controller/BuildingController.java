@@ -48,8 +48,7 @@ public class BuildingController {
         Assert.isNull(building.getId(), "建筑ID必须为空");
         if (null == building.getNumber())
             building.setNumber(building.getDx() + "_" + building.getDy());
-        if (null == building.getArea())
-            building.setArea("");
+        building.setArea("[]");
         return buildingService.saveBizBuildings(Collections.singletonList(building));
     }
 
