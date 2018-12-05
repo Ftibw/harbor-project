@@ -132,7 +132,7 @@ public class MapController {
             if (null == e.getDistance())
                 e.setDistance(Double.MAX_VALUE);
             if (null == e.getTime())
-                e.setDistance(Double.MAX_VALUE);
+                e.setTime(Double.MAX_VALUE);
         }
         return mapService.saveEdges(edges);
     }
