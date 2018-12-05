@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("导航路点的边关系对象(如:A->B,A为尾点,B为头点)")
 public class MapEdge {
+
+    public static final Integer IS_DOUBLE_DIRECT = 0;
+    public static final Integer IS_SINGLE_DIRECT = 1;
     @ApiModelProperty(hidden = true)
     private Integer id;
     @ApiModelProperty(value = "有向边的尾点", required = true)
@@ -21,6 +24,7 @@ public class MapEdge {
     private Integer tailFloorId;
     @ApiModelProperty(value = "终点所在楼层ID", required = true)
     private Integer headFloorId;
+
     public Integer getId() {
         return id;
     }

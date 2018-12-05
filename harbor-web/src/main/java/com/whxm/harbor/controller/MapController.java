@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,8 +78,20 @@ public class MapController {
         Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
         Map<Integer, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表
         for (BizBuilding b : buildings) {
-            vertices.put(b.getId(), b);
+            Integer id = b.getId();
+            vertices.put(id, b);
         }
+        List<MapEdge> reverseEdgeList = new ArrayList<>();
+        for (MapEdge edge : edges) {
+            if (MapEdge.IS_DOUBLE_DIRECT.equals(edge.getIsDirected())) {
+                MapEdge reverseEdge = new MapEdge();
+                BeanUtils.copyProperties(edge, reverseEdge);
+                reverseEdge.setTail(edge.getHead());
+                reverseEdge.setHead(edge.getTail());
+                reverseEdgeList.add(reverseEdge);
+            }
+        }
+        edges.addAll(reverseEdgeList);
         for (MapEdge edge : edges) {
             buildAdjacencyTable(adjacencyTable, edge);
         }
