@@ -8,29 +8,29 @@ import java.util.Date;
 public class BizShop {
     @ApiModelProperty(hidden = true)
     private String shopId;
-    @ApiModelProperty(value = "商铺编号", required = true)
+    @ApiModelProperty("商铺编号(添加时必要)")
     private String shopNumber;
-    @ApiModelProperty(value = "商铺名称", required = true)
+    @ApiModelProperty("商铺名称(添加时必要)")
     private String shopName;
     @ApiModelProperty(hidden = true)
     private String shopEnglishName;
-    @ApiModelProperty(value = "商铺所在楼层ID", required = true)
+    @ApiModelProperty("商铺所在楼层ID(添加时必要)")
     private Integer floorId;
-    @ApiModelProperty(value = "商铺的业态ID", required = true)
+    @ApiModelProperty("商铺的业态ID(添加时必要)")
     private Integer bizFormatId;
     @ApiModelProperty(hidden = true)
     private String shopHouseNumber;
     @ApiModelProperty(hidden = true)
     private Integer isShopEnabled;
-    @ApiModelProperty(value = "商铺logo图片相对路径", required = true)
+    @ApiModelProperty("商铺logo图片相对路径(添加时必要)")
     private String shopLogoPath;
-    @ApiModelProperty("商铺联系电话")
+    @ApiModelProperty("商铺联系电话(添加时必要)")
     private String shopTel;
     @ApiModelProperty(hidden = true)
     private Date addShopTime;
     @ApiModelProperty("商铺入住时间")
     private Date shopCheckinTime;
-    @ApiModelProperty(value = "商铺权重(用于排序)", required = true)
+    @ApiModelProperty("商铺权重(用于排序,添加时必要)")
     private Integer shopWeight;
     @ApiModelProperty("商铺描述")
     private String shopDescript;
