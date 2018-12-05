@@ -9,6 +9,7 @@ import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.callback.Callback;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.service.ScreensaverMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,16 +77,20 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
     public Result deleteBizScreensaverMaterial(Integer bizScreensaverMaterialId) {
 
         //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
-        bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
-
+        int affectRow = bizScreensaverMaterialMapper.delScreensaverMaterialRelation(bizScreensaverMaterialId);
+        if (0 == affectRow) {
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保素材关系无法删除", bizScreensaverMaterialId));
+        }
         //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
-        bizScreensaverMaterialMapper.delTerminalFirstPageMaterialRelation(bizScreensaverMaterialId);
-
-        int affectRow2 = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
-
-        return 0 == affectRow2 ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId))
-                : Result.success(ResultEnum.SUCCESS_DELETED);
+        affectRow = bizScreensaverMaterialMapper.delTerminalFirstPageMaterialRelation(bizScreensaverMaterialId);
+        if (0 == affectRow) {
+            throw new BusinessException(String.format("ID为%s的终端首页屏保素材关系无法删除", bizScreensaverMaterialId));
+        }
+        affectRow = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
+        if (0 == affectRow) {
+            throw new BusinessException(String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId));
+        }
+        return Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.MapService;
@@ -32,9 +33,9 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private MapService mapService;
     @Resource
-    private BizShopMapper bizShopMapper;
-    @Resource
     private BizBuildingMapper bizBuildingMapper;
+    @Resource
+    private BizShopMapper bizShopMapper;
 
     @Override
     public BizShopVo getBizShop(String bizShopId) {
@@ -152,8 +153,6 @@ public class ShopServiceImpl implements ShopService {
 
         int affectRow = 0;
 
-        int affectRow1 = 0;
-
         List<ShopPicture> pictures = shopVo.getPictures();
 
         Assert.notNull(pictures, "商铺图片集合不能为空");
@@ -176,18 +175,18 @@ public class ShopServiceImpl implements ShopService {
                 affectRow = bizShopMapper.updateByPrimaryKeySelective(shopVo);
             }
         }
+        String shopId = shopVo.getShopId();
 
         if (null == could)
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopId, shopVo.getShopNumber()));
 
-        bizShopMapper.deleteShopPictures(shopVo.getShopId());
+        if (affectRow == 0) {
+            Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,修改失败", shopId));
+        }
+        bizShopMapper.deleteShopPictures(shopId);
+        bizShopMapper.insertShopPictures(shopId, pictures);
 
-        affectRow1 = bizShopMapper.insertShopPictures(shopVo.getShopId(), pictures);
-
-
-        return 0 == affectRow || 0 == affectRow1 ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法修改", shopVo.getShopId()))
-                : Result.success(shopVo);
+        return Result.success(shopVo);
     }
 
     @Override
@@ -253,19 +252,26 @@ public class ShopServiceImpl implements ShopService {
         //删商铺
         String number = bizShop.getShopNumber();
         int affectRow = bizShopMapper.deleteByPrimaryKey(bizShopId);
+        if (0 == affectRow) {
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId));
+        }
         //删building
         BizBuilding building = bizBuildingMapper.selectByNumber(number);
-        bizBuildingMapper.deleteByNumber(number);
+        if (null == building)
+            return Result.success(String.format("商铺删除成功,商铺编号%s对应的建筑不存在", number));
+        affectRow = bizBuildingMapper.deleteByNumber(number);
+        if (0 == affectRow)
+            throw new BusinessException(String.format("商铺编号为%s对应的建筑,无法删除", number));
         //删edges
-        MapEdge pointKey = new MapEdge();
+        MapEdge edgePoint = new MapEdge();
         Integer id = building.getId();
-        pointKey.setHead(id);
-        pointKey.setTail(id);
-        mapService.delEdgesByPartKey(pointKey);
-
-        return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId))
-                : Result.success(ResultEnum.SUCCESS_DELETED);
+        edgePoint.setHead(id);
+        edgePoint.setTail(id);
+        Result result = mapService.delEdgesByTailOrHead(edgePoint);
+        if (!result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
+            throw new BusinessException(result.getMsg(), result.getData());
+        }
+        return Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @CacheEvict(cacheNames = "bizBuilding", allEntries = true)

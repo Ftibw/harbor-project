@@ -155,4 +155,13 @@
             #{item.dy,jdbcType=DOUBLE})
         </foreach>
     </insert>
+
+    <delete id="batchDelete">
+        DELETE from biz_building
+        where id in (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
 </mapper>

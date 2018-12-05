@@ -25,4 +25,12 @@ public interface MapEdgeMapper {
     int batchReplace(List<MapEdge> list);
 
     int batchDelete(List<Integer> list);
+
+    /**
+     * 用于批量删除建筑时,批量删除建筑有关的边
+     *
+     * @param list 建筑的ID列表
+     * @return 被删除边的行数
+     */
+    int batchDeleteByTailListOrHeadList(List<Integer> list);
 }

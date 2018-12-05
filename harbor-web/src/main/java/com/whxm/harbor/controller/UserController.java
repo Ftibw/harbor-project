@@ -33,8 +33,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation("获取用户列表(需授权)")
-    @GetMapping("/users")
     /*@ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "userLoginname", value = "登陆名", dataType = "String"),
@@ -44,6 +42,8 @@ public class UserController {
                     @ApiImplicitParam(name = "userWechat", value = "用户微信", dataType = "String")
             }
     )*/
+    @ApiOperation("获取用户列表(需授权)")
+    @GetMapping("/users")
     public Result getUsers(PageQO pageQO, User condition) {
 
         PageVO<User> pageVO = userService.getUserList(pageQO, condition);

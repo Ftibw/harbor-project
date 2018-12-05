@@ -1,7 +1,6 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizMap;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

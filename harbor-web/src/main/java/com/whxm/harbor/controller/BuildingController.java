@@ -33,7 +33,7 @@ public class BuildingController {
             @RequestParam(value = "type", required = false)
                     Integer type) {
 
-        List<BizBuilding> list = buildingService.getBizBuildingList(floor, type);
+        List<BizBuilding> list = buildingService.listBuildings(floor, type);
 
         if (null == list || list.isEmpty())
             throw new DataNotFoundException();
@@ -46,9 +46,6 @@ public class BuildingController {
     public Result addOneBizBuilding(@RequestBody BizBuilding building) {
         Assert.notNull(building, "建筑数据不能为空");
         Assert.isNull(building.getId(), "建筑ID必须为空");
-        if (null == building.getNumber())
-            building.setNumber(building.getDx() + "_" + building.getDy());
-        building.setArea("[]");
         return buildingService.saveBizBuildings(Collections.singletonList(building));
     }
 
@@ -68,11 +65,12 @@ public class BuildingController {
     @ApiOperation("删除建筑")
     @DeleteMapping
     public Result delBizBuilding(
-            @ApiParam(name = "id", value = "建筑ID", required = true)
-            @RequestParam("id") Integer id) {
+            @ApiParam(value = "建筑ID列表", required = true)
+            @RequestBody List<Integer> idList) {
 
-        Assert.notNull(id, "建筑ID不能为空");
+        Assert.notEmpty(idList, "建筑ID不能为空");
+        Assert.notRepeat(idList, "建筑ID不能重复");
 
-        return buildingService.deleteBizBuilding(id);
+        return buildingService.batchDelete(idList);
     }
 }

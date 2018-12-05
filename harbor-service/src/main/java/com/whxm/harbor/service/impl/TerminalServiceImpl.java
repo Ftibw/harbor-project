@@ -8,9 +8,12 @@ import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
 import com.whxm.harbor.mapper.BizTerminalMapper;
+import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
@@ -31,15 +34,16 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Resource
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
-
     @Autowired
     private PathConfig pathConfig;
-
     @Resource
     private BizTerminalMapper bizTerminalMapper;
-
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private MapService mapService;
+    @Resource
+    private BizBuildingMapper bizBuildingMapper;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -74,29 +78,48 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public Result deleteBizTerminal(String bizTerminalId) {
 
-        bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
+        BizTerminal terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
 
+        if (null == terminal)
+            return Result.success(String.format("ID为%s的终端不存在,无需删除", bizTerminalId));
+
+        bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
         bizTerminalMapper.delTerminalFirstPageRelation(bizTerminalId);
 
         BizTerminal bizTerminal = new BizTerminal();
-
         bizTerminal.setTerminalId(bizTerminalId);
-
         bizTerminal.setIsDeleted(Constant.YES);
-
         bizTerminal.setIsTerminalOnline(Constant.NO);
-
         bizTerminal.setTerminalNumber(null);
-
         bizTerminal.setTerminalName(null);
-
         bizTerminal.setFloorId(null);
 
         int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
-        return 0 == affectRow ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId))
-                : Result.success(ResultEnum.SUCCESS_DELETED);
+        if (0 == affectRow)
+            Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId));
+
+        String number = terminal.getTerminalNumber();
+
+        //删building
+        BizBuilding building = bizBuildingMapper.selectByNumber(number);
+        if (null == building)
+            return Result.success(String.format("终端编号为%s的建筑不存在", number));
+
+        affectRow = bizBuildingMapper.deleteByNumber(number);
+        if (0 == affectRow) {
+            throw new BusinessException(String.format("编号为%s的建筑,无法删除", number));
+        }
+        //删edges
+        MapEdge edgePoint = new MapEdge();
+        Integer id = building.getId();
+        edgePoint.setHead(id);
+        edgePoint.setTail(id);
+        Result result = mapService.delEdgesByTailOrHead(edgePoint);
+        if (!result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
+            throw new BusinessException(result.getMsg(), result.getData());
+        }
+        return Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override

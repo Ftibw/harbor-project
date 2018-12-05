@@ -130,11 +130,23 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <!--以下为自定义部分-->
-    <delete id="deleteByPartKey" parameterType="com.whxm.harbor.bean.MapEdge">
+    <delete id="delEdgesByTailOrHead" parameterType="com.whxm.harbor.bean.MapEdge">
         delete
         from map_edge
         where tail = #{tail,jdbcType=INTEGER}
            or head = #{head,jdbcType=INTEGER}
+    </delete>
+    <delete id="batchDeleteByTailListOrHeadList">
+        delete
+        from map_edge
+        where tail in (
+        <foreach collection="list" item="item" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>)
+        or head in (
+        <foreach collection="list" item="item" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>)
     </delete>
     <select id="selectAll" resultMap="BaseResultMap">
         select

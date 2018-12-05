@@ -3,7 +3,6 @@ package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizBuilding;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.type.JdbcType;
 
 import java.util.List;
 
@@ -42,4 +41,6 @@ public interface BizBuildingMapper {
 
     @Delete("delete from biz_building where number=#{number}")
     int deleteByNumber(String number);
+
+    int batchDelete(List<Integer> list);
 }

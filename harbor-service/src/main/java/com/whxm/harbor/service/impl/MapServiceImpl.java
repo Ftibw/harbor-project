@@ -147,10 +147,10 @@ public class MapServiceImpl implements MapService {
 
     @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
-    public Result delEdgesByPartKey(MapEdge key) {
-        int i = mapEdgeMapper.deleteByPartKey(key);
+    public Result delEdgesByTailOrHead(MapEdge edge) {
+        int i = mapEdgeMapper.deleteByPartKey(edge);
         return 0 == i ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("点ID为%s吸附的边,无法删除", key))
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("点ID为%s吸附的边,无法删除", edge))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 

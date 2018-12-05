@@ -62,7 +62,7 @@ public interface MapService {
 
     Result delEdgeByIdList(List<Integer> list);//根据ID删除一条边
 
-    Result delEdgesByPartKey(MapEdge key);//根据1点ID删除有关边
+    Result delEdgesByTailOrHead(MapEdge edge);//根据1点ID删除有关边
 
-    List<MapEdge> getEdgesByFid(Integer mapId);//获取所有边数据
+    List<MapEdge> getEdgesByFid(Integer floorId);//获取所有边数据
 }
