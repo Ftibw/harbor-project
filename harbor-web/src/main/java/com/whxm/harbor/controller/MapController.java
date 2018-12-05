@@ -52,8 +52,8 @@ public class MapController {
      */
     @ApiOperation("根据起止点ID寻找最短路线")
     @GetMapping(value = "/path")
-    public Result findPath(@ApiParam(value = "导航起点ID", required = true) Integer startId,
-                           @ApiParam(value = "导航终点ID", required = true) Integer endId) {
+    public Result findPath(@ApiParam(value = "导航起点ID", required = true) @RequestParam("startId") Integer startId,
+                           @ApiParam(value = "导航终点ID", required = true) @RequestParam("endId") Integer endId) {
         long start = System.currentTimeMillis();
         Assert.notNull(startId, "起点ID不能为空");
         Assert.notNull(endId, "终点ID不能为空");
@@ -148,7 +148,8 @@ public class MapController {
 
     @ApiOperation("获取全部边关系")
     @GetMapping(value = "/edges")
-    public Result getAllEdges(@ApiParam(value = "楼层ID(传参时获取指定楼层的边,空参时获取所有楼层的边)") Integer fid) {
+    public Result getAllEdges(@ApiParam(value = "楼层ID(传参时获取指定楼层的边,空参时获取所有楼层的边)")
+                              @RequestParam(name = "fid", required = false) Integer fid) {
         return Result.success(mapService.getEdgesByFid(fid));
     }
 
