@@ -105,6 +105,12 @@ public class CacheService {
 
     @Cacheable(cacheNames = "bizEdge", keyGenerator = "cacheKeyGenerator")
     public String listEdges() {
-        return JacksonUtils.toJson(mapEdgeMapper.selectAll(null));
+        List<MapEdge> mapEdges = mapEdgeMapper.selectAll(null);
+        for (MapEdge edge : mapEdges) {
+            edge.setId(null);
+            edge.setTailFloorId(null);
+            edge.setHeadFloorId(null);
+        }
+        return JacksonUtils.toJson(mapEdges);
     }
 }

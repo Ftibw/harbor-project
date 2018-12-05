@@ -84,8 +84,8 @@ public class MapController {
         List<MapEdge> reverseEdgeList = new ArrayList<>();
         for (MapEdge edge : edges) {
             if (MapEdge.IS_DOUBLE_DIRECT.equals(edge.getIsDirected())) {
-                MapEdge reverseEdge = new MapEdge();
-                BeanUtils.copyProperties(edge, reverseEdge);
+                MapEdge reverseEdge = MapEdge.copy();
+                BeanUtils.copyProperties(edge, reverseEdge, "id", "isDirected", "tailFloorId", "headFloorId");
                 reverseEdge.setTail(edge.getHead());
                 reverseEdge.setHead(edge.getTail());
                 reverseEdgeList.add(reverseEdge);
