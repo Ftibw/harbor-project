@@ -261,15 +261,17 @@ public class ShopServiceImpl implements ShopService {
             return Result.success(String.format("商铺删除成功,商铺编号%s对应的建筑不存在", number));
         affectRow = bizBuildingMapper.deleteByNumber(number);
         if (0 == affectRow)
-            throw new BusinessException(String.format("商铺编号为%s对应的建筑,无法删除", number));
+            return Result.success(String.format("商铺编号为%s的建筑删除成功,对应的建筑删除行数为0", number));
         //删edges
         MapEdge edgePoint = new MapEdge();
         Integer id = building.getId();
         edgePoint.setHead(id);
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);
-        if (!result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
-            throw new BusinessException(result.getMsg(), result.getData());
+        if (!result.getCode().equals(ResultEnum.SUCCESS_DELETED.getCode())) {
+            result.setResultEnum(ResultEnum.SUCCESS_DELETED);
+            result.setMsg(String.format("商铺编号为%s的建筑删除成功,对应的建筑有关的边删除行数为0", number));
+            return result;
         }
         return Result.success(ResultEnum.SUCCESS_DELETED);
     }

@@ -110,7 +110,7 @@ public class TerminalServiceImpl implements TerminalService {
 
         affectRow = bizBuildingMapper.deleteByNumber(number);
         if (0 == affectRow) {
-            throw new BusinessException(String.format("编号为%s的建筑,无法删除", number));
+            return Result.success(String.format("编号为%s的终端删除成功,对应的建筑删除行数为0", number));
         }
         //删edges
         MapEdge edgePoint = new MapEdge();
@@ -118,8 +118,10 @@ public class TerminalServiceImpl implements TerminalService {
         edgePoint.setHead(id);
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);
-        if (!result.getCode().equals(ResultEnum.SUCCESS.getCode())) {
-            throw new BusinessException(result.getMsg(), result.getData());
+        if (!result.getCode().equals(ResultEnum.SUCCESS_DELETED.getCode())) {
+            result.setResultEnum(ResultEnum.SUCCESS_DELETED);
+            result.setMsg(String.format("编号为%s的终端删除成功,终端对应建筑的有关边删除行数为0", number));
+            return result;
         }
         return Result.success(ResultEnum.SUCCESS_DELETED);
     }

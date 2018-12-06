@@ -47,7 +47,9 @@ public class BuildingServiceImpl implements BuildingService {
         }
         affectRow = mapEdgeMapper.batchDeleteByTailListOrHeadList(idList);
         if (0 == affectRow) {
-            throw new BusinessException("建筑有关边删除失败");
+            Result ret = Result.success(ResultEnum.SUCCESS_DELETED);
+            ret.setMsg("建筑删除成功,建筑有关边删除行数为0");
+            return ret;
         }
         return Result.success(ResultEnum.SUCCESS_DELETED);
     }
