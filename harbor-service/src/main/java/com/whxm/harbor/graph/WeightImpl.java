@@ -5,9 +5,7 @@ package com.whxm.harbor.graph;
  * @author : Ftibw
  * @date : 2018/11/30 16:02
  */
-public class WeightImpl implements Weight<WeightImpl>, Cloneable {
-
-    private static final WeightImpl prototype = new WeightImpl();
+public class WeightImpl implements Weight<WeightImpl> {
 
     //private Double ratio;//used for COMPARE_BY_DISTANCE_AND_TIME,调控时间/距离的计算占比
 
@@ -17,6 +15,12 @@ public class WeightImpl implements Weight<WeightImpl>, Cloneable {
 
     private ECompareMode compareMode = ECompareMode.COMPARE_BY_DISTANCE;
 
+
+    public WeightImpl(Double distance, Double time) {
+        this.distance = distance;
+        this.time = time;
+    }
+
     @Override
     public WeightImpl add(WeightImpl otherOne) {
         Double distance = otherOne.distance;
@@ -25,7 +29,7 @@ public class WeightImpl implements Weight<WeightImpl>, Cloneable {
         Double time = otherOne.time;
         if (null == time)
             time = Double.MAX_VALUE;
-        return WeightImpl.newInstance(this.distance + distance,
+        return new WeightImpl(this.distance + distance,
                 this.time + time);
     }
 
@@ -46,19 +50,6 @@ public class WeightImpl implements Weight<WeightImpl>, Cloneable {
                 throw new RuntimeException("Weight compared failed");
         }
         return offset > 0 ? 1 : offset < 0 ? -1 : 0;
-    }
-
-
-    public static WeightImpl newInstance(Double distance, Double time) {
-        try {
-            WeightImpl clone = (WeightImpl) WeightImpl.prototype.clone();
-            clone.setDistance(distance);
-            clone.setTime(time);
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException("WeightImpl.prototype clone failed");
-        }
     }
 
     public enum ECompareMode {

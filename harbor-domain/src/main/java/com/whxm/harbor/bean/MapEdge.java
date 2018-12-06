@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("导航路点的边关系对象(如:A->B,A为尾点,B为头点)")
-public class MapEdge implements Cloneable {
+public class MapEdge {
 
     public static final Integer IS_DOUBLE_DIRECT = 0;
     public static final Integer IS_SINGLE_DIRECT = 1;
@@ -24,6 +24,16 @@ public class MapEdge implements Cloneable {
     private Integer tailFloorId;
     @ApiModelProperty(value = "终点所在楼层ID", required = true)
     private Integer headFloorId;
+
+    public MapEdge() {
+    }
+
+    public MapEdge(Integer tail, Integer head, Double distance, Double time) {
+        this.tail = tail;
+        this.head = head;
+        this.distance = distance;
+        this.time = time;
+    }
 
     public Integer getId() {
         return id;
@@ -87,20 +97,6 @@ public class MapEdge implements Cloneable {
 
     public void setHeadFloorId(Integer headFloorId) {
         this.headFloorId = headFloorId;
-    }
-
-    /**
-     * 下面为拷贝空对象专用
-     */
-    private static final MapEdge prototype = new MapEdge();
-
-    public static MapEdge copy() {
-        try {
-            return (MapEdge) prototype.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            throw new RuntimeException("MapEdge 拷贝异常");
-        }
     }
 }
 

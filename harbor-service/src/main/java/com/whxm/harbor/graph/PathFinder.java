@@ -47,7 +47,7 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
 
     private final Wrapper prototype = new Wrapper();
 
-    private class Wrapper implements Cloneable {
+    private class Wrapper {
         /**
          * 图中的顶点
          */
@@ -72,16 +72,6 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
          * 当前点的前继
          */
         Wrapper previous;
-
-        public Object clone() {
-            try {
-                return super.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                throw new RuntimeException("PathFinder#Wrapper clone failed");
-            }
-        }
-
     }
 
     /**
@@ -113,11 +103,6 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
         this.openList.offer(wrappedStart);
     }
 
-    @SuppressWarnings("unchecked")
-    private Wrapper copyWrapper() {
-        return (Wrapper) this.prototype.clone();
-    }
-
     /**
      * 包装点
      *
@@ -126,7 +111,7 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
      */
     private Wrapper wrapPoint(ID pointId, W g) {
         Map<ID, V> vertices = this.vertices;
-        Wrapper wrapper = copyWrapper();
+        Wrapper wrapper = new Wrapper();
         wrapper.pointId = pointId;
         wrapper.g = g;
         wrapper.h = this.getterOfH.apply(vertices.get(pointId), vertices.get(this.endId));

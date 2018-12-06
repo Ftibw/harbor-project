@@ -88,12 +88,7 @@ public class MapController {
             buildAdjacencyTable(adjacencyTable, edge);
 
             if (MapEdge.IS_DOUBLE_DIRECT.equals(edge.getIsDirected())) {
-                MapEdge reverseEdge = MapEdge.copy();
-                reverseEdge.setTail(edge.getHead());
-                reverseEdge.setHead(edge.getTail());
-                reverseEdge.setDistance(edge.getDistance());
-                reverseEdge.setTime(edge.getTime());
-                buildAdjacencyTable(adjacencyTable, reverseEdge);
+                buildAdjacencyTable(adjacencyTable, new MapEdge(edge.getTail(), edge.getHead(), edge.getDistance(), edge.getTime()));
             }
         }
 
