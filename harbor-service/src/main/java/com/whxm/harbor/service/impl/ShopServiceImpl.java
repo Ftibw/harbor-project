@@ -269,11 +269,9 @@ public class ShopServiceImpl implements ShopService {
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);
         if (!result.getCode().equals(ResultEnum.SUCCESS_DELETED.getCode())) {
-            result.setResultEnum(ResultEnum.SUCCESS_DELETED);
-            result.setMsg(String.format("商铺编号为%s的建筑删除成功,对应的建筑有关的边删除行数为0", number));
-            return result;
+            return Result.success(String.format("商铺编号为%s的建筑删除成功,对应的建筑有关的边删除行数为0", number));
         }
-        return Result.success(ResultEnum.SUCCESS_DELETED);
+        return Result.success();
     }
 
     @CacheEvict(cacheNames = "bizBuilding", allEntries = true)

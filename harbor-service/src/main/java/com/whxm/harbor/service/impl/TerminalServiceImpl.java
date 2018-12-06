@@ -119,11 +119,9 @@ public class TerminalServiceImpl implements TerminalService {
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);
         if (!result.getCode().equals(ResultEnum.SUCCESS_DELETED.getCode())) {
-            result.setResultEnum(ResultEnum.SUCCESS_DELETED);
-            result.setMsg(String.format("编号为%s的终端删除成功,终端对应建筑的有关边删除行数为0", number));
-            return result;
+            return Result.success(String.format("编号为%s的终端删除成功,终端对应建筑的有关边删除行数为0", number));
         }
-        return Result.success(ResultEnum.SUCCESS_DELETED);
+        return Result.success();
     }
 
     @Override
