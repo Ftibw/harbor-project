@@ -94,15 +94,15 @@ public class MapController {
 
         //TODO find path using vertices and adjacencyTable by PathFinder
         PathFinder<Integer, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
-                vertices, adjacencyTable, startId, endId, WeightImpl.newInstance(0.0, 0.0),
+                vertices, adjacencyTable, startId, endId, new WeightImpl(0.0, 0.0),
                 (point, end) -> {
                     Double h = Math.abs(end.getDx() - point.getDx())
                             + Math.abs(end.getDy() - point.getDy());
-                    return WeightImpl.newInstance(h, 0.0);
+                    return new WeightImpl(h, 0.0);
                 }
         );
         Map<String, Object> info = pathFinder.findPath(MapEdge::getHead,
-                (edge) -> WeightImpl.newInstance(edge.getDistance(), edge.getTime()));
+                (edge) -> new WeightImpl(edge.getDistance(), edge.getTime()));
         if (null == info)
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "路径不存在");
         //将路径点按起点--->终点的次序以数组返回前端
