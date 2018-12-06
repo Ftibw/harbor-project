@@ -8,7 +8,6 @@ import com.whxm.harbor.conf.TerminalConfig;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;

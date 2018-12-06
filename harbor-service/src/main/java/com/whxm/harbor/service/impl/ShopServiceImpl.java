@@ -6,7 +6,6 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizShopMapper;
 import com.whxm.harbor.service.MapService;
