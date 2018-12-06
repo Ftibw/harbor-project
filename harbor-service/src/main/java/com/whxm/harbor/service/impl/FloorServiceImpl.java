@@ -61,9 +61,6 @@ public class FloorServiceImpl implements FloorService {
 
         List<BizFloor> list = bizFloorMapper.getBizFloorList(condition);
 
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
-
         pageVO.setList(list);
 
         pageVO.setTotal(page.getTotal());

@@ -42,9 +42,6 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
         List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(condition);
 
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
-
         list.forEach(item -> item.setActivityMaterialImgPath(
                 pathConfig.getResourceURLWithPost()
                         + item.getActivityMaterialImgPath()

@@ -43,9 +43,6 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         //目前参数用不上
         List<BizScreensaverMaterial> list = callback.call(null);
 
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
-
         list.forEach(item -> item.setScreensaverMaterialImgPath(
                 pathConfig.getResourceURLWithPost()
                         + item.getScreensaverMaterialImgPath()
@@ -83,13 +80,8 @@ public class ScreensaverMaterialServiceImpl implements ScreensaverMaterialServic
         }
         //删除屏保素材,先删屏保-屏保素材关系表,再删屏保素材表
         affectRow = bizScreensaverMaterialMapper.delTerminalFirstPageMaterialRelation(bizScreensaverMaterialId);
-        if (0 == affectRow) {
-            throw new BusinessException(String.format("ID为%s的终端首页屏保素材关系无法删除", bizScreensaverMaterialId));
-        }
         affectRow = bizScreensaverMaterialMapper.deleteByPrimaryKey(bizScreensaverMaterialId);
-        if (0 == affectRow) {
-            throw new BusinessException(String.format("ID为%s的屏保素材,无法删除", bizScreensaverMaterialId));
-        }
+
         return Result.success(ResultEnum.SUCCESS_DELETED);
     }
 

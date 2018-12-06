@@ -21,7 +21,7 @@ public class BusinessException extends RuntimeException {
 
     protected Object data;
 
-    public BusinessException() {
+    protected BusinessException() {
         ExceptionEnum exceptionEnum = ExceptionEnum.getByEClass(this.getClass());
         if (exceptionEnum != null) {
             resultEnum = exceptionEnum.getResultEnum();
@@ -35,20 +35,14 @@ public class BusinessException extends RuntimeException {
 
     }
 
-    public BusinessException(String message) {
+    protected BusinessException(String message) {
         this();
         this.message = message;
     }
 
-    public BusinessException(String format, Object... objects) {
+    protected BusinessException(String format, Object... objects) {
         this();
         format = StringUtils.replace(format, "{}", "%s");
-        this.message = String.format(format, objects);
-    }
-
-    public BusinessException(String msg, Throwable cause, Object... objects) {
-        this();
-        String format = StringUtils.replace(msg, "{}", "%s");
         this.message = String.format(format, objects);
     }
 

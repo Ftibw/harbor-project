@@ -67,10 +67,8 @@ public class MapServiceImpl implements MapService {
 
         List<BizMap> list = bizMapMapper.getBizMapList(condition);
 
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
-
-        list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
+        if (null != list && !list.isEmpty())
+            list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
 
         pageVO.setList(list);
 
@@ -84,10 +82,9 @@ public class MapServiceImpl implements MapService {
 
         List<BizMap> list = bizMapMapper.getBizMapList(null);
 
-        if (null == list || list.isEmpty())
-            throw new DataNotFoundException();
-
-        list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
+        if (null != list && !list.isEmpty()) {
+            list.forEach(item -> item.setMapImgPath(pathConfig.getResourceURLWithPost() + item.getMapImgPath()));
+        }
 
         return list;
     }

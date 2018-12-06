@@ -62,9 +62,6 @@ public class ActivityServiceImpl implements ActivityService {
 
         List<BizActivity> list = bizActivityMapper.getBizActivityList(condition);
 
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
-
         list.forEach(item -> item.setActivityLogo(
                 pathConfig.getResourceURLWithPost()
                         + item.getActivityLogo()
