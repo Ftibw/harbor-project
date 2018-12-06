@@ -80,6 +80,11 @@ public class MapController {
             Integer id = b.getId();
             vertices.put(id, b);
         }
+
+        if (null == vertices.get(startId) || null == vertices.get(endId)) {
+            return Result.failure(ResultEnum.DATA_IS_WRONG, "起点或终点数据无效");
+        }
+
         List<MapEdge> reverseEdgeList = new ArrayList<>();
         for (MapEdge edge : edges) {
             if (MapEdge.IS_DOUBLE_DIRECT.equals(edge.getIsDirected())) {
