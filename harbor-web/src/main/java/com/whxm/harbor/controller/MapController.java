@@ -222,6 +222,7 @@ public class MapController {
             b.setShopImg(svo.getPictures());
             b.setShopMessage(svo.getShopDescript());
             b.setBizType(svo.getBizFormatId());
+            b.setShopTel(svo.getShopTel());
         }
         return Result.success(buildings);
     }
