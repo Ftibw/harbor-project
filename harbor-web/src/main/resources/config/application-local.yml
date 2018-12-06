@@ -1,4 +1,4 @@
-mysql.address:  192.168.1.103
+mysql.address:  192.168.1.80
 redis.address:  localhost
 resource.address: 192.168.1.103
 my-web-dir: C:/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps
