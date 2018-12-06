@@ -77,29 +77,26 @@ public class MapController {
         Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
         Map<Integer, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表
         for (BizBuilding b : buildings) {
-            Integer id = b.getId();
-            vertices.put(id, b);
+            vertices.put(b.getId(), b);
         }
 
         if (null == vertices.get(startId) || null == vertices.get(endId)) {
             return Result.failure(ResultEnum.DATA_IS_WRONG, "起点或终点数据无效");
         }
 
-        List<MapEdge> reverseEdgeList = new ArrayList<>();
         for (MapEdge edge : edges) {
+            buildAdjacencyTable(adjacencyTable, edge);
+
             if (MapEdge.IS_DOUBLE_DIRECT.equals(edge.getIsDirected())) {
                 MapEdge reverseEdge = MapEdge.copy();
                 reverseEdge.setTail(edge.getHead());
                 reverseEdge.setHead(edge.getTail());
                 reverseEdge.setDistance(edge.getDistance());
                 reverseEdge.setTime(edge.getTime());
-                reverseEdgeList.add(reverseEdge);
+                buildAdjacencyTable(adjacencyTable, reverseEdge);
             }
         }
-        edges.addAll(reverseEdgeList);
-        for (MapEdge edge : edges) {
-            buildAdjacencyTable(adjacencyTable, edge);
-        }
+
         //TODO find path using vertices and adjacencyTable by PathFinder
         PathFinder<Integer, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
                 vertices, adjacencyTable, startId, endId, WeightImpl.newInstance(0.0, 0.0),
