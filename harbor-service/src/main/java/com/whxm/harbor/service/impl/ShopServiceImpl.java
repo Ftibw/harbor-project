@@ -211,8 +211,8 @@ public class ShopServiceImpl implements ShopService {
             exist = bizShopMapper.selectIdByNumber(shopNumber);
 
             if (Objects.isNull(exist)) {
-                bizShopMapper.insertShopVisit(shopNumber);
                 affectRow = bizShopMapper.insert(shopVo);
+                bizShopMapper.insertShopVisit(shopNumber);
             }
         }
 

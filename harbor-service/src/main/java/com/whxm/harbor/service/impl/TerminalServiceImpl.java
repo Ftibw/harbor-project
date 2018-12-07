@@ -157,8 +157,8 @@ public class TerminalServiceImpl implements TerminalService {
             exist = bizTerminalMapper.selectIdByNumber(terminalNumber);
 
             if (Objects.isNull(exist)) {
-                bizTerminalMapper.insertTerminalVisit(terminalNumber);
                 affectRow = bizTerminalMapper.insert(bizTerminal);
+                bizTerminalMapper.insertTerminalVisit(terminalNumber);
             }
         }
 
