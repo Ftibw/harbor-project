@@ -97,10 +97,12 @@ public class UserController {
         Assert.notNull(user, "用户数据为空");
         Assert.isNull(user.getUserId(), "用户ID必须为空");
         Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
-        Assert.notNull(user.getUserPassword(), "用户密码不能为空");
-
+        String password = user.getUserPassword();
+        Assert.notNull(password, "用户密码不能为空");
         //32位加密
-        user.setUserPassword(user.getUserPassword());
+        if (password.length() != 32)
+            return Result.failure(ResultEnum.USER_LOGIN_ERROR);
+        user.setUserPassword(password);
 
         return userService.addUser(user);
     }
