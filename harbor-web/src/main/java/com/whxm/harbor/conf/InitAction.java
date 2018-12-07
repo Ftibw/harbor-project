@@ -1,8 +1,12 @@
 package com.whxm.harbor.conf;
 
 import com.whxm.harbor.aop.KeepAliveAspect;
+import com.whxm.harbor.bean.User;
 import com.whxm.harbor.cache.CacheService;
+import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.service.TerminalService;
+import com.whxm.harbor.service.UserService;
+import com.whxm.harbor.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -22,16 +26,19 @@ public class InitAction implements
     private final TerminalService terminalService;
     private final KeepAliveAspect keepAliveAspect;
     private final CacheService cacheService;
+    private final UserService userService;
 
     @Autowired
     public InitAction(RedisTemplate<Object, Object> redisTemplate,
                       TerminalService terminalService,
                       KeepAliveAspect keepAliveAspect,
-                      CacheService cacheService) {
+                      CacheService cacheService,
+                      UserService userService) {
         this.redisTemplate = redisTemplate;
         this.terminalService = terminalService;
         this.keepAliveAspect = keepAliveAspect;
         this.cacheService = cacheService;
+        this.userService = userService;
     }
 
     private void initRedisSerializer(RedisTemplate<Object, Object> redisTemplate) {
@@ -53,5 +60,14 @@ public class InitAction implements
         cacheService.getFormatList();
         cacheService.listBuildings();
         cacheService.listEdges();
+
+        User user = new User();
+        user.setUserName("sys_admin");
+        user.setUserLoginname("admin");
+        user.setUserPassword(MD5Utils.MD5("123456"));
+        user.setIsDeleted(Constant.NO);
+        User admin = userService.login(user);
+        if (null == admin)
+            userService.addUser(user);
     }
 }
