@@ -3,7 +3,6 @@ package com.whxm.harbor.service.impl;
 import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.BusinessException;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.BuildingService;
