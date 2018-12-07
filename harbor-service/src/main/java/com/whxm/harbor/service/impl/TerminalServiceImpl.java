@@ -150,19 +150,20 @@ public class TerminalServiceImpl implements TerminalService {
 
         bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
 
+        String terminalNumber = bizTerminal.getTerminalNumber();
         //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
         synchronized (this) {
 
-            exist = bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber());
+            exist = bizTerminalMapper.selectIdByNumber(terminalNumber);
 
             if (Objects.isNull(exist)) {
-
+                bizTerminalMapper.insertTerminalVisit(terminalNumber);
                 affectRow = bizTerminalMapper.insert(bizTerminal);
             }
         }
 
         if (Objects.nonNull(exist))
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端编号%s重复", bizTerminal.getTerminalId(), bizTerminal.getTerminalNumber()));
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端编号%s重复", bizTerminal.getTerminalId(), terminalNumber));
 
         return 0 == affectRow ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "新终端,无法添加")

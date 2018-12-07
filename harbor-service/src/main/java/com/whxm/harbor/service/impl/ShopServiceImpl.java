@@ -197,27 +197,27 @@ public class ShopServiceImpl implements ShopService {
 
         //赋值
         String shopId = UUID.randomUUID().toString().replace("-", "");
-
+        String shopNumber = shopVo.getShopNumber();
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
         shopVo.setShopId(shopId);
         shopVo.setIsShopEnabled(Constant.YES);
         shopVo.setAddShopTime(new Date());
-        shopVo.setShopHouseNumber(shopVo.getShopNumber());
+        shopVo.setShopHouseNumber(shopNumber);
         String desc = shopVo.getShopDescript();
         shopVo.setShopDescript(null == desc ? "" : desc);
         //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
         synchronized (this) {
 
-            exist = bizShopMapper.selectIdByNumber(shopVo.getShopNumber());
+            exist = bizShopMapper.selectIdByNumber(shopNumber);
 
             if (Objects.isNull(exist)) {
-
+                bizShopMapper.insertShopVisit(shopNumber);
                 affectRow = bizShopMapper.insert(shopVo);
             }
         }
 
         if (Objects.nonNull(exist))
-            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopVo.getShopNumber()));
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺编号%s重复", shopVo.getShopId(), shopNumber));
 
         List<ShopPicture> pictures = shopVo.getPictures();
 
@@ -251,6 +251,7 @@ public class ShopServiceImpl implements ShopService {
         //删商铺
         String number = bizShop.getShopNumber();
         int affectRow = bizShopMapper.deleteByPrimaryKey(bizShopId);
+        bizShopMapper.deleteShopVisit(number);
         if (0 == affectRow) {
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId));
         }

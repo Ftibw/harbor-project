@@ -3,8 +3,8 @@ package com.whxm.harbor.mapper;
 import com.whxm.harbor.bean.BizShop;
 import com.whxm.harbor.bean.ShopPicture;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -43,4 +43,10 @@ public interface BizShopMapper {
     //int delShopPicturesRelation(String shopId);
 
     Integer couldUpdateUniqueNumber(BizShop bizShop);
+
+    @Insert("INSERT INTO biz_shop_visit(shop_number,shop_visit_amount,shop_visit_time) VALUES(#{shopNumber},0,CURRENT_TIMESTAMP)")
+    int insertShopVisit(String shopNumber);
+
+    @Delete("DELETE FROM biz_shop_visit WHERE shop_number=#{shopNumber}")
+    int deleteShopVisit(String shopNumber);
 }
