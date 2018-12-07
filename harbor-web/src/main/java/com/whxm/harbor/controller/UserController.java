@@ -100,7 +100,7 @@ public class UserController {
         Assert.notNull(user.getUserPassword(), "用户密码不能为空");
 
         //32位加密
-        user.setUserPassword(MD5Utils.MD5(user.getUserPassword()));
+        user.setUserPassword(user.getUserPassword());
 
         return userService.addUser(user);
     }
@@ -123,7 +123,7 @@ public class UserController {
 
         String userId = info.getUserId();
 
-        if (info.getUserPassword().equals(MD5Utils.MD5(user.getUserPassword()))) {
+        if (info.getUserPassword().equals(user.getUserPassword())) {
 
             String key = "USER_LIMIT_" + userId;
 

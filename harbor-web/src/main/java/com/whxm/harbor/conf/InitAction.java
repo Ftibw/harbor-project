@@ -64,7 +64,7 @@ public class InitAction implements
         User user = new User();
         user.setUserName("sys_admin");
         user.setUserLoginname("admin");
-        user.setUserPassword(MD5Utils.MD5("harbor654321"));
+        user.setUserPassword(MD5Utils.MD5("123456"));
         user.setIsDeleted(Constant.NO);
         User admin = userService.login(user);
         if (null == admin)
