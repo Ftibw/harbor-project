@@ -32,6 +32,10 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
      */
     private ID endId;
     /**
+     * 终点
+     */
+    private V endVertex;
+    /**
      * 当前点到终点的最短路线边权值总和估值的获取算法,由外部提供
      */
     private BiFunction<V, V, W> getterOfH;
@@ -96,7 +100,9 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
         this.getterOfH = hGetter;
         if (null == vertices.get(startId))
             throw new DataNotFoundException("起点数据错误,请重新输入");
-        if (null == vertices.get(endId))
+
+        this.endVertex = vertices.get(endId);
+        if (null == this.endVertex)
             throw new DataNotFoundException("终点数据错误,请重新输入");
         Wrapper wrappedStart = wrapPoint(startId, zeroWeight);
         wrappedStart.previous = prototype;//prototype仅做占位用
@@ -114,7 +120,10 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
         Wrapper wrapper = new Wrapper();
         wrapper.pointId = pointId;
         wrapper.g = g;
-        wrapper.h = this.getterOfH.apply(vertices.get(pointId), vertices.get(this.endId));
+        V curV = vertices.get(pointId);
+        if (null == curV)
+            throw new DataNotFoundException("当前边头点不在顶点集中");
+        wrapper.h = this.getterOfH.apply(curV, this.endVertex);
         wrapper.f = g.add(wrapper.h);
         this.wrapperTable.put(pointId, wrapper);
         return wrapper;
