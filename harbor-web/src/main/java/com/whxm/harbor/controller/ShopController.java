@@ -166,7 +166,7 @@ public class ShopController {
 
         return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
     }
-    //==========================以下均被拦截============================
+    //==========================以下需授权的接口均被拦截============================
 
     @ApiOperation("获取商铺列表(需授权)")
     @GetMapping("/bizShops")
@@ -188,8 +188,8 @@ public class ShopController {
         return shopService.triggerBizShop(id);
     }
 
-    @ApiOperation("修改商铺(需授权)")
-    @PutMapping("/bizShop")
+    @ApiOperation("修改商铺")
+    @PutMapping("/shops")
     public Result updateBizShop(@RequestBody BizShopVo shopVo) {
 
         Assert.notNull(shopVo, "商铺数据不能为空");
@@ -238,11 +238,11 @@ public class ShopController {
         return shopService.addBizShop(shopVo);
     }
 
-    @ApiOperation("删除商铺(需授权)")
-    @DeleteMapping(value = "/bizShop")
+    @ApiOperation("删除商铺")
+    @DeleteMapping(value = "/shops")
     public Result deleteBizShop(
             @ApiParam(name = "ID", value = "商铺的ID", required = true)
-                    String id
+            @RequestParam String id
     ) {
         Assert.notNull(id, "商铺ID不能为空");
 
