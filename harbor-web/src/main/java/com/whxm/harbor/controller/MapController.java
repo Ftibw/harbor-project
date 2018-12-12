@@ -216,7 +216,7 @@ public class MapController {
 
             BizShopVo svo = shopMap.get(number);
             if (null == svo) continue;
-
+            b.setShopId(svo.getShopId());
             b.setShopImg(svo.getPictures());
             b.setShopMessage(svo.getShopDescript());
             b.setBizType(svo.getBizFormatId());

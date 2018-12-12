@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 
 public class BizShop {
-    @ApiModelProperty("商铺编号(修改时必要)")
+    @ApiModelProperty("商铺的ID(修改时必要)")
     private String shopId;
     @ApiModelProperty("商铺编号(添加时必要)")
     private String shopNumber;

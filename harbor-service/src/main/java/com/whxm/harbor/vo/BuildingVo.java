@@ -21,6 +21,8 @@ public class BuildingVo extends BizBuilding {
 
     private String shopTel;
 
+    private String shopId;
+
     public List getPath() {
         return path;
     }
@@ -59,5 +61,13 @@ public class BuildingVo extends BizBuilding {
 
     public String getShopTel() {
         return shopTel;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
     }
 }

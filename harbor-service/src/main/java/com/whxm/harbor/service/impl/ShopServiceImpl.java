@@ -248,6 +248,8 @@ public class ShopServiceImpl implements ShopService {
         //删图片
         bizShopMapper.deleteShopPictures(bizShopId);
         BizShop bizShop = bizShopMapper.selectByPrimaryKey(bizShopId);
+        if (null == bizShop)
+            return Result.success("该商铺不存在,无法删除");
         //删商铺
         String number = bizShop.getShopNumber();
         int affectRow = bizShopMapper.deleteByPrimaryKey(bizShopId);
