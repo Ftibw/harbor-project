@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface MapEdgeMapper {
-    int deleteByPartKey(MapEdge key);
+    int delEdgesByTailOrHead(MapEdge key);
 
     int deleteByPrimaryKey(Integer id);
 

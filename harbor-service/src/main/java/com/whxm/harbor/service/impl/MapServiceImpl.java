@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.mapper.BizMapMapper;
 import com.whxm.harbor.mapper.MapEdgeMapper;
 import com.whxm.harbor.service.MapService;
@@ -145,7 +144,7 @@ public class MapServiceImpl implements MapService {
     @CacheEvict(cacheNames = "bizEdge", allEntries = true)
     @Override
     public Result delEdgesByTailOrHead(MapEdge edge) {
-        int i = mapEdgeMapper.deleteByPartKey(edge);
+        int i = mapEdgeMapper.delEdgesByTailOrHead(edge);
         return 0 == i ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("点ID为%s吸附的边,无法删除", edge))
                 : Result.success(ResultEnum.SUCCESS_DELETED);
