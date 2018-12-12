@@ -241,7 +241,7 @@ public class ShopController {
     @ApiOperation("删除商铺")
     @DeleteMapping(value = "/shops")
     public Result deleteBizShop(
-            @ApiParam(name = "ID", value = "商铺的ID", required = true)
+            @ApiParam(name = "id", value = "商铺的ID", required = true)
             @RequestParam String id
     ) {
         Assert.notNull(id, "商铺ID不能为空");
