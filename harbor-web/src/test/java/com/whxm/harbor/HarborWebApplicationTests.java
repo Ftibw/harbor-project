@@ -28,8 +28,11 @@ public class HarborWebApplicationTests {
         String key = "testKey";
         int limit = 2;
         long expire = TimeUnit.HOURS.toMillis(2);
-        if (!AtomicCounter.count(redisTemplate, key, limit, expire)) {
-            System.err.println("超出" + limit + "次限制");
+        int i=3;
+        while (i-->0){
+            if (!AtomicCounter.count(redisTemplate, key, limit, expire)) {
+                System.err.println("超出" + limit + "次限制");
+            }
         }
     }
 
