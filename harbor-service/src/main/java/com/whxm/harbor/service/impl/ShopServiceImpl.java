@@ -294,8 +294,11 @@ public class ShopServiceImpl implements ShopService {
             building.setDy(vo.getDy());
             i = bizBuildingMapper.insert(building);
         }
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("shop", vo);
+        ret.put("building", building);
         return 0 == i ?
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("商铺[%s],无法添加", vo.getShopName()))
-                : Result.success(building);
+                : Result.success(ret);
     }
 }
