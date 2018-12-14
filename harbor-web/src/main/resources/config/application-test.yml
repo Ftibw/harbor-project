@@ -1,5 +1,5 @@
-mysql.address:  192.168.1.80
-redis.address:  192.168.1.80
-resource.address: 192.168.1.80
+mysql.address:  192.168.1.140
+redis.address:  192.168.1.140
+resource.address: 192.168.1.140
 my-web-dir: /usr/local/tomcat/webapps
 

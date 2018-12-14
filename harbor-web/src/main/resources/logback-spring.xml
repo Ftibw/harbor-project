@@ -2,7 +2,9 @@
 <configuration debug="false">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径,${}读取不到yml中的值...-->
-    <property name="LOG_HOME" value="C:/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/logs" />
+    <!--C:/Users/ftibw/Desktop/dev/install/tomcat/apache-tomcat-8.0.45/apache-tomcat-8.0.45/webapps/-->
+    <!--docker容器中的该目录被挂载到了宿主的指定卷目录中,并且springboot的jar共享了前端用的tomcat的apps的挂载卷-->
+    <property name="LOG_HOME" value="/usr/local/tomcat/webapps/logs"/>
     <!--日志文件名-->
     <property name="FILE_NAME" value="harbor"/>
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
