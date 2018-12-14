@@ -94,13 +94,14 @@ public class TerminalServiceImpl implements TerminalService {
         bizTerminal.setTerminalNumber(null);
         bizTerminal.setTerminalName(null);
         bizTerminal.setFloorId(null);
-
         int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
 
         if (0 == affectRow)
             Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId));
 
         String number = terminal.getTerminalNumber();
+
+        bizTerminalMapper.deleteTerminalVisit(number);
 
         //删building
         BizBuilding building = bizBuildingMapper.selectByNumber(number);
