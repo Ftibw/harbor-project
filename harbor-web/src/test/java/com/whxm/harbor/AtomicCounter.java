@@ -1,11 +1,16 @@
 package com.whxm.harbor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.DigestUtils;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.scripting.ScriptSource;
-import org.springframework.scripting.support.StaticScriptSource;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.CharBuffer;
 import java.util.Collections;
 
 /**
@@ -14,15 +19,59 @@ import java.util.Collections;
  */
 public class AtomicCounter {
 
-    private static final ScriptSource SCRIPT_SOURCE = new StaticScriptSource("local key = KEYS[1] " +
-            "local limit = tonumber(ARGV[1]) " +
-            "local expire = ARGV[2] " +
-            "local count = tonumber(redis.call('get', key)) or 0 " +
-            "if count < limit then " +
-            "redis.call('set', key, count + 1) " +
-            "redis.call('expire', key, expire) " +
-            "return 1 " +
-            "else return 0 end");
+    private static final Logger logger = LoggerFactory.getLogger(AtomicCounter.class);
+
+    private static String sha1;
+
+    static {
+        String script;
+        try {
+            InputStreamReader reader = new InputStreamReader(new ClassPathResource("script.lua").getInputStream());
+            CharBuffer buf = CharBuffer.allocate(0x800); // 2K chars (4K bytes))
+            StringBuilder sb = new StringBuilder();
+            long total = 0;
+            while (reader.read(buf) != -1) {
+                buf.flip();
+                sb.append(buf);
+                total += buf.remaining();
+                buf.clear();
+            }
+            logger.info("read " + total + " chars from script.lua");
+            sha1 = DigestUtils.sha1DigestAsHex(sb.toString());
+        } catch (IOException e) {
+            script = "local key = KEYS[1] " +
+                    "local limit = tonumber(ARGV[1]) " +
+                    "local expire = ARGV[2] " +
+                    "local count = tonumber(redis.call('get', key)) or 0 " +
+                    "if count < limit then " +
+                    "redis.call('set', key, count + 1) " +
+                    "redis.call('expire', key, expire) " +
+                    "return 1 " +
+                    "else return 0 end";
+            sha1 = DigestUtils.sha1DigestAsHex(script);
+            logger.error("read failed from script.lua", e);
+        }
+    }
+
+
+    private static final RedisScript redisScript = new RedisScript() {
+        //脚本字符串进行摘要加密后的16进制字符串
+        @Override
+        public String getSha1() {
+            return sha1;
+        }
+
+        //redis执行脚本响应结果的类型
+        @Override
+        public Class getResultType() {
+            return Long.TYPE;
+        }
+
+        @Override
+        public String getScriptAsString() {
+            return null;
+        }
+    };
 
     /**
      * 分布式原子计数
@@ -34,10 +83,7 @@ public class AtomicCounter {
      * @return true 限制次数之内 | false 超出限制次数
      */
     @SuppressWarnings("unchecked")
-    public static Boolean count(RedisTemplate redisTemplate, String key, int limit, long expire) {
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
-        redisScript.setScriptSource(SCRIPT_SOURCE);
-        redisScript.setResultType(Long.TYPE);
+    public static boolean count(RedisTemplate redisTemplate, String key, int limit, long expire) {
         RedisSerializer serializer = redisTemplate.getStringSerializer();
         return 1 == (long) redisTemplate.execute(
                 redisScript, serializer, serializer,

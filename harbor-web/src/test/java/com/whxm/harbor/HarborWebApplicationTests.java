@@ -26,9 +26,9 @@ public class HarborWebApplicationTests {
     @Test
     public void testRedisLuaScript() {
         String key = "testKey";
-        int limit = 2;
+        int limit = 3;
         long expire = TimeUnit.HOURS.toMillis(2);
-        int i=3;
+        int i=5;
         while (i-->0){
             if (!AtomicCounter.count(redisTemplate, key, limit, expire)) {
                 System.err.println("超出" + limit + "次限制");
