@@ -40,6 +40,8 @@ public class MapController {
     private MapService mapService;
     @Autowired
     private BuildingService buildingService;
+    @Autowired
+    private ShopService shopService;
 
     //###########################################  地图导航  ############################################
     @Autowired
@@ -191,9 +193,6 @@ public class MapController {
         }
         return Result.success(edgeList);
     }
-
-    @Autowired
-    private ShopService shopService;
 
     @ApiOperation("获取全部建筑信息以及关联商铺信息")
     @GetMapping(value = "/buildingsInfo")
