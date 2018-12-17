@@ -165,12 +165,23 @@ public class ShopServiceImpl implements ShopService {
 
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
 
+        BizShop bizShop = bizShopMapper.selectByPrimaryKey(shopVo.getShopId());
+        String shopNumber = bizShop.getShopNumber();
+        BizBuilding building = null;
+        if (!shopNumber.equals(shopVo.getShopNumber())) {
+            building = bizBuildingMapper.selectByNumber(shopNumber);
+            building.setNumber(shopVo.getShopNumber());
+
+        }
+
         synchronized (this) {
 
             could = bizShopMapper.couldUpdateUniqueNumber(shopVo);
 
             if (null != could) {
-
+                if (null != building) {
+                    bizBuildingMapper.updateByPrimaryKeySelective(building);
+                }
                 affectRow = bizShopMapper.updateByPrimaryKeySelective(shopVo);
             }
         }
@@ -184,7 +195,6 @@ public class ShopServiceImpl implements ShopService {
         }
         bizShopMapper.deleteShopPictures(shopId);
         bizShopMapper.insertShopPictures(shopId, pictures);
-
         return Result.success(shopVo);
     }
 
@@ -285,14 +295,23 @@ public class ShopServiceImpl implements ShopService {
         if (ResultEnum.SUCCESS.getCode().equals(result.getCode())) {
             building = new BizBuilding();
             building.setId(null);
-            building.setNumber(vo.getShopNumber());
+            String shopNumber = vo.getShopNumber();
+            Assert.notEmpty(shopNumber, "商铺编号不能为空");
+            building.setNumber(shopNumber);
             building.setName(vo.getShopName());
-            building.setLayer(vo.getFloorId());
+            Integer floorId = vo.getFloorId();
+            Assert.notNull(floorId, "商铺所在楼层ID不能为空");
+            building.setLayer(floorId);
             building.setType(vo.getBuildingType());
             building.setArea(JacksonUtils.toJson(vo.getArea()));
-            building.setDx(vo.getDx());
-            building.setDy(vo.getDy());
-            i = bizBuildingMapper.insert(building);
+            Double dx = vo.getDx();
+            Double dy = vo.getDy();
+            Assert.notNull(dx, "商铺dx不能为空");
+            Assert.notNull(dy, "商铺dy不能为空");
+            building.setDx(dx);
+            building.setDy(dy);
+            building.setNumber(dx + "_" + dy);
+            i = bizBuildingMapper.batchReplace(Collections.singletonList(building));
         }
         Map<String, Object> ret = new HashMap<>();
         ret.put("shop", vo);

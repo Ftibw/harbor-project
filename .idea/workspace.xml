@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9cb277fa-ea85-4ca5-961d-63ae484e173e" name="Default" comment="test redis lua script">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/harbor-web/src/main/resources/logback-spring.xml" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-web/src/main/resources/logback-spring.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/harbor-mapper/target/" />
@@ -71,45 +73,45 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="11" />
-          <entry key="java" value="766" />
+          <entry key="class" value="12" />
+          <entry key="java" value="797" />
           <entry key="lst" value="1" />
           <entry key="lua" value="7" />
           <entry key="pom" value="3" />
           <entry key="properties" value="2" />
-          <entry key="xml" value="42" />
-          <entry key="yml" value="71" />
+          <entry key="xml" value="45" />
+          <entry key="yml" value="76" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="11" />
-          <entry key="JAVA" value="766" />
+          <entry key="CLASS" value="12" />
+          <entry key="JAVA" value="797" />
           <entry key="Lua" value="6" />
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="Properties" value="2" />
-          <entry key="XML" value="45" />
-          <entry key="YAML" value="71" />
+          <entry key="XML" value="48" />
+          <entry key="YAML" value="76" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="26" />
-          <entry key="java" value="21027" />
+          <entry key="java" value="21409" />
           <entry key="lua" value="103" />
           <entry key="txt" value="182" />
           <entry key="xml" value="648" />
-          <entry key="yml" value="221" />
+          <entry key="yml" value="262" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="21027" />
+          <entry key="JAVA" value="21409" />
           <entry key="Lua" value="103" />
           <entry key="PLAIN_TEXT" value="208" />
           <entry key="SQL" value="32" />
           <entry key="XML" value="616" />
-          <entry key="YAML" value="221" />
+          <entry key="YAML" value="262" />
         </counts>
       </usages-collector>
     </session>
@@ -117,19 +119,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/test/java/com/whxm/harbor/AtomicCounter.java">
+        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="87" selection-start-line="87" selection-end-line="87" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2124#2125#0" expanded="true" />
-                <element signature="e#2159#2160#0" expanded="true" />
-                <element signature="e#2217#2218#0" expanded="true" />
-                <element signature="e#2257#2258#0" expanded="true" />
-                <element signature="e#2320#2321#0" expanded="true" />
-                <element signature="e#2357#2358#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="200">
+              <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ShopController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="219" column="36" selection-start-line="219" selection-start-column="29" selection-end-line="219" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ShopService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="218">
+              <caret line="57" column="11" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="174" column="9" lean-forward="true" selection-start-line="174" selection-start-column="9" selection-end-line="174" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -137,26 +157,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="227" column="36" selection-start-line="227" selection-start-column="36" selection-end-line="227" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/TerminalService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="35" column="11" selection-start-line="35" selection-start-column="11" selection-end-line="35" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="93" column="44" selection-start-line="93" selection-start-column="44" selection-end-line="93" selection-end-column="44" />
+            <state relative-caret-position="-20">
+              <caret line="49" column="36" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -164,53 +166,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="61" column="17" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="17" />
+            <state relative-caret-position="1260">
+              <caret line="63" column="36" selection-start-line="63" selection-start-column="36" selection-end-line="63" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/logback-spring.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="14" column="52" lean-forward="true" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="3" column="37" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="37" />
+            <state relative-caret-position="100">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/TerminalVisitMapper.java">
+        <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
-              <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+            <state relative-caret-position="-60">
+              <caret line="141" column="42" lean-forward="true" selection-start-line="141" selection-start-column="42" selection-end-line="141" selection-end-column="42" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/TerminalVisitService.java">
+        <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/Assert.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-160">
-              <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizTerminalMapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="62" column="8" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="8" />
+            <state relative-caret-position="218">
+              <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -254,6 +241,7 @@
       <find>超</find>
       <find>read</find>
       <find>chars from script.lua</find>
+      <find>web-path</find>
     </findStrings>
     <replaceStrings>
       <replace>floor_id</replace>
@@ -282,7 +270,6 @@
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/vo/BizShopVo.java" />
         <option value="$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizBuilding.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/cache/CacheService.java" />
-        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/BuildingService.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/MapService.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/MapEdgeMapper.xml" />
@@ -308,7 +295,6 @@
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/BuildingServiceImpl.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizTerminalMapper.java" />
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizShopMapper.java" />
-        <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/conf/InitAction.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/UserController.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/graph/PathFinder.java" />
@@ -318,16 +304,18 @@
         <option value="$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/MapEdgeMapper.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/test/java/com/whxm/harbor/Dmbd4ApplicationTests.java" />
         <option value="$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java" />
-        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml" />
-        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/test/resources/script.lua" />
-        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java" />
         <option value="$PROJECT_DIR$/harbor-web/pom.xml" />
         <option value="$PROJECT_DIR$/harbor-web/src/test/java/com/whxm/harbor/HarborWebApplicationTests.java" />
         <option value="$PROJECT_DIR$/harbor-web/src/test/java/com/whxm/harbor/AtomicCounter.java" />
         <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/TerminalServiceImpl.java" />
-        <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml" />
         <option value="$PROJECT_DIR$/harbor-web/src/main/resources/logback-spring.xml" />
+        <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml" />
+        <option value="$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml" />
+        <option value="$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml" />
+        <option value="$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java" />
+        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java" />
+        <option value="$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java" />
       </list>
     </option>
   </component>
@@ -402,6 +390,51 @@
             <path>
               <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-service" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
               <item name="harbor-web" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -443,6 +476,17 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="harbor" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+              <item name="ShopController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
@@ -454,6 +498,26 @@
               <item name="harbor" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
               <item name="TerminalController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+              <item name="handler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harbor-project" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="harbor" type="462c0819:PsiDirectoryNode" />
+              <item name="wechat" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="harbor-project" type="b2602c69:ProjectViewProjectNode" />
@@ -495,12 +559,12 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544771751078" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545045687145" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Lottery" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -641,14 +705,7 @@
       <workItem from="1544161234891" duration="876000" />
       <workItem from="1544260780053" duration="2608000" />
       <workItem from="1544412736536" duration="18597000" />
-      <workItem from="1544677573341" duration="24799000" />
-    </task>
-    <task id="LOCAL-00043" summary="load cache on start">
-      <created>1543979084107</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1543979084107</updated>
+      <workItem from="1544677573341" duration="40251000" />
     </task>
     <task id="LOCAL-00044" summary="load cache on start">
       <created>1543979251879</created>
@@ -986,7 +1043,14 @@
       <option name="project" value="LOCAL" />
       <updated>1544755109681</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="test redis lua script">
+      <created>1544772204664</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1544772204664</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1022,12 +1086,12 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="271386000" />
+    <option name="totallyTimeSpent" value="286838000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20308311" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22184986" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1037,7 +1101,7 @@
       <window_info id="Web" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2638298" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25957447" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.5687943" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1062,7 +1126,7 @@
       <window_info anchor="right" id="Bean Validation" order="10" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21983914" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20241287" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1072,8 +1136,8 @@
       <window_info id="Web" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.18723404" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.37304965" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.14184397" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.5687943" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -1111,222 +1175,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="test redis lua script" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/RedisCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/DefaultStringRedisConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="318" column="18" selection-start-line="318" selection-start-column="18" selection-end-line="318" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/jedis/JedisClusterConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="4022" column="18" lean-forward="true" selection-start-line="4022" selection-start-column="18" selection-end-line="4022" selection-end-column="18" />
-          <folding>
-            <element signature="e#113932#113933#0" expanded="true" />
-            <element signature="e#113953#113954#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/RedisConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/twelvemonkeys/common/common-io/3.3.2/common-io-3.3.2.jar!/com/twelvemonkeys/io/FileUtil.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_171/src.zip!/java/nio/CharBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4620">
-          <caret line="261" column="22" selection-start-line="261" selection-start-column="22" selection-end-line="261" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/RedisScriptingCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="72" column="87" selection-start-line="72" selection-start-column="76" selection-end-line="72" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/lock/RedisDistributedLock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="74" selection-start-line="74" selection-end-line="76" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/ContextResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/Resource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="46" column="25" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/PathResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="56" column="23" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/AbstractResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="41" column="38" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/FallbackExceptionTranslationStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="47" selection-start-line="47" selection-end-line="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/connection/jedis/JedisConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="3631" selection-start-line="3631" selection-end-line="3631" />
-          <folding>
-            <element signature="e#10804#10805#0" expanded="true" />
-            <element signature="e#10823#10824#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/core/script/DefaultScriptExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="53" column="87" selection-start-line="53" selection-start-column="87" selection-end-line="53" selection-end-column="87" />
-          <folding>
-            <element signature="e#2453#3191#0" expanded="true" />
-            <element signature="e#3190#3191#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/data/spring-data-redis/1.8.12.RELEASE/spring-data-redis-1.8.12.RELEASE-sources.jar!/org/springframework/data/redis/core/script/ScriptExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ShopController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="50" column="38" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/ShopVisitMapper.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/BizBuilding.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="27" column="63" selection-start-line="27" selection-start-column="63" selection-end-line="27" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizShopMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="32" column="68" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/vo/BizShopVo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="297" column="28" lean-forward="true" selection-start-line="297" selection-start-column="28" selection-end-line="297" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ShopService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="84" column="11" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/ClassPathResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2277">
-          <caret line="61" column="11" selection-start-line="61" selection-start-column="11" selection-end-line="61" selection-end-column="11" />
-          <folding>
-            <element signature="e#2112#2113#0" expanded="true" />
-            <element signature="e#2149#2150#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.17.RELEASE/spring-core-4.3.17.RELEASE-sources.jar!/org/springframework/core/io/support/EncodedResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="68" column="10" selection-start-line="68" selection-start-column="10" selection-end-line="68" selection-end-column="10" />
-          <folding>
-            <element signature="e#2232#2233#0" expanded="true" />
-            <element signature="e#2269#2270#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/4.3.17.RELEASE/spring-context-4.3.17.RELEASE-sources.jar!/org/springframework/scripting/support/ResourceScriptSource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="96" column="18" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/4.3.17.RELEASE/spring-context-4.3.17.RELEASE-sources.jar!/org/springframework/scripting/support/StaticScriptSource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="73" column="27" lean-forward="true" selection-start-line="73" selection-start-column="27" selection-end-line="73" selection-end-column="27" />
-          <folding>
-            <element signature="e#1345#1346#0" expanded="true" />
-            <element signature="e#1369#1370#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/4.3.17.RELEASE/spring-context-4.3.17.RELEASE-sources.jar!/org/springframework/scripting/ScriptSource.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="355">
@@ -1376,24 +1224,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="322" column="5" selection-start-line="322" selection-start-column="5" selection-end-line="322" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-parent/1.5.13.RELEASE/spring-boot-starter-parent-1.5.13.RELEASE.pom">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="151" column="16" selection-start-line="151" selection-start-column="16" selection-end-line="151" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
-          <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
         </state>
       </provider>
     </entry>
@@ -1436,13 +1270,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="227" column="36" selection-start-line="227" selection-start-column="36" selection-end-line="227" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -1497,24 +1324,256 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-autoconfigure/1.5.13.RELEASE/spring-boot-autoconfigure-1.5.13.RELEASE.jar!/org/springframework/boot/autoconfigure/web/ServerProperties.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="61" column="17" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="17" />
+        <state relative-caret-position="209">
+          <caret line="820" column="20" selection-start-line="820" selection-start-column="20" selection-end-line="820" selection-end-column="20" />
+          <folding>
+            <element signature="e#28764#28765#0" expanded="true" />
+            <element signature="e#28810#28811#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="655">
+          <caret line="77" column="32" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/WeChatConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/WeChatConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/WeChatTemplate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-240">
+          <caret line="6" column="30" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/WeChatUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/BugEnum.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/PushBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-100">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/handler/GlobalExceptionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-645">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/handler/BaseAggregationLayerGlobalExceptionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/wechat/WeChatTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="92" column="50" selection-start-line="92" selection-start-column="50" selection-end-line="92" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/conf/PathConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+          <folding>
+            <element signature="e#669#670#0" expanded="true" />
+            <element signature="e#749#750#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/logback-spring.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="14" column="52" lean-forward="true" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
+        <state relative-caret-position="700">
+          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/BizBuildingMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/resources/mapper/BizBuildingMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="156" column="18" lean-forward="true" selection-start-line="156" selection-start-column="18" selection-end-line="156" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/vo/BizShopVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="30" column="27" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="27" />
+          <folding>
+            <element signature="e#939#940#0" expanded="true" />
+            <element signature="e#966#967#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-mapper/src/main/java/com/whxm/harbor/mapper/MapEdgeMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/BuildingServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="33" column="34" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/BuildingService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/vo/BuildingVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-domain/src/main/java/com/whxm/harbor/bean/MapEdge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/MapServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="128" selection-start-line="128" selection-end-line="128" />
+          <folding>
+            <element signature="e#4797#4798#0" expanded="true" />
+            <element signature="e#4848#4849#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/MapService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="60" column="15" selection-start-line="60" selection-start-column="15" selection-end-line="60" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/TerminalController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20">
+          <caret line="49" column="36" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/target/classes/config/application.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/target/classes/config/application-test.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="63" column="36" selection-start-line="63" selection-start-column="36" selection-end-line="63" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/harbor-web/src/main/resources/config/application-test.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="3" column="37" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="37" />
+        <state relative-caret-position="100">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-common/src/main/java/com/whxm/harbor/utils/Assert.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/BuildingController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="22" column="14" lean-forward="true" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/MapController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-60">
+          <caret line="141" column="42" lean-forward="true" selection-start-line="141" selection-start-column="42" selection-end-line="141" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/ShopService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="57" column="11" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-service/src/main/java/com/whxm/harbor/service/impl/ShopServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="174" column="9" lean-forward="true" selection-start-line="174" selection-start-column="9" selection-end-line="174" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/harbor-web/src/main/java/com/whxm/harbor/controller/ShopController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="219" column="36" selection-start-line="219" selection-start-column="29" selection-end-line="219" selection-end-column="36" />
         </state>
       </provider>
     </entry>

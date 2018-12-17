@@ -26,6 +26,8 @@ pagehelper:
   params: count=countSql
 server:
   port: 9000
+  tomcat:
+    basedir: /usr/local/tomcat
 ###################以下为自定义配置###################
 # swagger2 restful archive
 swagger2:
@@ -59,7 +61,6 @@ file:
 #容器中的/usr/local/tomcat/webapps目录被挂载到了/var/lib/docker/volumes/webapps/_data,用于文件上传后自动同步到资源服务器
 log:
   parent-path: ${my-web-dir}
-  web-path: /logs/harbor.log  #记录日志
   bug-path: /logs/bug.log     #记录bug
 
 

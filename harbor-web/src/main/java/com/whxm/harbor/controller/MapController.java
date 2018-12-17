@@ -9,6 +9,7 @@ import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.graph.PathFinder;
 import com.whxm.harbor.graph.WeightImpl;
+import com.whxm.harbor.service.BuildingService;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
@@ -37,6 +38,8 @@ public class MapController {
 
     @Autowired
     private MapService mapService;
+    @Autowired
+    private BuildingService buildingService;
 
     //###########################################  地图导航  ############################################
     @Autowired
@@ -136,7 +139,7 @@ public class MapController {
     @PostMapping(value = "/edges")
     public Result saveMapEdges(@RequestBody List<MapEdge> edges) {
 
-        Assert.notNull(edges, "边数据不能为空");
+        Assert.notEmpty(edges, "边数据不能为空");
         for (MapEdge e : edges) {
             Assert.notNull(e.getTail(), "边起点ID不能为空");
             Assert.notNull(e.getHead(), "边终点ID不能为空");
@@ -161,19 +164,19 @@ public class MapController {
     @GetMapping(value = "/edges")
     public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
+
+        List<BizBuilding> buildings = buildingService.listBuildings(fid, null);
+        if (null == buildings || buildings.size() == 0) {
+            return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
+        }
+
         List<MapEdge> edges = mapService.getEdgesByFid(fid);
         List<Map<String, Object>> edgeList = JacksonUtils.readGenericTypeValue(JacksonUtils.toJson(edges),
                 new TypeReference<List<Map<String, Object>>>() {
                 });
         if (null == edgeList)
             return Result.failure(ResultEnum.RESULT_DATA_NONE);
-        String buildingJson = cacheService.listBuildings();
-        if (null == buildingJson)
-            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR, "缓存数据读取失败");
-        List<BizBuilding> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BizBuilding>>() {
-        });
-        if (null == buildings)
-            return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR, "缓存数据反序列化失败");
+
         Map<Object, BizBuilding> buildingMap = new HashMap<>();
         for (BizBuilding b : buildings) {
             buildingMap.put(b.getId(), b);
@@ -196,11 +199,15 @@ public class MapController {
     @GetMapping(value = "/buildingsInfo")
     public Result getMapInfoWithShops() {
         List<BizShopVo> shopVos = shopService.getBizShopListOptional(null);
-        String buildingJson = cacheService.listBuildings();
-        if (null == buildingJson) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据失败");
-        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(buildingJson, new TypeReference<List<BuildingVo>>() {
+        List<BizBuilding> buildingList = buildingService.listBuildings(null, null);
+        if (null == buildingList || buildingList.size() == 0) {
+            return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
+        }
+        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(JacksonUtils.toJson(buildingList), new TypeReference<List<BuildingVo>>() {
         });
-        if (null == buildings) return Result.failure(ResultEnum.DATA_IS_WRONG, "缓存读取建筑数据解析失败");
+        if (null == buildings) {
+            return Result.failure(ResultEnum.DATA_IS_WRONG, "建筑数据错误");
+        }
         Map<String, BizShopVo> shopMap = new HashMap<>();
         for (BizShopVo s : shopVos) {
             shopMap.put(s.getShopNumber(), s);

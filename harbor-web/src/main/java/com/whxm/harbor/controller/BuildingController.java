@@ -46,6 +46,7 @@ public class BuildingController {
     public Result addOneBizBuilding(@RequestBody BizBuilding building) {
         Assert.notNull(building, "建筑数据不能为空");
         Assert.isNull(building.getId(), "建筑ID必须为空");
+        building.setNumber(building.getDx() + "_" + building.getDy());
         return buildingService.saveBizBuildings(Collections.singletonList(building));
     }
 
@@ -53,11 +54,14 @@ public class BuildingController {
     @PostMapping
     public Result addBizBuilding(@RequestBody List<BizBuilding> list) {
 
-        Assert.notNull(list, "建筑数据不能为空");
+        Assert.notEmpty(list, "建筑数据不能为空");
 
         Assert.notRepeat(list, "建筑数据不能重复");
 
-        list.forEach(item -> Assert.isNull(item.getId(), "建筑ID必须为空"));
+        list.forEach(item -> {
+            Assert.isNull(item.getId(), "建筑ID必须为空");
+            item.setNumber(item.getDx() + "_" + item.getDy());
+        });
 
         return buildingService.saveBizBuildings(list);
     }
