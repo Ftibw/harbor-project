@@ -295,22 +295,13 @@ public class ShopServiceImpl implements ShopService {
         if (ResultEnum.SUCCESS.getCode().equals(result.getCode())) {
             building = new BizBuilding();
             building.setId(null);
-            String shopNumber = vo.getShopNumber();
-            Assert.notEmpty(shopNumber, "商铺编号不能为空");
-            building.setNumber(shopNumber);
+            building.setNumber(vo.getShopNumber());
             building.setName(vo.getShopName());
-            Integer floorId = vo.getFloorId();
-            Assert.notNull(floorId, "商铺所在楼层ID不能为空");
-            building.setLayer(floorId);
+            building.setLayer(vo.getFloorId());
             building.setType(vo.getBuildingType());
             building.setArea(JacksonUtils.toJson(vo.getArea()));
-            Double dx = vo.getDx();
-            Double dy = vo.getDy();
-            Assert.notNull(dx, "商铺dx不能为空");
-            Assert.notNull(dy, "商铺dy不能为空");
-            building.setDx(dx);
-            building.setDy(dy);
-            building.setNumber(dx + "_" + dy);
+            building.setDx(vo.getDx());
+            building.setDy(vo.getDy());
             i = bizBuildingMapper.batchReplace(Collections.singletonList(building));
         }
         Map<String, Object> ret = new HashMap<>();

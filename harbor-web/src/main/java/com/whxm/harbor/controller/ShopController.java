@@ -42,9 +42,12 @@ public class ShopController {
     public Result addShop(@ApiParam("商铺建筑完整信息") @RequestBody BizShopVo shopVo) {
         Assert.notNull(shopVo, "添加的商铺数据不能为空");
         String number = shopVo.getShopNumber();
+        Assert.notEmpty(number, "商铺编号不能为空");
+        Assert.notNull(shopVo.getDx(), "商铺dx不能为空");
+        Assert.notNull(shopVo.getDy(), "商铺dy不能为空");
+        Assert.notNull(shopVo.getFloorId(), "商铺所在楼层ID不能为空");
         List<ShopPicture> pictures = shopVo.getPictures();
         Assert.notEmpty(pictures, "编号为{}的商铺图片集合不能为空", number);
-
         Assert.notRepeat(pictures, "编号为" + number + "的商铺图片不能重复");
 
         pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "编号为{}的商铺图片不能为空[params:{}]", number, item));

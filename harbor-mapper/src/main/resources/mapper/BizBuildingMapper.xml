@@ -139,8 +139,12 @@
             <if test="floor!=null">
                 and layer=#{floor}
             </if>
-            <if test="type!=null">
-                and type=#{type}
+            <if test="null!=typeList and typeList.size>0">
+                and type in (
+                <foreach collection="typeList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
             </if>
         </where>
     </select>

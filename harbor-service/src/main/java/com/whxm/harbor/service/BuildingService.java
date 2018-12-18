@@ -14,10 +14,10 @@ public interface BuildingService {
      * 获取全部建筑数据
      *
      * @param floor 楼层ID
-     * @param type  建筑类型
+     * @param typeList  建筑类型集合
      * @return 建筑数据列表
      */
-    List<BizBuilding> listBuildings(Integer floor, Integer type);
+    List<BizBuilding> listBuildings(Integer floor, List<Integer> typeList);
 
     /**
      * 批量新增建筑数据

@@ -24,9 +24,9 @@ public class BuildingServiceImpl implements BuildingService {
     private MapEdgeMapper mapEdgeMapper;
 
     @Override
-    public List<BizBuilding> listBuildings(Integer floor, Integer type) {
+    public List<BizBuilding> listBuildings(Integer floor, List<Integer> typeList) {
 
-        return bizBuildingMapper.getBuildingList(floor, type);
+        return bizBuildingMapper.getBuildingList(floor, typeList);
     }
 
     @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)

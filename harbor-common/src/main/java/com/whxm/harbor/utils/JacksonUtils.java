@@ -3,6 +3,8 @@ package com.whxm.harbor.utils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The class JacksonUtils
@@ -12,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version: $Revision$ $Date$ $LastChangedBy$
  */
 public final class JacksonUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JacksonUtils.class);
 
     private static ObjectMapper objectMapper;
 
@@ -38,9 +41,8 @@ public final class JacksonUtils {
         try {
             return objectMapper.readValue(jsonStr, valueType);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("json格式错误", e);
         }
-
         return null;
     }
 

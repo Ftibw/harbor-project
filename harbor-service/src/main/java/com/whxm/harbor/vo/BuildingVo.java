@@ -23,6 +23,9 @@ public class BuildingVo extends BizBuilding {
 
     private String shopId;
 
+    //1启用,0停用
+    private Integer shopStatus;
+
     public List getPath() {
         return path;
     }
@@ -69,5 +72,13 @@ public class BuildingVo extends BizBuilding {
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+    public Integer getShopStatus() {
+        return shopStatus;
+    }
+
+    public void setShopStatus(Integer shopStatus) {
+        this.shopStatus = shopStatus;
     }
 }

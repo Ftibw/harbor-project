@@ -197,7 +197,7 @@ public class MapController {
     @ApiOperation("获取全部建筑信息以及关联商铺信息")
     @GetMapping(value = "/buildingsInfo")
     public Result getMapInfoWithShops() {
-        List<BizShopVo> shopVos = shopService.getBizShopListOptional(null);
+        List<BizShopVo> shopVos = shopService.getBizShopList(new PageQO(),null).getList();
         List<BizBuilding> buildingList = buildingService.listBuildings(null, null);
         if (null == buildingList || buildingList.size() == 0) {
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
@@ -227,6 +227,7 @@ public class MapController {
             b.setShopMessage(svo.getShopDescript());
             b.setBizType(svo.getBizFormatId());
             b.setShopTel(svo.getShopTel());
+            b.setShopStatus(svo.getIsShopEnabled());
         }
         return Result.success(buildings);
     }

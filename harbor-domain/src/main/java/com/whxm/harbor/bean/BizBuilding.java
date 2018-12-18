@@ -5,6 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("建筑对象")
 public class BizBuilding {
+
+    public static final Integer TYPE_LINE = 0;//路线点
+    public static final Integer TYPE_TOILET = 1;//厕所
+    public static final Integer TYPE_ELEVATOR = 2;//电梯
+    public static final Integer TYPE_STAIR = 3;//楼梯
+    public static final Integer TYPE_TERMINAL = 4;//终端
+    public static final Integer TYPE_SHOP = 5;//商铺
+
     @ApiModelProperty(hidden = true)
     private Integer id;
     @ApiModelProperty("建筑编号")

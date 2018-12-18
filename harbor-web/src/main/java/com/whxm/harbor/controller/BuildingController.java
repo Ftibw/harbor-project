@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.service.BuildingService;
 import com.whxm.harbor.utils.Assert;
+import com.whxm.harbor.utils.JacksonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,9 +32,9 @@ public class BuildingController {
                     Integer floor,
             @ApiParam("建筑类型")
             @RequestParam(value = "type", required = false)
-                    Integer type) {
+                    List<Integer> typeList) {
 
-        List<BizBuilding> list = buildingService.listBuildings(floor, type);
+        List<BizBuilding> list = buildingService.listBuildings(floor, typeList);
 
         if (null == list || list.isEmpty())
             throw new DataNotFoundException();
@@ -44,10 +45,7 @@ public class BuildingController {
     @ApiOperation("保存一个建筑")
     @PostMapping("/oneBuilding")
     public Result addOneBizBuilding(@RequestBody BizBuilding building) {
-        Assert.notNull(building, "建筑数据不能为空");
-        Assert.isNull(building.getId(), "建筑ID必须为空");
-        building.setNumber(building.getDx() + "_" + building.getDy());
-        return buildingService.saveBizBuildings(Collections.singletonList(building));
+        return addBizBuilding(Collections.singletonList(building));
     }
 
     @ApiOperation("批量保存建筑")
@@ -60,7 +58,24 @@ public class BuildingController {
 
         list.forEach(item -> {
             Assert.isNull(item.getId(), "建筑ID必须为空");
-            item.setNumber(item.getDx() + "_" + item.getDy());
+            Double dx = item.getDx();
+            Double dy = item.getDy();
+            Assert.notNull(dx, "建筑dx不能为空");
+            Assert.notNull(dy, "建筑dy不能为空");
+            if (null == item.getArea() || null == JacksonUtils.readValue(item.getArea(), List.class)) {
+                item.setArea("[]");
+            }
+            if (null == item.getName()) {
+                item.setName("");
+            }
+            //终端或商铺类型的建筑编号使用终端或商铺的编号
+            Integer type = item.getType();
+            if (null == type) {
+                item.setType(BizBuilding.TYPE_LINE);
+            }
+            if (!BizBuilding.TYPE_TERMINAL.equals(type) && !BizBuilding.TYPE_SHOP.equals(type)) {
+                item.setNumber(dx.intValue() + "_" + dy.intValue());
+            }
         });
 
         return buildingService.saveBizBuildings(list);
