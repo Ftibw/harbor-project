@@ -37,7 +37,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 违反约束异常
      */
     protected Result handleConstraintViolationException(ConstraintViolationException e, HttpServletRequest request) {
-        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getMethod() + "->" + request.getRequestURI(), e);
         List<ParameterInvalidItem> parameterInvalidItemList = ConvertUtil.convertCVSetToParameterInvalidItemList(e.getConstraintViolations());
         return Result.failure(ResultEnum.PARAM_IS_INVALID, parameterInvalidItemList);
     }
@@ -46,7 +46,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理验证参数封装错误时异常
      */
     protected Result handleConstraintViolationException(HttpMessageNotReadableException e, HttpServletRequest request) {
-        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        LOGGER.info("handleConstraintViolationException start, uri:{}, caused by: ", request.getMethod() + "->" + request.getRequestURI(), e);
         return Result.failure(ResultEnum.PARAM_IS_INVALID, e.getMessage());
     }
 
@@ -54,7 +54,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理参数绑定时异常（反400错误码）
      */
     protected Result handleBindException(BindException e, HttpServletRequest request) {
-        LOGGER.info("handleBindException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        LOGGER.info("handleBindException start, uri:{}, caused by: ", request.getMethod() + "->" + request.getRequestURI(), e);
         List<ParameterInvalidItem> parameterInvalidItemList = ConvertUtil.convertBindingResultToMapParameterInvalidItemList(e.getBindingResult());
         return Result.failure(ResultEnum.PARAM_IS_INVALID, parameterInvalidItemList);
     }
@@ -63,7 +63,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理使用@Validated注解时，参数验证错误异常（反400错误码）
      */
     protected Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
-        LOGGER.info("handleMethodArgumentNotValidException start, uri:{}, caused by: ", request.getRequestURI(), e);
+        LOGGER.info("handleMethodArgumentNotValidException start, uri:{}, caused by: ", request.getMethod() + "->" + request.getRequestURI(), e);
         List<ParameterInvalidItem> parameterInvalidItemList = ConvertUtil.convertBindingResultToMapParameterInvalidItemList(e.getBindingResult());
         return Result.failure(ResultEnum.PARAM_IS_INVALID, parameterInvalidItemList);
     }
@@ -72,7 +72,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理通用自定义业务异常
      */
     protected ResponseEntity<Result> handleBusinessException(BusinessException e, HttpServletRequest request) {
-        LOGGER.info("handleBusinessException start, uri:{}, exceptions:{}, caused by: {}", request.getRequestURI(), e.getClass(), e.getMessage());
+        LOGGER.info("handleBusinessException start, uri:{}, exceptions:{}, caused by: {}", request.getMethod() + "->" + request.getRequestURI(), e.getClass(), e.getMessage());
         //根据异常的真实类型,获取限定死的的异常枚举常量,仅仅是为了从找到的常量中设置响应的HTTP状态码
         ExceptionEnum ee = ExceptionEnum.getByEClass(e.getClass());
         if (ee != null) {
@@ -96,7 +96,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
      * 处理运行时系统异常（反500错误码）
      */
     protected Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
+        String requestURI = request.getMethod() + "->" + request.getRequestURI();
         LOGGER.error("handleRuntimeException start, uri:{}, caused by:", requestURI, e);
         //TODO 可通过邮件、微信公众号等方式发送信息至开发人员、记录存档等操作
         task.pushException(e, requestURI);
@@ -113,7 +113,7 @@ public class BaseAggregationLayerGlobalExceptionHandler {
 
         String msgWrapper = dataIntegrityMessageFormat(message);
 
-        String requestURI = request.getRequestURI();
+        String requestURI = request.getMethod() + "->" + request.getRequestURI();
 
         String desc = "handleConstraintViolationException start, uri:{}, caused by: ";
 
