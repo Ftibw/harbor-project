@@ -304,4 +304,12 @@ public class ShopServiceImpl implements ShopService {
                 Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("商铺[%s],无法添加", vo.getShopName()))
                 : Result.success(ret);
     }
+
+    @Override
+    public List<BizShopVo> listAllShopInfo() {
+        final List<BizShopVo> ret = new ArrayList<>();
+        List<BizShop> list = bizShopMapper.listAllShopInfo();
+        selectShopPictures(ret, list);
+        return ret;
+    }
 }

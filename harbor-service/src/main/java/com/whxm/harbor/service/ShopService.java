@@ -83,4 +83,6 @@ public interface ShopService {
      * 批量添加商铺数据
      */
     Result addShopWithPoint(BizShopVo vo);
+
+    List<BizShopVo> listAllShopInfo();
 }
