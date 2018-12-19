@@ -29,27 +29,40 @@
         where terminal_id = #{terminalId,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        DELETE FROM biz_terminal
+        DELETE
+        FROM biz_terminal
         WHERE terminal_id = #{terminalId,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" useGeneratedKeys="true" keyProperty="terminalId"
             parameterType="com.whxm.harbor.bean.BizTerminal">
-        INSERT INTO biz_terminal (terminal_id, terminal_name, terminal_number,
-                                  terminal_ip, terminal_type, terminal_location,
-                                  terminal_rotation_angle, is_terminal_online,
-                                  is_deleted, add_terminal_time, register_terminal_time,
-                                  floor_id, terminal_switch_time, terminal_platform
-        )
-        VALUES (#{terminalId,jdbcType=VARCHAR}, #{terminalName,jdbcType=VARCHAR}, #{terminalNumber,jdbcType=VARCHAR},
-                                                #{terminalIp,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR},
-                                                #{terminalLocation,jdbcType=VARCHAR},
-                                                #{terminalRotationAngle,jdbcType=INTEGER},
-                                                #{isTerminalOnline,jdbcType=INTEGER},
-                                                #{isDeleted,jdbcType=INTEGER}, #{addTerminalTime,jdbcType=TIMESTAMP},
-                                                #{registerTerminalTime,jdbcType=TIMESTAMP},
-                #{floorId,jdbcType=INTEGER}, #{terminalSwitchTime,jdbcType=TIMESTAMP},
-                #{terminalPlatform,jdbcType=INTEGER}
-        )
+        INSERT INTO biz_terminal (terminal_id,
+                                  terminal_name,
+                                  terminal_number,
+                                  terminal_ip,
+                                  terminal_type,
+                                  terminal_location,
+                                  terminal_rotation_angle,
+                                  is_terminal_online,
+                                  is_deleted,
+                                  add_terminal_time,
+                                  register_terminal_time,
+                                  floor_id,
+                                  terminal_switch_time,
+                                  terminal_platform)
+        VALUES (#{terminalId,jdbcType=VARCHAR},
+                #{terminalName,jdbcType=VARCHAR},
+                #{terminalNumber,jdbcType=VARCHAR},
+                #{terminalIp,jdbcType=VARCHAR},
+                #{terminalType,jdbcType=VARCHAR},
+                #{terminalLocation,jdbcType=VARCHAR},
+                #{terminalRotationAngle,jdbcType=INTEGER},
+                #{isTerminalOnline,jdbcType=INTEGER},
+                #{isDeleted,jdbcType=INTEGER},
+                #{addTerminalTime,jdbcType=TIMESTAMP},
+                #{registerTerminalTime,jdbcType=TIMESTAMP},
+                #{floorId,jdbcType=INTEGER},
+                #{terminalSwitchTime,jdbcType=TIMESTAMP},
+                #{terminalPlatform,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizTerminal">
         insert into biz_terminal
@@ -249,6 +262,8 @@
         LEFT JOIN biz_floor USING (floor_id)
         LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
         where
+        terminal_ip is not null
+        and
         is_deleted=0
         <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
         <if test="floorId!=null">and floor_id=#{floorId}</if>
@@ -262,24 +277,25 @@
     </resultMap>
     <!--终端主动清除屏保发布终端关系表-->
     <delete id="delScreensaverTerminalRelation">
-        DELETE FROM screensaver_published_terminal_relation
+        DELETE
+        FROM screensaver_published_terminal_relation
         WHERE terminal_id = #{terminalId}
     </delete>
     <!--根据终端编号和终端平台,更新终端注册时间-->
     <update id="updateRegisteredTime">
         UPDATE biz_terminal
-        SET register_terminal_time = #{registerTerminalTime}, terminal_ip = #{ip}
-        WHERE terminal_number = #{terminalNumber} AND terminal_platform = #{terminalPlatform}
+        SET register_terminal_time = #{registerTerminalTime},
+            terminal_ip            = #{ip}
+        WHERE terminal_number = #{terminalNumber}
+          AND terminal_platform = #{terminalPlatform}
     </update>
 
     <!--根据终端编号查询:终端开关机时间, 屏保ID(通过终端关联屏保发布终端表)-->
     <select id="selectTerminalWithScreensaver" resultType="java.util.HashMap">
-        SELECT
-            screensaver_id           screensaverId,
-            screensaver_program_name screensaverProgramName
+        SELECT screensaver_id screensaverId, screensaver_program_name screensaverProgramName
         FROM biz_terminal
-            LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
-            LEFT JOIN biz_screensaver USING (screensaver_id)
+                 LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
+                 LEFT JOIN biz_screensaver USING (screensaver_id)
         WHERE terminal_number = #{terminalNumber}
     </select>
 
