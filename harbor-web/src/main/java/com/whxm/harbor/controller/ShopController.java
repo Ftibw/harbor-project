@@ -46,6 +46,7 @@ public class ShopController {
         Assert.notNull(shopVo.getDx(), "商铺dx不能为空");
         Assert.notNull(shopVo.getDy(), "商铺dy不能为空");
         Assert.notNull(shopVo.getFloorId(), "商铺所在楼层ID不能为空");
+        Assert.notEmpty(shopVo.getBuildingType(), "建筑类型不能为空");
         List<ShopPicture> pictures = shopVo.getPictures();
         Assert.notEmpty(pictures, "编号为{}的商铺图片集合不能为空", number);
         Assert.notRepeat(pictures, "编号为" + number + "的商铺图片不能重复");

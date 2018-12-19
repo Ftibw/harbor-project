@@ -167,21 +167,14 @@ public class ShopServiceImpl implements ShopService {
 
         BizShop bizShop = bizShopMapper.selectByPrimaryKey(shopVo.getShopId());
         String shopNumber = bizShop.getShopNumber();
-        BizBuilding building = null;
-        if (!shopNumber.equals(shopVo.getShopNumber())) {
-            building = bizBuildingMapper.selectByNumber(shopNumber);
-            building.setNumber(shopVo.getShopNumber());
-
-        }
+        BizBuilding building = bizBuildingMapper.selectByNumber(shopNumber);
+        building.setName(shopVo.getShopName());
+        building.setNumber(shopVo.getShopNumber());
 
         synchronized (this) {
-
             could = bizShopMapper.couldUpdateUniqueNumber(shopVo);
-
             if (null != could) {
-                if (null != building) {
-                    bizBuildingMapper.updateByPrimaryKeySelective(building);
-                }
+                bizBuildingMapper.updateByPrimaryKeySelective(building);
                 affectRow = bizShopMapper.updateByPrimaryKeySelective(shopVo);
             }
         }

@@ -100,7 +100,7 @@ public class TerminalServiceImpl implements TerminalService {
             Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId));
 
         String number = terminal.getTerminalNumber();
-
+        //删除终端访问记录
         bizTerminalMapper.deleteTerminalVisit(number);
 
         //删building
