@@ -8,32 +8,32 @@ public enum ExceptionEnum {
     /**
      * 无效参数
      */
-    PARAMETER_INVALID(ParameterInvalidException.class, HttpStatus.BAD_REQUEST, ResultEnum.PARAM_IS_INVALID),
+    PARAMETER_INVALID(ParameterInvalidException.class, HttpStatus.OK/*BAD_REQUEST*/, ResultEnum.PARAM_IS_INVALID),
 
     /**
      * 数据未找到
      */
-    NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultEnum.RESULT_DATA_NONE),
+    NOT_FOUND(DataNotFoundException.class, HttpStatus.OK/*NOT_FOUND*/, ResultEnum.RESULT_DATA_NONE),
 
     /**
      * 数据已存在
      */
-    CONFLICT(DataConflictException.class, HttpStatus.CONFLICT, ResultEnum.DATA_ALREADY_EXISTED),
+    CONFLICT(DataConflictException.class, HttpStatus.OK/*CONFLICT*/, ResultEnum.DATA_ALREADY_EXISTED),
 
     /**
      * 用户未登录
      */
-    UNAUTHORIZED(UserNotLoginException.class, HttpStatus.UNAUTHORIZED, ResultEnum.USER_NOT_LOGGED_IN),
+    UNAUTHORIZED(UserNotLoginException.class, HttpStatus.OK/*UNAUTHORIZED*/, ResultEnum.USER_NOT_LOGGED_IN),
 
     /**
      * 无访问权限
      */
-    FORBIDDEN(PermissionForbiddenException.class, HttpStatus.FORBIDDEN, ResultEnum.PERMISSION_NO_ACCESS),
+    FORBIDDEN(PermissionForbiddenException.class, HttpStatus.OK/*FORBIDDEN*/, ResultEnum.PERMISSION_NO_ACCESS),
 
     /**
      * 远程访问时错误
      */
-    REMOTE_ACCESS_ERROR(RemoteAccessException.class, HttpStatus.INTERNAL_SERVER_ERROR, ResultEnum.INTERFACE_OUTER_INVOKE_ERROR),
+    REMOTE_ACCESS_ERROR(RemoteAccessException.class, HttpStatus.OK/*INTERNAL_SERVER_ERROR*/, ResultEnum.INTERFACE_OUTER_INVOKE_ERROR),
 
     /**
      * 系统内部错误
