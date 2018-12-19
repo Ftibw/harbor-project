@@ -1,7 +1,6 @@
-
 mysql.address:  localhost
 redis.address:  localhost
 resource.address: localhost
-my-web-dir: D:/apache-tomcat/webapps
+my-web-dir: /usr/local/tomcat/webapps
 
 
