@@ -3,6 +3,7 @@ package com.whxm.harbor.bean;
 import io.swagger.annotations.ApiModelProperty;
 
 public class BizBuilding {
+
     @ApiModelProperty(hidden = true)
     private String id;
     @ApiModelProperty("建筑所在楼层ID")
@@ -13,6 +14,8 @@ public class BizBuilding {
     private Double dx;
     @ApiModelProperty("建筑y值")
     private Double dy;
+    @ApiModelProperty("建筑区域")
+    private String area;
 
     public String getId() {
         return id;
@@ -52,5 +55,13 @@ public class BizBuilding {
 
     public void setDy(Double dy) {
         this.dy = dy;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

@@ -7,39 +7,28 @@
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="dx" property="dx" jdbcType="DOUBLE"/>
         <result column="dy" property="dy" jdbcType="DOUBLE"/>
+        <result column="area" property="area" jdbcType="CHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, floor_id, type, dx, dy
+        id, floor_id, type, dx, dy, area
     </sql>
     <!--以下为自定义部分-->
     <select id="listBuildings" resultType="com.whxm.harbor.model.BuildingVo">
-        SELECT
-        id,
-        bb.floor_id floorId,
-        type,
-        dx,
-        dy,
-        bs.shop_number shopNumber,
-        bs.shop_name shopName,
-        rsb.area shopArea,
-        bt.terminal_number terminalNumber
-        FROM biz_building bb
-        left join rel_shop_building rsb on bb.id=rsb.bid
-        left join biz_shop bs on rsb.number=bs.shop_number
-        left join rel_terminal_building rtb on bb.id=rtb.bid
-        left join biz_terminal bt on rtb.number=bt.terminal_number
-        where
-        ( bs.is_shop_enabled is null or bs.is_shop_enabled=1)
-        <if test="floorId!=null">
-            and bb.floor_id=#{floorId}
-        </if>
-        <if test="null!=typeList and typeList.size>0">
-            and bb.type in (
-            <foreach collection="typeList" item="item" separator=",">
-                #{item}
-            </foreach>
-            )
-        </if>
+        SELECT bb.id,
+               bb.floor_id    floorId,
+               bb.type,
+               bb.dx,
+               bb.dy,
+               bb.area,
+               bs.shop_id     sid,
+               bt.terminal_id tid,
+               bs.shop_name   shopName,
+               bs.shop_number shopNumber
+        from biz_building bb
+                 left join biz_shop bs on bb.id = bs.bid
+                 left join biz_terminal bt on bb.id = bt.bid
+        where bs.is_shop_enabled is null
+           or bs.is_shop_enabled = 1
     </select>
 
     <insert id="batchReplace">
@@ -47,11 +36,14 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            ( #{item.id} ,
+            (
+            #{item.id} ,
             #{item.floorId,jdbcType=INTEGER},
             #{item.type,jdbcType=INTEGER},
             #{item.dx,jdbcType=DOUBLE},
-            #{item.dy,jdbcType=DOUBLE})
+            #{item.dy,jdbcType=DOUBLE},
+            #{item.area,jdbcType=CHAR}
+            )
         </foreach>
     </insert>
 

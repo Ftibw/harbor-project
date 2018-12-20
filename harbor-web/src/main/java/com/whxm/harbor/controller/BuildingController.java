@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.*;
 import com.whxm.harbor.model.BuildingVo;
 import com.whxm.harbor.service.BuildingService;
 import com.whxm.harbor.utils.Assert;
+import com.whxm.harbor.utils.JacksonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -52,6 +53,13 @@ public class BuildingController {
             Double dy = item.getDy();
             Assert.notNull(dx, "建筑dx不能为空");
             Assert.notNull(dy, "建筑dy不能为空");
+            String area = item.getArea();
+            if (null != area) {
+                List test = JacksonUtils.readValue(area, List.class);
+                Assert.notNull(test, "建筑区域数据错误");
+            } else {
+                item.setArea("[]");
+            }
             item.setId(dx.intValue() + "_" + dy.intValue());
         });
         return buildingService.saveBizBuildings(list);

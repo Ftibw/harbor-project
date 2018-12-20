@@ -206,6 +206,6 @@
         JOIN terminal_first_page_relation
         USING (screensaver_material_id)
         JOIN biz_terminal USING (terminal_id)
-        WHERE is_first_page = 1 AND terminal_number=#{terminalNumber}
+        WHERE is_first_page = 1 AND terminal_number=#{tid}
     </select>
 </mapper>

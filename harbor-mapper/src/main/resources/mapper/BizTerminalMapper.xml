@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizTerminal">
         <id column="terminal_id" property="terminalId" jdbcType="VARCHAR"/>
         <result column="terminal_name" property="terminalName" jdbcType="VARCHAR"/>
-        <result column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+        <result column="terminal_number" property="tid" jdbcType="VARCHAR"/>
         <result column="terminal_ip" property="terminalIp" jdbcType="VARCHAR"/>
         <result column="terminal_type" property="terminalType" jdbcType="VARCHAR"/>
         <result column="terminal_location" property="terminalLocation" jdbcType="VARCHAR"/>
@@ -51,7 +51,7 @@
                                   terminal_platform)
         VALUES (#{terminalId,jdbcType=VARCHAR},
                 #{terminalName,jdbcType=VARCHAR},
-                #{terminalNumber,jdbcType=VARCHAR},
+                #{tid,jdbcType=VARCHAR},
                 #{terminalIp,jdbcType=VARCHAR},
                 #{terminalType,jdbcType=VARCHAR},
                 #{terminalLocation,jdbcType=VARCHAR},
@@ -73,7 +73,7 @@
             <if test="terminalName != null">
                 terminal_name,
             </if>
-            <if test="terminalNumber != null">
+            <if test="tid != null">
                 terminal_number,
             </if>
             <if test="terminalIp != null">
@@ -117,8 +117,8 @@
             <if test="terminalName != null">
                 #{terminalName,jdbcType=VARCHAR},
             </if>
-            <if test="terminalNumber != null">
-                #{terminalNumber,jdbcType=VARCHAR},
+            <if test="tid != null">
+                #{tid,jdbcType=VARCHAR},
             </if>
             <if test="terminalIp != null">
                 #{terminalIp,jdbcType=VARCHAR},
@@ -162,8 +162,8 @@
             <if test="terminalName !='-1'">
                 terminal_name = #{terminalName,jdbcType=VARCHAR},
             </if>
-            <if test="terminalNumber!='-1'">
-                terminal_number=#{terminalNumber,jdbcType=VARCHAR},
+            <if test="tid!='-1'">
+                terminal_number=#{tid,jdbcType=VARCHAR},
             </if>
             <if test="terminalIp != null">
                 terminal_ip = #{terminalIp,jdbcType=VARCHAR},
@@ -204,7 +204,7 @@
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizTerminal">
         UPDATE biz_terminal
         SET terminal_name           = #{terminalName,jdbcType=VARCHAR},
-            terminal_number         = #{terminalNumber,jdbcType=VARCHAR},
+            terminal_number         = #{tid,jdbcType=VARCHAR},
             terminal_ip             = #{terminalIp,jdbcType=VARCHAR},
             terminal_type           = #{terminalType,jdbcType=VARCHAR},
             terminal_location       = #{terminalLocation,jdbcType=VARCHAR},
@@ -226,7 +226,7 @@
         <include refid="Base_Column_List"/>
         FROM biz_terminal
         JOIN biz_floor USING (floor_id)
-        WHERE terminal_number=#{terminalNumber}
+        WHERE terminal_number=#{tid}
         AND is_deleted=0
     </select>
 
@@ -243,7 +243,7 @@
         WHERE
         is_deleted=0
         <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
-        <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
+        <if test="tid!=null">and terminal_number like concat('%',#{`},'%')</if>
         <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
         <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
         <if test="floorId!=null">and floor_id=#{floorId}</if>
@@ -286,7 +286,7 @@
         UPDATE biz_terminal
         SET register_terminal_time = #{registerTerminalTime},
             terminal_ip            = #{ip}
-        WHERE terminal_number = #{terminalNumber}
+        WHERE terminal_number = #{tid}
           AND terminal_platform = #{terminalPlatform}
     </update>
 
@@ -296,7 +296,7 @@
         FROM biz_terminal
                  LEFT JOIN screensaver_published_terminal_relation USING (terminal_id)
                  LEFT JOIN biz_screensaver USING (screensaver_id)
-        WHERE terminal_number = #{terminalNumber}
+        WHERE terminal_number = #{tid}
     </select>
 
     <!-- @Update("update biz_terminal set is_terminal_online=0 where terminal_number in (" +

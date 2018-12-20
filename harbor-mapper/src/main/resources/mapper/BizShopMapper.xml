@@ -3,7 +3,7 @@
 <mapper namespace="com.whxm.harbor.mapper.BizShopMapper">
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizShop">
         <id column="shop_id" property="shopId" jdbcType="VARCHAR"/>
-        <result column="shop_number" property="shopNumber" jdbcType="VARCHAR"/>
+        <result column="shop_number" property="sid" jdbcType="VARCHAR"/>
         <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
         <result column="shop_english_name" property="shopEnglishName" jdbcType="VARCHAR"/>
         <result column="floor_id" property="floorId" jdbcType="INTEGER"/>
@@ -47,7 +47,7 @@
                               shop_weight,
                               shop_descript)
         VALUES (#{shopId,jdbcType=VARCHAR},
-                #{shopNumber,jdbcType=VARCHAR},
+                #{sid,jdbcType=VARCHAR},
                 #{shopName,jdbcType=VARCHAR},
                 #{shopEnglishName,jdbcType=VARCHAR},
                 #{floorId,jdbcType=INTEGER},
@@ -67,7 +67,7 @@
             <if test="shopId != null">
                 shop_id,
             </if>
-            <if test="shopNumber != null">
+            <if test="sid != null">
                 shop_number,
             </if>
             <if test="shopName != null">
@@ -111,8 +111,8 @@
             <if test="shopId != null">
                 #{shopId,jdbcType=VARCHAR},
             </if>
-            <if test="shopNumber != null and shopNumber!='-1'">
-                #{shopNumber,jdbcType=VARCHAR},
+            <if test="sid != null and sid!='-1'">
+                #{sid,jdbcType=VARCHAR},
             </if>
             <if test="shopName != null">
                 #{shopName,jdbcType=VARCHAR},
@@ -155,8 +155,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizShop">
         update biz_shop
         <set>
-            <if test="shopNumber != null">
-                shop_number = #{shopNumber,jdbcType=VARCHAR},
+            <if test="sid != null">
+                shop_number = #{sid,jdbcType=VARCHAR},
             </if>
             <if test="shopName != null">
                 shop_name = #{shopName,jdbcType=VARCHAR},
@@ -199,7 +199,7 @@
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whxm.harbor.bean.BizShop">
         UPDATE biz_shop
-        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+        SET shop_number       = #{sid,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
             shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
             floor_id          = #{floorId,jdbcType=INTEGER},
@@ -216,7 +216,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizShop">
         UPDATE biz_shop
-        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+        SET shop_number       = #{sid,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
             shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
             floor_id          = #{floorId,jdbcType=INTEGER},
@@ -252,17 +252,17 @@
         select
         <include refid="Base_Column_List"/>
         from biz_shop
-        WHERE shop_number=#{shopNumber}
+        WHERE shop_number=#{sid}
     </select>
 
     <select id="couldUpdateUniqueNumber" parameterType="com.whxm.harbor.bean.BizShop" resultType="java.lang.Integer">
         SELECT 1
         FROM DUAL
-        WHERE NOT EXISTS(SELECT shop_id FROM biz_shop WHERE shop_number = #{shopNumber})
+        WHERE NOT EXISTS(SELECT shop_id FROM biz_shop WHERE shop_number = #{sid})
            OR EXISTS(SELECT 1
                      FROM biz_shop
                      WHERE shop_id = #{shopId}
-                       AND shop_number = #{shopNumber})
+                       AND shop_number = #{sid})
     </select>
 
     <select id="getBizShopList" resultMap="ExtensionResultMap">
@@ -273,7 +273,7 @@
         LEFT JOIN biz_format USING (biz_format_id)
         <where>
             <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
-            <if test="shopNumber!=null">and shop_number like concat('%',#{shopNumber},'%')</if>
+            <if test="sid!=null">and shop_number like concat('%',#{sid},'%')</if>
             <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>
             <if test="isShopEnabled!=null">and is_shop_enabled=#{isShopEnabled}</if>
             <if test="floorId!=null">and floor_id=#{floorId}</if>

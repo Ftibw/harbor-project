@@ -13,13 +13,19 @@ public interface BizBuildingMapper {
 
     int batchDelete(List<String> list);
 
+    /**
+     * 查询建筑信息,以及绑定了建筑ID终端、商铺信息--终端编号,已启用的商铺(ID,编号,名称)
+     *
+     * @param floorId  建筑所在楼层
+     * @param typeList 建筑类型列表
+     * @return list
+     */
     List<BuildingVo> listBuildings(@Param("floorId") Integer floorId,
                                    @Param("typeList") List<Integer> typeList);
 
-    @ResultMap("BaseResultMap")
-    @Select("select * from biz_building where number=#{number}")
-    BizBuilding selectByNumber(@Param("number") String number);
+    @Update("update biz_terminal set bid=#{bid} where terminal_id=#{tid}")
+    int setTerminalBuildingId(String tid, String bid);
 
-    @Delete("delete from biz_building where number=#{number}")
-    int deleteByNumber(String number);
+    @Update("update biz_shop set bid=#{bid} where shop_id=#{sid}")
+    int setShopBuildingId(String sid, String bid);
 }

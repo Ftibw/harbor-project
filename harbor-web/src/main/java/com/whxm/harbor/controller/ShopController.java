@@ -46,7 +46,6 @@ public class ShopController {
     @PostMapping(value = "/shops")
     public Map<String, Object> getBizShops(Integer floor, Integer type, String initial) {
         ResultMap<String, Object> ret = new ResultMap<>(2);
-
         try {
             List<BizShopVo> list = shopService.getBizShopListOptional(
                     new ResultMap<String, Object>(3)
@@ -54,33 +53,23 @@ public class ShopController {
                             .build("bizFormatId", type)
                             .build("initial", Objects.nonNull(initial) ? initial.toLowerCase() : null)
             );
-
             if (null == list || list.isEmpty())
                 ret.build("data", new byte[]{}).build("success", false);
-
             ret.build("data", list).build("success", true);
-
         } catch (Exception e) {
-
             logger.error("floorId:{},bizFormatId:{},initial:{}---店铺列表 获取报错", floor, type, initial, e);
-
             ret.build("data", new byte[]{}).build("success", false);
         }
-
         return ret;
     }
 
     @ApiOperation(value = "根据商铺ID获取商铺图片")
     @GetMapping("/shopPictures/{ID}")
     public Result getPicturesById(@PathVariable("ID") String bizShopId) {
-
         Assert.notNull(bizShopId, "商铺ID不能为空");
-
         List<ShopPicture> shopPictures = shopService.getShopPicturesById(bizShopId);
-
         if (null == shopPictures || shopPictures.isEmpty())
             throw new DataNotFoundException();
-
         return Result.success(shopPictures);
     }
 
@@ -90,18 +79,14 @@ public class ShopController {
     public Map<String, Object> updateShopVisit(
             @ApiParam(name = "no", value = "商铺编号")
             @RequestParam("no") String shopNumber) {
-
         Assert.notNull(shopNumber, "商铺编号不能为空");
-
         return shopVisitService.updateShopVisit(shopNumber);
     }
 
     @ApiOperation(value = "获取商铺访问数据列表")
     @GetMapping("/visits")
     public Result getShopVisitList(PageQO pageQO, BizShop condition) {
-
         PageVO<ShopVisit> pageVO = shopVisitService.getShopVisitList(pageQO, condition);
-
         return Result.success(pageVO);
     }
     //=========================以上为对外提供的API=================================
@@ -109,28 +94,21 @@ public class ShopController {
     @ApiOperation("上传商铺logo")
     @PostMapping("/logo")
     public Result uploadLogo(@RequestParam("file") MultipartFile file) {
-
         if (null == file || file.isEmpty()) {
             throw new ParameterInvalidException("上传的文件是空的");
         }
-
         return FileUtils.upload(file, Result::success);
     }
 
     @ApiOperation(value = "上传商铺图片", notes = "表单控件中name属性的值必须为file")
     @PostMapping("/pictures")
     public Result uploadPicture(HttpServletRequest request) {
-
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-
         if (null == files || files.isEmpty()) {
             throw new ParameterInvalidException("上传的文件是空的");
         }
-
         ArrayList<Object> retList = new ArrayList<>();
-
         files.forEach(file -> FileUtils.upload(file, retList::add));
-
         return Result.success(retList);
     }
 
@@ -149,7 +127,6 @@ public class ShopController {
             String shopNumber = shopId;
             shop = shopService.getBizShopByNumber(shopNumber);
         }
-
         return null == shop ? Result.failure(ResultEnum.RESULT_DATA_NONE, new Object[]{}) : Result.success(shop);
     }
     //==========================以下需授权的接口均被拦截============================
@@ -157,9 +134,7 @@ public class ShopController {
     @ApiOperation("获取商铺列表(需授权)")
     @GetMapping("/bizShops")
     public Result getBizShops(PageQO pageQO, BizShop condition) {
-
         PageVO<BizShopVo> pageVO = shopService.getBizShopList(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
@@ -170,24 +145,17 @@ public class ShopController {
                     String id
     ) {
         Assert.notNull(id, "商铺ID不能为空");
-
         return shopService.triggerBizShop(id);
     }
 
     @ApiOperation("修改商铺")
     @PutMapping("/shops")
     public Result updateBizShop(@RequestBody BizShopVo shopVo) {
-
         Assert.notNull(shopVo, "商铺数据不能为空");
-
         Assert.notNull(shopVo.getShopId(), "商铺ID不能为空");
-
         List<ShopPicture> pictures = shopVo.getPictures();
-
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
-
         shopVo.setPictures(pictures);
-
         return shopService.updateBizShop(shopVo);
     }
 
@@ -196,31 +164,19 @@ public class ShopController {
                     "shopPictureName(商铺图片名称),shopPicturePath(商铺图片路径),shopPictureSize(商铺图片大小)")
     @PostMapping("/bizShop")
     public Result addBizShop(@RequestBody ShopParam param) {
-
         Assert.notNull(param, "提交数据不能为空");
-
         Assert.notNull(param.bizShop, "商铺数据不能为空[params:{}]", param);
-
         Assert.isNull(param.bizShop.getShopId(), "商铺ID必须为空[params:{}]", param);
-
         Assert.notNull(param.bizShop.getShopLogoPath(), "商铺logo不能为空[params:{}]", param);
-
         //-----------做适配---------------
         BizShopVo shopVo = new BizShopVo();
-
         BeanUtils.copyProperties(param.bizShop, shopVo);
-
         List<ShopPicture> pictures = param.pictureList;
-
         Assert.notEmpty(pictures, "商铺图片集合不能为空");
-
         Assert.notRepeat(pictures, "商铺图片不能重复");
-
         pictures.forEach(item -> Assert.notNull(item.getShopPicturePath(), "商铺图片不能为空[params:{}]", item));
-
         shopVo.setPictures(pictures);
         //--------------------------------
-
         return shopService.addBizShop(shopVo);
     }
 
@@ -231,7 +187,6 @@ public class ShopController {
             @RequestParam String id
     ) {
         Assert.notNull(id, "商铺ID不能为空");
-
         return shopService.deleteBizShop(id);
     }
 }

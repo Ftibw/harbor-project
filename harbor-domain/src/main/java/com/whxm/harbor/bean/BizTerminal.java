@@ -46,6 +46,8 @@ public class BizTerminal {
     //终端是否有指定屏保ID的屏保
     private Integer hasThisScreensaver;
 
+    private String bid;
+
     @JsonProperty("checked")
     public Integer getHasThisScreensaver() {
         return hasThisScreensaver;
@@ -190,5 +192,13 @@ public class BizTerminal {
 
     public void setTerminalPlatform(Integer terminalPlatform) {
         this.terminalPlatform = terminalPlatform;
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 }

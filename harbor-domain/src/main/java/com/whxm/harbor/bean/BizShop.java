@@ -40,6 +40,7 @@ public class BizShop {
     @ApiModelProperty(hidden = true)
     //join biz_format
     private String bizFormatType;
+    private String bid;
 
     public String getBizFormatType() {
         return bizFormatType;
@@ -167,5 +168,13 @@ public class BizShop {
 
     public void setShopDescript(String shopDescript) {
         this.shopDescript = shopDescript == null ? null : shopDescript.trim();
+    }
+
+    public String getBid() {
+        return bid;
+    }
+
+    public void setBid(String bid) {
+        this.bid = bid;
     }
 }

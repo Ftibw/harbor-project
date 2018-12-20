@@ -8,29 +8,29 @@ import io.swagger.annotations.ApiModelProperty;
  * @date : 2018/12/20 10:04
  */
 public class BuildingVo extends BizBuilding {
-    @ApiModelProperty("商铺编号")
-    private String shopNumber;
-    @ApiModelProperty("终端编号")
-    private String terminalNumber;
+    @ApiModelProperty("商铺ID")
+    private String sid;
+    @ApiModelProperty("终端ID")
+    private String tid;
     @ApiModelProperty(hidden = true)
     private String shopName;
-    @ApiModelProperty("商铺区域")
-    private String shopArea;
+    @ApiModelProperty(hidden = true)
+    private String shopNumber;
 
-    public String getShopNumber() {
-        return shopNumber;
+    public String getSid() {
+        return sid;
     }
 
-    public void setShopNumber(String shopNumber) {
-        this.shopNumber = shopNumber;
+    public void setSid(String sid) {
+        this.sid = sid;
     }
 
-    public String getTerminalNumber() {
-        return terminalNumber;
+    public String getTid() {
+        return tid;
     }
 
-    public void setTerminalNumber(String terminalNumber) {
-        this.terminalNumber = terminalNumber;
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 
     public String getShopName() {
@@ -41,11 +41,11 @@ public class BuildingVo extends BizBuilding {
         this.shopName = shopName;
     }
 
-    public String getShopArea() {
-        return shopArea;
+    public String getShopNumber() {
+        return shopNumber;
     }
 
-    public void setShopArea(String shopArea) {
-        this.shopArea = shopArea;
+    public void setShopNumber(String shopNumber) {
+        this.shopNumber = shopNumber;
     }
 }

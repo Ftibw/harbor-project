@@ -5,6 +5,7 @@ import com.whxm.harbor.bean.ShopPicture;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,7 @@ public interface BizShopMapper {
 
     List<BizShop> getBizShopList(BizShop condition);
 
-    List<BizShop> listAllShopInfo();
-
     List<ShopPicture> selectShopPicturesById(String bizShopId);
-
-//    List<String> selectShopIdListByBizType(String bizFormatType);
 
     List<BizShop> getBizShopListOptional(Map<String, Object> params);
 

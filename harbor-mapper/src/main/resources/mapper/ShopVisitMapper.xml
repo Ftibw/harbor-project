@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.whxm.harbor.mapper.ShopVisitMapper">
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.ShopVisit">
-        <id column="shop_number" property="shopNumber" jdbcType="VARCHAR"/>
+        <id column="shop_number" property="sid" jdbcType="VARCHAR"/>
         <result column="shop_visit_amount" property="shopVisitAmount" jdbcType="DECIMAL"/>
         <result column="shop_visit_time" property="shopVisitTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -13,22 +13,22 @@
         select
         <include refid="Base_Column_List"/>
         from biz_shop_visit
-        where shop_number = #{shopNumber,jdbcType=VARCHAR}
+        where shop_number = #{sid,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM biz_shop_visit
-        WHERE shop_number = #{shopNumber,jdbcType=VARCHAR}
+        WHERE shop_number = #{sid,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="com.whxm.harbor.bean.ShopVisit">
         INSERT INTO biz_shop_visit (shop_number, shop_visit_amount, shop_visit_time
         )
-        VALUES (#{shopNumber,jdbcType=VARCHAR}, #{shopVisitAmount,jdbcType=DECIMAL}, #{shopVisitTime,jdbcType=TIMESTAMP}
+        VALUES (#{sid,jdbcType=VARCHAR}, #{shopVisitAmount,jdbcType=DECIMAL}, #{shopVisitTime,jdbcType=TIMESTAMP}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.ShopVisit">
         insert into biz_shop_visit
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="shopNumber != null">
+            <if test="sid != null">
                 shop_number,
             </if>
             <if test="shopVisitAmount != null">
@@ -39,8 +39,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="shopNumber != null">
-                #{shopNumber,jdbcType=VARCHAR},
+            <if test="sid != null">
+                #{sid,jdbcType=VARCHAR},
             </if>
             <if test="shopVisitAmount != null">
                 #{shopVisitAmount,jdbcType=DECIMAL},
@@ -60,13 +60,13 @@
                 shop_visit_time = #{shopVisitTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where shop_number = #{shopNumber,jdbcType=VARCHAR}
+        where shop_number = #{sid,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.ShopVisit">
         UPDATE biz_shop_visit
         SET shop_visit_amount = #{shopVisitAmount,jdbcType=DECIMAL},
             shop_visit_time   = #{shopVisitTime,jdbcType=TIMESTAMP}
-        WHERE shop_number = #{shopNumber,jdbcType=VARCHAR}
+        WHERE shop_number = #{sid,jdbcType=VARCHAR}
     </update>
 
     <!--以下是自定义部分-->
@@ -101,6 +101,6 @@
     <update id="updateAmountByID">
         UPDATE biz_shop_visit
         SET shop_visit_amount = shop_visit_amount + 1, shop_visit_time = CURRENT_TIMESTAMP
-        WHERE shop_number = #{shopNumber}
+        WHERE shop_number = #{sid}
     </update>
 </mapper>
