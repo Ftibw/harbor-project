@@ -13,7 +13,7 @@ public interface BizBuildingMapper {
 
     int batchDelete(List<String> list);
 
-    List<BuildingVo> listBuildings(@Param("floor") Integer floor,
+    List<BuildingVo> listBuildings(@Param("floorId") Integer floorId,
                                    @Param("typeList") List<Integer> typeList);
 
     @ResultMap("BaseResultMap")

@@ -8,14 +8,21 @@
         <result column="dx" property="dx" jdbcType="DOUBLE"/>
         <result column="dy" property="dy" jdbcType="DOUBLE"/>
     </resultMap>
+    <sql id="Base_Column_List">
+        id, floor_id, type, dx, dy
+    </sql>
     <!--以下为自定义部分-->
     <select id="listBuildings" resultType="com.whxm.harbor.model.BuildingVo">
         SELECT
+        id,
+        bb.floor_id floorId,
+        type,
+        dx,
+        dy,
         bs.shop_number shopNumber,
         bs.shop_name shopName,
         rsb.area shopArea,
-        bt.terminal_number terminalNumber,
-        <include refid="Base_Column_List"/>
+        bt.terminal_number terminalNumber
         FROM biz_building bb
         left join rel_shop_building rsb on bb.id=rsb.bid
         left join biz_shop bs on rsb.number=bs.shop_number

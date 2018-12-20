@@ -11,6 +11,8 @@ import com.whxm.harbor.mapper.RelationShopBuildingMapper;
 import com.whxm.harbor.mapper.RelationTerminalBuildingMapper;
 import com.whxm.harbor.model.BuildingVo;
 import com.whxm.harbor.service.BuildingService;
+import com.whxm.harbor.utils.Assert;
+import com.whxm.harbor.utils.JacksonUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -35,9 +37,9 @@ public class BuildingServiceImpl implements BuildingService {
     private RelationTerminalBuildingMapper relationTerminalBuildingMapper;
 
     @Override
-    public List<BuildingVo> listBuildings(Integer floor, List<Integer> typeList) {
+    public List<BuildingVo> listBuildings(Integer floorId, List<Integer> typeList) {
 
-        return bizBuildingMapper.listBuildings(floor, typeList);
+        return bizBuildingMapper.listBuildings(floorId, typeList);
     }
 
     @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)
@@ -59,7 +61,10 @@ public class BuildingServiceImpl implements BuildingService {
                 RelationShopBuilding rsb = new RelationShopBuilding();
                 rsb.setNumber(shopNumber);
                 rsb.setBid(id);
-                rsb.setArea(vo.getShopArea());
+                String area = vo.getShopArea();
+                List test = JacksonUtils.readValue(area, List.class);
+                Assert.notNull(test, "编号为[" + shopNumber + "]的建筑区域数据错误");
+                rsb.setArea(area);
                 sBidList.add(id);
                 rsbList.add(rsb);
             }

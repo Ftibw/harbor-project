@@ -41,7 +41,7 @@ public final class JacksonUtils {
         try {
             return objectMapper.readValue(jsonStr, valueType);
         } catch (Exception e) {
-            logger.error("json格式错误", e);
+            logger.error("json格式错误", e.getMessage());
         }
         return null;
     }
