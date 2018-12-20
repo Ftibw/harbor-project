@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class RestControllerAspect {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger("API_LOG");
 
     /**
      * 环绕通知
