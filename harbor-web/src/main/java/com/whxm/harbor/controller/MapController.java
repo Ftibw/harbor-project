@@ -167,7 +167,7 @@ public class MapController {
     public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
 
-        List<BizBuilding> buildings = buildingService.listBuildings(fid, null);
+        List<BizBuilding> buildings = buildingService.listBuildings(null, null);
         if (null == buildings || buildings.size() == 0) {
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
         }
