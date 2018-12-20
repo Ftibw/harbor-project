@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 public class BaseAggregationLayerGlobalExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseAggregationLayerGlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("EXCEPTION_LOG");
 
     /**
      * 违反约束异常
