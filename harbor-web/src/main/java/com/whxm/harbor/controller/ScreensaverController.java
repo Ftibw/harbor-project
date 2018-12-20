@@ -27,9 +27,7 @@ public class ScreensaverController {
     @ApiOperation("获取屏保列表(需授权)")
     @GetMapping("/bizScreensavers")
     public Result bizScreensaverList(PageQO pageQO, BizScreensaver condition) {
-
         PageVO<BizScreensaver> pageVO = screensaverService.getBizScreensaverList(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
@@ -39,24 +37,16 @@ public class ScreensaverController {
             @ApiParam(name = "ID", value = "屏保的ID", required = true)
             @RequestParam("id") Integer id
     ) {
-
         Assert.notNull(id, "屏保的ID不能为空");
-
         BizScreensaver screensaver = screensaverService.getBizScreensaver(id);
-
-        if (null == screensaver)
-            throw new DataNotFoundException();
-
         return Result.success(screensaver);
     }
 
     @ApiOperation("修改屏保(需授权)")
     @PutMapping("/bizScreensaver")
     public Result updateBizScreensaver(@RequestBody BizScreensaver bizScreensaver) {
-
         Assert.notNull(bizScreensaver, "屏保数据不能为空");
         Assert.notNull(bizScreensaver.getScreensaverId(), "屏保ID不能为空");
-
         return screensaverService.updateBizScreensaver(bizScreensaver);
     }
 
@@ -67,23 +57,19 @@ public class ScreensaverController {
                     Integer id
     ) {
         Assert.notNull(id, "屏保的ID不能为空");
-
         return screensaverService.deleteBizScreensaver(id);
     }
 
     @ApiOperation("添加屏保(需授权)")
     @PostMapping("/bizScreensaver")
     public Result addBizScreensaver(@RequestBody ScreensaverParam param) {
-
         Assert.notNull(param, "参数不能为空");
         Assert.notNull(param.bizScreensaver, "屏保数据不能为空");
         Assert.isNull(param.bizScreensaver.getScreensaverId(), "屏保ID必须为空");
         Assert.notEmpty(param.screensaverMaterialIds, "屏保素材ID集合不能为空");
         Assert.notRepeat(param.screensaverMaterialIds, "屏保素材ID集合不能重复");
-        //Assert.notEmpty(param.terminalIds, "终端ID集合不能为空");
         if (null != param.terminalIds)
             Assert.notRepeat(param.terminalIds, "终端ID集合不能重复");
-
         return screensaverService.addBizScreensaver(param.bizScreensaver, param.screensaverMaterialIds, param.terminalIds);
     }
 
@@ -91,12 +77,10 @@ public class ScreensaverController {
             notes = "Integer screensaverId 屏保ID,String[] terminalIds 终端ID数组")
     @PostMapping("/publishedScreensaver")
     public Result publishScreensaver(@RequestBody PublishedScreensaverParam param) {
-
         Assert.notNull(param, "参数不能为空");
         Assert.notNull(param.screensaverId, "屏保ID不能为空");
         Assert.notEmpty(param.terminalIds, "终端ID集合不能为空");
         Assert.notRepeat(param.terminalIds, "终端ID集合不能重复");
-
         return screensaverService.publishScreensaver(param.screensaverId, param.terminalIds);
     }
 }

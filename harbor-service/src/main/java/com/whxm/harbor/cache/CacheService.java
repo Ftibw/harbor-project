@@ -100,7 +100,7 @@ public class CacheService {
 
     @Cacheable(cacheNames = "bizBuilding", keyGenerator = "cacheKeyGenerator")
     public String listBuildings() {
-        return JacksonUtils.toJson(bizBuildingMapper.getBuildingList(null, null));
+        return JacksonUtils.toJson(bizBuildingMapper.listBuildings(null, null));
     }
 
     @Cacheable(cacheNames = "bizEdge", keyGenerator = "cacheKeyGenerator")

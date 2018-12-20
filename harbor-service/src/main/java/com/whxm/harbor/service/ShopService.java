@@ -78,11 +78,4 @@ public interface ShopService {
      * @return 商铺的图片路径集合
      */
     Result deleteBizShop(String bizShopId);
-
-    /**
-     * 批量添加商铺数据
-     */
-    Result addShopWithPoint(BizShopVo vo);
-
-    List<BizShopVo> listAllShopInfo();
 }

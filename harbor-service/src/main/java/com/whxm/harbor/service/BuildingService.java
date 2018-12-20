@@ -1,7 +1,7 @@
 package com.whxm.harbor.service;
 
-import com.whxm.harbor.bean.BizBuilding;
 import com.whxm.harbor.bean.Result;
+import com.whxm.harbor.model.BuildingVo;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface BuildingService {
      * @param typeList  建筑类型集合
      * @return 建筑数据列表
      */
-    List<BizBuilding> listBuildings(Integer floor, List<Integer> typeList);
+    List<BuildingVo> listBuildings(Integer floor, List<Integer> typeList);
 
     /**
      * 批量新增建筑数据
@@ -25,7 +25,7 @@ public interface BuildingService {
      * @param list 新建筑数据
      * @return 添加操作结果
      */
-    Result saveBizBuildings(List<BizBuilding> list);
+    Result saveBizBuildings(List<BuildingVo> list);
 
     /**
      * 批量删除建筑数据
@@ -35,5 +35,5 @@ public interface BuildingService {
      * @param idList id列表
      * @return 删除的行数
      */
-    Result batchDelete(List<Integer> idList);
+    Result batchDelete(List<String> idList);
 }

@@ -282,18 +282,6 @@
         order by add_shop_time desc
     </select>
 
-    <select id="listAllShopInfo" resultMap="ResultMapWithBLOBs">
-        select
-        floor_name,
-        biz_format_type,
-        <include refid="Base_Column_List"/>,
-        <include refid="Blob_Column_List"/>
-        from biz_shop
-        LEFT JOIN biz_floor USING(floor_id)
-        LEFT JOIN biz_format USING (biz_format_id)
-        order by shop_weight desc
-    </select>
-
     <select id="getBizShopListOptional" resultMap="ResultMapWithBLOBs">
         select
         floor_name,

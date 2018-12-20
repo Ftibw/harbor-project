@@ -32,5 +32,5 @@ public interface MapEdgeMapper {
      * @param list 建筑的ID列表
      * @return 被删除边的行数
      */
-    int batchDeleteByTailListOrHeadList(List<Integer> list);
+    int batchDeleteByTailListOrHeadList(List<String> list);
 }

@@ -54,7 +54,6 @@ public class BusinessFormatServiceImpl implements BusinessFormatService {
 
     @Override
     public List<BizFormat> getBizFormatList() {
-
         return cacheService.getFormatList();
     }
 

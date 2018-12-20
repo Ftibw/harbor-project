@@ -76,14 +76,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<BizActivity> getBizActivityList() {
-
         List<BizActivity> list = bizActivityMapper.getBizActivityList(null);
-
         list.forEach(item -> item.setActivityLogo(
                 pathConfig.getResourceURLWithPost()
                         + item.getActivityLogo()
         ));
-
         return list;
     }
 

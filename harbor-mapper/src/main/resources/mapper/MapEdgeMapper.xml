@@ -3,8 +3,8 @@
 <mapper namespace="com.whxm.harbor.mapper.MapEdgeMapper">
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.MapEdge">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="tail" property="tail" jdbcType="INTEGER"/>
-        <result column="head" property="head" jdbcType="INTEGER"/>
+        <result column="tail" property="tail" jdbcType="VARCHAR"/>
+        <result column="head" property="head" jdbcType="VARCHAR"/>
         <result column="distance" property="distance" jdbcType="DOUBLE"/>
         <result column="time" property="time" jdbcType="DOUBLE"/>
         <result column="is_directed" property="isDirected" jdbcType="INTEGER"/>
@@ -95,10 +95,10 @@
         update map_edge
         <set>
             <if test="tail != null">
-                tail = #{tail,jdbcType=INTEGER},
+                tail = #{tail,jdbcType=VARCHAR},
             </if>
             <if test="head != null">
-                head = #{head,jdbcType=INTEGER},
+                head = #{head,jdbcType=VARCHAR},
             </if>
             <if test="distance != null">
                 distance = #{distance,jdbcType=DOUBLE},
@@ -120,8 +120,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.MapEdge">
         update map_edge
-        set tail          = #{tail,jdbcType=INTEGER},
-            head          = #{head,jdbcType=INTEGER},
+        set tail          = #{tail,jdbcType=VARCHAR},
+            head          = #{head,jdbcType=VARCHAR},
             distance      = #{distance,jdbcType=DOUBLE},
             time          = #{time,jdbcType=DOUBLE},
             is_directed   = #{isDirected,jdbcType=INTEGER},
@@ -133,20 +133,14 @@
     <delete id="delEdgesByTailOrHead" parameterType="com.whxm.harbor.bean.MapEdge">
         delete
         from map_edge
-        where tail = #{tail,jdbcType=INTEGER}
-           or head = #{head,jdbcType=INTEGER}
+        where tail = #{tail}
+           or head = #{head}
     </delete>
     <delete id="batchDeleteByTailListOrHeadList">
         delete
         from map_edge
-        where tail in (
-        <foreach collection="list" item="item" separator=",">
-            #{item,jdbcType=INTEGER}
-        </foreach>)
-        or head in (
-        <foreach collection="list" item="item" separator=",">
-            #{item,jdbcType=INTEGER}
-        </foreach>)
+        where tail in (<foreach collection="list" item="item" separator=",">#{item}</foreach>)
+        or head in (<foreach collection="list" item="item" separator=",">#{item}</foreach>)
     </delete>
     <select id="selectAll" resultMap="BaseResultMap">
         select
@@ -163,23 +157,18 @@
         VALUES
         <foreach collection="list" item="item" separator=",">
             (NULL ,
-            #{item.tail,jdbcType=INTEGER},
-            #{item.head,jdbcType=INTEGER},
-            #{item.distance,jdbcType=DOUBLE},
-            #{item.time,jdbcType=DOUBLE},
-            #{item.isDirected,jdbcType=INTEGER},
-            #{item.tailFloorId,jdbcType=INTEGER},
-            #{item.headFloorId,jdbcType=INTEGER})
+            #{item.tail},
+            #{item.head},
+            #{item.distance},
+            #{item.time},
+            #{item.isDirected},
+            #{item.tailFloorId},
+            #{item.headFloorId})
         </foreach>
     </insert>
     <delete id="batchDelete">
         delete
         from map_edge
-        where id in
-        (
-        <foreach collection="list" item="item" separator=",">
-            #{item,jdbcType=INTEGER}
-        </foreach>
-        )
+        where id in (<foreach collection="list" item="item" separator=",">#{item}</foreach>)
     </delete>
 </mapper>

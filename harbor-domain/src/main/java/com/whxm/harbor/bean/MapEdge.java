@@ -11,9 +11,9 @@ public class MapEdge {
     @ApiModelProperty(hidden = true)
     private Integer id;
     @ApiModelProperty(value = "有向边的尾点", required = true)
-    private Integer tail;
+    private String tail;
     @ApiModelProperty(value = "有向边的头点", required = true)
-    private Integer head;
+    private String head;
     @ApiModelProperty(value = "头尾点之间距离", required = true)
     private Double distance;
     @ApiModelProperty(value = "尾点走到头点的耗时")
@@ -28,7 +28,7 @@ public class MapEdge {
     public MapEdge() {
     }
 
-    public MapEdge(Integer tail, Integer head, Double distance, Double time) {
+    public MapEdge(String tail, String head, Double distance, Double time) {
         this.tail = tail;
         this.head = head;
         this.distance = distance;
@@ -43,19 +43,19 @@ public class MapEdge {
         this.id = id;
     }
 
-    public Integer getTail() {
+    public String getTail() {
         return tail;
     }
 
-    public void setTail(Integer tail) {
+    public void setTail(String tail) {
         this.tail = tail;
     }
 
-    public Integer getHead() {
+    public String getHead() {
         return head;
     }
 
-    public void setHead(Integer head) {
+    public void setHead(String head) {
         this.head = head;
     }
 

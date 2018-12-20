@@ -45,12 +45,9 @@ public class TerminalController {
                     Integer os,
             HttpServletRequest request
     ) {
-
         Assert.notNull(sn, "终端编号不能为空");
         Assert.notNull(os, "终端类型不能为空");
-
         ResultMap<String, Object> ret = new ResultMap<>(3);
-
         try {
             String ip = IPv4Utils.getIpAddress(request);
 
@@ -64,22 +61,16 @@ public class TerminalController {
                             .build("ip", ip)
             );
             if (null != terminal) {
-
                 ret.build("success", true)
                         .build("floor", terminal.getFloorId())
                         .build("rotate", terminal.getTerminalRotationAngle());
-
             } else {
-
                 ret.put("success", false);
             }
         } catch (Exception e) {
-
             logger.error("编号为{}的终端注册检测报错", sn, e);
-
             ret.put("success", false);
         }
-
         return ret;
     }
 
@@ -93,7 +84,6 @@ public class TerminalController {
                     Integer prog
     ) {
         Assert.notNull(terminalNumber, "终端编号不能为空");
-
         return terminalService.getTerminalScreensaverProgram(terminalNumber);
     }
 
@@ -107,12 +97,9 @@ public class TerminalController {
                 .build("success", false)
                 .build("data", new Object[]{});
         if (null == sn) return ret;
-
         try {
             return terminalService.getTerminalFirstPage(sn, ret);
-
         } catch (Exception e) {
-
             logger.error("终端首页轮播图 获取报错", e);
             return ret;
         }
@@ -124,18 +111,14 @@ public class TerminalController {
     public ResultMap<String, Object> updateTerminalVisit(
             @ApiParam(name = "sn", value = "终端编号")
             @RequestParam("sn") String terminalNumber) {
-
         Assert.notNull(terminalNumber, "终端编号不能为空");
-
         return terminalVisitService.updateTerminalVisit(terminalNumber);
     }
 
     @ApiOperation(value = "获取终端访问数据列表")
     @GetMapping("/visits")
     public Result getTerminalVisitList(PageQO pageQO, BizTerminal condition) {
-
         PageVO<TerminalVisit> pageVO = terminalVisitService.getTerminalVisitList(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
@@ -146,47 +129,35 @@ public class TerminalController {
     public Result bizProgram(
             @ApiParam(name = "sn", value = "终端编号", required = true)
             @RequestParam("sn") String terminalNumber) {
-
         Assert.notNull(terminalNumber, "终端编号不能为空");
-
         ResultMap<String, Object> ret = terminalService.getTerminalScreensaverProgram(terminalNumber);
-
         Object data = ret.get("data");
-
         Object screensaverProgramName = ret.get("screensaverProgramName");
-
         ret.clean().build("data", data).build("screensaverProgramName", screensaverProgramName);
-
         return Result.success(ret);
     }
 
     @ApiOperation("终端绑定首页轮播图(需授权)")
     @PostMapping("/boundFirstPage")
     public Result terminalBindFirstPage(@RequestBody TerminalFirstPageParam param) {
-
         Assert.notNull(param, "参数不能为空");
         Assert.notNull(param.terminalId, "终端ID不能为空[param:{}]", param);
         Assert.notEmpty(param.firstPageIds, "首页轮播图的ID集合不能为空[param:{}]", param);
         Assert.notRepeat(param.firstPageIds, "首页轮播图的ID集合不能重复");
-
         return terminalService.bindFirstPage(param.terminalId, param.firstPageIds);
     }
 
     @ApiOperation("指定ID的屏保发布前,查询全部终端,并将该屏保发布过的终端标记为checked(需授权)")
     @GetMapping("/bizTerminalsWithPublishedFlag")
     public Result getNotPublishedTerminals(PageQO pageQO, BizTerminal condition) {
-
         PageVO<BizTerminal> pageVO = terminalService.getBizTerminalListWithPublishedFlag(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
     @ApiOperation("获取终端列表(需授权)")
     @GetMapping("/bizTerminals")
     public Result getBizTerminals(PageQO pageQO, BizTerminal condition) {
-
         PageVO<BizTerminal> pageVO = terminalService.getBizTerminalList(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
@@ -197,22 +168,15 @@ public class TerminalController {
             @PathVariable("ID") String terminalId
     ) {
         Assert.notNull(terminalId, "终端的ID不能为空");
-
         BizTerminal terminal = terminalService.getBizTerminal(terminalId);
-
-        if (null == terminal)
-            return Result.failure(ResultEnum.RESULT_DATA_NONE);
-
         return Result.success(terminal);
     }
 
     @ApiOperation("修改终端(需授权)")
     @PutMapping("/bizTerminal")
     public Result updateBizTerminal(@RequestBody BizTerminal bizTerminal) {
-
         Assert.notNull(bizTerminal, "终端的数据不能为空");
         Assert.notNull(bizTerminal.getTerminalId(), "终端的ID不能为空");
-
         return terminalService.updateBizTerminal(bizTerminal);
     }
 
@@ -222,19 +186,15 @@ public class TerminalController {
             @ApiParam(name = "ID", value = "终端的ID", required = true)
                     String id
     ) {
-
         Assert.notNull(id, "终端的ID不能为空");
-
         return terminalService.deleteBizTerminal(id);
     }
 
     @ApiOperation("添加终端(需授权)")
     @PostMapping("/bizTerminal")
     public Result addBizTerminal(@RequestBody BizTerminal bizTerminal) {
-
         Assert.notNull(bizTerminal, "终端的数据不能为空");
         Assert.isNull(bizTerminal.getTerminalId(), "终端的ID必须为空");
-
         return terminalService.addBizTerminal(bizTerminal);
     }
 
@@ -260,28 +220,23 @@ public class TerminalController {
 
     @PostMapping("/config")
     public Result updateTerminalConfig(@RequestBody TerminalConfig config) {
-
         Assert.notNull(config, "参数不能为空");
         Assert.notNull(config.getOnOff(), "终端开关机时间不能为空[params:{}]", config);
         Assert.notNull(config.getDelay(), "终端延时不能为空[params:{}]", config);
         Assert.notNull(config.getProtect(), "终端保护时间不能为空[params:{}]", config);
-
         if (!checkTerminalTimeFormat(config.getOnOff())) {
             return Result.failure(ResultEnum.PARAM_IS_INVALID, "终端开关机时间格式错误,请按照示例[00:00-24:00]的格式填写");
         }
-
         return terminalService.updateTerminalConfig(config);
     }
 
     @GetMapping("/config")
     public Result getTerminalConfig() {
-
         return terminalService.getTerminalConfig();
     }
 
     @GetMapping("/config/reset")
     public Result resetTerminalConfig() {
-
         return terminalService.resetTerminalConfig();
     }
 }

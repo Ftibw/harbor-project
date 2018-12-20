@@ -15,8 +15,6 @@ import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.utils.JacksonUtils;
-import com.whxm.harbor.vo.BizShopVo;
-import com.whxm.harbor.vo.BuildingVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,8 +38,6 @@ public class MapController {
     private MapService mapService;
     @Autowired
     private BuildingService buildingService;
-    @Autowired
-    private ShopService shopService;
 
     //###########################################  地图导航  ############################################
     @Autowired
@@ -57,8 +53,8 @@ public class MapController {
      */
     @ApiOperation("根据起止点ID寻找最短路线")
     @GetMapping(value = "/path")
-    public Result findPath(@ApiParam(value = "导航起点ID", required = true) @RequestParam("startId") Integer startId,
-                           @ApiParam(value = "导航终点ID", required = true) @RequestParam("endId") Integer endId) {
+    public Result findPath(@ApiParam(value = "导航起点ID", required = true) @RequestParam("startId") String startId,
+                           @ApiParam(value = "导航终点ID", required = true) @RequestParam("endId") String endId) {
         long start = System.currentTimeMillis();
         Assert.notNull(startId, "起点ID不能为空");
         Assert.notNull(endId, "终点ID不能为空");
@@ -79,8 +75,8 @@ public class MapController {
             return Result.failure(ResultEnum.INTERFACE_INNER_INVOKE_ERROR.setMessage("缓存数据解析失败"));
         }
         //根据顶点集合和邻接出边表寻找最短路径
-        Map<Integer, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
-        Map<Integer, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表
+        Map<String, BizBuilding> vertices = new HashMap<>(buildings.size());//顶点集
+        Map<String, List<MapEdge>> adjacencyTable = new HashMap<>();//邻接出边表
         for (BizBuilding b : buildings) {
             vertices.put(b.getId(), b);
         }
@@ -99,7 +95,7 @@ public class MapController {
         }
 
         //TODO find path using vertices and adjacencyTable by PathFinder
-        PathFinder<Integer, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
+        PathFinder<String, BizBuilding, MapEdge, WeightImpl> pathFinder = new PathFinder<>(
                 vertices, adjacencyTable, startId, endId, new WeightImpl(0.0, 0.0),
                 (point, end) -> {
                     Double h = Math.abs(end.getDx() - point.getDx())
@@ -122,8 +118,8 @@ public class MapController {
      * @param adjacencyTable 邻接出边表
      * @param edge           边
      */
-    private void buildAdjacencyTable(Map<Integer, List<MapEdge>> adjacencyTable, MapEdge edge) {
-        Integer tailId = edge.getTail();
+    private void buildAdjacencyTable(Map<String, List<MapEdge>> adjacencyTable, MapEdge edge) {
+        String tailId = edge.getTail();
         List<MapEdge> adjacencyList = adjacencyTable.get(tailId);
         if (null != adjacencyList) {
             adjacencyList.add(edge);
@@ -140,7 +136,6 @@ public class MapController {
     @ApiOperation("保存地图边关系")
     @PostMapping(value = "/edges")
     public Result saveMapEdges(@RequestBody List<MapEdge> edges) {
-
         Assert.notEmpty(edges, "边数据不能为空");
         for (MapEdge e : edges) {
             Assert.notNull(e.getTail(), "边起点ID不能为空");
@@ -167,7 +162,7 @@ public class MapController {
     public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
 
-        List<BizBuilding> buildings = buildingService.listBuildings(fid, null);
+        List<com.whxm.harbor.model.BuildingVo> buildings = buildingService.listBuildings(fid, null);
         if (null == buildings || buildings.size() == 0) {
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
         }
@@ -194,66 +189,19 @@ public class MapController {
         return Result.success(edgeList);
     }
 
-    @ApiOperation("获取全部建筑信息以及关联商铺信息")
-    @GetMapping(value = "/buildingsInfo")
-    public Result getMapInfoWithShops() {
-        List<BizShopVo> shopVos = shopService.listAllShopInfo();
-        List<BizBuilding> buildingList = buildingService.listBuildings(null, null);
-        if (null == buildingList || buildingList.size() == 0) {
-            return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
-        }
-        List<BuildingVo> buildings = JacksonUtils.readGenericTypeValue(JacksonUtils.toJson(buildingList), new TypeReference<List<BuildingVo>>() {
-        });
-        if (null == buildings) {
-            return Result.failure(ResultEnum.DATA_IS_WRONG, "建筑数据错误");
-        }
-        Map<String, BizShopVo> shopMap = new HashMap<>();
-        for (BizShopVo s : shopVos) {
-            shopMap.put(s.getShopNumber(), s);
-        }
-        for (BuildingVo b : buildings) {
-            String areaJson = b.getArea();
-            if (null != areaJson) {
-                b.setPath(JacksonUtils.readValue(areaJson, List.class));
-                b.setArea(null);
-            }
-            String number = b.getNumber();
-            if (null == number) continue;
-
-            BizShopVo svo = shopMap.get(number);
-            if (null == svo) continue;
-            b.setShopId(svo.getShopId());
-            b.setShopImg(svo.getPictures());
-            b.setShopMessage(svo.getShopDescript());
-            b.setBizType(svo.getBizFormatId());
-            b.setShopTel(svo.getShopTel());
-            b.setShopStatus(svo.getIsShopEnabled());
-        }
-        return Result.success(buildings);
-    }
     //#################################################################################################
 
     @ApiOperation("终端获取全部地图数据")
     @GetMapping("/maps")
     public ResultMap<String, Object> getBizMaps() {
-
         ResultMap<String, Object> ret = new ResultMap<>(2);
-
         try {
             List<BizMap> list = mapService.getBizMapList();
-
-            if (null == list || list.isEmpty())
-                throw new DataNotFoundException();
-
             ret.build("data", list).build("success", true);
-
         } catch (Exception e) {
-
             logger.error("地图列表 获取报错", e);
-
             ret.build("data", new Object[]{}).build("success", false);
         }
-
         return ret;
     }
 
@@ -261,11 +209,9 @@ public class MapController {
     @ApiOperation("上传地图")
     @PostMapping("/picture")
     public Result uploadMap(@RequestParam("file") MultipartFile file) {
-
         if (null == file || file.isEmpty()) {
             throw new ParameterInvalidException("上传的文件是空的");
         }
-
         return FileUtils.upload(file, Result::success);
     }
 
@@ -275,14 +221,8 @@ public class MapController {
             @ApiParam(name = "floor", value = "楼层ID", required = true)
             @RequestParam("floor") Integer floor
     ) {
-
         Assert.notNull(floor, "楼层ID不能为空");
-
         BizMap bizMap = mapService.getBizMap(floor);
-
-        if (null == bizMap)
-            throw new DataNotFoundException();
-
         return Result.success(bizMap);
     }
 
@@ -291,19 +231,15 @@ public class MapController {
     @ApiOperation("获取地图列表(需授权)")
     @GetMapping("/bizMaps")
     public Result getBizMaps(PageQO pageQO, BizMap condition) {
-
         PageVO<BizMap> pageVO = mapService.getBizMapList(pageQO, condition);
-
         return Result.success(pageVO);
     }
 
     @ApiOperation("修改地图(需授权)")
     @PutMapping("/bizMap")
     public Result updateBizMap(@RequestBody BizMap bizMap) {
-
         Assert.notNull(bizMap, "地图数据不能为空");
         Assert.notNull(bizMap.getMapId(), "地图ID不能为空");
-
         return mapService.updateBizMap(bizMap);
     }
 
@@ -314,18 +250,14 @@ public class MapController {
                     Integer id
     ) {
         Assert.notNull(id, "地图ID不能为空");
-
         return mapService.deleteBizMap(id);
     }
 
     @ApiOperation("添加地图(需授权)")
     @PostMapping(value = "/bizMap")
     public Result addBizMap(@RequestBody BizMap bizMap) {
-
         Assert.notNull(bizMap, "地图数据不能为空");
-
         Assert.isNull(bizMap.getMapId(), "ID必须为空");
-
         return mapService.addBizMap(bizMap);
     }
 }

@@ -9,9 +9,7 @@ import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.exception.DataNotFoundException;
-import com.whxm.harbor.mapper.BizBuildingMapper;
-import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
-import com.whxm.harbor.mapper.BizTerminalMapper;
+import com.whxm.harbor.mapper.*;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.TerminalService;
 import com.whxm.harbor.utils.JacksonUtils;
@@ -44,6 +42,8 @@ public class TerminalServiceImpl implements TerminalService {
     private MapService mapService;
     @Resource
     private BizBuildingMapper bizBuildingMapper;
+    @Resource
+    private RelationTerminalBuildingMapper relationTerminalBuildingMapper;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
@@ -102,7 +102,8 @@ public class TerminalServiceImpl implements TerminalService {
         String number = terminal.getTerminalNumber();
         //删除终端访问记录
         bizTerminalMapper.deleteTerminalVisit(number);
-
+        //删除终端--建筑关系
+        relationTerminalBuildingMapper.deleteByTn(number);
         //删building
         BizBuilding building = bizBuildingMapper.selectByNumber(number);
         if (null == building)
@@ -114,7 +115,7 @@ public class TerminalServiceImpl implements TerminalService {
         }
         //删edges
         MapEdge edgePoint = new MapEdge();
-        Integer id = building.getId();
+        String id = building.getId();
         edgePoint.setHead(id);
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);

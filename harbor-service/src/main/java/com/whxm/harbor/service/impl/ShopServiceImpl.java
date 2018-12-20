@@ -8,6 +8,8 @@ import com.whxm.harbor.constant.Constant;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.BizShopMapper;
+import com.whxm.harbor.mapper.RelationShopBuildingMapper;
+import com.whxm.harbor.mapper.RelationTerminalBuildingMapper;
 import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
@@ -35,6 +37,8 @@ public class ShopServiceImpl implements ShopService {
     private BizBuildingMapper bizBuildingMapper;
     @Resource
     private BizShopMapper bizShopMapper;
+    @Resource
+    private RelationShopBuildingMapper relationShopBuildingMapper;
 
     @Override
     public BizShopVo getBizShop(String bizShopId) {
@@ -80,9 +84,6 @@ public class ShopServiceImpl implements ShopService {
         final List<BizShopVo> ret = new ArrayList<>();
 
         List<BizShop> list = bizShopMapper.getBizShopList(condition);
-
-        /*if (null == list || list.isEmpty())
-            throw new DataNotFoundException();*/
 
         selectShopPictures(ret, list);
 
@@ -165,16 +166,9 @@ public class ShopServiceImpl implements ShopService {
 
         shopVo.setShopEnglishName(PinyinUtils.toPinyin(shopVo.getShopName()));
 
-        BizShop bizShop = bizShopMapper.selectByPrimaryKey(shopVo.getShopId());
-        String shopNumber = bizShop.getShopNumber();
-        BizBuilding building = bizBuildingMapper.selectByNumber(shopNumber);
-        building.setName(shopVo.getShopName());
-        building.setNumber(shopVo.getShopNumber());
-
         synchronized (this) {
             could = bizShopMapper.couldUpdateUniqueNumber(shopVo);
             if (null != could) {
-                bizBuildingMapper.updateByPrimaryKeySelective(building);
                 affectRow = bizShopMapper.updateByPrimaryKeySelective(shopVo);
             }
         }
@@ -260,6 +254,8 @@ public class ShopServiceImpl implements ShopService {
         if (0 == affectRow) {
             return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的商铺,无法删除", bizShopId));
         }
+        //删商铺--建筑关系
+        relationShopBuildingMapper.deleteBySn(number);
         //删building
         BizBuilding building = bizBuildingMapper.selectByNumber(number);
         if (null == building)
@@ -269,7 +265,7 @@ public class ShopServiceImpl implements ShopService {
             return Result.success(String.format("商铺编号为%s的建筑删除成功,对应的建筑删除行数为0", number));
         //删edges
         MapEdge edgePoint = new MapEdge();
-        Integer id = building.getId();
+        String id = building.getId();
         edgePoint.setHead(id);
         edgePoint.setTail(id);
         Result result = mapService.delEdgesByTailOrHead(edgePoint);
@@ -277,39 +273,5 @@ public class ShopServiceImpl implements ShopService {
             return Result.success(String.format("商铺编号为%s的建筑删除成功,对应的建筑有关的边删除行数为0", number));
         }
         return Result.success();
-    }
-
-    @CacheEvict(cacheNames = "bizBuilding", allEntries = true)
-    @Override
-    public Result addShopWithPoint(BizShopVo vo) {
-        int i = 0;
-        BizBuilding building = null;
-        Result result = addBizShop(vo);
-        if (ResultEnum.SUCCESS.getCode().equals(result.getCode())) {
-            building = new BizBuilding();
-            building.setId(null);
-            building.setNumber(vo.getShopNumber());
-            building.setName(vo.getShopName());
-            building.setLayer(vo.getFloorId());
-            building.setType(vo.getBuildingType());
-            building.setArea(JacksonUtils.toJson(vo.getArea()));
-            building.setDx(vo.getDx());
-            building.setDy(vo.getDy());
-            i = bizBuildingMapper.batchReplace(Collections.singletonList(building));
-        }
-        Map<String, Object> ret = new HashMap<>();
-        ret.put("shop", vo);
-        ret.put("building", building);
-        return 0 == i ?
-                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("商铺[%s],无法添加", vo.getShopName()))
-                : Result.success(ret);
-    }
-
-    @Override
-    public List<BizShopVo> listAllShopInfo() {
-        final List<BizShopVo> ret = new ArrayList<>();
-        List<BizShop> list = bizShopMapper.listAllShopInfo();
-        selectShopPictures(ret, list);
-        return ret;
     }
 }
