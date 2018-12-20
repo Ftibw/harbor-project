@@ -122,7 +122,7 @@ public class PathFinder<ID, V, E, W extends Weight<W>> {
         wrapper.g = g;
         V curV = vertices.get(pointId);
         if (null == curV)
-            throw new DataNotFoundException("当前边ID为" + pointId + "的头点不在顶点集中");
+            throw new DataNotFoundException("当前边中tail=" + pointId + "的头点不在顶点集中");
         wrapper.h = this.getterOfH.apply(curV, this.endVertex);
         wrapper.f = g.add(wrapper.h);
         this.wrapperTable.put(pointId, wrapper);
