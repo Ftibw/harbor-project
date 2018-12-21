@@ -1,4 +1,7 @@
 /target/
+target/
+/.idea
+.idea/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
