@@ -1,7 +1,7 @@
 package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.model.BuildingVo;
+import com.whxm.harbor.vo.BuildingVo;
 
 import java.util.List;
 

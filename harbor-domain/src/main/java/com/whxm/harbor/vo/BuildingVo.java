@@ -1,4 +1,4 @@
-package com.whxm.harbor.model;
+package com.whxm.harbor.vo;
 
 import com.whxm.harbor.bean.BizBuilding;
 import io.swagger.annotations.ApiModelProperty;

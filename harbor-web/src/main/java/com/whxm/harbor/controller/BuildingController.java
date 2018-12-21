@@ -2,7 +2,7 @@ package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.model.BuildingVo;
+import com.whxm.harbor.vo.BuildingVo;
 import com.whxm.harbor.service.BuildingService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.JacksonUtils;

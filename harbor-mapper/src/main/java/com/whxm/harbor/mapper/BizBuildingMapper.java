@@ -2,7 +2,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizBuilding;
-import com.whxm.harbor.model.BuildingVo;
+import com.whxm.harbor.vo.BuildingVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

@@ -5,14 +5,12 @@ import com.whxm.harbor.annotation.MyApiResponses;
 import com.whxm.harbor.bean.*;
 import com.whxm.harbor.cache.CacheService;
 import com.whxm.harbor.enums.ResultEnum;
-import com.whxm.harbor.exception.DataNotFoundException;
 import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.graph.PathFinder;
 import com.whxm.harbor.graph.WeightImpl;
-import com.whxm.harbor.model.BuildingVo;
+import com.whxm.harbor.vo.BuildingVo;
 import com.whxm.harbor.service.BuildingService;
 import com.whxm.harbor.service.MapService;
-import com.whxm.harbor.service.ShopService;
 import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import com.whxm.harbor.utils.JacksonUtils;
@@ -163,7 +161,7 @@ public class MapController {
     public Result getAllEdges(@ApiParam("楼层ID(传参时获取头点或者尾点在该楼层的边,空参时获取所有楼层的边)")
                               @RequestParam(name = "fid", required = false) Integer fid) {
 
-        List<BuildingVo> buildings = buildingService.listBuildings(fid, null);
+        List<BuildingVo> buildings = buildingService.listBuildings(null, null);
         if (null == buildings || buildings.size() == 0) {
             return Result.failure(ResultEnum.RESULT_DATA_NONE, "建筑数据为空");
         }

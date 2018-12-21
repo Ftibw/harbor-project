@@ -5,7 +5,7 @@ import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizBuildingMapper;
 import com.whxm.harbor.mapper.MapEdgeMapper;
-import com.whxm.harbor.model.BuildingVo;
+import com.whxm.harbor.vo.BuildingVo;
 import com.whxm.harbor.service.BuildingService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;

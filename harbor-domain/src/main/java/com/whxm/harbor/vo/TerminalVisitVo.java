@@ -1,8 +1,8 @@
-package com.whxm.harbor.model;
+package com.whxm.harbor.vo;
 
 import java.math.BigDecimal;
 
-public class TerminalVisitModel {
+public class TerminalVisitVo {
 
     private String terminalNumber;
 

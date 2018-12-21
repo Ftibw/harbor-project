@@ -93,7 +93,7 @@
         ORDER BY terminal_visit_time DESC
     </select>
 
-    <resultMap id="ModelResultMap" type="com.whxm.harbor.model.TerminalVisitModel">
+    <resultMap id="ModelResultMap" type="com.whxm.harbor.vo.TerminalVisitVo">
         <id column="terminal_number" property="tid" jdbcType="VARCHAR"/>
         <id column="terminal_name" property="terminalName" jdbcType="VARCHAR"/>
         <id column="terminal_type" property="terminalType" jdbcType="VARCHAR"/>

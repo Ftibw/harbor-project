@@ -13,7 +13,7 @@
         id, floor_id, type, dx, dy, area
     </sql>
     <!--以下为自定义部分-->
-    <select id="listBuildings" resultType="com.whxm.harbor.model.BuildingVo">
+    <select id="listBuildings" resultType="com.whxm.harbor.vo.BuildingVo">
         SELECT bb.id,
                bb.floor_id    floorId,
                bb.type,
