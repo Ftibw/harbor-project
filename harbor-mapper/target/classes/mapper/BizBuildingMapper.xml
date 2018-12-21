@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whxm.harbor.mapper.BizBuildingMapper">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizBuilding">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="number" property="number" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="layer" property="layer" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="area" property="area" jdbcType="CHAR"/>
+        <result column="dx" property="dx" jdbcType="DOUBLE"/>
+        <result column="dy" property="dy" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, number, name, layer, type, area, dx, dy
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_building
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from biz_building
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.whxm.harbor.bean.BizBuilding">
+        insert into biz_building (id, number, name, layer, type, area, dx, dy)
+        values (#{id,jdbcType=INTEGER},
+                #{number,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR},
+                #{layer,jdbcType=INTEGER},
+                #{type,jdbcType=INTEGER},
+                #{area,jdbcType=CHAR},
+                #{dx,jdbcType=DOUBLE},
+                #{dy,jdbcType=DOUBLE})
+    </insert>
+    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizBuilding">
+        insert into biz_building
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="layer != null">
+                layer,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="dx != null">
+                dx,
+            </if>
+            <if test="dy != null">
+                dy,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=CHAR},
+            </if>
+            <if test="dx != null">
+                #{dx,jdbcType=DOUBLE},
+            </if>
+            <if test="dy != null">
+                #{dy,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizBuilding">
+        update biz_building
+        <set>
+            <if test="number != null">
+                number = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                layer = #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=CHAR},
+            </if>
+            <if test="dx != null">
+                dx = #{dx,jdbcType=DOUBLE},
+            </if>
+            <if test="dy != null">
+                dy = #{dy,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizBuilding">
+        update biz_building
+        set number = #{number,jdbcType=VARCHAR},
+            name   = #{name,jdbcType=VARCHAR},
+            layer  = #{layer,jdbcType=INTEGER},
+            type   = #{type,jdbcType=INTEGER},
+            area   = #{area,jdbcType=CHAR},
+            dx     = #{dx,jdbcType=DOUBLE},
+            dy     = #{dy,jdbcType=DOUBLE}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!--以下时自定义部分-->
+    <select id="getBuildingList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM biz_building
+        <where>
+            <if test="floor!=null">
+                and layer=#{floor}
+            </if>
+            <if test="null!=typeList and typeList.size>0">
+                and type in (
+                <foreach collection="typeList" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+    </select>
+
+    <insert id="batchReplace" useGeneratedKeys="true" keyProperty="id">
+        REPLACE INTO biz_building
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (NULL , #{item.number,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
+            #{item.layer,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER},
+            #{item.area,jdbcType=CHAR}, #{item.dx,jdbcType=DOUBLE},
+            #{item.dy,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
+
+    <delete id="batchDelete">
+        DELETE from biz_building
+        where id in (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+</mapper>

@@ -1,0 +1,15 @@
+com\whxm\harbor\bean\BizTerminal.class
+com\whxm\harbor\bean\BizActivityMaterial.class
+com\whxm\harbor\bean\ShopPicture.class
+com\whxm\harbor\bean\BizShop.class
+com\whxm\harbor\bean\BizScreensaver.class
+com\whxm\harbor\bean\BizActivity.class
+com\whxm\harbor\bean\BizScreensaverMaterial.class
+com\whxm\harbor\bean\ShopVisit.class
+com\whxm\harbor\bean\BizFormat.class
+com\whxm\harbor\bean\MapEdge.class
+com\whxm\harbor\bean\BizBuilding.class
+com\whxm\harbor\bean\BizFloor.class
+com\whxm\harbor\bean\BizMap.class
+com\whxm\harbor\bean\TerminalVisit.class
+com\whxm\harbor\model\TerminalVisitModel.class
