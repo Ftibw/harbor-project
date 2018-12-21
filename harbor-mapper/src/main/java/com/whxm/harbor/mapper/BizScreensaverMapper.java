@@ -1,6 +1,7 @@
 package com.whxm.harbor.mapper;
 
 import com.whxm.harbor.bean.BizScreensaver;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -35,4 +36,9 @@ public interface BizScreensaverMapper {
     );
 
     int delScreensaverMaterialRelation(@Param("screensaverId") Integer bizScreensaverId);
+
+    int batchDeleteScreensaverTerminalRelation(@Param("terminalIds") String[] terminalIds);
+
+    @Delete("delete from screensaver_published_terminal_relation where screensaver_id=#{screensaverId}")
+    int delScreensaverPublishedTerminalRelation(@Param("screensaverId") Integer screensaverId);
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class BizActivity {
     private Integer activityId;
 
+    private String activityNumber;
+
     private String activityLogo;
 
     private Long activityLogoSize;
@@ -13,6 +15,14 @@ public class BizActivity {
 
     @JsonIgnore
     private Integer isDeleted;
+
+    public String getActivityNumber() {
+        return activityNumber;
+    }
+
+    public void setActivityNumber(String activityNumber) {
+        this.activityNumber = activityNumber;
+    }
 
     public Integer getActivityId() {
         return activityId;

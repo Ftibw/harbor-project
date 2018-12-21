@@ -16,19 +16,28 @@ public interface ShopService {
      * @param bizShopId 商铺ID
      * @return 商铺数据
      */
-    BizShop getBizShop(String bizShopId);
+    BizShopVo getBizShop(String bizShopId);
+
+    /**
+     * 根据商铺编号获取商铺数据
+     *
+     * @param shopNumber 商铺编号
+     * @return 商铺数据
+     */
+    BizShopVo getBizShopByNumber(String shopNumber);
 
     /**
      * 获取商铺列表
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<BizShop> getBizShopList(PageQO<BizShop> pageQO);
+    PageVO<BizShopVo> getBizShopList(PageQO pageQO, BizShop condition);
 
 
     /**
-     *根据{业态ID/楼层ID/商铺名称首字母}获取店铺列表
+     * 根据{业态ID/楼层ID/商铺名称首字母}获取店铺列表
      */
     List<BizShopVo> getBizShopListOptional(Map<String, Object> params);
 
@@ -43,22 +52,30 @@ public interface ShopService {
     /**
      * 修改商铺数据
      *
-     * @param bizShop 商铺数据新值
+     * @param shopVo 商铺数据新值
      * @return ret
      */
-    Result updateBizShop(BizShop bizShop);
+    Result updateBizShop(BizShopVo shopVo);
 
     /**
      * 新增商铺数据
      *
-     * @param bizShop 商铺数据新值
+     * @param shopVo 商铺数据新值
      * @return ret
      */
-    Result addBizShop(BizShop bizShop, List<Map<String, Object>> pictureList);
+    Result addBizShop(BizShopVo shopVo);
 
     /**
      * @param bizShopId 商铺ID
      * @return 商铺的图片路径集合
      */
     List<ShopPicture> getShopPicturesById(String bizShopId);
+
+    /**
+     * 删除商铺数据
+     *
+     * @param bizShopId 商铺ID
+     * @return 商铺的图片路径集合
+     */
+    Result deleteBizShop(String bizShopId);
 }

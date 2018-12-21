@@ -2,12 +2,33 @@ package com.whxm.harbor.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BizFormat {
+
+public class BizFormat{
     private Integer bizFormatId;
 
     private String bizFormatNumber;
 
     private String bizFormatType;
+
+    private Integer bizFormatPid;
+
+    private Integer sortNumber;
+
+    public Integer getSortNumber() {
+        return sortNumber;
+    }
+
+    public void setSortNumber(Integer sortNumber) {
+        this.sortNumber = sortNumber;
+    }
+
+    public Integer getBizFormatPid() {
+        return bizFormatPid;
+    }
+
+    public void setBizFormatPid(Integer bizFormatPid) {
+        this.bizFormatPid = bizFormatPid;
+    }
 
     @JsonIgnore
     private Integer isDeleted;

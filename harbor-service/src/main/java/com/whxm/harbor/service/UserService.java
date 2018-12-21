@@ -30,9 +30,10 @@ public interface UserService {
      * 获取用户列表
      *
      * @param pageQO 查询条件
+     * @param condition
      * @return 查询结果
      */
-    PageVO<User> getUserList(PageQO<User> pageQO);
+    PageVO<User> getUserList(PageQO pageQO, User condition);
 
     /**
      * 删除用户

@@ -1,27 +1,21 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: harbor-web
-  datasource:     #47.94.202.250
-    url: jdbc:mysql://${databasehost:localhost}:3306/harbor?useUnicode=true&characterEncoding=utf8
+  datasource:
+    url: jdbc:mysql://${mysql.address}:3306/harbor?useUnicode=true&characterEncoding=utf8
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    filters: stat
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
   redis:
-      host: ${redishost:192.168.1.80}    #47.94.202.250
+    host: ${redis.address}
+  #配置全局时间返回格式
+  jackson:
+    default-property-inclusion: non_null  #忽略对象中值为null的属性
+#   date-format: yyyy-MM-dd HH:mm:ss
+#   time-zone: GMT+8
 mybatis:
   type-aliases-package: com.whxm.harbor.bean
   mapper-locations: mapper/*.xml
@@ -30,23 +24,45 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+server:
+  port: 9000
+  tomcat:
+    basedir: /usr/local/tomcat
+###################以下为自定义配置###################
+# swagger2 restful archive
 swagger2:
   package: com.whxm.harbor.controller
-fileDir:
-  activityLogoDir: activityLogo
-  activityMaterialImgDir: activityMaterialPicture
-  shopLogoDir: shopLogo
-  shopPictureDir: shopPicture
-  screensaverMaterialImgDir: screensaverMaterialPicture
-urlConfig:
-  urlPrefix: ${resourceServer:http://192.168.1.103:8080/resources/}
-server:
-  port: 10000
+# terminal
+terminal:
+  on-off: 00:00-24:00
+  delay: 10
+  protect: 300
+# 一个账号不限登录总人数,但是限制2小时/1000人新登录
+account:
+  login-limit: 1000
+# wei xin
+wechat:
+  app-id: wx64a4ab9041d6344b
+  secret: 78ce2dae8e9b51ac1f26c6eda6bc079f
+# resources application url
+resource:
+  path: http://${resource.address}:8080/resources
+# file config
+file:
+  absolute-resource-dir: ${my-web-dir}/resources
+  relative-picture-upload-dir: uploadImg/business
+  file-origin-name: fileOriginName
+  file-new-name: fileNewName
+  file-size: fileSize
+  file-path: filePath
+  image-orientation: imageOrientation
+# log record  ---resource.path+log.bug-path构成了bug详情访问URL,用于给微信推送访问bug详情
+#linux部署时,对于spring-boot的jar启动项目来说
+#容器中的/usr/local/tomcat/webapps目录被挂载到了/var/lib/docker/volumes/webapps/_data,用于文件上传后自动同步到资源服务器
+log:
+  parent-path: ${my-web-dir}
+  bug-path: /logs/bug.log     #记录bug
 
-#防止表单重复提交
-#1.数据库乐观锁,以前秒杀用过
-#2.redis分布式锁,尝试性使用
-#redis分布式锁的jedis配置
-jedis:
-  host: ${redishost:192.168.1.80}
-  port: ${redisPort:6379}
+
+
+

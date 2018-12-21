@@ -3,17 +3,23 @@ package com.whxm.harbor.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whxm.harbor.bean.*;
-import com.whxm.harbor.conf.UrlConfig;
+import com.whxm.harbor.cache.CacheService;
+import com.whxm.harbor.conf.TerminalConfig;
+import com.whxm.harbor.conf.PathConfig;
 import com.whxm.harbor.constant.Constant;
-import com.whxm.harbor.mapper.BizScreensaverMaterialMapper;
-import com.whxm.harbor.mapper.BizTerminalMapper;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.mapper.*;
+import com.whxm.harbor.service.MapService;
 import com.whxm.harbor.service.TerminalService;
+import com.whxm.harbor.utils.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -22,256 +28,227 @@ import java.util.*;
 @Transactional
 public class TerminalServiceImpl implements TerminalService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TerminalServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(TerminalServiceImpl.class);
 
     @Resource
     private BizScreensaverMaterialMapper bizScreensaverMaterialMapper;
-
     @Autowired
-    private UrlConfig urlConfig;
-
+    private PathConfig pathConfig;
     @Resource
     private BizTerminalMapper bizTerminalMapper;
+    @Autowired
+    private CacheService cacheService;
+    @Autowired
+    private MapService mapService;
+    @Resource
+    private BizBuildingMapper bizBuildingMapper;
 
     @Override
     public BizTerminal getBizTerminal(String bizTerminalId) {
-
-        BizTerminal terminal;
-
-        try {
-            terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
-
-            if (null == terminal) {
-                logger.error("ID为{}的终端不存在", bizTerminalId);
-            }
-        } catch (Exception e) {
-
-            logger.error("终端ID为{}的数据 获取报错", bizTerminalId);
-
-            throw new RuntimeException();
-        }
-
-        return terminal;
+        return bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
     }
 
     @Override
-    public PageVO<BizTerminal> getBizTerminalList(PageQO<BizTerminal> pageQO) {
+    public PageVO<BizTerminal> getBizTerminalList(PageQO pageQO, BizTerminal condition) {
 
-        PageVO<BizTerminal> pageVO;
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
-
-            pageVO = new PageVO<>(pageQO);
-
-            pageVO.setList(bizTerminalMapper.getBizTerminalList(pageQO.getCondition()));
-
-            pageVO.setTotal(page.getTotal());
-
-        } catch (Exception e) {
-
-            logger.error("终端列表 获取报错", e);
-
-            throw new RuntimeException();
-        }
-
+        PageVO<BizTerminal> pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        List<BizTerminal> list = bizTerminalMapper.getBizTerminalList(condition);
+        pageVO.setList(list);
+        pageVO.setTotal(page.getTotal());
         return pageVO;
     }
 
+    @CacheEvict(cacheNames = {"bizBuilding", "bizEdge"}, allEntries = true)
     @Override
     public Result deleteBizTerminal(String bizTerminalId) {
+        BizTerminal terminal = bizTerminalMapper.selectByPrimaryKey(bizTerminalId);
+        if (null == terminal)
+            return Result.success(String.format("ID为%s的终端不存在,无需删除", bizTerminalId));
 
-        Result ret;
+        bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
+        bizTerminalMapper.delTerminalFirstPageRelation(bizTerminalId);
+        terminal.setIsDeleted(Constant.YES);
+        terminal.setIsTerminalOnline(Constant.NO);
+        terminal.setTerminalNumber(null);
+        terminal.setTerminalName(null);
+        terminal.setFloorId(null);
+        terminal.setBid(null);
 
-        try {
+        int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(terminal);
+        if (0 == affectRow)
+            Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法删除", bizTerminalId));
 
-            bizTerminalMapper.delScreensaverTerminalRelation(bizTerminalId);
-
-            BizTerminal bizTerminal = new BizTerminal();
-
-            bizTerminal.setTerminalId(bizTerminalId);
-
-            bizTerminal.setIsDeleted(Constant.RECORD_IS_DELETED);
-
-            boolean isSuccess = updateBizTerminal(bizTerminal).getData().toString().contains("1");
-
-            logger.info(isSuccess ? "ID为{}的终端 删除成功" : "ID为{}的终端 删除失败", bizTerminalId);
-
-            ret = new Result(isSuccess ?
-                    "ID为" + bizTerminalId + "的终端 删除成功" :
-                    "ID为" + bizTerminalId + "的终端 删除失败"
-            );
-
-        } catch (Exception e) {
-
-            logger.error("终端ID为{}的数据 删除错误", bizTerminalId);
-
-            throw new RuntimeException();
+        String number = terminal.getTerminalNumber();
+        //删除终端访问记录
+        bizTerminalMapper.deleteTerminalVisit(number);
+        //删building
+        String bid = terminal.getBid();
+        affectRow = bizBuildingMapper.batchDelete(Collections.singletonList(bid));
+        if (0 == affectRow) {
+            return Result.success(String.format("编号为%s的终端删除成功,对应的建筑删除行数为0", number));
         }
-
-        return ret;
+        //删edges
+        MapEdge edgePoint = new MapEdge();
+        edgePoint.setHead(bid);
+        edgePoint.setTail(bid);
+        Result result = mapService.delEdgesByTailOrHead(edgePoint);
+        if (!result.getCode().equals(ResultEnum.SUCCESS_DELETED.getCode())) {
+            return Result.success(String.format("编号为%s的终端删除成功,终端对应建筑的有关边删除行数为0", number));
+        }
+        return Result.success();
     }
 
     @Override
     public Result updateBizTerminal(BizTerminal bizTerminal) {
-
-        Result ret;
-
-        try {
-
-            int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
-
-            logger.info(1 == affectRow ?
-                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改成功" :
-                    "ID为" + bizTerminal.getTerminalId() + "的终端 修改失败"
-            );
-
-            ret = new Result("终端数据修改了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("终端数据 修改报错", e);
-
-            throw new RuntimeException();
-        }
-
-        return ret;
+        int affectRow = bizTerminalMapper.updateByPrimaryKeySelective(bizTerminal);
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法修改", bizTerminal.getTerminalId()))
+                : Result.success(bizTerminal);
     }
 
     @Override
     public Result addBizTerminal(BizTerminal bizTerminal) {
-
-        Result ret;
-
-        try {
-            synchronized (this) {
-                if (null != bizTerminalMapper.selectIdByNumber(bizTerminal.getTerminalNumber())) {
-
-                    return new Result(HttpStatus.NOT_ACCEPTABLE.value(), "终端编号重复", Constant.NO_DATA);
-                }
+        Object exist = null;
+        int affectRow = 0;
+        bizTerminal.setIsTerminalOnline(Constant.NO);
+        bizTerminal.setIsDeleted(Constant.NO);
+        //使用终端的类型(二维码/横屏/竖屏)来判断平台0/1/2
+        bizTerminal.setTerminalPlatform(Integer.parseInt(bizTerminal.getTerminalType()));
+        bizTerminal.setAddTerminalTime(new Date());
+        bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
+        String terminalNumber = bizTerminal.getTerminalNumber();
+        //已经做了编号的唯一索引,仅仅是为了避免重复索引异常,这里真浪费,暂时这样,优先保证状态正确性
+        synchronized (this) {
+            exist = bizTerminalMapper.selectIdByNumber(terminalNumber);
+            if (Objects.isNull(exist)) {
+                affectRow = bizTerminalMapper.insert(bizTerminal);
+                bizTerminalMapper.insertTerminalVisit(terminalNumber);
             }
-
-            bizTerminal.setIsDeleted(Constant.RECORD_NOT_DELETED);
-
-            bizTerminal.setAddTerminalTime(new Date());
-
-            bizTerminal.setTerminalId(UUID.randomUUID().toString().replace("-", ""));
-
-            int affectRow = bizTerminalMapper.insert(bizTerminal);
-
-            logger.info(1 == affectRow ?
-                    "终端数据添加成功" :
-                    "终端数据添加失败"
-            );
-
-            ret = new Result("终端数据添加了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("终端数据 添加报错", e);
-
-            throw new RuntimeException();
         }
 
-        return ret;
+        if (Objects.nonNull(exist))
+            return Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端编号%s重复", bizTerminal.getTerminalId(), terminalNumber));
+
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "新终端,无法添加")
+                : Result.success(bizTerminal);
     }
 
     @Override
-    public Result register(Map<String, Object> params) {
-
-        Result ret;
-
-        try {
-            if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
-
-                ret = new Result("终端注册成功");
-
-            } else {
-
-                ret = new Result(HttpStatus.NOT_FOUND.value(), "终端未注册", Constant.NO_DATA);
-            }
-
-        } catch (Exception e) {
-
-            logger.error("终端是否注册 查询报错 ", e);
-
-            throw new RuntimeException();
+    public BizTerminal register(Map<String, Object> params) {
+        if (0 != bizTerminalMapper.updateRegisteredTime(params)) {
+            return bizTerminalMapper.selectIdByNumber(params.get("terminalNumber"));
         }
-
-        return ret;
+        return null;
     }
 
     @Override
-    public ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params) {
-
-        ResultMap<String, Object> ret = new ResultMap<>(4);
-
+    public ResultMap<String, Object> getTerminalScreensaverProgram(String terminalNumber) {
+        ResultMap<String, Object> ret = new ResultMap<>(8);
         final List<Map<String, Object>> list = new ArrayList<>();
-
-        Map<String, Object> terminalInfo;
-
-        String terminalNumber = (String) params.get("terminalNumber");
-
         Object screensaverId = null;
-
-        Object terminalSwitchTime = null;
-
+        Object screensaverProgramName = null;
+        TerminalConfig config = JacksonUtils.readValue(JacksonUtils.toJson(cacheService.getConfig(TerminalConfig.cacheKey).get(0)), TerminalConfig.class);
+        if (null == config)
+            throw new DataNotFoundException();
         try {
-            terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
-
+            Map<String, Object> terminalInfo = bizTerminalMapper.selectTerminalWithScreensaver(terminalNumber);
             if (null != terminalInfo) {
                 //屏保ID
                 screensaverId = terminalInfo.get("screensaverId");
-                //终端开关机时间
-                terminalSwitchTime = terminalInfo.get("terminalSwitchTime");
+                screensaverProgramName = terminalInfo.get("screensaverProgramName");
             }
+
             //先存了list引用再说
-            ret.build("prog", screensaverId)
-                    .build("on_off", String.valueOf(terminalSwitchTime))
+            ret.build("prog", null == screensaverId ? 0 : screensaverId)
                     .build("data", list)
-                    .build("delay", 10);
+                    .build("on_off", config.getOnOff())
+                    .build("delay", config.getDelay())
+                    .build("protect", config.getProtect())
+                    //这个字段给后台使用的
+                    .build("screensaverProgramName", screensaverProgramName);
 
             if (null == screensaverId || "".equals(screensaverId)) {
                 ret.build("code", 0);
-
             } else {
                 bizScreensaverMaterialMapper
                         .selectMaterialsByScreensaverId(screensaverId)
                         .forEach(item -> list.add(
                                 new ResultMap<String, Object>(2)
-                                        .build("name", item.getScreensaverMaterialName())
-                                        .build("url", urlConfig.getUrlPrefix() + item.getScreensaverMaterialImgPath())
+                                        .build("name", item.getScreensaverMaterialImgName())
+                                        .build("url", pathConfig.getResourceURLWithPost() + item.getScreensaverMaterialImgPath())
                         ));
-
                 ret = list.isEmpty() ? ret.build("code", 0) : ret.build("code", 1);
             }
-
+            return ret;
         } catch (Exception e) {
-
             logger.error("编号为{}的终端屏保信息 查询报错", terminalNumber, e);
-
-            throw new RuntimeException();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ret.build("code", 0)
+                    .build("prog", 0)
+                    .build("data", new Object[]{})
+                    .build("on_off", config.getOnOff())
+                    .build("delay", config.getDelay())
+                    .build("protect", config.getProtect())
+                    .build("screensaverProgramName", "");
         }
-
-        return ret;
     }
 
     @Override
-    public List<BizTerminal> getNotPublishedTerminal() {
+    public PageVO<BizTerminal> getBizTerminalListWithPublishedFlag(PageQO pageQO, BizTerminal condition) {
 
-        List<BizTerminal> list = null;
+        PageVO<BizTerminal> pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        //[terminalType],[floorId],screensaverId
+        List<BizTerminal> list = bizTerminalMapper.getBizTerminalListWithPublishedFlag(condition);
+        pageVO.setList(list);
+        pageVO.setTotal(page.getTotal());
+        return pageVO;
+    }
 
-        try {
-            list = bizTerminalMapper.selectNotPublishedTerminal();
+    @Override
+    public int updateTerminalOnline(String terminalNumber) {
+        return bizTerminalMapper.keepOnline(terminalNumber);
+    }
 
-            logger.info(list.isEmpty() ? "无屏保的终端不存在" : "查询无屏保的终端列表OK");
+    @Override
+    public int updateTerminalOffline(List<Object> terminalNumbers) {
+        return bizTerminalMapper.offLine(terminalNumbers);
+    }
 
-        } catch (Exception e) {
+    @Override
+    public Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret) {
+        List<BizScreensaverMaterial> list = bizScreensaverMaterialMapper.getFirstPageByTerminalNumber(sn);
+        if (null != list && !list.isEmpty()) {
+            list.forEach(item -> item.setScreensaverMaterialImgPath(pathConfig.getResourceURLWithPost() + item.getScreensaverMaterialImgPath()));
+            return ret.build("success", true)
+                    .build("data", list);
+        } else return ret;
+    }
 
-            logger.error("无屏保的终端列表查询报错", e);
+    @Override
+    public Result bindFirstPage(String terminalId, Integer[] firstPageIds) {
+        bizTerminalMapper.delTerminalFirstPageRelation(terminalId);
+        int affectRow = bizTerminalMapper.insertTerminalFirstPageRelation(terminalId, firstPageIds);
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的终端,无法设置ID为%s的首页轮播图", terminalId, Arrays.asList(firstPageIds)))
+                : Result.success(firstPageIds);
+    }
 
-            throw new RuntimeException();
-        }
+    @Override
+    public Result updateTerminalConfig(TerminalConfig terminalConfig) {
+        return Result.success(cacheService.updateConfig(terminalConfig));
+    }
 
-        return list;
+    @Override
+    public Result getTerminalConfig() {
+        return Result.success(cacheService.getConfig(TerminalConfig.cacheKey).get(0));
+    }
+
+    @Override
+    public Result resetTerminalConfig() {
+        cacheService.resetConfig(TerminalConfig.cacheKey);
+        return Result.success();
     }
 }

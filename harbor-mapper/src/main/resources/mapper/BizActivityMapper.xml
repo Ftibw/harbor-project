@@ -3,14 +3,15 @@
 <mapper namespace="com.whxm.harbor.mapper.BizActivityMapper">
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizActivity">
         <id column="activity_id" property="activityId" jdbcType="INTEGER"/>
+        <result column="activity_number" property="activityNumber" jdbcType="VARCHAR"/>
         <result column="activity_logo" property="activityLogo" jdbcType="VARCHAR"/>
         <result column="activity_logo_size" property="activityLogoSize" jdbcType="BIGINT"/>
         <result column="activity_type" property="activityType" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    activity_id, activity_logo, activity_logo_size, activity_type, is_deleted
-  </sql>
+        activity_id, activity_number, activity_logo, activity_logo_size, activity_type, is_deleted
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -18,20 +19,25 @@
         where activity_id = #{activityId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from biz_activity
-    where activity_id = #{activityId,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizActivity">
-    insert into biz_activity (activity_id, activity_logo, activity_logo_size, 
-      activity_type, is_deleted)
-    values (#{activityId,jdbcType=INTEGER}, #{activityLogo,jdbcType=VARCHAR}, #{activityLogoSize,jdbcType=BIGINT}, 
-      #{activityType,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER})
-  </insert>
+        DELETE FROM biz_activity
+        WHERE activity_id = #{activityId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="activityId"
+            parameterType="com.whxm.harbor.bean.BizActivity">
+        INSERT INTO biz_activity (activity_id, activity_number, activity_logo, activity_logo_size,
+                                  activity_type, is_deleted)
+        VALUES (#{activityId,jdbcType=INTEGER}, #{activityNumber,jdbcType=VARCHAR}, #{activityLogo,jdbcType=VARCHAR},
+                #{activityLogoSize,jdbcType=BIGINT},
+                #{activityType,jdbcType=VARCHAR}, #{isDeleted,jdbcType=INTEGER})
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizActivity">
         insert into biz_activity
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="activityId != null">
                 activity_id,
+            </if>
+            <if test="activityNumber != null">
+                activity_number,
             </if>
             <if test="activityLogo != null">
                 activity_logo,
@@ -49,6 +55,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="activityId != null">
                 #{activityId,jdbcType=INTEGER},
+            </if>
+            <if test="activityNumber != null">
+                #{activityNumber,jdbcType=VARCHAR},
             </if>
             <if test="activityLogo != null">
                 #{activityLogo,jdbcType=VARCHAR},
@@ -70,6 +79,9 @@
             <if test="activityLogo != null">
                 activity_logo = #{activityLogo,jdbcType=VARCHAR},
             </if>
+            <if test="activityNumber != null and activityNumber!='-1'">
+                activity_number = #{activityNumber,jdbcType=VARCHAR},
+            </if>
             <if test="activityLogoSize != null">
                 activity_logo_size = #{activityLogoSize,jdbcType=BIGINT},
             </if>
@@ -83,18 +95,29 @@
         where activity_id = #{activityId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizActivity">
-    update biz_activity
-    set activity_logo = #{activityLogo,jdbcType=VARCHAR},
-      activity_logo_size = #{activityLogoSize,jdbcType=BIGINT},
-      activity_type = #{activityType,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=INTEGER}
-    where activity_id = #{activityId,jdbcType=INTEGER}
-  </update>
+        UPDATE biz_activity
+        SET activity_number    = #{activityNumber,jdbcType=VARCHAR},
+            activity_logo      = #{activityLogo,jdbcType=VARCHAR},
+            activity_logo_size = #{activityLogoSize,jdbcType=BIGINT},
+            activity_type      = #{activityType,jdbcType=VARCHAR},
+            is_deleted         = #{isDeleted,jdbcType=INTEGER}
+        WHERE activity_id = #{activityId,jdbcType=INTEGER}
+    </update>
     <!--以下为自定义部分-->
     <select id="getBizActivityList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from biz_activity where is_deleted = 1
+        from biz_activity where is_deleted = 0
         ORDER BY activity_id DESC
     </select>
+
+    <!--如果符合条件则置为删除状态-->
+    <update id="setIsDeleted" parameterType="com.whxm.harbor.bean.BizActivity">
+        UPDATE biz_activity
+        SET is_deleted = #{isDeleted,jdbcType=INTEGER},activity_type=#{activityType}
+        WHERE NOT exists(SELECT activity_id
+                         FROM biz_activity_material
+                         WHERE biz_activity.activity_id = biz_activity_material.activity_id)
+              AND activity_id = #{activityId,jdbcType=INTEGER}
+    </update>
 </mapper>

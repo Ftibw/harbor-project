@@ -6,6 +6,8 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 
+import java.util.List;
+
 public interface ScreensaverMaterialService {
     /**
      * 根据屏保素材ID获取屏保素材数据
@@ -18,10 +20,30 @@ public interface ScreensaverMaterialService {
     /**
      * 获取屏保素材列表
      *
-     * @return list
      * @param pageQO
+     * @param condition
+     * @return list
      */
-    PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO<BizScreensaverMaterial> pageQO);
+    PageVO<BizScreensaverMaterial> getBizScreensaverMaterialList(PageQO pageQO, BizScreensaverMaterial condition);
+
+
+    /**
+     * 获取指定屏保绑定的屏保素材列表
+     *
+     * @param pageQO
+     * @param condition
+     * @return list
+     */
+    PageVO<BizScreensaverMaterial> getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition);
+
+    /**
+     * 获取指定终端绑定的首页素材列表
+     *
+     * @param pageQO
+     * @param condition
+     * @return list
+     */
+    PageVO<BizScreensaverMaterial> getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition);
 
     /**
      * 根据ID删除屏保素材
@@ -41,8 +63,9 @@ public interface ScreensaverMaterialService {
 
     /**
      * 新增屏保素材数据
-     * @param screensaverMaterial  新屏保素材数据
-     * @return  添加操作结果
+     *
+     * @param screensaverMaterial 新屏保素材数据
+     * @return 添加操作结果
      */
-    Result addBizScreensaverMaterial(BizScreensaverMaterial screensaverMaterial);
+    Result addBizScreensaverMaterial(List<BizScreensaverMaterial> screensaverMaterial);
 }

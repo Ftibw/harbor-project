@@ -3,7 +3,7 @@
 <mapper namespace="com.whxm.harbor.mapper.BizShopMapper">
     <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizShop">
         <id column="shop_id" property="shopId" jdbcType="VARCHAR"/>
-        <result column="shop_number" property="shopNumber" jdbcType="VARCHAR"/>
+        <result column="shop_number" property="sid" jdbcType="VARCHAR"/>
         <result column="shop_name" property="shopName" jdbcType="VARCHAR"/>
         <result column="shop_english_name" property="shopEnglishName" jdbcType="VARCHAR"/>
         <result column="floor_id" property="floorId" jdbcType="INTEGER"/>
@@ -16,9 +16,7 @@
         <result column="shop_checkin_time" property="shopCheckinTime" jdbcType="TIMESTAMP"/>
         <result column="shop_weight" property="shopWeight" jdbcType="INTEGER"/>
     </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="BaseResultMap">
-        <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
-    </resultMap>
+
     <sql id="Base_Column_List">
         shop_id, shop_number, shop_name, shop_english_name, floor_id, biz_format_id, shop_house_number,
         is_shop_enabled, shop_logo_path, shop_tel, add_shop_time, shop_checkin_time, shop_weight
@@ -26,32 +24,42 @@
     <sql id="Blob_Column_List">
         shop_descript
     </sql>
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from biz_shop
-        where shop_id = #{shopId,jdbcType=VARCHAR}
-    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        DELETE FROM biz_shop
+        DELETE
+        FROM biz_shop
         WHERE shop_id = #{shopId,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizShop">
-        INSERT INTO biz_shop (shop_id, shop_number, shop_name,
-                              shop_english_name, floor_id, biz_format_id,
-                              shop_house_number, is_shop_enabled, shop_logo_path,
-                              shop_tel, add_shop_time, shop_checkin_time,
-                              shop_weight, shop_descript)
-        VALUES (#{shopId,jdbcType=VARCHAR}, #{shopNumber,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR},
-                                            #{shopEnglishName,jdbcType=VARCHAR}, #{floorId,jdbcType=INTEGER},
-                                            #{bizFormatId,jdbcType=VARCHAR},
-                                            #{shopHouseNumber,jdbcType=VARCHAR}, #{isShopEnabled,jdbcType=INTEGER},
-                                            #{shopLogoPath,jdbcType=VARCHAR},
-                                            #{shopTel,jdbcType=VARCHAR}, #{addShopTime,jdbcType=TIMESTAMP},
+    <insert id="insert" useGeneratedKeys="true" keyProperty="shopId"
+            parameterType="com.whxm.harbor.bean.BizShop">
+        INSERT INTO biz_shop (shop_id,
+                              shop_number,
+                              shop_name,
+                              shop_english_name,
+                              floor_id,
+                              biz_format_id,
+                              shop_house_number,
+                              is_shop_enabled,
+                              shop_logo_path,
+                              shop_tel,
+                              add_shop_time,
+                              shop_checkin_time,
+                              shop_weight,
+                              shop_descript)
+        VALUES (#{shopId,jdbcType=VARCHAR},
+                #{sid,jdbcType=VARCHAR},
+                #{shopName,jdbcType=VARCHAR},
+                #{shopEnglishName,jdbcType=VARCHAR},
+                #{floorId,jdbcType=INTEGER},
+                #{bizFormatId,jdbcType=VARCHAR},
+                #{shopHouseNumber,jdbcType=VARCHAR},
+                #{isShopEnabled,jdbcType=INTEGER},
+                #{shopLogoPath,jdbcType=VARCHAR},
+                #{shopTel,jdbcType=VARCHAR},
+                #{addShopTime,jdbcType=TIMESTAMP},
                 #{shopCheckinTime,jdbcType=TIMESTAMP},
-                #{shopWeight,jdbcType=INTEGER}, #{shopDescript,jdbcType=LONGVARCHAR})
+                #{shopWeight,jdbcType=INTEGER},
+                #{shopDescript,jdbcType=LONGVARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizShop">
         insert into biz_shop
@@ -59,7 +67,7 @@
             <if test="shopId != null">
                 shop_id,
             </if>
-            <if test="shopNumber != null">
+            <if test="sid != null">
                 shop_number,
             </if>
             <if test="shopName != null">
@@ -103,8 +111,8 @@
             <if test="shopId != null">
                 #{shopId,jdbcType=VARCHAR},
             </if>
-            <if test="shopNumber != null">
-                #{shopNumber,jdbcType=VARCHAR},
+            <if test="sid != null and sid!='-1'">
+                #{sid,jdbcType=VARCHAR},
             </if>
             <if test="shopName != null">
                 #{shopName,jdbcType=VARCHAR},
@@ -147,8 +155,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizShop">
         update biz_shop
         <set>
-            <if test="shopNumber != null">
-                shop_number = #{shopNumber,jdbcType=VARCHAR},
+            <if test="sid != null">
+                shop_number = #{sid,jdbcType=VARCHAR},
             </if>
             <if test="shopName != null">
                 shop_name = #{shopName,jdbcType=VARCHAR},
@@ -191,7 +199,7 @@
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whxm.harbor.bean.BizShop">
         UPDATE biz_shop
-        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+        SET shop_number       = #{sid,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
             shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
             floor_id          = #{floorId,jdbcType=INTEGER},
@@ -208,7 +216,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizShop">
         UPDATE biz_shop
-        SET shop_number       = #{shopNumber,jdbcType=VARCHAR},
+        SET shop_number       = #{sid,jdbcType=VARCHAR},
             shop_name         = #{shopName,jdbcType=VARCHAR},
             shop_english_name = #{shopEnglishName,jdbcType=VARCHAR},
             floor_id          = #{floorId,jdbcType=INTEGER},
@@ -224,40 +232,69 @@
     </update>
 
     <!--以下为自定义部分-->
+
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        floor_name,
+        biz_format_type,
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        from biz_shop
+        LEFT JOIN biz_floor USING(floor_id)
+        LEFT JOIN biz_format USING (biz_format_id)
+        where shop_id = #{shopId,jdbcType=VARCHAR}
+    </select>
+    <resultMap id="ResultMapWithBLOBs" type="com.whxm.harbor.bean.BizShop" extends="ExtensionResultMap">
+        <result column="shop_descript" property="shopDescript" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
     <select id="selectIdByNumber" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from biz_shop
-        WHERE shop_number=#{shopNumber}
+        WHERE shop_number=#{sid}
+    </select>
+
+    <select id="couldUpdateUniqueNumber" parameterType="com.whxm.harbor.bean.BizShop" resultType="java.lang.Integer">
+        SELECT 1
+        FROM DUAL
+        WHERE NOT EXISTS(SELECT shop_id FROM biz_shop WHERE shop_number = #{sid})
+           OR EXISTS(SELECT 1
+                     FROM biz_shop
+                     WHERE shop_id = #{shopId}
+                       AND shop_number = #{sid})
     </select>
 
     <select id="getBizShopList" resultMap="ExtensionResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name,biz_format_type
         from biz_shop
-        JOIN biz_floor USING(floor_id)
-        JOIN biz_format USING (biz_format_id)
+        LEFT JOIN biz_floor USING(floor_id)
+        LEFT JOIN biz_format USING (biz_format_id)
         <where>
             <if test="shopName!=null">and shop_name like concat('%',#{shopName},'%')</if>
+            <if test="sid!=null">and shop_number like concat('%',#{sid},'%')</if>
             <if test="shopHouseNumber!=null">and shop_house_number like concat('%',#{shopHouseNumber},'%')</if>
-            <if test="isShopEnabled!=null">and is_shop_enabled=#{shopName}</if>
+            <if test="isShopEnabled!=null">and is_shop_enabled=#{isShopEnabled}</if>
             <if test="floorId!=null">and floor_id=#{floorId}</if>
             <if test="bizFormatId!=null">and biz_format_id=#{bizFormatId}</if>
         </where>
         order by add_shop_time desc
     </select>
 
-    <select id="getBizShopListOptional" resultMap="ExtensionResultMap">
+    <select id="getBizShopListOptional" resultMap="ResultMapWithBLOBs">
         select
-        <include refid="Base_Column_List"/>,floor_name,biz_format_type
+        floor_name,
+        biz_format_type,
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
         from biz_shop
-        JOIN biz_floor USING(floor_id)
-        JOIN biz_format USING (biz_format_id)
-        <where>
-            <if test="floorId!=null">AND floor_id=#{floorId}</if>
-            <if test="bizFormatId!=null">AND biz_format_id=#{bizFormatId}</if>
-            <if test="initial!=null">AND shop_english_name like concat(#{initial},'%')</if>
-        </where>
+        LEFT JOIN biz_floor USING(floor_id)
+        LEFT JOIN biz_format USING (biz_format_id)
+        WHERE is_shop_enabled = 1
+        <if test="floorId!=null">AND floor_id=#{floorId}</if>
+        <if test="bizFormatId!=null and bizFormatId!=''">AND biz_format_id=#{bizFormatId}</if>
+        <if test="initial!=null and initial!=''">AND shop_english_name like concat(#{initial},'%')</if>
         order by shop_weight desc
     </select>
 
@@ -274,18 +311,17 @@
         </foreach>
     </insert>
 
-    <!--清除商铺-商铺图片关系表数据-->
+    <!--清除商铺-商铺图片关系表数据,直接用注解写的-->
     <!--<delete id="delShopPicturesRelation">
         DELETE FROM shop_picture_relation
         WHERE shop_id=#{shopId}
     </delete>-->
 
     <select id="selectShopPicturesById" resultType="com.whxm.harbor.bean.ShopPicture">
-        SELECT
-            shop_id shopId,
-            shop_picture_path shopPicturePath,
-            shop_picture_name shopPictureName,
-            shop_picture_size shopPictureSize
+        SELECT shop_id           shopId,
+               shop_picture_path shopPicturePath,
+               shop_picture_name shopPictureName,
+               shop_picture_size shopPictureSize
         FROM shop_picture_relation
         WHERE shop_id = #{bizShopId}
     </select>

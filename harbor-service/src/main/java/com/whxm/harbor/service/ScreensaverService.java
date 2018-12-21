@@ -20,8 +20,9 @@ public interface ScreensaverService {
      *
      * @return list
      * @param pageQO
+     * @param condition
      */
-    PageVO<BizScreensaver> getBizScreensaverList(PageQO<BizScreensaver> pageQO);
+    PageVO<BizScreensaver> getBizScreensaverList(PageQO pageQO, BizScreensaver condition);
 
     /**
      * 根据ID删除屏保
@@ -44,9 +45,10 @@ public interface ScreensaverService {
      *
      * @param screensaver            新屏保数据
      * @param screensaverMaterialIds 新屏保的屏保素材
+     * @param terminalIds            需要发布的终端ID集合
      * @return 添加操作结果
      */
-    Result addBizScreensaver(BizScreensaver screensaver, Integer[] screensaverMaterialIds);
+    Result addBizScreensaver(BizScreensaver screensaver, Integer[] screensaverMaterialIds, String[] terminalIds);
 
     /**
      * 给选择的终端发布屏保

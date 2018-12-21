@@ -5,24 +5,23 @@ import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
 import com.whxm.harbor.bean.User;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.enums.ResultEnum;
+import com.whxm.harbor.lock.RedisDistributedLock;
 import com.whxm.harbor.service.UserService;
-import com.whxm.harbor.utils.MD5Util;
-import com.whxm.harbor.utils.TokenUtils;
+import com.whxm.harbor.utils.*;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import javax.validation.Valid;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.whxm.harbor.utils.TokenUtils.chaos;
 import static com.whxm.harbor.utils.TokenUtils.order;
+import static com.whxm.harbor.utils.TokenUtils.salt;
 
 @Api(description = "用户服务")
 @RestController
@@ -30,39 +29,14 @@ import static com.whxm.harbor.utils.TokenUtils.order;
 @MyApiResponses
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
     private UserService userService;
 
     @ApiOperation("获取用户列表(需授权)")
     @GetMapping("/users")
-    /*@ApiImplicitParams(
-            {
-                    @ApiImplicitParam(name = "userLoginname", value = "登陆名", dataType = "String"),
-                    @ApiImplicitParam(name = "userName", value = "用户名", dataType = "String"),
-                    @ApiImplicitParam(name = "userAlias", value = "用户昵称", dataType = "String"),
-                    @ApiImplicitParam(name = "userEmail", value = "用户邮箱", dataType = "String"),
-                    @ApiImplicitParam(name = "userWechat", value = "用户微信", dataType = "String")
-            }
-    )*/
-    public Result getUsers(PageQO<User> pageQO, User condition) {
-
-        Result ret = null;
-
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<User> pageVO = userService.getUserList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("用户列表 获取报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户列表 获取报错", pageQO);
-        }
-
-        return ret;
+    public Result getUsers(PageQO pageQO, User condition) {
+        PageVO<User> pageVO = userService.getUserList(pageQO, condition);
+        return Result.success(pageVO);
     }
 
     @ApiOperation("获取用户(需授权)")
@@ -71,34 +45,17 @@ public class UserController {
             @ApiParam(name = "ID", value = "用户的ID", required = true)
             @PathVariable("ID") String userId
     ) {
-        Result ret = null;
-        User user = null;
-        try {
-            user = userService.getUser(userId);
-
-            ret = new Result(user);
-
-        } catch (Exception e) {
-            logger.error("ID为{}的用户数据 获取报错", userId, e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + userId + "的用户数据 获取报错", null);
-        }
-
-        return ret;
+        Assert.notNull(userId, "用户ID不能为空");
+        User user = userService.getUser(userId);
+        return Result.success(user);
     }
 
     @ApiOperation("修改用户(需授权)")
     @PutMapping("/user")
     public Result updateUser(@RequestBody User user) {
-        Result ret = null;
-        try {
-            ret = userService.updateUser(user);
-        } catch (Exception e) {
-
-            logger.error("用户数据 修改报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户数据 修改报错", user);
-        }
-
-        return ret;
+        Assert.notNull(user, "用户数据不能为空");
+        Assert.notNull(user.getUserId(), "用户ID不能为空");
+        return userService.updateUser(user);
     }
 
     @ApiOperation("删除用户(需授权)")
@@ -107,145 +64,104 @@ public class UserController {
             @ApiParam(name = "ID", value = "用户的ID", required = true)
                     String id
     ) {
-        Result ret = null;
-        try {
-            ret = userService.deleteUser(id);
-        } catch (Exception e) {
-
-            logger.error("ID为{}的用户数据 删除报错", id, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ID为" + id + "的用户数据 删除报错", null);
-        }
-
-        return ret;
+        Assert.notNull(id, "用户ID不能为空");
+        return userService.deleteUser(id);
     }
 
     @ApiOperation("添加用户(需授权)")
     @PostMapping("/user")
     public Result addUser(@RequestBody User user) {
-        Result ret = null;
-        try {
-            //32位加密
-            user.setUserPassword(MD5Util.MD5(user.getUserPassword()));
-
-            ret = userService.addUser(user);
-
-        } catch (Exception e) {
-            logger.error("用户数据 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "用户数据 添加报错", user);
-        }
-        return ret;
+        Assert.notNull(user, "用户数据为空");
+        Assert.isNull(user.getUserId(), "用户ID必须为空");
+        Assert.notNull(user.getUserLoginname(), "用户登录名不能为空");
+        String password = user.getUserPassword();
+        Assert.notNull(password, "用户密码不能为空");
+        //32位加密
+        if (password.length() != 32)
+            return Result.failure(ResultEnum.USER_LOGIN_ERROR);
+        user.setUserPassword(password);
+        return userService.addUser(user);
     }
 
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @ApiOperation("登陆接口,token有效时间为2小时")
+    @Autowired
+    private RedisDistributedLock lock;
+
+    @ApiOperation("登录接口,token有效时间为2小时")
     @PostMapping("/login")
-    public Result userLogin(@RequestBody User user) {
-
-        Result ret = null;
-
-        if (null == user.getUserLoginname()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户名不能为空", Constant.NO_DATA);
-        }
-
-        if (null == user.getUserPassword()) {
-            return new Result(HttpStatus.UNAUTHORIZED.value(), "用户密码不能为空", Constant.NO_DATA);
-        }
-
+    public Result userLogin(@Valid @RequestBody User user, @Value("${account.login-limit}") Integer limit) {
         User info = userService.login(user);
-
-        if (null != info) {
-
-            if (info.getUserPassword().equals(MD5Util.MD5(user.getUserPassword()))) {
-
-                String userId = info.getUserId();
-
-                String salt = UUID.randomUUID().toString().replace("-", "");
-
-                //设置String序列化器
-                StringRedisSerializer serializer = new StringRedisSerializer();
-
-                redisTemplate.setKeySerializer(serializer);
-
-                redisTemplate.setValueSerializer(serializer);
-
-                //以userId为key避免登陆状态冗余,以盐为value始终维持最新的登陆状态
-                redisTemplate.boundValueOps(userId).set(salt, 2, TimeUnit.HOURS);
-
-                //将userId和盐搅拌生成token
-                ret = new Result(chaos(userId, salt));
-
-            } else
-
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "密码错误", Constant.NO_DATA);
-        } else {
-
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "该用户不存在", Constant.NO_DATA);
+        if (null == info)
+            return Result.failure(ResultEnum.USER_NOT_EXIST);
+        String userId = info.getUserId();
+        if (info.getUserPassword().equals(user.getUserPassword())) {
+            String key = "USER_LIMIT_" + userId;
+            long expire = TimeUnit.SECONDS.convert(2, TimeUnit.HOURS);
+            String isOK = lock.StringLuaTemplate(""
+                    + "local is_exist = redis.call('get', '" + key + "')"
+                    + "local count = is_exist and tonumber(is_exist) or 0 "
+                    + "if count < " + limit + " then "
+                    + "redis.call('set', '" + key + "',count + 1) "
+                    + "redis.call('expire','" + key + "', '" + expire + "') "
+                    + "return 'OK' "
+                    + "else return 'NO' end"
+            );
+            if (!"OK".equals(isOK))
+                return Result.failure(ResultEnum.USER_HAS_EXISTED, "超出同时登录上限");
+            String salt = UUID.randomUUID().toString().replace("-", "");
+            redisTemplate.boundValueOps(salt).set(userId, 2, TimeUnit.HOURS);
+            //将userId和盐搅拌生成token
+            return Result.success(chaos(userId, salt));
         }
+        return Result.failure(ResultEnum.USER_PASSWORD_ERROR);
 
-        return ret;
     }
 
     @ApiOperation("刷新token(需授权)")
     @GetMapping("/token")
     public Result token(
             @ApiParam(name = "token", value = "token值", required = true) String token) {
-        Result ret = null;
-
         if (token != null && 64 == token.length()) {
-            //设置String序列化器
-            StringRedisSerializer serializer = new StringRedisSerializer();
-
-            redisTemplate.setKeySerializer(serializer);
-
-            redisTemplate.setValueSerializer(serializer);
-
             String userId = order(token);
-
-            //从redis获取盐信息
-            String salt = (String) redisTemplate.boundValueOps(userId).get();
-
-            if (null != salt && salt.equals(TokenUtils.salt(token))) {
-
+            String salt = salt(token);
+            //从redis获取存储的userId
+            if (userId.equals(redisTemplate.boundValueOps(salt).get())) {
+                redisTemplate.delete(salt);
                 String newSalt = UUID.randomUUID().toString().replace("-", "");
-
-                redisTemplate.boundValueOps(userId).set(newSalt, 2, TimeUnit.HOURS);
-
-                ret = new Result(chaos(userId, newSalt));
-
-            } else
-                ret = new Result(HttpStatus.UNAUTHORIZED.value(), "token无效", Constant.NO_DATA);
-        } else
-            ret = new Result(HttpStatus.UNAUTHORIZED.value(), "未登陆", Constant.NO_DATA);
-
-        return ret;
+                redisTemplate.boundValueOps(newSalt).set(userId, 2, TimeUnit.HOURS);
+                return Result.success(chaos(userId, newSalt));
+            }
+        }
+        return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
 
     @ApiOperation("用户登出(需授权)")
     @GetMapping("/logout")
     public Result logout(@ApiParam(name = "token", value = "token值", required = true) String token) {
-        Result ret = null;
-
-        try {
-            if (token != null && 64 == token.length()) {
-
-                redisTemplate.delete(order(token));
-
-                ret = new Result("登出成功");
+        if (token != null && 64 == token.length()) {
+            String userId = order(token);
+            String salt = salt(token);
+            if (userId.equals(redisTemplate.boundValueOps(salt).get())) {
+                redisTemplate.delete(salt);
+                String key = "USER_LIMIT_" + userId;
+                String script = "" +
+                        "local is_exist = redis.call('get', '" + key + "') " +
+                        "local expire_time = math.modf(redis.call('pttl','" + key + "')/1000) " +
+                        "local count = is_exist and tonumber(is_exist) or 0 " +
+                        "if count > 1 " +
+                        "then " +
+                        "   redis.call('set', '" + key + "',count - 1) " +
+                        "   redis.call('expire', '" + key + "',expire_time) " +
+                        "   return 'OK' " +
+                        "else " +
+                        "    return ''..redis.call('del','" + key + "') end ";
+                lock.StringLuaTemplate(script);
+                return Result.success("登出成功");
             }
-
-        } catch (Exception e) {
-
-            logger.error("登出报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登出报错", Constant.NO_DATA);
         }
-
-        return ret;
+        return Result.failure(ResultEnum.USER_NOT_LOGGED_IN);
     }
-
 }

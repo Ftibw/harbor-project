@@ -5,10 +5,11 @@
         <id column="floor_id" property="floorId" jdbcType="INTEGER"/>
         <result column="floor_number" property="floorNumber" jdbcType="VARCHAR"/>
         <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <result column="sort_number" property="sortNumber" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    floor_id, floor_number, floor_name
-  </sql>
+        floor_id, floor_number, floor_name, sort_number
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -16,15 +17,17 @@
         where floor_id = #{floorId,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from biz_floor
-    where floor_id = #{floorId,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.whxm.harbor.bean.BizFloor">
-    insert into biz_floor (floor_id, floor_number, floor_name
-      )
-    values (#{floorId,jdbcType=INTEGER}, #{floorNumber,jdbcType=VARCHAR}, #{floorName,jdbcType=VARCHAR}
-      )
-  </insert>
+        DELETE FROM biz_floor
+        WHERE floor_id = #{floorId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="floorId"
+            parameterType="com.whxm.harbor.bean.BizFloor">
+        INSERT INTO biz_floor (floor_id, floor_number, floor_name, sort_number
+        )
+        VALUES (#{floorId,jdbcType=INTEGER}, #{floorNumber,jdbcType=VARCHAR}, #{floorName,jdbcType=VARCHAR}
+            , #{sortNumber,jdbcType=INTEGER}
+        )
+    </insert>
     <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizFloor">
         insert into biz_floor
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -37,6 +40,9 @@
             <if test="floorName != null">
                 floor_name,
             </if>
+            <if test="sortNumber != null">
+                sort_number,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="floorId != null">
@@ -48,26 +54,33 @@
             <if test="floorName != null">
                 #{floorName,jdbcType=VARCHAR},
             </if>
+            <if test="sortNumber != null">
+                #{sortNumber,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizFloor">
         update biz_floor
         <set>
-            <if test="floorNumber != null">
+            <if test="floorNumber != null and floorNumber!='-1'">
                 floor_number = #{floorNumber,jdbcType=VARCHAR},
             </if>
             <if test="floorName != null">
                 floor_name = #{floorName,jdbcType=VARCHAR},
             </if>
+            <if test="sortNumber != null">
+                sort_number = #{sortNumber,jdbcType=INTEGER},
+            </if>
         </set>
         where floor_id = #{floorId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizFloor">
-    update biz_floor
-    set floor_number = #{floorNumber,jdbcType=VARCHAR},
-      floor_name = #{floorName,jdbcType=VARCHAR}
-    where floor_id = #{floorId,jdbcType=INTEGER}
-  </update>
+        UPDATE biz_floor
+        SET floor_number = #{floorNumber,jdbcType=VARCHAR},
+            floor_name   = #{floorName,jdbcType=VARCHAR},
+            sort_number = #{sortNumber,jdbcType=INTEGER}
+        WHERE floor_id = #{floorId,jdbcType=INTEGER}
+    </update>
 
     <!--以下为自定义部分-->
     <select id="selectIdByNumber" resultMap="BaseResultMap">
@@ -81,6 +94,6 @@
         select
         <include refid="Base_Column_List"/>
         from biz_floor
-        ORDER BY floor_id DESC
+        ORDER BY sort_number ASC
     </select>
 </mapper>

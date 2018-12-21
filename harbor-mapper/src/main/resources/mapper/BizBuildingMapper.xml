@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whxm.harbor.mapper.BizBuildingMapper">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizBuilding">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="floor_id" property="floorId" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="dx" property="dx" jdbcType="DOUBLE"/>
+        <result column="dy" property="dy" jdbcType="DOUBLE"/>
+        <result column="area" property="area" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, floor_id, type, dx, dy, area
+    </sql>
+    <!--以下为自定义部分-->
+    <select id="listBuildings" resultType="com.whxm.harbor.vo.BuildingVo">
+        SELECT bb.id,
+               bb.floor_id    floorId,
+               bb.type,
+               bb.dx,
+               bb.dy,
+               bb.area,
+               bs.shop_id     sid,
+               bt.terminal_id tid,
+               bs.shop_name   shopName,
+               bs.shop_number shopNumber
+        from biz_building bb
+                 left join biz_shop bs on bb.id = bs.bid
+                 left join biz_terminal bt on bb.id = bt.bid
+        where bs.is_shop_enabled is null
+           or bs.is_shop_enabled = 1
+    </select>
+
+    <insert id="batchReplace">
+        REPLACE INTO biz_building
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id} ,
+            #{item.floorId,jdbcType=INTEGER},
+            #{item.type,jdbcType=INTEGER},
+            #{item.dx,jdbcType=DOUBLE},
+            #{item.dy,jdbcType=DOUBLE},
+            #{item.area,jdbcType=CHAR}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="batchDelete">
+        DELETE from biz_building
+        where id in (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+</mapper>

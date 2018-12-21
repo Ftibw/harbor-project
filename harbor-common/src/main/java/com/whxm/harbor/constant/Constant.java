@@ -2,17 +2,25 @@ package com.whxm.harbor.constant;
 
 public class Constant {
 
-    public static final Object DEFAULT_QUERY_CONDITION = null;
+    public static final int YES = 1;
 
-    public static final Integer INCREMENT_ID_DEFAULT_VALUE = null;
+    public static final int NO = 0;
 
-    public static final Integer RECORD_IS_DELETED = 0;
+    public static final String DEFAULT_FILTER_METHOD = "POST";
 
-    public static final Integer RECORD_NOT_DELETED = 1;
+    public static final String DEFAULT_FILTER_CONTENT_TYPE = "application/json";
 
-    public static final Integer ENABLED_STATUS = 1;
+    //表单提交防重时长15秒(15000毫秒)
+    public static final int DEFAULT_SUBMIT_EXPIRE_TIME = 15000;
 
-    public static final Integer DISABLED_STATUS = 0;
+    //终端keep alive时间间隔5分钟(300000毫秒)
+    public static final long KEEP_ALIVE_INTERVAL = 300000;
+    //状态状态存储key
+    public static final String TERMINAL_STATUS_KEY = "TERMINAL_STATUS_KEY";
 
-    public static final Object NO_DATA = null;
+    public static final long TASK_INIT_DELAY = 1000;
+
+    public static final int NEGATIVE_TIME_POINT_HOLDER = 0;
+
+    public static final String DEFAULT_FILE_SEPARATOR = "/";
 }

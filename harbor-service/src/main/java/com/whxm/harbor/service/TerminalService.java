@@ -1,6 +1,7 @@
 package com.whxm.harbor.service;
 
 import com.whxm.harbor.bean.*;
+import com.whxm.harbor.conf.TerminalConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -20,10 +21,11 @@ public interface TerminalService {
     /**
      * 获取终端列表
      *
-     * @param pageQO 分页查询对象
+     * @param pageQO    分页查询对象
+     * @param condition
      * @return pageVO
      */
-    PageVO<BizTerminal> getBizTerminalList(PageQO<BizTerminal> pageQO);
+    PageVO<BizTerminal> getBizTerminalList(PageQO pageQO, BizTerminal condition);
 
     /**
      * 根据ID停用/启用终端
@@ -50,23 +52,79 @@ public interface TerminalService {
     Result addBizTerminal(BizTerminal bizTerminal);
 
     /**
-     * 根据终端编号和终端平台获取终端ID
+     * 根据终端编号和终端平台确认终端是否注册
      *
      * @param params 终端编号和终端平台
-     * @return 终端ID
      */
-    Result register(Map<String, Object> params);
+    BizTerminal register(Map<String, Object> params);
 
     /**
-     * 根据终端编号和屏保ID
+     * 根据终端编号查询屏保ID
      *
-     * @param params
+     * @param terminalNumber
      * @return
      */
-    ResultMap<String, Object> getTerminalScreensaverProgram(Map<String, Object> params);
+    ResultMap<String, Object> getTerminalScreensaverProgram(String terminalNumber);
 
     /**
-     *获取无屏保的终端
+     * 某个屏保发布前,查询全部终端,并将该屏保发布过的终端标记为checked
+     *
+     * @param pageQO
+     * @param condition
      */
-    List<BizTerminal> getNotPublishedTerminal();
+    PageVO<BizTerminal> getBizTerminalListWithPublishedFlag(PageQO pageQO, BizTerminal condition);
+
+    /**
+     * 维持终端在线状态
+     *
+     * @param terminalNumber
+     * @return
+     */
+    int updateTerminalOnline(String terminalNumber);
+
+    /**
+     * 批量更新终端在线状态
+     *
+     * @param terminalNumbers
+     * @return
+     */
+    int updateTerminalOffline(List<Object> terminalNumbers);
+
+    /**
+     * 获取终端首页轮播图
+     *
+     * @param sn  终端编号
+     * @param ret 结果Map
+     * @return 结果
+     */
+    Map<String, Object> getTerminalFirstPage(String sn, ResultMap<String, Object> ret);
+
+    /**
+     * 终端绑定首页轮播图
+     *
+     * @param terminalId   终端ID
+     * @param firstPageIds 首页轮播图ID
+     * @return 结果
+     */
+    Result bindFirstPage(String terminalId, Integer[] firstPageIds);
+
+    /**
+     * 更新终端配置
+     *
+     * @param terminalConfig 配置参数
+     * @return 结果
+     */
+    Result updateTerminalConfig(TerminalConfig terminalConfig);
+
+    /**
+     * 获取终端配置
+     *
+     * @return 结果
+     */
+    Result getTerminalConfig();
+
+    /**
+     * 重置终端配置为初始值
+     */
+    Result resetTerminalConfig();
 }

@@ -1,28 +1,20 @@
 package com.whxm.harbor.controller;
 
 import com.whxm.harbor.annotation.MyApiResponses;
-import com.whxm.harbor.bean.BizScreensaverMaterial;
-import com.whxm.harbor.bean.PageQO;
-import com.whxm.harbor.bean.PageVO;
-import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.FileDir;
-import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.bean.*;
+import com.whxm.harbor.exception.DataNotFoundException;
+import com.whxm.harbor.exception.ParameterInvalidException;
 import com.whxm.harbor.service.ScreensaverMaterialService;
+import com.whxm.harbor.utils.Assert;
 import com.whxm.harbor.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 @Api(description = "屏保素材服务")
 @RestController
@@ -30,61 +22,43 @@ import java.util.Map;
 @RequestMapping("/screensaverMaterial")
 public class ScreensaverMaterialController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScreensaverMaterialController.class);
 
     @Autowired
     private ScreensaverMaterialService screensaverMaterialService;
 
-    @Autowired
-    private FileDir fileDir;
-
-    @Autowired
-    private UrlConfig urlConfig;
-
     @ApiOperation("上传屏保素材图片")
     @PostMapping("/picture")
-    public Result uploadPicture(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-
-        Result ret = FileUtils.upload(file, request, fileDir.getScreensaverMaterialImgDir());
-
-        try {
-            Map<String, Object> map = (Map<String, Object>) ret.getData();
-            //判断图片横屏还是竖屏
-            String path = urlConfig.getUrlPrefix() + map.get("filePath");
-
-            String orientation = FileUtils.getImageOrientation(
-                    path.replace("\\", "/"));
-
-            map.put("imageOrientation", orientation);
-
-        } catch (IOException e) {
-
-            logger.error("屏保素材图片上传报错", e);
+    public Result uploadPicture(@RequestParam("file") MultipartFile file) {
+        if (null == file || file.isEmpty()) {
+            throw new ParameterInvalidException("上传的文件是空的");
         }
-        return ret;
+        return FileUtils.upload(file, Result::success);
     }
 
     //===============================以下均被拦截===============================
 
+    @ApiOperation("获取首页素材列表(需授权)")
+    @GetMapping("/bizScreensaverMaterials/first")
+    public Result getFirstPageMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
+
+        PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getFirstPageMaterials(pageQO, condition);
+
+        return Result.success(pageVO);
+    }
+
+
     @ApiOperation("获取屏保素材列表(需授权)")
-    @PostMapping("/bizScreensaverMaterials")
-    public Result getBizScreensaverMaterials(PageQO<BizScreensaverMaterial> pageQO, BizScreensaverMaterial condition) {
+    @GetMapping("/bizScreensaverMaterials")
+    public Result getBizScreensaverMaterials(PageQO pageQO, BizScreensaverMaterial condition) {
+        PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getBizScreensaverMaterialList(pageQO, condition);
+        return Result.success(pageVO);
+    }
 
-        Result ret = null;
-
-        try {
-            pageQO.setCondition(condition);
-
-            PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getBizScreensaverMaterialList(pageQO);
-
-            ret = new Result(pageVO);
-
-        } catch (Exception e) {
-            logger.error("屏保素材列表 获取报错", e);
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材列表 获取报错", pageQO);
-        }
-
-        return ret;
+    @ApiOperation("获取指定屏保绑定的屏保素材(需授权)")
+    @GetMapping("/bizScreensaverMaterialsBound")
+    public Result getMaterialsByScreensaverId(PageQO pageQO, BizScreensaverMaterial condition) {
+        PageVO<BizScreensaverMaterial> pageVO = screensaverMaterialService.getMaterialsByScreensaverId(pageQO, condition);
+        return Result.success(pageVO);
     }
 
     @ApiOperation("获取屏保素材(需授权)")
@@ -93,40 +67,20 @@ public class ScreensaverMaterialController {
             @ApiParam(name = "ID", value = "屏保素材的ID", required = true)
             @PathVariable("ID") Integer screensaverMaterialId
     ) {
-        Result ret = null;
-        BizScreensaverMaterial screensaverMaterial = null;
-        try {
-            screensaverMaterial = screensaverMaterialService.getBizScreensaverMaterial(screensaverMaterialId);
-
-            ret = new Result(screensaverMaterial);
-
-        } catch (Exception e) {
-
-            logger.error("ID为{}的屏保素材数据 获取报错", screensaverMaterialId, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + screensaverMaterialId + "的屏保素材数据 获取报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        Assert.notNull(screensaverMaterialId, "屏保素材的ID不能为空");
+        BizScreensaverMaterial screensaverMaterial = screensaverMaterialService.getBizScreensaverMaterial(screensaverMaterialId);
+        return Result.success(screensaverMaterial);
     }
 
     @ApiOperation("修改屏保素材(需授权)")
     @PutMapping("/bizScreensaverMaterial")
     public Result updateBizScreensaverMaterial(@RequestBody BizScreensaverMaterial bizScreensaverMaterial) {
-        Result ret = null;
-        try {
-            ret = screensaverMaterialService.updateBizScreensaverMaterial(bizScreensaverMaterial);
-
-        } catch (Exception e) {
-
-            logger.error("屏保素材数据 修改报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "屏保素材数据 修改报错", bizScreensaverMaterial);
-        }
-
-        return ret;
+        Assert.notNull(bizScreensaverMaterial, "屏保素材不能为null");
+        Assert.notNull(bizScreensaverMaterial.getScreensaverMaterialId(), "屏保素材ID不能为null");
+        //Assert.notNull(bizScreensaverMaterial.getIsFirstPage(), "素材是否为首页素材必须填");
+        if (null == bizScreensaverMaterial.getIsFirstPage())
+            bizScreensaverMaterial.setIsFirstPage(0);
+        return screensaverMaterialService.updateBizScreensaverMaterial(bizScreensaverMaterial);
     }
 
     @ApiOperation("删除屏保素材(需授权)")
@@ -135,32 +89,22 @@ public class ScreensaverMaterialController {
             @ApiParam(name = "id", value = "屏保素材的ID", required = true)
                     Integer id
     ) {
-        Result ret = null;
-        try {
-            ret = screensaverMaterialService.deleteBizScreensaverMaterial(id);
-        } catch (Exception e) {
-
-            logger.error("ID为{}的屏保素材数据 删除报错", id, e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "ID为" + id + "的屏保素材数据 删除报错", Constant.NO_DATA);
-        }
-
-        return ret;
+        Assert.notNull(id, "屏保素材ID不能为null");
+        return screensaverMaterialService.deleteBizScreensaverMaterial(id);
     }
 
+
     @ApiOperation("添加屏保素材(需授权)")
-    @PostMapping("/bizScreensaverMaterial")
-    public Result addBizScreensaverMaterial(@RequestBody BizScreensaverMaterial bizScreensaverMaterial) {
-        Result ret = null;
-        try {
-            ret = screensaverMaterialService.addBizScreensaverMaterial(bizScreensaverMaterial);
-
-        } catch (Exception e) {
-            logger.error("屏保素材 添加报错", e);
-
-            ret = new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "屏保素材 添加报错", bizScreensaverMaterial);
-        }
-        return ret;
+    @PostMapping(value = "/bizScreensaverMaterial", consumes = "application/json")
+    public Result addBizScreensaverMaterial(@RequestBody List<BizScreensaverMaterial> list) {
+        Assert.notEmpty(list, "屏保数据不能为空");
+        Assert.notRepeat(list, "屏保素材不能重复");
+        list.forEach(item -> {
+            Assert.isNull(item.getScreensaverMaterialId(), "屏保素材ID必须为null");
+            //Assert.notNull(item.getIsFirstPage(), "素材是否为首页素材必须填");
+            if (null == item.getIsFirstPage())
+                item.setIsFirstPage(0);
+        });
+        return screensaverMaterialService.addBizScreensaverMaterial(list);
     }
 }

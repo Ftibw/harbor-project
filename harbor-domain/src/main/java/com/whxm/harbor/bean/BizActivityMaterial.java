@@ -14,7 +14,7 @@ public class BizActivityMaterial {
     private Integer activityId;
 
     //join activity 表查询 activity_type
-    private String activityType;
+    private String activityType = "无";
 
     public String getActivityType() {
         return activityType;

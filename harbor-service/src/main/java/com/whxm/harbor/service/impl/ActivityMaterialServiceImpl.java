@@ -6,12 +6,10 @@ import com.whxm.harbor.bean.BizActivityMaterial;
 import com.whxm.harbor.bean.PageQO;
 import com.whxm.harbor.bean.PageVO;
 import com.whxm.harbor.bean.Result;
-import com.whxm.harbor.conf.UrlConfig;
-import com.whxm.harbor.constant.Constant;
+import com.whxm.harbor.conf.PathConfig;
+import com.whxm.harbor.enums.ResultEnum;
 import com.whxm.harbor.mapper.BizActivityMaterialMapper;
 import com.whxm.harbor.service.ActivityMaterialService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +21,8 @@ import java.util.List;
 @Transactional
 public class ActivityMaterialServiceImpl implements ActivityMaterialService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActivityMaterialServiceImpl.class);
-
     @Autowired
-    private UrlConfig urlConfig;
+    private PathConfig pathConfig;
 
     @Resource
     private BizActivityMaterialMapper bizActivityMaterialMapper;
@@ -34,49 +30,26 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public BizActivityMaterial getBizActivityMaterial(Integer bizActivityMaterialId) {
 
-        BizActivityMaterial activityMaterial;
-
-        try {
-            activityMaterial = bizActivityMaterialMapper.selectMaterialWithActivityType(bizActivityMaterialId);
-
-            if (null == activityMaterial)
-                logger.info("ID为{}的活动素材不存在", bizActivityMaterialId);
-
-        } catch (Exception e) {
-
-            logger.error("活动素材ID为{}的数据 获取报错", bizActivityMaterialId);
-
-            throw new RuntimeException();
-        }
-
-        return activityMaterial;
+        return bizActivityMaterialMapper.selectMaterialWithActivityType(bizActivityMaterialId);
     }
 
     @Override
-    public PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO<BizActivityMaterial> pageQO) {
+    public PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO pageQO, BizActivityMaterial condition) {
 
-        PageVO<BizActivityMaterial> pageVO;
-        try {
-            Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
+        PageVO<BizActivityMaterial> pageVO = new PageVO<>(pageQO);
 
-            pageVO = new PageVO<>(pageQO);
+        Page page = PageHelper.startPage(pageQO.getPageNum(), pageQO.getPageSize());
 
-            List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(pageQO.getCondition());
+        List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(condition);
 
-            list.forEach(item -> item.setActivityMaterialImgPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getActivityMaterialImgPath()
-            ));
+        list.forEach(item -> item.setActivityMaterialImgPath(
+                pathConfig.getResourceURLWithPost()
+                        + item.getActivityMaterialImgPath()
+        ));
 
-            pageVO.setList(list);
+        pageVO.setList(list);
 
-            pageVO.setTotal(page.getTotal());
-
-        } catch (Exception e) {
-            logger.error("活动素材列表 获取报错", e);
-
-            throw new RuntimeException();
-        }
+        pageVO.setTotal(page.getTotal());
 
         return pageVO;
     }
@@ -84,106 +57,58 @@ public class ActivityMaterialServiceImpl implements ActivityMaterialService {
     @Override
     public Result deleteBizActivityMaterial(Integer bizActivityMaterialId) {
 
-        Result ret;
 
-        try {
-            int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
+        int affectRow = bizActivityMaterialMapper.deleteByPrimaryKey(bizActivityMaterialId);
 
-            logger.info(1 == affectRow ?
-                            "ID为{}的活动素材 删除成功" :
-                            "ID为{}的活动素材 删除失败",
-                    bizActivityMaterialId
-            );
-
-            ret = new Result("活动素材数据删除了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("活动素材ID为{}的数据 删除错误", bizActivityMaterialId);
-
-            throw new RuntimeException();
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的活动素材,无法删除", bizActivityMaterialId))
+                : Result.success(ResultEnum.SUCCESS_DELETED);
     }
 
     @Override
     public Result updateBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
 
-        Result ret;
+        bizActivityMaterial.setActivityMaterialImgPath(bizActivityMaterial.getActivityMaterialImgPath().replaceAll("^" + pathConfig.getResourceURLWithPost() + "(.*)$", "$1"));
 
-        try {
+        int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
 
-            int affectRow = bizActivityMaterialMapper.updateByPrimaryKeySelective(bizActivityMaterial);
-
-            logger.info(1 == affectRow ?
-                            "ID为{}的活动素材 修改成功" :
-                            "ID为{}的活动素材 修改失败",
-                    bizActivityMaterial.getActivityMaterialId()
-            );
-
-            ret = new Result("活动素材数据修改了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("活动素材数据 修改报错", e);
-
-            throw new RuntimeException();
-        }
-
-        return ret;
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的活动素材,无法修改", bizActivityMaterial.getActivityMaterialId()))
+                : Result.success(bizActivityMaterial);
     }
 
     @Override
     public Result addBizActivityMaterial(BizActivityMaterial bizActivityMaterial) {
 
-        Result ret;
+        int affectRow = bizActivityMaterialMapper.insert(bizActivityMaterial);
 
-        try {
-            bizActivityMaterial.setActivityMaterialId(Constant.INCREMENT_ID_DEFAULT_VALUE);
+        return 0 == affectRow ?
+                Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, String.format("ID为%s的活动素材,无法添加", bizActivityMaterial.getActivityMaterialId()))
+                : Result.success(bizActivityMaterial);
+    }
 
-            int affectRow = bizActivityMaterialMapper.insert(bizActivityMaterial);
+    @Override
+    public Result addBizActivityMaterials(List<BizActivityMaterial> list) {
 
-            logger.info(1 == affectRow ?
-                    "活动素材 添加成功" :
-                    "活动素材 添加失败"
-            );
+        int affectRow = bizActivityMaterialMapper.batchInsert(list);
 
-            ret = new Result("活动素材数据添加了" + affectRow + "行");
-
-        } catch (Exception e) {
-
-            logger.error("活动素材数据 添加报错", e);
-
-            throw new RuntimeException();
-        }
-
-        return ret;
+        return 0 == affectRow ? Result.failure(ResultEnum.OPERATION_LOGIC_ERROR, "数据列表无法添加")
+                : Result.success(list);
     }
 
     @Override
     public List<BizActivityMaterial> getMaterialListByActivityId(Integer activityId) {
 
-        List<BizActivityMaterial> list;
+        BizActivityMaterial activityMaterial = new BizActivityMaterial();
 
-        try {
-            BizActivityMaterial activityMaterial = new BizActivityMaterial();
+        activityMaterial.setActivityId(activityId);
 
-            activityMaterial.setActivityId(activityId);
+        List<BizActivityMaterial> list = bizActivityMaterialMapper.getBizActivityMaterialList(activityMaterial);
 
-            list = bizActivityMaterialMapper.getBizActivityMaterialList(activityMaterial);
-
-            list.forEach(item -> item.setActivityMaterialImgPath(
-                    urlConfig.getUrlPrefix()
-                            + item.getActivityMaterialImgPath()
-            ));
-
-        } catch (Exception e) {
-
-            logger.error("活动素材数据列表 获取报错", e);
-
-            throw new RuntimeException();
-        }
+        list.forEach(item -> item.setActivityMaterialImgPath(
+                pathConfig.getResourceURLWithPost()
+                        + item.getActivityMaterialImgPath()
+        ));
 
         return list;
     }

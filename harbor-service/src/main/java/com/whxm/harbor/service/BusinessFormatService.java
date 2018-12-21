@@ -24,9 +24,10 @@ public interface BusinessFormatService {
      * 分页+过滤获取业态集合
      *
      * @param pageQO
+     * @param condition
      * @return list
      */
-    PageVO<BizFormat> getBizFormatList(PageQO<BizFormat> pageQO);
+    PageVO<BizFormat> getBizFormatList(PageQO pageQO, BizFormat condition);
 
     /**
      * 获取所有业态数据

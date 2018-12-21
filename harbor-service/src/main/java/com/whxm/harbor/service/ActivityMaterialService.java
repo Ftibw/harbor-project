@@ -24,7 +24,7 @@ public interface ActivityMaterialService {
      *
      * @return list
      */
-    PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO<BizActivityMaterial> pageQO);
+    PageVO<BizActivityMaterial> getBizActivityMaterialList(PageQO pageQO, BizActivityMaterial condition);
 
     /**
      * 根据ID删除活动材料
@@ -49,6 +49,14 @@ public interface ActivityMaterialService {
      * @return 添加操作结果
      */
     Result addBizActivityMaterial(BizActivityMaterial bizActivityMaterial);
+
+    /**
+     * 新增活动材料数据
+     *
+     * @param list 新活动材料数据列表
+     * @return 添加操作结果
+     */
+    Result addBizActivityMaterials(List<BizActivityMaterial> list);
 
     /**
      * 根据活动ID获取活动素材列表

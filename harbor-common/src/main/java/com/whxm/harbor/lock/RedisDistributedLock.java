@@ -1,68 +1,183 @@
 package com.whxm.harbor.lock;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.ReturnType;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
+import redis.clients.util.SafeEncoder;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
+ * @Author Ftibw
+ * @CreateTime forget...
+ * @UpdateTime 2018/7/5 00:54
  * 本质上还是乐观锁
  */
 @Component
 public class RedisDistributedLock {
 
-    private static final String LOCK_SUCCESS = "OK";
+    private final Logger logger = LoggerFactory.getLogger(RedisDistributedLock.class);
+
     private static final String SET_IF_NOT_EXIST = "NX";
     private static final String SET_WITH_EXPIRE_TIME = "PX";
-    private static final Long RELEASE_SUCCESS = 1L;
 
     @Autowired
-    private Jedis jedis;
+    private RedisTemplate<Object, Object> redisTemplate;
 
-    /**
-     * 尝试获取分布式锁
-     *
-     * @param lockKey    锁
-     * @param requestId  请求标识
-     * @param expireTime 超期时间
-     * @return 是否获取成功
-     */
-    public boolean tryAcquire(String lockKey, String requestId, int expireTime) {
-        //1.
-        //client.set(SafeEncoder.encode(key), SafeEncoder.encode(value), SafeEncoder.encode(nxxx),
-        //      SafeEncoder.encode(expx), time)
-        //2.
-        //binaryClient.sendCommand(Command.SET, key, value, nxxx, expx, toByteArray(time));
-        //方法签名:protected Connection sendCommand(final Command cmd, final byte[]... args);
-        //3.
-        //最后在sendCommand中调用了Protocol.sendCommand(outputStream, cmd, args);
+    public Boolean lock(String lockKey, String requestId, long expireTime) {
 
-        //说明了参数对应的条件的设置都是在redis中完成的,保证了原子性
-        String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
+        return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
 
-        return LOCK_SUCCESS.equals(result);
+            RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+            //成功则返回的字符串"OK"的字节数组,失败则返回null
+            Object ret = connection.execute(
+                    "set",
+                    serializer.serialize(lockKey),
+                    serializer.serialize(requestId),
+                    serializer.serialize(SET_IF_NOT_EXIST),
+                    serializer.serialize(SET_WITH_EXPIRE_TIME),
+                    SafeEncoder.encode(String.valueOf(expireTime))
+            );
+
+            if (null != ret) logger.info("key为[{}]的redis分布式锁加锁{}", lockKey, new String((byte[]) ret));
+
+            return ret != null;
+        });
     }
 
     /**
-     * 尝试释放分布式锁
-     *
-     * @param lockKey   锁
-     * @param requestId 请求标识
-     * @return 是否释放成功
+     * call set返回的是字符串可以转[B,而call del返回的是Long无法转[B
      */
-    public boolean tryRelease(String lockKey, String requestId) {
+    public Boolean unlock(String lockKey, String requestId) {
 
-        //多么熟悉的lua脚本,游戏程序员的基础语言...
-        //所有的check and act都放到了redis中,保证了原子性
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] "
                 + "then return redis.call('del', KEYS[1]) "
                 + "else return 0 end";
 
-        Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
+        List<String> keys = Collections.singletonList(lockKey);
 
-        return RELEASE_SUCCESS.equals(result);
+        List<String> args = Collections.singletonList(requestId);
+
+        return luaTemplate(keys, args, script, Boolean.TYPE, ReturnType.BOOLEAN);
+
+    }
+
+    public <T> T luaTemplate(List<String> keys, List<String> args, String script, Class<T> returnClass, ReturnType returnType) {
+
+        DefaultRedisScript<Object> redisScript = new DefaultRedisScript<>();
+
+        redisScript.setScriptText(script);
+
+        return redisTemplate.execute(
+                (RedisCallback<T>) connection -> connection.eval(
+                        SafeEncoder.encode(script),
+                        returnType,
+                        keys.size(),
+                        getByteParams(getParams(keys, args))
+                )
+        );
+    }
+
+    public <T> T luaTemplate(String script, Class<T> returnClass, ReturnType returnType) {
+
+        List<String> empty = Collections.singletonList("");
+
+        return luaTemplate(empty, empty, script, returnClass, returnType);
+    }
+
+    public String StringLuaTemplate(String script) {
+        //ReturnType.STATUS 返回字节数组
+        return luaTemplate(script, String.class, ReturnType.STATUS);
+    }
+
+    //恶心,参数序列化格式连文档说明都没有,还是对比jedis源码,然后粘贴过来的...
+    private String[] getParams(List<String> keys, List<String> args) {
+        int keyCount = keys.size();
+        int argCount = args.size();
+
+        String[] params = new String[keyCount + args.size()];
+
+        for (int i = 0; i < keyCount; i++)
+            params[i] = keys.get(i);
+
+        for (int i = 0; i < argCount; i++)
+            params[keyCount + i] = args.get(i);
+
+        return params;
+    }
+
+    private byte[][] getByteParams(String... params) {
+        byte[][] p = new byte[params.length][];
+        for (int i = 0; i < params.length; i++)
+            p[i] = SafeEncoder.encode(params[i]);
+
+        return p;
     }
 
 }
+//关于ReturnType的说明,见代码
+/*
+ * Copyright 2013 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+public class JedisScriptReturnConverter implements Converter<Object, Object> {
+
+    private final ReturnType returnType;
+
+    public JedisScriptReturnConverter(ReturnType returnType) {
+        this.returnType = returnType;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Object convert(Object result) {
+        if (result instanceof String) {
+            // evalsha converts byte[] to String. Convert back for consistency
+            return SafeEncoder.encode((String) result);
+        }
+        if (returnType == ReturnType.STATUS) {
+            return JedisConverters.toString((byte[]) result);
+        }
+        if (returnType == ReturnType.BOOLEAN) {
+            // Lua false comes back as a null bulk reply
+            if (result == null) {
+                return Boolean.FALSE;
+            }
+            return ((Long) result == 1);
+        }
+        if (returnType == ReturnType.MULTI) {
+            List<Object> resultList = (List<Object>) result;
+            List<Object> convertedResults = new ArrayList<Object>();
+            for (Object res : resultList) {
+                if (res instanceof String) {
+                    // evalsha converts byte[] to String. Convert back for
+                    // consistency
+                    convertedResults.add(SafeEncoder.encode((String) res));
+                } else {
+                    convertedResults.add(res);
+                }
+            }
+            return convertedResults;
+        }
+        return result;
+    }
+}
+* */
