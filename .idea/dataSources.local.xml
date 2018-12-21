@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal">
-    <data-source name="DB" uuid="fb45af5d-9c93-4aef-8225-1f1aad1bb247">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
-      <introspection-schemas>*:harbor</introspection-schemas>
-    </data-source>
-  </component>
-</project>
