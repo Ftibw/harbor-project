@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whxm.harbor.mapper.BizBuildingMapper">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.BizBuilding">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="number" property="number" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="color" property="color" jdbcType="VARCHAR"/>
+        <result column="layer" property="layer" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="width" property="width" jdbcType="VARCHAR"/>
+        <result column="height" property="height" jdbcType="VARCHAR"/>
+        <result column="page_x" property="pageX" jdbcType="VARCHAR"/>
+        <result column="page_y" property="pageY" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, number, name, color, layer, type, width, height, page_x, page_y
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_building
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM biz_building
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.whxm.harbor.bean.BizBuilding">
+        INSERT INTO biz_building (id, number, name,
+                                  color, layer, type,
+                                  width, height, page_x,
+                                  page_y)
+        VALUES (#{id,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                #{color,jdbcType=VARCHAR}, #{layer,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+                #{width,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{pageX,jdbcType=VARCHAR},
+                #{pageY,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.BizBuilding">
+        insert into biz_building
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="color != null">
+                color,
+            </if>
+            <if test="layer != null">
+                layer,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="pageX != null">
+                page_x,
+            </if>
+            <if test="pageY != null">
+                page_y,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="color != null">
+                #{color,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="pageX != null">
+                #{pageX,jdbcType=VARCHAR},
+            </if>
+            <if test="pageY != null">
+                #{pageY,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.BizBuilding">
+        update biz_building
+        <set>
+            <if test="number != null and number!=-1">
+                number = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="color != null">
+                color = #{color,jdbcType=VARCHAR},
+            </if>
+            <if test="layer != null">
+                layer = #{layer,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="width != null">
+                width = #{width,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                height = #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="pageX != null">
+                page_x = #{pageX,jdbcType=VARCHAR},
+            </if>
+            <if test="pageY != null">
+                page_y = #{pageY,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.BizBuilding">
+        UPDATE biz_building
+        SET number = #{number,jdbcType=VARCHAR},
+            name   = #{name,jdbcType=VARCHAR},
+            color  = #{color,jdbcType=VARCHAR},
+            layer  = #{layer,jdbcType=INTEGER},
+            type   = #{type,jdbcType=INTEGER},
+            width  = #{width,jdbcType=VARCHAR},
+            height = #{height,jdbcType=VARCHAR},
+            page_x = #{pageX,jdbcType=VARCHAR},
+            page_y = #{pageY,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <!--以下时自定义部分-->
+    <insert id="batchInsert">
+        insert into biz_building (<include refid="Base_Column_List"/>)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (NULL , #{item.number,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR},
+            #{item.color,jdbcType=VARCHAR}, #{item.layer,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER},
+            #{item.width,jdbcType=VARCHAR}, #{item.height,jdbcType=VARCHAR}, #{item.pageX,jdbcType=VARCHAR},
+            #{item.pageY,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+    <select id="getBuildingList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM biz_building
+        <where>
+            <if test="floor!=null">
+                and layer=#{floor}
+            </if>
+        </where>
+    </select>
+</mapper>

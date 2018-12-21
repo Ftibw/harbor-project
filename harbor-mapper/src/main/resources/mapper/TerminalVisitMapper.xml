@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whxm.harbor.mapper.TerminalVisitMapper">
+    <resultMap id="BaseResultMap" type="com.whxm.harbor.bean.TerminalVisit">
+        <id column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+        <result column="terminal_visit_amount" property="terminalVisitAmount" jdbcType="DECIMAL"/>
+        <result column="terminal_visit_time" property="terminalVisitTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        terminal_number, terminal_visit_amount, terminal_visit_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_terminal_visit
+        where terminal_number = #{terminalNumber,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM biz_terminal_visit
+        WHERE terminal_number = #{terminalNumber,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.whxm.harbor.bean.TerminalVisit">
+        INSERT INTO biz_terminal_visit (terminal_number, terminal_visit_amount,
+                                        terminal_visit_time)
+        VALUES (#{terminalNumber,jdbcType=VARCHAR}, #{terminalVisitAmount,jdbcType=DECIMAL},
+                #{terminalVisitTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.whxm.harbor.bean.TerminalVisit">
+        insert into biz_terminal_visit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="terminalNumber != null">
+                terminal_number,
+            </if>
+            <if test="terminalVisitAmount != null">
+                terminal_visit_amount,
+            </if>
+            <if test="terminalVisitTime != null">
+                terminal_visit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="terminalNumber != null">
+                #{terminalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="terminalVisitAmount != null">
+                #{terminalVisitAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="terminalVisitTime != null">
+                #{terminalVisitTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.whxm.harbor.bean.TerminalVisit">
+        update biz_terminal_visit
+        <set>
+            <if test="terminalVisitAmount != null">
+                terminal_visit_amount = #{terminalVisitAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="terminalVisitTime != null">
+                terminal_visit_time = #{terminalVisitTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where terminal_number = #{terminalNumber,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.whxm.harbor.bean.TerminalVisit">
+        UPDATE biz_terminal_visit
+        SET terminal_visit_amount = #{terminalVisitAmount,jdbcType=DECIMAL},
+            terminal_visit_time   = #{terminalVisitTime,jdbcType=TIMESTAMP}
+        WHERE terminal_number = #{terminalNumber,jdbcType=VARCHAR}
+    </update>
+
+    <!--以下是自定义部分-->
+
+    <select id="getTerminalVisitList" parameterType="com.whxm.harbor.bean.BizTerminal"
+            resultMap="ModelResultMap">
+        SELECT
+        terminal_number,
+        terminal_name,
+        terminal_type,
+        terminal_ip,
+        floor_name,
+        is_terminal_online,
+        terminal_visit_amount
+        FROM biz_terminal
+        LEFT JOIN biz_terminal_visit USING (terminal_number)
+        LEFT JOIN biz_floor USING (floor_id)
+        <where>
+            is_deleted=1
+            <if test="terminalName!=null">and terminal_name like concat('%',#{terminalName},'%')</if>
+            <if test="terminalNumber!=null">and terminal_number like concat('%',#{`},'%')</if>
+            <if test="terminalType!=null and terminalType!=''">and terminal_type =#{terminalType}</if>
+            <if test="isTerminalOnline!=null">and is_terminal_online=#{isTerminalOnline}</if>
+            <if test="floorId!=null">and floor_id=#{floorId}</if>
+        </where>
+    </select>
+
+    <resultMap id="ModelResultMap" type="com.whxm.harbor.model.TerminalVisitModel">
+        <id column="terminal_number" property="terminalNumber" jdbcType="VARCHAR"/>
+        <id column="terminal_name" property="terminalName" jdbcType="VARCHAR"/>
+        <id column="terminal_type" property="terminalType" jdbcType="VARCHAR"/>
+        <id column="terminal_ip" property="terminalIp" jdbcType="VARCHAR"/>
+        <id column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <id column="is_terminal_online" property="isTerminalOnline" jdbcType="INTEGER"/>
+        <result column="terminal_visit_amount" property="terminalVisitAmount" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <update id="updateAmountByID">
+        UPDATE biz_terminal_visit
+        SET terminal_visit_amount = terminal_visit_amount + 1, terminal_visit_time = CURRENT_TIMESTAMP
+        WHERE terminal_number = #{terminalNumber}
+    </update>
+</mapper>
