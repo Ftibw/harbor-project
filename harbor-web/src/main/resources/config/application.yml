@@ -61,7 +61,7 @@ file:
 #容器中的/usr/local/tomcat/webapps目录被挂载到了/var/lib/docker/volumes/webapps/_data,用于文件上传后自动同步到资源服务器
 log:
   parent-path: ${my-web-dir}
-  bug-path: /logs/bug.log     #记录bug
+bug-path: /logs/bug.log     #记录bug
 
 
 
