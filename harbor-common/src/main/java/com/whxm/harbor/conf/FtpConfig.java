@@ -38,4 +38,15 @@ public class FtpConfig {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        FtpSession utils = new FtpSession(10, 10, 10);
+
+        try {
+            utils.connect("121.40.178.13", 21, "iips", "YFiips5488", false);
+            System.out.println(utils.getWorkingDirectory());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
