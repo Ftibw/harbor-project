@@ -4,6 +4,7 @@ import com.whxm.harbor.ftp.FtpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -45,6 +46,9 @@ public class FtpConfig {
         try {
             utils.connect("121.40.178.13", 21, "iips", "YFiips5488", false);
             System.out.println(utils.getWorkingDirectory());
+            System.out.println(utils.list("/material/pic"));
+            //utils.download("/material/pic/fe1ff428cac647c1a5bdc5d927826a31.png",new File("C:/Users/ftibw/Desktop/test.png"));
+            System.out.println(utils.upload("../", new File("C:/Users/ftibw/Desktop/test.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
